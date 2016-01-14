@@ -13,8 +13,8 @@
  *
  */
 
-namespace sajaki\bbguild\model\wowapi;
-use sajaki\bbguild\model\Admin\admin;
+namespace bbdkp\bbguild\model\wowapi;
+use bbdkp\bbguild\model\Admin\admin;
 
 /**
  * Resource skeleton

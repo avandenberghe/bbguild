@@ -23,12 +23,12 @@
  *
  */
 
-namespace sajaki\bbguild\model\wowapi;
-use sajaki\bbguild\model\wowapi\Resource;
+namespace bbdkp\bbguild\model\wowapi;
+use bbdkp\bbguild\model\wowapi\Resource;
 
 /**
  * Guild resource.
- * @package sajaki\bbguild\model\wowapi
+ * @package bbdkp\bbguild\model\wowapi
  */
 class Guild extends Resource
 {

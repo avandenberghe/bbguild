@@ -7,8 +7,8 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbguild\model\games\library;
-use sajaki\bbguild\model\games\library\GameInstall;
+namespace bbdkp\bbguild\model\games\library;
+use bbdkp\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -20,7 +20,7 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * Installs Everquest 2
- * @package sajaki\bbguild\controller\games
+ * @package bbdkp\bbguild\controller\games
  */
 class install_eq2 extends GameInstall
 {

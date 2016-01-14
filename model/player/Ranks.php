@@ -8,8 +8,8 @@
  *
  */
 
-namespace sajaki\bbguild\model\player;
-use sajaki\bbguild\model\player\Guilds;
+namespace bbdkp\bbguild\model\player;
+use bbdkp\bbguild\model\player\Guilds;
 
 /**
  * Ranks Class

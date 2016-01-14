@@ -8,17 +8,17 @@
  *
  */
 
-namespace sajaki\bbguild\model\player;
+namespace bbdkp\bbguild\model\player;
 
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\games\Game;
-use sajaki\bbguild\model\player\Guilds;
-use sajaki\bbguild\model\points\Adjust;
-use sajaki\bbguild\model\wowapi\BattleNet;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\games\Game;
+use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\points\Adjust;
+use bbdkp\bbguild\model\wowapi\BattleNet;
 
 /**
  * manages member creation
- * @package sajaki\bbguild\model\player
+ * @package bbdkp\bbguild\model\player
  * @property array $memberdata
  * @property int $game_id
  * @property int $member_id

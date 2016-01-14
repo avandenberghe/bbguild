@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbguild\migrations;
+namespace bbdkp\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
@@ -25,7 +25,7 @@ class release_2_0_0_m05_mod extends migration
      */
     static public function depends_on()
     {
-        return array('\sajaki\bbguild\migrations\release_2_0_0_m04_permissions');
+        return array('\bbdkp\bbguild\migrations\release_2_0_0_m04_permissions');
     }
 
     /**
@@ -50,7 +50,7 @@ class release_2_0_0_m05_mod extends migration
                 'acp',
                 'ACP_BBGUILD_MAINPAGE',
                 array(
-                    'module_basename' => '\sajaki\bbguild\acp\main_module',
+                    'module_basename' => '\bbdkp\bbguild\acp\main_module',
                     'modes'           => array('panel', 'config', 'logs', 'index') ,
                 )
             )),
@@ -59,7 +59,7 @@ class release_2_0_0_m05_mod extends migration
                 'acp',
                 'ACP_BBGUILD_MAINPAGE',
                 array(
-                    'module_basename' => '\sajaki\bbguild\acp\game_module',
+                    'module_basename' => '\bbdkp\bbguild\acp\game_module',
                     'modes'           => array('listgames', 'editgames', 'addfaction', 'addrace', 'addclass', 'addrole'),
                 )
             )),
@@ -68,7 +68,7 @@ class release_2_0_0_m05_mod extends migration
                 'acp',
                 'ACP_BBGUILD_MEMBER',
                 array(
-                    'module_basename' => '\sajaki\bbguild\acp\guild_module',
+                    'module_basename' => '\bbdkp\bbguild\acp\guild_module',
                     'modes'           => array('addguild', 'editguild', 'listguilds') ,
                 )
             )),
@@ -77,14 +77,14 @@ class release_2_0_0_m05_mod extends migration
                 'acp',
                 'ACP_BBGUILD_MEMBER',
                 array(
-                    'module_basename' => '\sajaki\bbguild\acp\mm_module',
+                    'module_basename' => '\bbdkp\bbguild\acp\mm_module',
                     'modes'           => array('mm_addmember', 'mm_listmembers') ,
                 )
             )),
 
             array('module.add', array(
                 'ucp', 'UCP_BBGUILD', array(
-                    'module_basename' => '\sajaki\bbguild\ucp\bbguild_module',
+                    'module_basename' => '\bbdkp\bbguild\ucp\bbguild_module',
                     'modes'           => array('char', 'add') ,
                 )
             )),

@@ -16,9 +16,9 @@
  *
  */
 
-namespace sajaki\bbguild\model\wowapi;
+namespace bbdkp\bbguild\model\wowapi;
 
-use sajaki\bbguild\model\wowapi\Resource;
+use bbdkp\bbguild\model\wowapi\Resource;
 
 /**
  * @ignore

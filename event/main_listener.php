@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbguild\event;
+namespace bbdkp\bbguild\event;
 
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -82,7 +82,7 @@ class main_listener implements EventSubscriberInterface
     {
         $lang_set_ext = $event['lang_set_ext'];
         $lang_set_ext[] = array(
-            'ext_name' => 'sajaki/bbguild',
+            'ext_name' => 'bbdkp/bbguild',
             'lang_set' => array('common','admin') ,
         );
         $event['lang_set_ext'] = $lang_set_ext;

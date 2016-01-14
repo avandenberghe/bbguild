@@ -8,16 +8,16 @@
  *
  */
 
-namespace sajaki\bbguild\model\player;
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\games\Game;
-use sajaki\bbguild\model\player\Members;
-use sajaki\bbguild\model\player\Ranks;
-use sajaki\bbguild\model\wowapi\BattleNet;
+namespace bbdkp\bbguild\model\player;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\games\Game;
+use bbdkp\bbguild\model\player\Members;
+use bbdkp\bbguild\model\player\Ranks;
+use bbdkp\bbguild\model\wowapi\BattleNet;
 
 /**
  * Manages Guild creation
- * @package sajaki\bbguild\model\player
+ * @package bbdkp\bbguild\model\player
  * @property int $game_id
  * @property int $guildid
  * @property string $name

@@ -7,7 +7,7 @@
  *
  */
 
-namespace sajaki\bbguild;
+namespace bbdkp\bbguild;
 
 use phpbb\extension\base;
 

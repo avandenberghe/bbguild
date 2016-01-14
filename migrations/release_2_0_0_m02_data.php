@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbguild\migrations;
+namespace bbdkp\bbguild\migrations;
 use phpbb\db\migration\container_aware_migration;
 
 /**
@@ -35,7 +35,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
     static public function depends_on()
     {
-        return array('\sajaki\bbguild\migrations\release_2_0_0_m01_schema');
+        return array('\bbdkp\bbguild\migrations\release_2_0_0_m01_schema');
     }
 
     public function update_data()
@@ -54,7 +54,7 @@ class release_2_0_0_m02_data extends container_aware_migration
     public function insert_sample_data()
     {
         $user = $this->container->get('user');
-        $user->add_lang_ext('sajaki/bbguild', 'admin');
+        $user->add_lang_ext('bbdkp/bbguild', 'admin');
         $welcome_message = $this->encode_message($user->lang['WELCOME_DEFAULT']);
 
         $this->bbgames_table = $this->table_prefix  . 'bb_games';

@@ -9,11 +9,11 @@
  *
  */
 
-namespace sajaki\bbguild\model\admin;
-use sajaki\bbguild\model\games\Game;
+namespace bbdkp\bbguild\model\admin;
+use bbdkp\bbguild\model\games\Game;
 use phpbb\extension\metadata_manager;
 use phpbb\version_helper;
-use sajaki\bbguild\model\admin\log;
+use bbdkp\bbguild\model\admin\log;
 use phpbb\file_downloader;
 
 /**
@@ -67,8 +67,8 @@ class Admin
     public function __construct()
     {
         global $user, $phpEx, $phpbb_extension_manager;
-        $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbguild', true);
-        $user->add_lang_ext('sajaki/bbguild', array('admin','common'));
+        $this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
+        $user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
         include_once($this->ext_path . 'model/admin/constants.' . $phpEx);
 
         // Check for required extensions

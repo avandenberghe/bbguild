@@ -7,8 +7,8 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbguild\model\games\library;
-use sajaki\bbguild\model\games\library\GameInstall;
+namespace bbdkp\bbguild\model\games\library;
+use bbdkp\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -20,7 +20,7 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * FFXI Installer Class
- * @package sajaki\bbguild\model\games\library
+ * @package bbdkp\bbguild\model\games\library
  */
 class install_ffxi extends GameInstall
 {

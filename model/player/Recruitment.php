@@ -8,8 +8,8 @@
  *
  */
 
-namespace sajaki\bbguild\model\player;
-use sajaki\bbguild\model\games\rpg\Roles;
+namespace bbdkp\bbguild\model\player;
+use bbdkp\bbguild\model\games\rpg\Roles;
 
 /**
  * holds vacancies per guild, game, role and class

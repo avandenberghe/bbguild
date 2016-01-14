@@ -9,17 +9,17 @@
  *
  */
 
-namespace sajaki\bbguild\acp;
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\player\Members;
-use sajaki\bbguild\model\player\Guilds;
-use sajaki\bbguild\model\games\rpg\Roles;
-use sajaki\bbguild\model\player\Ranks;
+namespace bbdkp\bbguild\acp;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\player\Members;
+use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\games\rpg\Roles;
+use bbdkp\bbguild\model\player\Ranks;
 
 /**
  * This class manages member general info
  *
- * @package sajaki\bbguild\acp
+ * @package bbdkp\bbguild\acp
  */
 class mm_module extends Admin
 {
@@ -57,7 +57,7 @@ class mm_module extends Admin
 
         parent::__construct();
 
-        $form_key = 'sajaki/bbguild';
+        $form_key = 'bbdkp/bbguild';
         add_form_key($form_key);
         $this->tpl_name   = 'acp_' . $mode;
 
@@ -68,7 +68,7 @@ class mm_module extends Admin
              */
             case 'mm_listmembers':
 
-                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>Return to Index</h3></a>';
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>Return to Index</h3></a>';
                 $Guild = new Guilds();
 
                 $guildlist = $Guild->guildlist(1);
@@ -150,7 +150,7 @@ class mm_module extends Admin
                 if ($showadd)
                 {
                     $a = $this->request->variable('member_guild_id', $this->request->variable('hidden_guildid', 0));
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;guild_id=' . $a ));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;guild_id=' . $a ));
                     break;
                 }
 
@@ -163,7 +163,7 @@ class mm_module extends Admin
             /***************************************/
             case 'mm_addmember' :
 
-                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
                 $add = $this->request->is_set_post('add');
                 $update = $this->request->is_set_post('update');
@@ -171,7 +171,7 @@ class mm_module extends Admin
 
                 if ($add || $update)
                 {
-                    if (! check_form_key('sajaki/bbguild'))
+                    if (! check_form_key('bbdkp/bbguild'))
                     {
                         trigger_error('FORM_INVALID');
                     }
@@ -315,16 +315,16 @@ class mm_module extends Admin
         if ($newmember->member_id > 0)
         {
             //record added. now update some stats
-            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
+            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
             $success_message = sprintf($this->user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
 
-            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
             trigger_error($success_message . $this->link, E_USER_NOTICE);
 
         }
         else
         {
-            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
+            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
 
             $failure_message = sprintf($this->user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name));
             trigger_error($failure_message . $this->link, E_USER_WARNING);
@@ -390,8 +390,8 @@ class mm_module extends Admin
         $old_member->Getmember();
         $updatemember->Updatemember($old_member);
 
-        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id));
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id));
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
         $success_message = sprintf($this->user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
         trigger_error($success_message . $this->link);
 
@@ -411,8 +411,8 @@ class mm_module extends Admin
         $deletemember->Deletemember();
         $success_message = sprintf($this->user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
 
-        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $deletemember->member_guild_id));
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' .
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $deletemember->member_guild_id));
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' .
                 URI_GUILD . "=" . $deletemember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
         trigger_error($success_message . $this->link, E_USER_WARNING);
@@ -424,7 +424,7 @@ class mm_module extends Admin
      */
     private function ActivateList()
     {
-        if (!check_form_key('sajaki/bbguild'))
+        if (!check_form_key('bbdkp/bbguild'))
         {
             trigger_error('FORM_INVALID');
         }
@@ -589,8 +589,8 @@ class mm_module extends Admin
                 'CLASS'                => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;',
                 'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbguild_date_format'] . ' H:i:s', $row['last_update']),
                 'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
-                'U_VIEW_MEMBER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']),
-                'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
+                'U_VIEW_MEMBER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']),
+                'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
             $previous_data = $row[$previous_source];
         }
         $this->db->sql_freeresult($members_result);
@@ -600,7 +600,7 @@ class mm_module extends Admin
         $memberpagination = $this->phpbb_container->get('pagination');
 
         $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx",
-            'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri']['current'] .
+            'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri']['current'] .
             "&amp;" . URI_GUILD . "=" . $Guild->guildid .
             "&amp;minlevel=" . $minlevel .
             "&amp;maxlevel=" . $maxlevel .
@@ -618,39 +618,39 @@ class mm_module extends Admin
             'MAXLEVEL'              => $maxlevel,
             'START'                 => $start,
             'MEMBER_NAME'           => $member_filter,
-            'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module') . '&amp;mode=mm_addmember',
-            'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module') . '&amp;mode=mm_listmembers',
+            'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module') . '&amp;mode=mm_addmember',
+            'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module') . '&amp;mode=mm_listmembers',
             'L_TITLE'               => $this->user->lang['ACP_MM_LISTMEMBERS'],
             'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
-            'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_USERNAME'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_USERNAME'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_LEVEL'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_LEVEL'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_CLASS'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_CLASS'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_RANK'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_RANK'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_LAST_UPDATE'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_LAST_UPDATE'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_ID'                  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_ID'                  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'U_LIST_MEMBERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;'),
+            'U_LIST_MEMBERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;'),
             'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
             'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
             'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,
@@ -913,7 +913,7 @@ class mm_module extends Admin
         $this->template->assign_vars(array(
             'L_TITLE'                  => $this->user->lang['ACP_MM_ADDMEMBER'],
             'L_EXPLAIN'                => $this->user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
-            'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;'),
+            'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;'),
             'STATUS'                   => $editmember->member_status == 1 ? 'checked="checked"' : '',
             'MEMBER_NAME'              => $editmember->member_name,
             'MEMBER_ID'                => $editmember->member_id,

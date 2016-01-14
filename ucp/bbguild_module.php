@@ -7,20 +7,20 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace sajaki\bbguild\ucp;
+namespace bbdkp\bbguild\ucp;
 
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\player\Guilds;
-use sajaki\bbguild\model\player\Ranks;
-use sajaki\bbguild\model\player\Members;
-use sajaki\bbguild\model\games\rpg\Classes;
-use sajaki\bbguild\model\games\rpg\Faction;
-use sajaki\bbguild\model\games\rpg\Races;
-use sajaki\bbguild\model\games\rpg\Roles;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\player\Ranks;
+use bbdkp\bbguild\model\player\Members;
+use bbdkp\bbguild\model\games\rpg\Classes;
+use bbdkp\bbguild\model\games\rpg\Faction;
+use bbdkp\bbguild\model\games\rpg\Races;
+use bbdkp\bbguild\model\games\rpg\Roles;
 
 /**
  * Class bbguild_module
- * @package sajaki\bbguild\acp
+ * @package bbdkp\bbguild\acp
  */
 class bbguild_module extends Admin
 {
@@ -99,7 +99,7 @@ class bbguild_module extends Admin
         $mode = ($mode == '' ? 'characters' :$mode);
 
         // GET processing logic
-        $form_key = 'sajaki/bbguild';
+        $form_key = 'bbdkp/bbguild';
         add_form_key ( $form_key );
 
         switch ($this->mode)
@@ -114,7 +114,7 @@ class bbguild_module extends Admin
                 $member = new Members();
                 if ($submit)
                 {
-                    if (!check_form_key('sajaki/bbguild'))
+                    if (!check_form_key('bbdkp/bbguild'))
                     {
                         trigger_error('FORM_INVALID');
                     }

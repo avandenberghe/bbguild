@@ -13,10 +13,10 @@
  *
  */
 
-namespace sajaki\bbguild\model\wowapi;
-use sajaki\bbguild\model\wowapi\Realm;
-use sajaki\bbguild\model\wowapi\Guild;
-use sajaki\bbguild\model\wowapi\Character;
+namespace bbdkp\bbguild\model\wowapi;
+use bbdkp\bbguild\model\wowapi\Realm;
+use bbdkp\bbguild\model\wowapi\Guild;
+use bbdkp\bbguild\model\wowapi\Character;
 
 /**
  * Battle.net WoW API PHP SDK

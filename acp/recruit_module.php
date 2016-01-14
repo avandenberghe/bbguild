@@ -9,12 +9,12 @@
  *
  */
 
-namespace sajaki\bbguild\acp;
+namespace bbdkp\bbguild\acp;
 
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\player\Guilds;
-use sajaki\bbguild\model\games\rpg\roles;
-use sajaki\bbguild\model\player\Recruitment;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\games\rpg\roles;
+use bbdkp\bbguild\model\player\Recruitment;
 
 /**
  * This class manages guilds
@@ -77,8 +77,8 @@ class recruit_module  extends Admin
 
         parent::__construct();
         $this->tpl_name = 'dkp/acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
-        $form_key = 'sajaki/bbguild';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
+        $form_key = 'bbdkp/bbguild';
         add_form_key($form_key);
 
         $this->apply_installed = false;
@@ -105,11 +105,11 @@ class recruit_module  extends Admin
         $this->template->assign_vars(array(
             'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
             'GUILD_EMBLEM'          => $Guild->emblempath,
-            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
-            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
-            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
-            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=editrecruit'),
-            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\guild_module&amp;mode=listguilds'),
+            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=editrecruit'),
+            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
         ));
 
         switch ($mode)
@@ -202,7 +202,7 @@ class recruit_module  extends Admin
                 if ($add || $update)
                 {
 
-                    if (!check_form_key('sajaki/bbguild'))
+                    if (!check_form_key('bbdkp/bbguild'))
                     {
                         trigger_error('FORM_INVALID');
                     }
