@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbguild\migrations;
+namespace bbdkp\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
@@ -26,7 +26,7 @@ class release_2_0_0_m04_permissions extends migration
      */
     static public function depends_on()
     {
-        return array('\sajaki\bbguild\migrations\release_2_0_0_m03_config');
+        return array('\bbdkp\bbguild\migrations\release_2_0_0_m03_config');
     }
 
     /**

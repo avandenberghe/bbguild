@@ -7,8 +7,8 @@
  *
  */
 
-namespace sajaki\bbguild\model\games\rpg;
-use sajaki\bbguild\model\games\Game;
+namespace bbdkp\bbguild\model\games\rpg;
+use bbdkp\bbguild\model\games\Game;
 
 /**
  * Races

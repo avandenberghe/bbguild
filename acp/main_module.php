@@ -7,10 +7,10 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace sajaki\bbguild\acp;
+namespace bbdkp\bbguild\acp;
 
-use sajaki\bbguild\model\admin\Admin;
-use sajaki\bbguild\model\admin\log;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\admin\log;
 
 class main_module extends Admin
 {
@@ -47,11 +47,11 @@ class main_module extends Admin
 
         parent::__construct();
 
-        $form_key = 'sajaki/bbguild';
+        $form_key = 'bbdkp/bbguild';
         add_form_key($form_key);
         $this->page_title = 'ACP_BBGUILD_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module') . '"><h3>' . $this->user->lang['ACP_BBGUILD'] . '</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module') . '"><h3>' . $this->user->lang['ACP_BBGUILD'] . '</h3></a>';
 
         switch ($mode)
         {
@@ -125,7 +125,7 @@ class main_module extends Admin
                     foreach ($listlogs as $key => $log)
                     {
                         $this->template->assign_block_vars('actions_row', array(
-                            'U_VIEW_LOG' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
+                            'U_VIEW_LOG' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
                             'LOGDATE' 		=> $log['datestamp'],
                             'ACTION' 		=> $log['log_line'],
                         ));
@@ -155,7 +155,7 @@ class main_module extends Admin
                     'NUMBER_OF_GUILDS' => $total_guildcount ,
                     'BBGUILD_STARTED' => $bbguild_started,
                     'BBGUILD_VERSION'	=> BBGUILD_VERSION,
-                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=panel&amp;versioncheck_force=1'),
+                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=panel&amp;versioncheck_force=1'),
                     'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $this->user->lang['NA'],
                     'PLUGINS_INSTALLED' => $plugins_installed,
                 ));
@@ -279,7 +279,7 @@ class main_module extends Admin
                 $this->template->assign_vars(array(
                     'REGID' => isset($config['bbguild_regid']) ? $config['bbguild_regid'] : '',
                     'S_BBDKPREGISTERED' => isset($config['bbguild_regid']) ? $config['bbguild_regid'] : '',
-                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=config&amp;action=register'),
+                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=config&amp;action=register'),
 
                     'REALM' => $config['bbguild_default_realm'] ,
                     'EQDKP_START_DD' => date('d', $config['bbguild_eqdkp_start']) ,
@@ -314,7 +314,7 @@ class main_module extends Admin
                     'INACTIVE_POINT' => $config['bbguild_inactive_point_adj'] ,
                     'ACTIVE_POINT' => $config['bbguild_active_point_adj'] ,
 
-                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=config&amp;action=addconfig'),
+                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=config&amp;action=addconfig'),
                     'PHPBBVER' => $config['version'],
                     'BBDKPVER' => BBGUILD_VERSION,
 
@@ -484,9 +484,9 @@ class main_module extends Admin
                                         'log_action' => $log_action));
 
                                     //redirect to listing
-                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs');
+                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs');
                                     meta_refresh(3, $meta_info);
-                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
+                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
                                     trigger_error($message, E_USER_WARNING);
                                 }
                                 else
@@ -497,7 +497,7 @@ class main_module extends Admin
                                         'mark' 		=> $marked)));
                                 }
                                 // they hit no
-                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
+                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
                                 trigger_error($message, E_USER_WARNING);
                             }
                         }
@@ -520,7 +520,7 @@ class main_module extends Admin
                                 'ID'		=> $log['log_id'],
                                 'DATE' 		=> $log['datestamp'],
                                 'TYPE' 		=> $log['log_type'],
-                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start ) ,
+                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start ) ,
                                 'VERBOSE'	=> $verbose,
                                 'IMGPATH'    => $this->ext_path . 'adm/images/glyphs/view.gif',
                                 'USER' 		=> $log['username'],
@@ -536,7 +536,7 @@ class main_module extends Admin
 
                         $pagination = $phpbb_container->get('pagination');
 
-                        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
+                        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
                         $pagination->generate_template_pagination($pagination_url, 'pagination', 'page', $logcount, USER_LLIMIT, $start);
 
                         $this->template->assign_vars(array(
@@ -548,8 +548,8 @@ class main_module extends Admin
                             'O_USER' 	=> $current_order['uri'][2] ,
                             'O_IP' 		=> $current_order['uri'][3] ,
                             'O_RESULT' 	=> $current_order['uri'][4] ,
-                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
-                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs'),
+                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
+                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs'),
                             'CURRENT_ORDER' => $current_order['uri']['current'] ,
                             'START' => $start ,
                             'VIEWLOGS_FOOTCOUNT' => sprintf($this->user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
@@ -603,7 +603,7 @@ class main_module extends Admin
                 }
 
                 $this->template->assign_vars(array(
-                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs') . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
                 ));
                 break;
         }

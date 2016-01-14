@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbguild\model\admin;
+namespace bbdkp\bbguild\model\admin;
 
 /**
  * Singleton bbDKP Logging class

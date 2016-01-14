@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbguild\controller;
+namespace bbdkp\bbguild\controller;
 
 class main
 {

@@ -6,12 +6,12 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbguild\model\games\rpg;
-use sajaki\bbguild\model\games\Game;
+namespace bbdkp\bbguild\model\games\rpg;
+use bbdkp\bbguild\model\games\Game;
 
 /**
  * Roles
- * @package sajaki\bbguild\model\games\rpg
+ * @package bbdkp\bbguild\model\games\rpg
  */
 class Roles extends Game
 {

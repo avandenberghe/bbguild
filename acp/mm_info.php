@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbguild\acp;
+namespace bbdkp\bbguild\acp;
 
 /**
  * info class for acp module mm
@@ -20,17 +20,17 @@ class mm_info
     function module()
     {
         return array(
-            'filename'	=> '\sajaki\bbguild\acp\mm_module',
+            'filename'	=> '\bbdkp\bbguild\acp\mm_module',
             'title'		=> 'ACP_BBGUILD_MEMBER',
             'version'	=> '2.0.0',
             'modes'		=> array(
                 'mm_addmember'	    => array(
                     'title' => 'ACP_BBGUILD_MEMBER_ADD',
-                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false ),
                 'mm_listmembers'	=> array(
                     'title' => 'ACP_BBGUILD_MEMBER_LIST',
-                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER')),
             ),
         );

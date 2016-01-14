@@ -9,8 +9,8 @@
  * @author Sajaki
  *
  */
-namespace sajaki\bbguild\model\games\library;
-use sajaki\bbguild\model\games\library\GameInstall;
+namespace bbdkp\bbguild\model\games\library;
+use bbdkp\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * ffxiv Installer Class
- * @package sajaki\bbguild\model\games\library
+ * @package bbdkp\bbguild\model\games\library
  */
 class install_ffxiv extends GameInstall
 {

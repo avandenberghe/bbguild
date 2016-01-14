@@ -13,8 +13,8 @@
  *
  */
 
-namespace sajaki\bbguild\model\wowapi;
-use sajaki\bbguild\model\wowapi\Resource;
+namespace bbdkp\bbguild\model\wowapi;
+use bbdkp\bbguild\model\wowapi\Resource;
 
 /**
  * Realm resource.

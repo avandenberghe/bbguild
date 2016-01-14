@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbguild\acp;
+namespace bbdkp\bbguild\acp;
 
 /**
  * info class for acp module guild
@@ -20,23 +20,23 @@ class recruit_info
     function module()
     {
         return array(
-            'filename'	=> '\sajaki\bbguild\acp\recruit_module',
+            'filename'	=> '\bbdkp\bbguild\acp\recruit_module',
             'title'		=> 'ACP_BBGUILD_RECRUIT',
             'version'	=> '2.0.0',
             'modes'		=> array(
                 'addrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_ADD',
-                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'editrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
-                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'listrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_LIST',
-                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => true),
             ));
