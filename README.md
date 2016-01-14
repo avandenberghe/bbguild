@@ -68,7 +68,7 @@ Find support and more on
 
 ## contribute
 
-You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbDKP/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbguild/graphs/contributors).
 
 1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues
 2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
