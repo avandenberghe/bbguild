@@ -26,11 +26,11 @@ class mm_info
             'modes'		=> array(
                 'mm_addmember'	    => array(
                     'title' => 'ACP_BBGUILD_MEMBER_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false ),
                 'mm_listmembers'	=> array(
                     'title' => 'ACP_BBGUILD_MEMBER_LIST',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER')),
             ),
         );

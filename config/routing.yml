@@ -4,34 +4,34 @@
 #
 # default route
 #guild/guild/1
-sajaki_bbguild_00:
+bbdkp_bbguild_00:
     path: /guild
-    defaults: { _controller: sajaki.bbguild.controller:handleGuild, guild_id: 1    }
+    defaults: { _controller: bbdkp.bbguild.controller:handleGuild, guild_id: 1    }
     requirements:
      guild_id: \d*
 #dkp.php?page=news&guild_id=1
 #guild/news/guild/1
-sajaki_bbguild_02:
+bbdkp_bbguild_02:
     path: /guild/news/guild/{guild_id}
-    defaults: { _controller: sajaki.bbguild.controller:handleGuild, guild_id: 1    }
+    defaults: { _controller: bbdkp.bbguild.controller:handleGuild, guild_id: 1    }
     requirements:
      guild_id: \d*
 #dkp.php?page=roster&guild_id=1&rosterlayout=0
 #guild/roster/guild/1
 #guild/roster/guild/1?rosterlayout=1
-sajaki_bbguild_03:
+bbdkp_bbguild_03:
     path: /guild/roster/guild/{guild_id}
-    defaults: { _controller: sajaki.bbguild.controller:handleGuild, guild_id: 1 }
+    defaults: { _controller: bbdkp.bbguild.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id: \d*
 #dkp.php?page=member&member_id=2&dkpsys_id=3
 #guild/member/2?dkpsys_id=3
-sajaki_bbguild_04:
+bbdkp_bbguild_04:
     path: /guild/member/{member_id}
-    defaults: { _controller: sajaki.bbguild.controller:handleMember, member_id: 1 }
+    defaults: { _controller: bbdkp.bbguild.controller:handleMember, member_id: 1 }
     requirements:
      member_id: \d*
 #portal.php/guild/1
-sajaki_bbguild_43:
+bbdkp_bbguild_43:
     path: /guildportal/guild/{guild_id}
-    defaults: { _controller: sajaki.bbguild.portalcontroller:handlePortal, guild_id: 1 }
+    defaults: { _controller: bbdkp.bbguild.portalcontroller:handlePortal, guild_id: 1 }

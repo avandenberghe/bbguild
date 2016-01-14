@@ -1,7 +1,7 @@
 # mapping of service "sajaki.bbguild.controller" to class sajaki\bbguild\controller\main
 services:
-    sajaki.bbguild.controller:
-        class: sajaki\bbguild\controller\main
+    bbdkp.bbguild.controller:
+        class: bbdkp\bbguild\controller\main
         arguments:
             - @config
             - @config_text
@@ -9,8 +9,8 @@ services:
             - @template
             - @user
             - %core.php_ext%
-    sajaki.bbguild.portalcontroller:
-        class: sajaki\bbguild\controller\main
+    bbdkp.bbguild.portalcontroller:
+        class: bbdkp\bbguild\controller\main
         arguments:
             - @config
             - @config_text
@@ -18,8 +18,8 @@ services:
             - @template
             - @user
             - %core.php_ext%
-    sajaki.bbguild.listener:
-        class: sajaki\bbguild\event\main_listener
+    bbdkp.bbguild.listener:
+        class: bbdkp\bbguild\event\main_listener
         arguments:
             - @controller.helper
             - @template
