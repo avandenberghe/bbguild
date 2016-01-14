@@ -6,7 +6,7 @@ bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally
 
 The 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB 3.1. The name is changed from bbDKP to reflect that dkp functions are now removed from the core and will return as an addon extension. 
 
-[![Build Status](https://travis-ci.org/bbDKP/bbguild.svg?branch=2.0.0a1-ucp2)](https://travis-ci.org/bbDKP/bbguild)
+[![Build Status](https://api.travis-ci.org/bbDKP/bbGuild.svg)](https://travis-ci.org/bbDKP/bbguild)
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 Features : 
