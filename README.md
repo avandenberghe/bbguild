@@ -41,7 +41,7 @@ This code is not ready for testing yet...
 #### Install
 1. Download the latest release.
 2. In the `ext` directory of your phpBB board, create a new directory named `bbdkp` (if it does not already exist).
-3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/sajaki/bbguild/composer.json).
+3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/bbdkp/bbguild/composer.json).
 4. Navigate in the ACP to `Customise -> Manage extensions`.
 5. Look for `bbGuild Extension` under the Disabled Extensions list, and click its `Enable` link.
 
@@ -70,7 +70,7 @@ Find support and more on
 
 You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbguild/graphs/contributors).
 
-1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues
+1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbGuild/issues
 2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
 3. Make a pull request.
 
