@@ -6,7 +6,7 @@
  * @copyright 2011 bbguild <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author sajaki <sajaki@gmail.com>
- * @link http://www.avathar.be/bbguild
+ * @link http://www.avathar.be/bbdkp
  * @version 2.0
  *
  */
@@ -46,9 +46,10 @@ $lang = array();
 // DKP
 $lang = array_merge($lang, array(
 'NOT_UP_TO_DATE_TITLE' => 'La tua versione %s non è aggiornata.',
+'PRELELEASE_TITLE' => 'La tua versione %s è una versione pre.',
 'BBGUILD_LATESTVERSION' => 'Ultima Versione:',
-'BBDKPDISABLED' => 'bbDKP è attualmente disabilitato.',
-'BBDKPSCRIPTALERT' => 'bbDKP include embedded Javascript. Dovresti utilizzare un browser javascript-enabled.',
+'BBDKPDISABLED' => 'bbGuild è attualmente disabilitato.',
+'BBDKPSCRIPTALERT' => 'bbGuild include embedded Javascript. Dovresti utilizzare un browser javascript-enabled.',
 
 //addnews
 'ADD_NEWS' => 'Aggiungi News',
@@ -62,7 +63,7 @@ $lang = array_merge($lang, array(
 //REGISTRATION
 'REGISTRATIONID' => 'Chiave di registrazione bbDKP',
 'NOTREGISTERED' => 'Non Registrato',
-'REGISTRATION_EXPLAIN' => 'Se premi il tasto di registrazione, il tuo nome di dominio, la versione di phbb e la versione di bbDKP verranno inviati a bbDKP.com ed otterrai una chiave di registrazione. La chiave è a vostro esclusivo utilizzo, e la registrazione non è obbligatoria ai fini dell‘utilizzo di questo software. ',
+'REGISTRATION_EXPLAIN' => 'Se premi il tasto di registrazione, il tuo nome di dominio, la versione di phbb e la versione di bbGuild verranno inviati a avathar.be ed otterrai una chiave di registrazione. La chiave è a vostro esclusivo utilizzo, e la registrazione non è obbligatoria ai fini dell‘utilizzo di questo software. ',
 
 //JAVASCRIPT
 'B_HELP' => 'Testo Grassetto: [b]testo[/b]',
@@ -172,46 +173,11 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDATTENDEES_INSERTED' => 'Totale partecipanti alle incursioni inseiti : %s.',
 
 // installer
-'IMPORT_EQDKP132' => 'Importa i dati di EQDKP 1.3.2 in bbguild 1.1.1',
-'IMPORT_EQDKP132_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc. ',
-'IMPORT_EQDKP140' => 'Importa i dati di EQDKP 1.4.1 in bbguild 1.1.1',
+'IMPORT_EQDKP140' => 'Importa i dati di EQDKP 1.4.1 in bbguild 2.0.0',
 'IMPORT_EQDKP140_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc. ',
-'IMPORT_EQDKPPLUS' => 'Importa i dati EQDKP-PLUS in bbguild 1.1.1',
+'IMPORT_EQDKPPLUS' => 'Importa i dati EQDKP-PLUS in bbguild 2.0.0',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP-PLUS devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc.',
-'UMIL_INSERT_COMMON_ROW' => 'Inserimento dati di configurazione di bbguild per index/gradi/Bprogress',
-'UMIL_REMOVE_COMMON_ROW' => 'Rimozione dati di configurazione di bbguild per index/gradi/Bprogress',
-'UMIL_INSERT_GAME_ROW' => 'Inserimento dati gioco',
-'UMIL_INSERT_DAOCDATA' => 'Inserito dati per Dark Age of Camelot',
-'UMIL_INSERT_EQDATA' => 'Inserito dati per EverQuest',
-'UMIL_INSERT_EQ2DATA' => 'Inserito dati per EverQuest II',
-'UMIL_INSERT_LOTRODATA' => 'Inserito dati per Lord of the Rings',
-'UMIL_INSERT_FFXIDATA' => 'Inserito dati per Final Fantasy XI',
-'UMIL_INSERT_VANGUARDDATA' => 'Inserito dati per Vanguard',
-'UMIL_INSERT_WOWDATA' => 'Inserito dati per Warcraft',
-'UMIL_INSERT_WARDATA' => 'Inserito dati per Warhammer',
-'UMIL_INSERT_AIONDATA' => 'Inserito dati per Aion',
-'UMIL_INSERT_FFXIVDATA' => 'Inserito dati per Final Fantasy XIV',
-'UMIL_ITEMSTATS' => 'Aggiunto Modulo Popup,  configurazione',
-'UMIL_ITEMSTATS_HIDDEN' => 'Aggiunto Modulo Popup nascosto e configurazione',
-'UMIL_ITEMSTATS_REMOVED' => 'Rimosso modulo Popup',
-'UMIL_REMOVE_GAME_ROW' => 'Rimozione dati di gioco',
-'UMIL_UPGRADE_WOWDATA' => 'Rimozione dati Warcraft',
-'UMIL_LOGCLEANED' => 'Pulizia { and } da tabbela Log',
-'UMIL_CHOOSE' => 'Scegli Gioco',
-'UMIL_GUILD' => 'Nome Gilda / Alleanza',
-'UMIL_INSERT_DKPLINK' => 'Inserito Dkplink',
-'UMIL_REMOVE_DKPLINK' => 'Rimosso Dkplink',
-'UMIL_CACHECLEARED' => 'Caches Ripulita',
-'UMIL_RANKCHANGED' => 'Aggiunto guild_id e index alla tabella Gradi',
-'UMIL_CLASSCHANGED' => 'Le classi ID di WOW sono aggiornate',
-'UMIL_OLD_RESTORE_SUCCESS' => 'Le tabelle bbguild (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp ripristinate con successo.',
-'UMIL_OLD_RESTORE_NOT' => 'Nessuna installazione di bbguild (%s) da ripristinare.',
-'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbguild (%s) disinstallato. ',
-'UMIL_128MINIMUM' => 'La versione precedente 1.2.8 è richiesta per update alla 1.3.0',
-'UMIL_GAME' => 'Dati di Gioco installati per %s',
-'UMIL_DUMMYDATA' => 'Inserimento dati Dummy',
-'UMIL_GAMEUNINST' => 'Dati di gioco Rimossi',
-'UMIL_UPDTABLES' =>  'Tabelle %s per la versione %s',
+
 
 // ACP titles
 'BBGUILD_WELCOME' => 'Benvenuti in bbDKP',
