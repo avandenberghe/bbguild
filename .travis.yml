@@ -40,8 +40,7 @@ env:
 
 branches:
   only:
-    - develop-2.0
-    - 2.0.0a1-ucp2
+    - develop2
 
 install:
   - travis_retry composer install --dev --no-interaction --prefer-source
