@@ -2,27 +2,7 @@
 <a name="maincontent"></a>
 
 <h1>{L_GENERAL_SETTINGS}</h1>
-<p>{L_ACP_DKP_CONFIG_EXPLAIN}</p>
-
-<form method="post" action="{U_REGISTER}" id="register" >
- <fieldset>
- <legend>{L_REGISTER}</legend>
-  <dl>
-    <dt style="width: 75%;"><label for="bbguild_user_nlimit">{L_REGISTRATIONID}:</label><span style="font-size: smaller;">{L_REGISTRATION_EXPLAIN}</span></dt>
-    <dd>
-    	<!-- IF S_BBDKPREGISTERED -->
-    		&nbsp; {REGID} 
-    	<!-- ELSE -->
-    		&nbsp; <input type="submit" name="register" value="{L_REGISTER}" class="button1" />
-    		{L_NOTREGISTERED}
-    	<!-- ENDIF -->
-    </dd>
-  </dl>
-  
- </fieldset>
-<input type="hidden" name="phpbbversion" value="{PHPBBVER}" />
-<input type="hidden" name="bbguildversion" value="{BBDKPVER}" />
-</form>
+<p>{L_ACP_BBGUILD_CONFIG_EXPLAIN}</p>
 
 <form method="post" action="{U_ADDCONFIG}" id="addconfig" >
 
@@ -134,11 +114,34 @@
 
 </fieldset>
 
-
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset>
+    <legend>{L_ACP_SUBMIT_CHANGES}</legend>
 	{S_FORM_TOKEN}
   <input type="submit" name="updateconfig" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </fieldset>
 
 </form>
+
+<form method="post" action="{U_REGISTER}" id="register" >
+        <fieldset>
+            <legend>{L_REGISTER}</legend>
+            <dl>
+                <dt style="width: 75%;"><label for="bbguild_user_nlimit">{L_REGISTRATIONID}:</label><span style="font-size: smaller;">{L_REGISTRATION_EXPLAIN}</span></dt>
+                <dd>
+                    <!-- IF S_BBDKPREGISTERED -->
+                    &nbsp; {REGID}
+                    <!-- ELSE -->
+                    &nbsp; <input type="submit" name="register" value="{L_REGISTER}" class="button1" />
+                    {L_NOTREGISTERED}
+
+                    <!-- ENDIF -->
+                </dd>
+            </dl>
+
+        </fieldset>
+        {S_FORM_TOKEN}
+        <input type="hidden" name="phpbbversion" value="{PHPBBVER}" />
+        <input type="hidden" name="bbguildversion" value="{BBDKPVER}" />
+</form>
+
 <!-- INCLUDE overall_footer.html -->

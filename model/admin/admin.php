@@ -210,7 +210,7 @@ class Admin
     {
         $rndhash = base_convert(mt_rand(5, 60466175) . mt_rand(5, 60466175), 10, 36);
         // bbguild registration url
-        $url = "http://www.avathar.be/services/registerbbguild.php";
+        $url = "http://www.avathar.be/services/registerbbkdp.php";
         // Create URL parameter string
         $fields_string = '';
         foreach( $regdata as $key => $value )
@@ -220,10 +220,22 @@ class Admin
         $fields_string .= 'rndhash='.$rndhash;
 
         $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_URL, $url);
-        curl_setopt( $ch, CURLOPT_POST, 4 );
-        curl_setopt( $ch, CURLOPT_HEADER , false);
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
+
+        // set options
+        curl_setopt_array($ch, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST=> 4,
+            CURLOPT_URL => $url,
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => $fields_string,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION, true,
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_VERBOSE => true,
+            CURLOPT_HEADER => false
+        ));
+
         curl_exec($ch);
         curl_close( $ch );
 
@@ -237,12 +249,19 @@ class Admin
     private final function get_register_request($regcode)
     {
         global $cache, $config;
-        $url = 'http://www.avathar.be/services/registerbbguild.php?rndhash=' . $regcode;
+        $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
         $data = $this->Curl($url, 'GET');
-        $regID = isset($data['response']) ? $data['response']['registration']: '';
-        $config->set('bbguild_regid', $regID, true);
-        $cache->destroy('config');
-        trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE );
+        $regID = isset($data['response']) ? isset($data['response']['registration']) ? $data['response']['registration'] : '' : '';
+        if( $regID != '')
+        {
+            $config->set('bbguild_regid', $regID, true);
+            $cache->destroy('config');
+            trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE );
+        }
+        else
+        {
+            trigger_error('Registration failed ', E_USER_WARNING );
+        }
     }
 
     /**

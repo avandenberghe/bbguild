@@ -25,7 +25,7 @@ if (! defined ( 'IN_PHPBB' ))
  */
 class install_eq extends GameInstall
 {
-    // credit shadowfox  http://www.avathar.be/bbguild/viewtopic.php?f=33&t=2676
+    // credit shadowfox  http://www.avathar.be/bbdkp/viewtopic.php?f=33&t=2676
     protected $bossbaseurl = 'http://everquest.allakhazam.com/db/npc.html?id=%s';
     protected $zonebaseurl = 'http://everquest.allakhazam.com/db/zone.html?zstrat=%s';
 

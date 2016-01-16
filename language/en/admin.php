@@ -6,7 +6,7 @@
  * @copyright 2009 bbguild <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author sajaki <sajaki@gmail.com>
- * @link http://www.avathar.be/bbguild
+ * @link http://www.avathar.be/bbdkp
  * @version 2.0
  *
  */
@@ -64,7 +64,7 @@ $lang = array_merge($lang, array(
 //REGISTRATION
 'REGISTRATIONID' => 'bbGuild Registration key',
 'NOTREGISTERED' => 'Unregistered',
-'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbGuild version are sent to bbGuild.com and you get a registration key. This is entirely up to you, registration is not needed to use this software. ',
+'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbGuild version are sent to avathar.be and you get a registration key. This is entirely up to you, registration is not needed to use this software. ',
 
 //JAVASCRIPT
 'B_HELP' => 'Bold text: [b]text[/b]',
@@ -174,46 +174,11 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDATTENDEES_INSERTED' => 'Total raid attendees inserted : %s.',
 
 // installer
-'IMPORT_EQDKP132' => 'Import EQDKP 1.3.2 data Into bbguild 1.1.1',
-'IMPORT_EQDKP132_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
-'IMPORT_EQDKP140' => 'Import EQDKP 1.4.1 data Into bbguild 1.1.1',
+'IMPORT_EQDKP140' => 'Import EQDKP 1.4.1 data Into bbguild 2.0.0',
 'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
-'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbguild 1.1.1',
+'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbguild 2.0.0',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
-'UMIL_INSERT_COMMON_ROW' => 'Insert common bbguild data for index/ranks/Bossprogress',
-'UMIL_REMOVE_COMMON_ROW' => 'Remove common bbguild data for index/ranks/Bossprogress',
-'UMIL_INSERT_GAME_ROW' => 'Insert game data',
-'UMIL_INSERT_DAOCDATA' => 'Inserted Dark Age of Camelot Data',
-'UMIL_INSERT_EQDATA' => 'Inserted EverQuest Data',
-'UMIL_INSERT_EQ2DATA' => 'Inserted EverQuest II Data',
-'UMIL_INSERT_LOTRODATA' => 'Inserted Lord of the Rings Data',
-'UMIL_INSERT_FFXIDATA' => 'Inserted Final Fantasy XI Data',
-'UMIL_INSERT_VANGUARDDATA' => 'Inserted Vanguard Data',
-'UMIL_INSERT_WOWDATA' => 'Inserted Warcraft Data',
-'UMIL_INSERT_WARDATA' => 'Inserted Warhammer Data',
-'UMIL_INSERT_AIONDATA' => 'Inserted Aion Data',
-'UMIL_INSERT_FFXIVDATA' => 'Inserted Final Fantasy XIV Data',
-'UMIL_ITEMSTATS' => 'Added Popup Module,  config',
-'UMIL_ITEMSTATS_HIDDEN' => 'Added Hidden Popup Module & config',
-'UMIL_ITEMSTATS_REMOVED' => 'Removed Popup Module',
-'UMIL_REMOVE_GAME_ROW' => 'Remove game data',
-'UMIL_UPGRADE_WOWDATA' => 'Removed Warcraft Data',
-'UMIL_LOGCLEANED' => 'Cleaned { and } from Log table',
-'UMIL_CHOOSE' => 'Choose Game',
-'UMIL_GUILD' => 'Guildtag / Alliance Name',
-'UMIL_INSERT_DKPLINK' => 'Dkplink inserted',
-'UMIL_REMOVE_DKPLINK' => 'Dkplink removed',
-'UMIL_CACHECLEARED' => 'Caches Cleared',
-'UMIL_RANKCHANGED' => 'Added guild_id and index to ranks table',
-'UMIL_CLASSCHANGED' => 'WOW Class ids updated',
-'UMIL_OLD_RESTORE_SUCCESS' => 'bbguild (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp tables restored successfully.',
-'UMIL_OLD_RESTORE_NOT' => 'No bbguild (%s) installation found to restore.',
-'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbguild (%s) uninstalled. ',
-'UMIL_128MINIMUM' => 'Old version. 1.2.8 is required for updating to 1.3.0',
-'UMIL_GAME' => 'Game data installed for %s',
-'UMIL_DUMMYDATA' => 'Dummy data entered',
-'UMIL_GAMEUNINST' => 'Game data uninstalled',
-'UMIL_UPDTABLES' =>  'Tables %s for version %s',
+
 
 // ACP titles
 'BBGUILD_WELCOME' => 'Welcome to bbGuild',
