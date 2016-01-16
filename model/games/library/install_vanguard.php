@@ -160,14 +160,4 @@ class install_vanguard extends GameInstall
 
 
 
-    /**
-     * Event Groups
-     * see parent function InstallEventGroup()
-     */
-    protected function  InstallEventGroup()
-    {
-
-    }
-
-
 }

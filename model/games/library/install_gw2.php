@@ -181,63 +181,6 @@ class install_gw2 extends GameInstall
 		unset ( $sql_ary );
 		
 	}
-	
-	/**
-	 * GW2 dkp id to be created
-	 */
-	private $gw2dkpid = 0; 
-	
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-	*/
-    protected function InstallEventGroup()
-	{
-		global  $db;
-		
-		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'GW2 Raids' ";
-		$result = $db->sql_query($sql);
-		$this->gw2dkpid  = (int) $db->sql_fetchfield('dkpsys_id');
-		$db->sql_freeresult($result);
-		if ($this->gw2dkpid == 0)
-		{
-			
-			// dkp pool
-			$sql_ary = array (
-					'dkpsys_name' => 'GW2 Raids',
-					'dkpsys_status' => 'Y',
-					'dkpsys_addedby' => 'admin',
-					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' .  DKPSYS_TABLE  . $db->sql_build_array('INSERT', $sql_ary);
-			$db->sql_query($sql);
-			$this->gw2dkpid = $db->sql_nextid();
-			$this->InstallEvents(); 
-		}
-		
-			
-	}
-	
-	/**
-	 * Install sample Events and Events
-	 * an Event answers the 'what' question
-	 */
-    protected function InstallEvents()
-	{
-		global  $db;
-		$db->sql_query('DELETE FROM ' .  BBEVENTS_TABLE . '  WHERE event_dkpid = ' . $this->gw2dkpid );
-		$sql_ary = array();
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Ascalonian Catacombs (30)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Caudecus’s Manor  (45)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Twilight Arbor (50)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Sorrow’s Embrace (65)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Citadel of Flame (70)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Crucible of Eternity (75)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Honor of the Waves (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Arah (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_ara' );
-        $sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Fractals of the Mists (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_ara' );
-
-		$db->sql_multi_insert (  BBEVENTS_TABLE , $sql_ary );
-	}
 
 
     /**

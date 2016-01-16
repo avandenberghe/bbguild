@@ -345,14 +345,4 @@ class install_eq2 extends GameInstall
 	}
 
 
-
-    /**
-     * Event Groups
-     * see parent function InstallEventGroup()
-     */
-    protected function  InstallEventGroup()
-    {
-
-    }
-
 }

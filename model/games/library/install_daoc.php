@@ -294,14 +294,6 @@ class install_daoc extends GameInstall
 
 	}
 
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-	*/
-    protected function InstallEventGroup()
-	{
-		// don‘t know what event groups to make for DaoC
-	}
 
 }
 

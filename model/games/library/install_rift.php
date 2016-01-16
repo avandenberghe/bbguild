@@ -187,66 +187,6 @@ class install_rift extends GameInstall
 		
 		
 	}
-	
-	/**
-	 * rift dkp id to be created
-	 */
-	private $riftdkpid = 0; 
-	
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-	 *
-	 *	Slivers
-	 *	Greenscale's Blight
-	 *	Hammerknell
-	 *	Infernal Dawn
- 	 *	The River of Souls
-	 *	Raid Rifts
-	 */
-    protected function InstallEventGroup()
-	{
-		global $db;
-		
-		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Rift Raids' ";
-		$result = $db->sql_query($sql);
-		$this->riftdkpid = (int) $db->sql_fetchfield('dkpsys_id');
-		$db->sql_freeresult($result);
-		
-		if ($this->riftdkpid == 0)
-		{
-			$db->sql_query('DELETE FROM ' .  BBEVENTS_TABLE  .' WHERE event_dkpid = ' . $this->riftdkpid );
-			
-			$sql_ary = array (
-					'dkpsys_name' => 'Rift Raids',
-					'dkpsys_status' => 'Y',
-					'dkpsys_addedby' => 'admin',
-					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' .  DKPSYS_TABLE  . $db->sql_build_array('INSERT', $sql_ary);
-			$db->sql_query($sql);
-			$this->riftdkpid = $db->sql_nextid();
-			$this->InstallEvents(); 
-		}
-    }
-    
-
-    /**
-     * Install sample Events and Events
-     * an Event answers the 'what' question
-     */
-    protected function InstallEvents()
-    {
-    	global $db;
-    	
-    	$sql_ary = array();
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Slivers', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Greenscale’s Blight', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Hammerknell', 'event_color' => '#C6DEFF', 'event_value' => 10 , 'event_imagename' => '') ;
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Infernal Dawn', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'The River of Souls', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
-    	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Expert/Raid rifts', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
-    	$db->sql_multi_insert (  BBEVENTS_TABLE , $sql_ary );
-    }
 
 
 }

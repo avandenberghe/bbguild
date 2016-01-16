@@ -13,8 +13,14 @@ use bbdkp\bbguild\model\games\Game;
  * Roles
  * @package bbdkp\bbguild\model\games\rpg
  */
-class Roles extends Game
+class Roles
 {
+    /**
+     * the game_id (unique key)
+     * @var string
+     */
+    public $game_id;
+
     /**
      * Primary key
      * @var int

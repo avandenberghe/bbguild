@@ -204,13 +204,4 @@ class install_ffxi extends GameInstall
 	}
 
 
-    /**
-     * Event Groups
-     * see parent function InstallEventGroup()
-     */
-    protected function  InstallEventGroup()
-    {
-
-    }
-
 }
