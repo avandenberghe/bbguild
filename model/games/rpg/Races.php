@@ -17,8 +17,13 @@ use bbdkp\bbguild\model\games\Game;
  *
  *   @package bbguild
  */
- class Races extends Game
+ class Races
 {
+     /**
+      * the game_id (unique key)
+      * @var string
+      */
+     public $game_id;
 
 	/**
 	 * race id

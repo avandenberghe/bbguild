@@ -52,23 +52,6 @@ class install_custom extends GameInstall
 
 	}
 
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-	*/
-    protected function InstallEventGroup()
-	{
-
-	}
-
-	/**
-	 * Install sample Events and Events
-	 * an Event answers the 'what' question
-	*/
-    protected function InstallEvents()
-	{
-
-	}
 
 
 

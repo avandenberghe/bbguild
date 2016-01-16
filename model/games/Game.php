@@ -295,11 +295,11 @@ class Game
     public function install()
     {
         //insert into phpbb_bbguild_games table
-        global $user, $phpEx, $phpbb_root_path, $config;
+        global $user, $phpEx, $config;
 
         if ($this->game_id == '')
         {
-            \trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
+            trigger_error(sprintf ( $user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
         }
 
         if(array_key_exists($this->game_id, $this->preinstalled_games))
@@ -318,7 +318,7 @@ class Game
             {
                 if ($config['bbguild_gameworld_version'] >= '2.0')
                 {
-                    $classname = '\bbdkp\bbguild\model\games\library\world_' . $this->game_id;
+                    $classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
                     $installworld = new $classname;
                     $installworld->Install($this->game_id);
                 }
@@ -341,11 +341,11 @@ class Game
             {
                 if ($config['bbguild_gameworld_version'] >= '2.0')
                 {
-                    if (!class_exists('\bbdkp\bbguild\model\games\library\world_custom'))
+                    if (!class_exists('\bbdkp\bbworld\model\games\library\world_custom'))
                     {
                         include($this->ext_path .'model/games/library/world_custom.' . $phpEx);
                     }
-                    $installworld = new \sajaki\bbworld\model\games\library\world_custom;
+                    $installworld = new \bbdkp\bbworld\model\games\library\world_custom;
                     $installworld->Install($this->game_id);
 
                 }
@@ -358,7 +358,7 @@ class Game
      */
     public function Delete()
     {
-        global $user, $phpEx, $phpbb_root_path, $config;
+        global $user, $phpEx, $config;
         if ($this->game_id == '')
         {
             \trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
@@ -379,7 +379,7 @@ class Game
             {
                 include($this->ext_path .'model/games/library/install_custom.' . $phpEx);
             }
-            $gameclassname = '\bbguild\controller\games\install_custom';
+            $gameclassname = '\bbdkp\bbguild\model\games\library\install_custom';
         }
 
         //is bossprogress installed ?
@@ -389,12 +389,12 @@ class Game
             {
                 if(array_key_exists($this->game_id, $this->preinstalled_games))
                 {
-                    $gameworld_classname = '\sajaki\bbworld\model\games\library\world_' . $this->game_id;
+                    $gameworld_classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
                     $installworld = new $gameworld_classname;
                 }
                 else
                 {
-                    $installworld = new \sajaki\bbworld\model\games\library\world_custom;
+                    $installworld = new \bbdkp\bbworld\model\games\library\world_custom;
                 }
                 $installworld->Uninstall($this->game_id, $this->getName());
             }
@@ -478,8 +478,8 @@ class Game
         $sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
         $sql .= ' GROUP BY g.id, g.game_id, g.game_name';
         $sql .= ' ORDER BY g.game_id';
-        // cache for 7 days
-        $result = $db->sql_query ( $sql, 604800 );
+        // cache for 1 days
+        $result = $db->sql_query ( $sql, 86400 );
         while($row = $db->sql_fetchrow($result))
         {
             $this->games[$row['game_id']] = $row['game_name'];

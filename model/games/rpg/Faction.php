@@ -18,9 +18,9 @@ use bbdkp\bbguild\model\games\Game;
  * 
  *   @package bbguild
  */
- class Faction extends Game
+ class Faction
 {
-	/**
+     /**
 	 * game id 
 	 * @var string
 	 */

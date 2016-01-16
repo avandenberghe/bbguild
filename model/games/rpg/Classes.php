@@ -18,8 +18,14 @@ use bbdkp\bbguild\model\games\Game;
  *
  *   @package bbguild
  */
- class Classes extends Game
+ class Classes
  {
+
+     /**
+      * the game_id (unique key)
+      * @var string
+      */
+     public $game_id;
 
      /**
       * Class id
@@ -93,6 +99,8 @@ use bbdkp\bbguild\model\games\Game;
       * @var array
       */
      public $armortypes;
+
+
 
 	/**
 	 * Classes Class constructor

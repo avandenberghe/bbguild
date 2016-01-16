@@ -158,13 +158,6 @@ class install_eq extends GameInstall
 		unset ( $sql_ary );
 	}
 	
-	/**
-	 * Event Groups
-	 * see parent function InstallEventGroup()
-	 */
-    protected function  InstallEventGroup()
-    {
 
-    }
 
 }

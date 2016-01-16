@@ -1213,7 +1213,7 @@ class game_module extends Admin
      */
 	private function showgame( Game $editgame)
 	{
-		global $phpbb_admin_path, $phpbb_root_path, $phpEx;
+		global $phpbb_admin_path, $phpEx;
 
 		//populate dropdown
 		foreach ($this->gamelist as $key => $game)
@@ -1343,7 +1343,7 @@ class game_module extends Admin
 
 		unset ( $listclasses, $cl );
 
-		$imgexists = file_exists($phpbb_root_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png');
+		$imgexists = file_exists($this->ext_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png');
 
         //set the other fields
 		$this->template->assign_vars ( array (
@@ -1351,7 +1351,7 @@ class game_module extends Admin
 				'GAMEIMAGEEXPLAIN' => sprintf($this->user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->getImagename(),
                 'GAME_NAME' => $editgame->getName(),
-				'GAMEPATH' => $phpbb_root_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
+				'GAMEPATH' => $this->ext_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
 				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->getImagename()) > 0 && $imgexists  ) ? true : false,
 				'EDITGAME' => sprintf($this->user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
@@ -1378,7 +1378,7 @@ class game_module extends Admin
 				'LISTFACTION_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTFACTION_FOOTCOUNT'], $total_factions ),
 				'LISTRACE_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTRACE_FOOTCOUNT'], $total_races ),
 				'LISTCLASS_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTCLASS_FOOTCOUNT'], $total_classes ),
-        'LISTROLES_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTROLES_FOOTCOUNT'], $total_roles ),
+                'LISTROLES_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTROLES_FOOTCOUNT'], $total_roles ),
 				'U_ACTION' => $this->u_action ) );
 	}
 

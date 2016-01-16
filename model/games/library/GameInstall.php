@@ -72,7 +72,6 @@ abstract class GameInstall
 		$this->Installfactions();
 		$this->InstallClasses();
 		$this->InstallRaces();
-		$this->InstallEventGroup();
         $this->InstallRoles();
 
 		//insert a new entry in the game table
@@ -94,8 +93,6 @@ abstract class GameInstall
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );
-        $cache->destroy( 'sql', DKPSYS_TABLE );
-        $cache->destroy( 'sql', BBEVENTS_TABLE );
         $cache->destroy( 'sql', MEMBER_LIST_TABLE );
         $cache->destroy( 'sql', BB_GAMEROLE_TABLE );
 
@@ -139,8 +136,6 @@ abstract class GameInstall
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );
-        $cache->destroy( 'sql', DKPSYS_TABLE );
-        $cache->destroy( 'sql', BBEVENTS_TABLE );
         $cache->destroy( 'sql', MEMBER_LIST_TABLE );
     }
 
@@ -161,13 +156,6 @@ abstract class GameInstall
 	 * must be implemented
 	*/
     abstract protected function InstallRaces();
-
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-     * must be implemented
-	 */
-    abstract protected function InstallEventGroup();
 
     /**
      * Install sample roles.

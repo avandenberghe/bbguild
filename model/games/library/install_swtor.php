@@ -175,69 +175,6 @@ class install_swtor extends GameInstall
 		
 		
 	}
-	
-	/**
-	 * dkp pool created for SWTOR
-	 * @var int
-	 */
-	private $swtordkpid = 0; 
-	
-	/**
-	 * Install sample Event Groups
-	 * an Event answers the 'what' question
-	*/
-    protected function InstallEventGroup()
-	{
-		global $db;
-		
-		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'SWTOR Flashpoints' ";
-		$result = $db->sql_query($sql);
-		$this->swtordkpid = (int) $db->sql_fetchfield('dkpsys_id');
-		$db->sql_freeresult($result);
-		if ($this->swtordkpid == 0)
-		{
-			$db->sql_query('DELETE FROM ' .  BBEVENTS_TABLE . ' WHERE event_dkpid = ' . $this->swtordkpid );
-			
-			$sql_ary = array (
-					'dkpsys_name' => 'SWTOR Flashpoints',
-					'dkpsys_status' => 'Y',
-					'dkpsys_addedby' => 'admin',
-					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' .  DKPSYS_TABLE  . $db->sql_build_array('INSERT', $sql_ary);
-			$db->sql_query($sql);
-			$this->swtordkpid = intval($db->sql_nextid());
-			
-			$this->InstallEvents();
-		}
-		
-	}
-	
-	/**
-	 * Install flashpoints
-	 * an Event answers the 'what' question
-	 */
-    protected function InstallEvents()
-	{
-		global $db;
-		$sql_ary = array();
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'The Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => '') ;
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Hammer Station', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Taral V', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
-		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Maelstrom Prison', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Collicoid War Game', 'event_color' => '#842DCE', 'event_value' => 45, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Red Reaper', 'event_color' => '#842DCE', 'event_value' => 45, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Battle of Ulum', 'event_color' => '#842DCE', 'event_value' => 50, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'False Emperor', 'event_color' => '#842DCE', 'event_value' => 50, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Kaon under Siege', 'event_color' => '#842DCE', 'event_value' => 50, 'event_imagename' => '' );
-        $sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Lost Island', 'event_color' => '#842DCE', 'event_value' => 50, 'event_imagename' => '' );
-
-		$db->sql_multi_insert (  BBEVENTS_TABLE , $sql_ary );
-		
-	}
 
 
 
