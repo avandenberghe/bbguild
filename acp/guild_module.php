@@ -47,6 +47,8 @@ class guild_module extends Admin
     protected $user;
     /** @var \phpbb\db\driver\driver_interface */
     protected $db;
+    /** @var \phpbb\config\config */
+    protected $config;
 
     public $id;
     public $mode;
@@ -58,9 +60,10 @@ class guild_module extends Admin
      */
     public function main($id, $mode)
     {
-        global $user, $template, $db, $phpbb_admin_path, $phpEx;
+        global $config, $user, $template, $db, $phpbb_admin_path, $phpEx;
         global $request;
 
+        $this->config = $config;
         $this->id = $id;
         $this->mode = $mode;
         $this->request=$request;
@@ -88,13 +91,23 @@ class guild_module extends Admin
                 {
                     $this->AddGuild($addguild);
                 }
-
+                $addguild->region = $config['bbguild_default_region'];
                 foreach ($this->regions as $key => $regionname)
                 {
                     $this->template->assign_block_vars('region_row', array(
                         'VALUE' => $key ,
                         'SELECTED' => ($addguild->region == $key) ? ' selected="selected"' : '' ,
                         'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+                }
+
+                $addguild->game_id = $config['bbguild_default_game'];
+
+                $thisgame = new Game;
+                $thisgame->game_id = $addguild->game_id;
+                $thisgame->Get();
+                if($thisgame->getApikey() != '' && $thisgame->game_id =='wow')
+                {
+                    $addguild->armory_enabled = true;
                 }
 
                 if(isset($this->games))
@@ -114,9 +127,12 @@ class guild_module extends Admin
 
                 $this->template->assign_vars(array(
                     'F_ENABLEARMORY'	=> $addguild->armory_enabled,
+                    'DEFAULTREALM'      => $config['bbguild_default_realm'],
                     'RECSTATUS'         => true,
+                    'MIN_ARMORYLEVEL'   => $config['bbguild_minrosterlvl'],
                 ));
                 $this->page_title = $this->user->lang['ACP_ADDGUILD'];
+
                 break;
             case 'editguild':
 
