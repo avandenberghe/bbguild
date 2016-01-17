@@ -29,11 +29,11 @@ class bbguild_info
             'modes'		=> array(
                 'char'	=> array(
                     'title' => 'UCP_CHARACTERS',
-                    'auth' => 'ext_bbdkp/bbguild && u_charclaim',
+                    'auth' => 'ext_bbdkp/bbguild && acl_u_charclaim',
                     'cat' => array('UCP_BBGUILD')),
                 'add'	=> array(
                     'title' => 'UCP_CHARACTER_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && u_charadd',
+                    'auth' => 'ext_bbdkp/bbguild && acl_u_charadd',
                     'cat' => array('UCP_BBGUILD')),
             ),
         );
