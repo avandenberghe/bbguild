@@ -223,7 +223,11 @@ class Guilds extends Admin
 		global $user;
 		parent::__construct();
 		$this->guildid = $guild_id;
-		$this->Getguild();
+        if($guild_id>0)
+        {
+            $this->Getguild();
+        }
+
 
 		$this->possible_recstatus = array(
 			0 => $user->lang['CLOSED'] ,
