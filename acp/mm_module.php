@@ -67,7 +67,7 @@ class mm_module extends Admin
              * List members
              */
             case 'mm_listmembers':
-
+                $this->tpl_name   = 'acp_listmembers';
                 $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>Return to Index</h3></a>';
                 $Guild = new Guilds();
 
@@ -162,7 +162,7 @@ class mm_module extends Admin
             // add member
             /***************************************/
             case 'mm_addmember' :
-
+                $this->tpl_name   = 'acp_addmember';
                 $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
                 $add = $this->request->is_set_post('add');
