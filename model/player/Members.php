@@ -618,31 +618,6 @@ class Members extends Admin
 				break;
 		}
 
-		// Get first and last raiding dates from raid table.
-		$sql = "SELECT b.member_id,
-			MIN(a.raid_start) AS startdate,
-			MAX(a.raid_start) AS enddate
-			FROM " . RAIDS_TABLE . " a
-			INNER JOIN " . RAID_DETAIL_TABLE . " b on a.raid_id = b.raid_id
-			WHERE  b.member_id = " . $this->member_id . "
-			GROUP BY b.member_id ";
-		$result = $db->sql_query($sql);
-		$startraiddate = (int) $db->sql_fetchfield('startdate', false, $result);
-		$endraiddate = (int) $db->sql_fetchfield('enddate', false, $result);
-		$db->sql_freeresult($result);
-
-		// if first recorded raiddate is before joindate then update joindate
-		if ($startraiddate != 0 && ($this->member_joindate == 0 || $this->member_joindate > $startraiddate))
-		{
-			$this->member_joindate = $startraiddate;
-		}
-
-		// if last raiddate is after outdate or outdate is in future then reset it
-		if ($endraiddate !=0 && ($this->member_outdate < $endraiddate || $this->member_outdate > time()))
-		{
-			$this->member_outdate = mktime(0, 0, 0, 12, 31, 2030);
-		}
-
 		// update the data including the phpbb userid
 		$query = $db->sql_build_array('UPDATE', array(
 			'member_name' => $this->member_name ,
@@ -686,7 +661,6 @@ class Members extends Admin
 			$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 				WHERE member_id= ' . $this->member_id);
 
-            $this->AddMemberAdjustment($config['bbguild_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
 		}
 
         // if status was 0 before then add a line in user comments and set an adjustment
@@ -699,8 +673,6 @@ class Members extends Admin
             ));
             $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 				WHERE member_id= ' . $this->member_id);
-
-            $this->AddMemberAdjustment($config['bbguild_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
         }
 
         $log_action = array(
@@ -737,14 +709,6 @@ class Members extends Admin
 	{
 		global $user, $db;
 
-		$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id = ' . (int) $this->member_id;
-		$db->sql_query($sql);
-		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . (int) $this->member_id;
-		$db->sql_query($sql);
-		$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id = ' . (int) $this->member_id;
-		$db->sql_query($sql);
-		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' where member_id = ' . (int) $this->member_id;
-		$db->sql_query($sql);
 		$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id = ' . (int) $this->member_id;
 		$db->sql_query($sql);
 
@@ -896,10 +860,7 @@ class Members extends Admin
         $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
 
         $this->member_id = $db->sql_nextid();
-
-        // add starting points
-        $this->AddMemberAdjustment($config['bbguild_starting_dkp'],$user->lang['STARTING_DKP'] );
-
+        
         $log_action = array(
             'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
             'L_NAME' 	 => ucwords($this->member_name)  ,
@@ -1168,8 +1129,6 @@ class Members extends Admin
         {
             $changed = true;
             $this->member_status = "1";
-            $this->AddMemberAdjustment($config['bbguild_active_point_adj'], $user->lang['ACTION_MEMBER_ACTIVATED']);
-
         }
 
         if ($changed)
@@ -1209,7 +1168,6 @@ class Members extends Admin
         {
             $changed = true;
             $this->member_status = "0";
-            $this->AddMemberAdjustment($config['bbguild_inactive_point_adj'], $user->lang['ACTION_MEMBER_DEACTIVATED']);
         }
 
         if ($changed)
@@ -1841,29 +1799,5 @@ class Members extends Admin
 		unset ($result);
 		return $dataset;
 	}
-
-    /**
-     * @param float $adj
-     * @param string $reason
-     */
-    private function AddMemberAdjustment($adj, $reason)
-    {
-        global $user;
-        $newadjust = new Adjust;
-        $newadjust->setMemberId($this->member_id);
-        $newadjust->setAdjustmentValue($adj);
-        $newadjust->setAdjustmentReason($reason);
-        $newadjust->setCanDecay(0);
-        $newadjust->setAdjDecay(0);
-        $newadjust->setDecayTime(0);
-        $newadjust->setAdjustmentDate($this->member_joindate);
-        $newadjust->setAdjustmentGroupkey($this->gen_group_key($newadjust->getAdjustmentDate(), $newadjust->getAdjustmentReason(), $newadjust->getAdjustmentValue()));
-        $newadjust->setAdjustmentAddedBy($user->data['username']);
-        foreach ($newadjust->getDkpsys() as $pool) {
-            $newadjust->setAdjustmentDkpid($pool['id']);
-            $newadjust->add();
-        }
-        unset($newadjust);
-    }
 
 }
