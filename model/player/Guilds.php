@@ -334,6 +334,7 @@ class Guilds extends Admin
                 'rec_status' => $this->recstatus,
 				'recruitforum' => $this->recruitforum,
 				'members' => 0,
+                'armoryresult' => 'NA',
 			));
 
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
@@ -360,8 +361,11 @@ class Guilds extends Admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-        $data =  $this->GetApiInfo(array());
-		$this->ApiUpdateBattleNet($data, array() );
+        if ($this->game_id == 'wow')
+        {
+            $data =  $this->GetApiInfo(array());
+            $this->ApiUpdateBattleNet($data, array() );
+        }
 
 		return true;
 
