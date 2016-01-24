@@ -115,7 +115,7 @@ class guild_module extends Admin
                     foreach ($this->games as $key => $gamename)
                     {
                         $this->template->assign_block_vars('game_row', array(
-                            'VALUE' => $key ,
+                            'VALUE' => $key,
                             'SELECTED' => ($addguild->game_id == $key) ? ' selected="selected"' : '' ,
                             'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
                     }
@@ -179,10 +179,12 @@ class guild_module extends Admin
                         $this->BuildTemplateEditGuildRanks($updateguild);
                         break;
 
+                    case 'editguild':
                     default:
-                        $submit = ($this->request->is_set_post('updateguild')) ? true : false;
-                        $delete = ($this->request->is_set_post('deleteguild')) ? true : false;
-                        $armory = ($this->request->is_set_post('armory_enabled')) ? true : false;
+                        $submit = $this->request->is_set_post('updateguild');
+                        $delete = $this->request->is_set_post('deleteguild');
+                        $armoryenabled = $this->request->is_set_post('armory_enabled');
+                        $updatearmory = $this->request->is_set_post('armory');
                         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
                         // POST check
                         if ($submit)
@@ -192,7 +194,7 @@ class guild_module extends Admin
                                 trigger_error('FORM_INVALID', E_USER_NOTICE);
                             }
 
-                            if($armory)
+                            if($armoryenabled)
                             {
                                 $this->UpdateGuild($updateguild, true);
                             }
@@ -200,6 +202,11 @@ class guild_module extends Admin
                             {
                                 $this->UpdateGuild($updateguild, false);
                             }
+                        }
+
+                        if($updatearmory)
+                        {
+                            $this->UpdateGuild($updateguild, true);
                         }
 
                         if ($delete)
@@ -296,7 +303,7 @@ class guild_module extends Admin
 
         if($updateArmory)
         {
-            $GuildAPIParameters = array('players');
+            $GuildAPIParameters = array('members');
         }
 
         if($updateguild->Guildupdate($old_guild, $GuildAPIParameters))
