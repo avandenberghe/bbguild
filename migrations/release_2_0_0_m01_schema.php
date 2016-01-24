@@ -37,7 +37,7 @@ class release_2_0_0_m01_schema extends migration
     protected $welcome_msg_table;
     protected $bbrecruit_table;
     protected $bb_gamerole_table;
-    protected $bbdkpplugins_table;
+    protected $plugins_table;
 
     static public function depends_on()
     {
@@ -71,7 +71,7 @@ class release_2_0_0_m01_schema extends migration
         $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
         $this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
         $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
-        $this->bbguild_plugins_table = $this->table_prefix  . 'bb_plugins';
+        $this->plugins_table = $this->table_prefix  . 'bb_plugins';
     }
 
     public function effectively_installed()
@@ -319,7 +319,7 @@ class release_2_0_0_m01_schema extends migration
                         'I03'	=> array('INDEX', 'log_ipaddress')),
                 ),
 
-                $this->bbguild_plugins_table	=> array(
+                $this->plugins_table	=> array(
                     'COLUMNS'	=> array(
                         'name'			=> array('VCHAR_UNI:255', ''),
                         'value'			=> array('BOOL', 0),
@@ -359,7 +359,7 @@ class release_2_0_0_m01_schema extends migration
                 $this->bb_gamerole_table,
                 $this->bbrecruit_table,
                 $this->bblogs_table,
-                $this->bbdkpplugins_table,
+                $this->plugins_table,
             ),
         );
     }
