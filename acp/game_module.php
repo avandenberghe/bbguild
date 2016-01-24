@@ -40,8 +40,9 @@ class game_module extends Admin
     /** @var \phpbb\user **/
     protected $user;
 
+	public $ext_path;
+	public $ext_manager;
     public $u_action;
-
     public $id;
     public $mode;
 
@@ -55,7 +56,11 @@ class game_module extends Admin
 	{
 
 		global $user, $template, $phpbb_admin_path, $phpEx;
-        global $request,  $phpbb_container;
+        global $phpbb_container, $request;
+        parent::__construct();
+
+		// Get an instance of the admin controller
+		$admin_controller = $phpbb_container->get('bbdkp.bbguild.admin.controller');
 
         $this->id = $id;
         $this->mode = $mode;
@@ -63,7 +68,6 @@ class game_module extends Admin
         $this->template=$template;
         $this->user=$user;
 
-        parent::__construct();
 		$form_key = 'bbdkp/bbguild';
 		add_form_key ( $form_key );
 		$this->tpl_name = 'acp_' . $this->mode;
