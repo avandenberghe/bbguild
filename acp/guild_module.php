@@ -140,7 +140,7 @@ class guild_module extends Admin
                 $updateguild = new Guilds($this->url_id);
                 if ($this->request->is_set_post('playeradd'))
                 {
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addplayer&amp;' . URI_GUILD . "=" . $this->url_id  ));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=addplayer&amp;' . URI_GUILD . "=" . $this->url_id  ));
                 }
 
                 $action = $this->request->variable('action', '');

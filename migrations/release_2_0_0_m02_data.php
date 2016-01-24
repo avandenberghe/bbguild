@@ -30,7 +30,7 @@ class release_2_0_0_m02_data extends container_aware_migration
     protected $race_table;
     protected $faction_table;
     protected $bbrecruit_table;
-    protected $bbdkpplugins_table;
+    protected $plugins_table;
 
 
     static public function depends_on()

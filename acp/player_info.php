@@ -24,11 +24,11 @@ class player_info
             'title'		=> 'ACP_BBGUILD_PLAYER',
             'version'	=> '2.0.0',
             'modes'		=> array(
-                'mm_addplayer'	    => array(
+                'addplayer'	    => array(
                     'title' => 'ACP_BBGUILD_PLAYER_ADD',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_PLAYER'), 'display' => false ),
-                'mm_listplayers'	=> array(
+                'listplayers'	=> array(
                     'title' => 'ACP_BBGUILD_PLAYER_LIST',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_PLAYER')),
