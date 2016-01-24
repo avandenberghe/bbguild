@@ -981,7 +981,7 @@ class Guilds extends Admin
             trim($game->getApilocale()) != ''
         )
         {
-            //available extra fields : 'players', 'achievements','news'
+            //available extra fields : 'members', 'achievements','news'
             $api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey(), $this->ext_path);
             $data = $api->Guild->getGuild($this->name, $this->realm, $params);
             $data = $data['response'];
@@ -1062,7 +1062,7 @@ class Guilds extends Admin
 
         $this->emblem = isset($data['emblem']) ? $data['emblem']: '';
         $this->emblempath = isset($data['emblem']) ?  $this->createEmblem(false)  : '';
-        $this->playerdata = isset($data['players']) ? $data['players']: '';
+        $this->playerdata = isset($data['members']) ? $data['members']: '';
 
         $query = $db->sql_build_array('UPDATE', array(
             'achievementpoints' => $this->achievementpoints,
@@ -1074,7 +1074,7 @@ class Guilds extends Admin
         ));
 
         $db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-        if (in_array("players", $params))
+        if (in_array('members', $params))
         {
             // update ranks table
             $rank = new Ranks($this->guildid);
