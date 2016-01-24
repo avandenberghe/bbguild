@@ -18,15 +18,6 @@ services:
             - '@template'
             - '@user'
             - '%core.php_ext%'
-    bbdkp.bbguild.listener:
-        class: bbdkp\bbguild\event\main_listener
-        arguments:
-            - '@controller.helper'
-            - '@template'
-            - '@user'
-            - '@config'
-        tags:
-            - { name: event.listener }
     bbdkp.bbguild.admin.controller:
         class: bbdkp\bbguild\controller\admin_controller
         arguments:
@@ -41,3 +32,12 @@ services:
             - '@ext.manager'
             - '%core.root_path%'
             - '%core.php_ext%'
+    bbdkp.bbguild.listener:
+        class: bbdkp\bbguild\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+            - '@config'
+        tags:
+            - { name: event.listener }
