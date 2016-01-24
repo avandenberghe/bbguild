@@ -24,13 +24,13 @@ bbdkp_bbguild_03:
     defaults: { _controller: bbdkp.bbguild.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id: \d*
-#dkp.php?page=member&member_id=2&dkpsys_id=3
-#guild/member/2?dkpsys_id=3
+#dkp.php?page=player&player_id=2&dkpsys_id=3
+#guild/player/2?dkpsys_id=3
 bbdkp_bbguild_04:
-    path: /guild/member/{member_id}
-    defaults: { _controller: bbdkp.bbguild.controller:handleMember, member_id: 1 }
+    path: /guild/player/{player_id}
+    defaults: { _controller: bbdkp.bbguild.controller:handleMember, player_id: 1 }
     requirements:
-     member_id: \d*
+     player_id: \d*
 #portal.php/guild/1
 bbdkp_bbguild_43:
     path: /guildportal/guild/{guild_id}

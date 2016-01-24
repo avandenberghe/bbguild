@@ -21,23 +21,23 @@ class guild_info
     {
         return array(
             'filename'	=> '\bbdkp\bbguild\acp\guild_module',
-            'title'		=> 'ACP_BBGUILD_MEMBER',
+            'title'		=> 'ACP_BBGUILD_PLAYER',
             'version'	=> '2.0.0',
             'modes'		=> array(
                 'addguild'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_ADD',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'cat' => array('ACP_BBGUILD_PLAYER'),
                     'display' => false),
                 'editguild'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_EDIT',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'cat' => array('ACP_BBGUILD_PLAYER'),
                     'display' => false),
                 'listguilds'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_LIST',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER')),
+                    'cat' => array('ACP_BBGUILD_PLAYER')),
             ),
         );
     }

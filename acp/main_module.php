@@ -57,16 +57,16 @@ class main_module extends Admin
         {
             // MAINPAGE
             case 'panel':
-                // get inactive members
-                $sql = 'SELECT count(*) as member_count FROM ' . MEMBER_LIST_TABLE . " WHERE member_status='0'";
+                // get inactive players
+                $sql = 'SELECT count(*) as player_count FROM ' . PLAYER_LIST_TABLE . " WHERE player_status='0'";
                 $result = $this->db->sql_query($sql);
-                $total_members_inactive = (int) $this->db->sql_fetchfield('member_count');
-                //get the active members
-                $sql = 'SELECT count(*) as member_count FROM ' . MEMBER_LIST_TABLE . " WHERE member_status='1'";
+                $total_players_inactive = (int) $this->db->sql_fetchfield('player_count');
+                //get the active players
+                $sql = 'SELECT count(*) as player_count FROM ' . PLAYER_LIST_TABLE . " WHERE player_status='1'";
                 $result = $this->db->sql_query($sql);
-                $total_members_active = (int) $this->db->sql_fetchfield('member_count');
-                // active member kpi
-                $total_members = $total_members_active . ' / ' . $total_members_inactive;
+                $total_players_active = (int) $this->db->sql_fetchfield('player_count');
+                // active player kpi
+                $total_players = $total_players_active . ' / ' . $total_players_inactive;
                 //number of guilds
                 $sql = 'SELECT count(*) as guild_count  FROM ' . GUILD_TABLE;
                 $result = $this->db->sql_query($sql);
@@ -151,7 +151,7 @@ class main_module extends Admin
 
                 $this->template->assign_vars(array(
                     'GLYPH' => $this->ext_path . "adm/images/glyphs/view.gif" ,
-                    'NUMBER_OF_MEMBERS' => $total_members ,
+                    'NUMBER_OF_PLAYERS' => $total_players ,
                     'NUMBER_OF_GUILDS' => $total_guildcount ,
                     'BBGUILD_STARTED' => $bbguild_started,
                     'BBGUILD_VERSION'	=> BBGUILD_VERSION,
@@ -352,8 +352,8 @@ class main_module extends Admin
                     $config->set('bbguild_portal_recent', $this->request->variable('show_recenttopics', 0), true);
                     $config->set('bbguild_portal_rtlen', $this->request->variable('n_rclength', 0), true);
                     $config->set('bbguild_portal_rtno', $this->request->variable('n_rcno', 0), true);
-                    $config->set('bbguild_portal_newmembers', $this->request->variable('show_newmembers', 0), true);
-                    $config->set('bbguild_portal_maxnewmembers', $this->request->variable('num_newmembers', 0), true);
+                    $config->set('bbguild_portal_newplayers', $this->request->variable('show_newplayers', 0), true);
+                    $config->set('bbguild_portal_maxnewplayers', $this->request->variable('num_newplayers', 0), true);
                     $config->set('bbguild_portal_whoisonline', $this->request->variable('show_onlineblock', 0), true);
                     $config->set('bbguild_portal_onlineblockposition', $this->request->variable('onlineblockposition', 0), true);
 
@@ -428,9 +428,9 @@ class main_module extends Admin
                     'SHOW_LINK_NO_CHECKED' => ($config['bbguild_portal_links'] == '0') ? ' checked="checked"' : '' ,
                     'SHOW_MENU_YES_CHECKED' => ($config['bbguild_portal_menu'] == '1') ? ' checked="checked"' : '' ,
                     'SHOW_MENU_NO_CHECKED' => ($config['bbguild_portal_menu'] == '0') ? ' checked="checked"' : '',
-                    'SHOW_NEWM_YES_CHECKED' => ($config['bbguild_portal_newmembers'] == '1') ? ' checked="checked"' : '' ,
-                    'SHOW_NEWM_NO_CHECKED' => ($config['bbguild_portal_newmembers'] == '0') ? ' checked="checked"' : '' ,
-                    'N_NUMNEWM' => $config['bbguild_portal_maxnewmembers'],
+                    'SHOW_NEWM_YES_CHECKED' => ($config['bbguild_portal_newplayers'] == '1') ? ' checked="checked"' : '' ,
+                    'SHOW_NEWM_NO_CHECKED' => ($config['bbguild_portal_newplayers'] == '0') ? ' checked="checked"' : '' ,
+                    'N_NUMNEWM' => $config['bbguild_portal_maxnewplayers'],
                 ));
                 $this->page_title = $this->user->lang['ACP_INDEXPAGE'];
 

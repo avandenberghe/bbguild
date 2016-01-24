@@ -28,7 +28,7 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    	'ACP_BBGUILD_MEMBER'	=> 'Gestion Guildes et membres',
-	'ACP_BBGUILD_MEMBER_ADD'	=> 'Ajouter membre',
-	'ACP_BBGUILD_MEMBER_LIST'	=> 'Membres',
+    	'ACP_BBGUILD_PLAYER'	=> 'Gestion Guildes et membres',
+	'ACP_BBGUILD_PLAYER_ADD'	=> 'Ajouter membre',
+	'ACP_BBGUILD_PLAYER_LIST'	=> 'Membres',
 ));

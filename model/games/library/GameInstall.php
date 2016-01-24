@@ -93,7 +93,7 @@ abstract class GameInstall
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );
-        $cache->destroy( 'sql', MEMBER_LIST_TABLE );
+        $cache->destroy( 'sql', PLAYER_LIST_TABLE );
         $cache->destroy( 'sql', BB_GAMEROLE_TABLE );
 
 	}
@@ -136,7 +136,7 @@ abstract class GameInstall
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );
-        $cache->destroy( 'sql', MEMBER_LIST_TABLE );
+        $cache->destroy( 'sql', PLAYER_LIST_TABLE );
     }
 
 	/**

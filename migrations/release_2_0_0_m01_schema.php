@@ -26,9 +26,9 @@ class release_2_0_0_m01_schema extends migration
     protected $bbgames_table;
     protected $news_table;
     protected $bblogs_table;
-    protected $member_ranks_table;
+    protected $player_ranks_table;
 
-    protected $member_list_table;
+    protected $player_list_table;
     protected $class_table;
     protected $race_table;
     protected $faction_table;
@@ -61,8 +61,8 @@ class release_2_0_0_m01_schema extends migration
         $this->bbgames_table = $this->table_prefix  . 'bb_games';
         $this->news_table = $this->table_prefix  . 'bb_news';
         $this->bblogs_table = $this->table_prefix  . 'bb_logs';
-        $this->member_ranks_table = $this->table_prefix  . 'bb_ranks';
-        $this->member_list_table = $this->table_prefix  . 'bb_members';
+        $this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
+        $this->player_list_table = $this->table_prefix  . 'bb_players';
         $this->class_table = $this->table_prefix  . 'bb_classes';
         $this->race_table = $this->table_prefix  . 'bb_races';
         $this->faction_table = $this->table_prefix  . 'bb_factions';
@@ -174,7 +174,7 @@ class release_2_0_0_m01_schema extends migration
                         'aion_legion_id'    => array('USINT', 0),
                         'aion_server_id'    => array('USINT', 0),
                         'level'             => array('UINT', 0),
-                        'members'           => array('UINT', 0),
+                        'players'           => array('UINT', 0),
                         'achievementpoints' =>  array('UINT', 0),
                         'guildarmoryurl'    => array('VCHAR:255', ''),
                         'emblemurl'         => array('VCHAR:255', ''),
@@ -191,7 +191,7 @@ class release_2_0_0_m01_schema extends migration
                 ),
 
                 /*7*/
-                $this->member_ranks_table	=> array(
+                $this->player_ranks_table	=> array(
                     'COLUMNS'	=> array(
                         //rank_id is not auto-increment
                         'guild_id'		=> array('USINT', 0),
@@ -205,35 +205,35 @@ class release_2_0_0_m01_schema extends migration
                 ),
 
                 /*8*/
-                $this->member_list_table	=> array(
+                $this->player_list_table	=> array(
                     'COLUMNS'	=> array(
-                        'member_id'        => array('UINT', NULL, 'auto_increment'),
+                        'player_id'        => array('UINT', NULL, 'auto_increment'),
                         'game_id'  		   => array('VCHAR:10', ''),
-                        'member_name'      => array('VCHAR_UNI:255', ''),
-                        'member_region'     => array('VCHAR', ''),
-                        'member_realm'      => array('VCHAR', ''),
-                        'member_title'      => array('VCHAR_UNI:255', ''),
-                        'member_level'     => array('USINT', 0),
-                        'member_race_id'   => array('USINT', 0),
-                        'member_class_id'  => array('USINT', 0),
-                        'member_rank_id'   => array('USINT', 0),
-                        'member_role'       => array('VCHAR:20', ''),
-                        'member_comment'   => array( 'TEXT_UNI' , ''),
-                        'member_joindate'  => array('TIMESTAMP', 0),
-                        'member_outdate'   => array('TIMESTAMP', 0),
-                        'member_guild_id'  => array('USINT', 0),
-                        'member_gender_id' => array('USINT', 0),
-                        'member_achiev'    => array('UINT', 0),
-                        'member_armory_url' => array('VCHAR:255', ''),
-                        'member_portrait_url' => array('VCHAR', ''),
+                        'player_name'      => array('VCHAR_UNI:255', ''),
+                        'player_region'     => array('VCHAR', ''),
+                        'player_realm'      => array('VCHAR', ''),
+                        'player_title'      => array('VCHAR_UNI:255', ''),
+                        'player_level'     => array('USINT', 0),
+                        'player_race_id'   => array('USINT', 0),
+                        'player_class_id'  => array('USINT', 0),
+                        'player_rank_id'   => array('USINT', 0),
+                        'player_role'       => array('VCHAR:20', ''),
+                        'player_comment'   => array( 'TEXT_UNI' , ''),
+                        'player_joindate'  => array('TIMESTAMP', 0),
+                        'player_outdate'   => array('TIMESTAMP', 0),
+                        'player_guild_id'  => array('USINT', 0),
+                        'player_gender_id' => array('USINT', 0),
+                        'player_achiev'    => array('UINT', 0),
+                        'player_armory_url' => array('VCHAR:255', ''),
+                        'player_portrait_url' => array('VCHAR', ''),
                         'phpbb_user_id' 	=> array('UINT', 0),
-                        'member_status'     => array('BOOL', 0) ,
+                        'player_status'     => array('BOOL', 0) ,
                         'deactivate_reason' => array('VCHAR_UNI:255', ''),
                         'last_update'       => array('TIMESTAMP', 0)
 
                     ),
-                    'PRIMARY_KEY'  => 'member_id',
-                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('member_guild_id', 'member_name'))),
+                    'PRIMARY_KEY'  => 'player_id',
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('player_guild_id', 'player_name'))),
                 ),
 
                 /*18*/
@@ -352,8 +352,8 @@ class release_2_0_0_m01_schema extends migration
                 $this->class_table,
                 $this->race_table,
                 $this->guild_table,
-                $this->member_ranks_table,
-                $this->member_list_table,
+                $this->player_ranks_table,
+                $this->player_list_table,
                 $this->welcome_msg_table,
                 $this->bbgames_table,
                 $this->bb_gamerole_table,

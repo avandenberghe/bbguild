@@ -27,17 +27,17 @@ class recruit_info
                 'addrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_ADD',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'cat' => array('ACP_BBGUILD_PLAYER'),
                     'display' => false),
                 'editrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'cat' => array('ACP_BBGUILD_PLAYER'),
                     'display' => false),
                 'listrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_LIST',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'cat' => array('ACP_BBGUILD_PLAYER'),
                     'display' => true),
             ));
     }

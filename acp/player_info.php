@@ -9,10 +9,10 @@
 namespace bbdkp\bbguild\acp;
 
 /**
- * info class for acp module mm
+ * info class for acp module player
  *   @package bbguild
  */
-class mm_info
+class player_info
 {
     /**
      * phpbb module function
@@ -20,18 +20,18 @@ class mm_info
     function module()
     {
         return array(
-            'filename'	=> '\bbdkp\bbguild\acp\mm_module',
-            'title'		=> 'ACP_BBGUILD_MEMBER',
+            'filename'	=> '\bbdkp\bbguild\acp\player_module',
+            'title'		=> 'ACP_BBGUILD_PLAYER',
             'version'	=> '2.0.0',
             'modes'		=> array(
-                'mm_addmember'	    => array(
-                    'title' => 'ACP_BBGUILD_MEMBER_ADD',
+                'mm_addplayer'	    => array(
+                    'title' => 'ACP_BBGUILD_PLAYER_ADD',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false ),
-                'mm_listmembers'	=> array(
-                    'title' => 'ACP_BBGUILD_MEMBER_LIST',
+                    'cat' => array('ACP_BBGUILD_PLAYER'), 'display' => false ),
+                'mm_listplayers'	=> array(
+                    'title' => 'ACP_BBGUILD_PLAYER_LIST',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_MEMBER')),
+                    'cat' => array('ACP_BBGUILD_PLAYER')),
             ),
         );
     }

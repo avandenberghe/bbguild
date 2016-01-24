@@ -41,7 +41,7 @@ class release_2_0_0_m05_mod extends migration
             //array('module.add', array('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBGUILD')),
             array('module.add', array('acp', 0, 'ACP_CAT_BBGUILD')),
             array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_MAINPAGE')),
-            array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_MEMBER')),
+            array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_PLAYER')),
             array('module.add', array('ucp', '0', 'UCP_BBGUILD')),
         );
 
@@ -66,7 +66,7 @@ class release_2_0_0_m05_mod extends migration
 
             array('module.add', array(
                 'acp',
-                'ACP_BBGUILD_MEMBER',
+                'ACP_BBGUILD_PLAYER',
                 array(
                     'module_basename' => '\bbdkp\bbguild\acp\guild_module',
                     'modes'           => array('addguild', 'editguild', 'listguilds') ,
@@ -75,10 +75,10 @@ class release_2_0_0_m05_mod extends migration
 
             array('module.add', array(
                 'acp',
-                'ACP_BBGUILD_MEMBER',
+                'ACP_BBGUILD_PLAYER',
                 array(
-                    'module_basename' => '\bbdkp\bbguild\acp\mm_module',
-                    'modes'           => array('mm_addmember', 'mm_listmembers') ,
+                    'module_basename' => '\bbdkp\bbguild\acp\player_module',
+                    'modes'           => array('addplayer', 'listplayers') ,
                 )
             )),
 

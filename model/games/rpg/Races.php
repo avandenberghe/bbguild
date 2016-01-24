@@ -156,13 +156,13 @@ use bbdkp\bbguild\model\games\Game;
 	{
 		global $user, $db, $config, $cache;
 
-		/* check if there are members with this raceid */
+		/* check if there are players with this raceid */
 		$sql_array = array (
 				'SELECT' => ' count(*) as racecount  ',
 				'FROM' => array (
-						MEMBER_LIST_TABLE => 'm',
+						PLAYER_LIST_TABLE => 'm',
 						RACE_TABLE => 'r' ),
-				'WHERE' => 'm.member_race_id = r.race_id
+				'WHERE' => 'm.player_race_id = r.race_id
 		    			and r.race_id =  ' .  $this->race_id . "
 		    			and r.game_id = m.game_id
 		    			and r.game_id = '" . $this->game_id . "'" );
