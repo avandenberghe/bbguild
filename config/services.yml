@@ -27,3 +27,17 @@ services:
             - '@config'
         tags:
             - { name: event.listener }
+    bbdkp.bbguild.admin.controller:
+        class: bbdkp\bbguild\controller\admin_controller
+        arguments:
+            - '@cache'
+            - '@config'
+            - '@dbal.conn'
+            - '@pagination'
+            - '@controller.helper'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@ext.manager'
+            - '%core.root_path%'
+            - '%core.php_ext%'
