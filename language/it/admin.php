@@ -316,7 +316,7 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_PLAYERS_MAN' => 'Non hai i permessi per gestire i membri della gilda.',
 'NOAUTH_A_LOGS_VIEW' => 'Non hai i permessi per visualizzare i logs bbDKP.',
 
-// Manage Members Menu (yes, MMM)
+// Manage Players Menu (yes, MMM)
 'LIST_EDIT_DEL_PLAYER' => 'Elenca, Modifica or Cancella Giocatori',
 'EDIT_RANKS' => 'Modifica Grado',
 'EDIT_ROLES' => 'Modifica Ruolo',
@@ -830,7 +830,7 @@ $lang = array_merge($lang, array(
 'DELETE_GUILD' => 'Cancella Gilda',
 'DELETE_ITEM' => 'Cancella Oggetto',
 'DELETE_PLAYER' => 'Cancella Membro',
-'DELETE_PLAYER_DKP' => 'Cancella Member dkp',
+'DELETE_PLAYER_DKP' => 'Cancella Player dkp',
 'DELETE_RAID' => 'Cancella Incursione',
 'DELETE_SELECTED_PLAYERS' => 'Cancella Membri Selezionati',
 'DELETE_SELECTED_GUILDS' => 'Cancella Gilde Selezionate',
@@ -992,7 +992,7 @@ $lang = array_merge($lang, array(
 'NUMBER_OF_GUILDS' => 'Numero di Gilde',
 'NUMBER_OF_ADJUSTMENTS' => 'Numero di Modifiche Manuali',
 'NUMBER_OF_EVENTS' => 'Numero di Eventi',
-'PLAYERCOUNT' => 'Membercount',
+'PLAYERCOUNT' => 'Playercount',
 'RAIDS_PER_DAY' => 'Incursioni per Giorno',
 'ATTENDANCEDAYS' => 'Giorni di frequenza (per classifica)',
 'STATISTICS' => 'Statistiche',

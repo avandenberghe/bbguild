@@ -155,7 +155,7 @@ class player_module extends Admin
                 }
 
                 // pageloading
-                $this->BuildTemplateListMembers($mode, $Guild);
+                $this->BuildTemplateListPlayers($mode, $Guild);
                 break;
 
             /***************************************/
@@ -185,14 +185,14 @@ class player_module extends Admin
 
                 if ($update)
                 {
-                    $this->UpdateMember();
+                    $this->UpdatePlayer();
                 }
 
                 if ($delete)
                 {
                     if (confirm_box(true))
                     {
-                        $deleteplayer = $this->DeleteMember();
+                        $deleteplayer = $this->DeletePlayer();
                     }
                     else
                     {
@@ -335,7 +335,7 @@ class player_module extends Admin
      * Update bbguild player
      *
      */
-    private function UpdateMember()
+    private function UpdatePlayer()
     {
         global $phpbb_admin_path, $phpEx;
 
@@ -402,7 +402,7 @@ class player_module extends Admin
      * Delete bbguild player
      *
      */
-    private function DeleteMember()
+    private function DeletePlayer()
     {
         global $phpbb_admin_path, $phpEx;
         $deleteplayer = new Player();
@@ -501,12 +501,12 @@ class player_module extends Admin
     }
 
     /**
-     * List Members
+     * List Players
      *
      * @param $mode
      * @param Guilds $Guild
      */
-    private function BuildTemplateListMembers($mode, Guilds $Guild)
+    private function BuildTemplateListPlayers($mode, Guilds $Guild)
     {
         global  $config, $phpbb_admin_path, $phpEx;
 

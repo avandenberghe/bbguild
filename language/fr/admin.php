@@ -318,7 +318,7 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_PLAYERS_MAN' => 'Vous n’avez pas la permission de configurer des membres',
 'NOAUTH_A_LOGS_VIEW' => 'Vous n’avez pas la permission de consulter les logs',
 
-// Manage Members Menu (yes, MMM)
+// Manage Players Menu (yes, MMM)
 'LIST_EDIT_DEL_PLAYER' => 'Lister, Editer ou supprimer des Membres',
 'EDIT_RANKS' => 'Editer les Grades',
 'EDIT_ROLES' => 'Editer les Rôles',
@@ -1006,7 +1006,7 @@ $lang = array_merge($lang, array(
 'NUMBER_OF_GUILDS' => 'Nombre de Guildes',
 'NUMBER_OF_ADJUSTMENTS' => 'Nombre d’ajustements',
 'NUMBER_OF_EVENTS' => 'Nombre d’évènements',
-'PLAYERCOUNT' => 'Membercount',
+'PLAYERCOUNT' => 'Playercount',
 'RAIDS_PER_DAY' => 'Raids par journée',
 'ATTENDANCEDAYS' => 'Jours de Participation',
 'STATISTICS' => 'Statistiques',

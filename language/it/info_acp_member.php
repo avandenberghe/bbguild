@@ -1,6 +1,6 @@
 <?php
 /**
- * bbguild acp language file for Guild and Members (FR)
+ * bbguild acp language file for Guild and Players (FR)
  * @author lucasari
  * @package phpBB Extension - bbguild
  * @copyright 2011 bbguild <https://github.com/bbDKP>

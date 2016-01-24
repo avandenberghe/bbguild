@@ -103,7 +103,7 @@ class main
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handleMember($player_id)
+    public function handlePlayer($player_id)
     {
         if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
         {

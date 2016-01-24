@@ -322,7 +322,7 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_PLAYERS_MAN' => 'Du hast keine Berechtigung Gildenmitglieder einzustellen.',
 'NOAUTH_A_LOGS_VIEW' => 'Du hast keine Berechtigung Protokolle zu sehen.',
 
-// Manage Members Menu (yes, MMM)
+// Manage Players Menu (yes, MMM)
 'LIST_EDIT_DEL_PLAYER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
 'EDIT_RANKS' => 'Gildenränge bearbeiten',
 'EDIT_ROLES' => 'Rollen bearbeiten',

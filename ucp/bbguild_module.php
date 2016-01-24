@@ -121,7 +121,7 @@ class bbguild_module extends Admin
                     $player_id = (int) $this->request->variable('playerlist', 0);
                     $player->player_id = $player_id;
                     $player->Getplayer();
-                    $player->Claim_Member();
+                    $player->Claim_Player();
                     // Generate confirmation page. It will redirect back to the calling page
                     meta_refresh(2, $this->u_action);
                     $message = sprintf($this->user->lang['CHARACTERS_UPDATED'], $player->player_name) . '<br /><br />' . sprintf($this->user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
