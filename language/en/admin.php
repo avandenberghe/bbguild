@@ -686,6 +686,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DKPPOOLSYNC_SUCCESS' => '%s DKP accounts were synchronised.',
 'ADMIN_RESET_GAME_SUCCESS' => 'Game "%s" was reinitialised successfully.',
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Game "%s" was installed successfully.',
+'ADMIN_UPDATED_GAME_SUCCESS' => 'Game Settings %s updated.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Game "%s" was deleted successfully.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Game name is missing. Game could not be installed.',
 'ADMIN_ADD_ROLE_FAILED'  => 'Role %s could not be added',
