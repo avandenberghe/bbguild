@@ -684,6 +684,7 @@ $lang = array_merge($lang, array(
 'ADMIN_RESET_GAME_SUCCESS' => 'Spiel "%s" wurde zurückgesetzt.',
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Spiel "%s" wurde installiert.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Spiel "%s" wurde gelöscht.',
+'ADMIN_UPDATED_GAME_SUCCESS' => 'Spiel %s aktualisiert.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Spielname fehlt. Spiel kann nicht installiert werden.',
 'ADMIN_ADD_ROLE_FAILED'  => 'Rolle %s kann nicht hinzugefügt werden',
 'ADMIN_ADD_ROLE_SUCCESS'  => 'Rolle %s wurde erfolgreich erstellt.',

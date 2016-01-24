@@ -667,6 +667,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DKPPOOLSYNC_SUCCESS' => 'L’account DKP %s è stato sincronizzato.',
 'ADMIN_RESET_GAME_SUCCESS' => 'Il gioco "%s" reinizializzato con successo.',
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Il Gioco "%s" installato con successo.',
+'ADMIN_UPDATED_GAME_SUCCESS' => 'Gioco %s aggiornata con successo.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Il Gioco "%s" cancellato con successo.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Nome Gioco Mancante. Il gioco non è stato installato.',
 

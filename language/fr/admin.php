@@ -675,6 +675,7 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Jeu "%s" est installé.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Jeu "%s" est supprimé.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Nom de jeu manquant. Jeu ne peut être installé.',
+'ADMIN_UPDATED_GAME_SUCCESS' => 'Jeu %s mis à jour.',
 'ADMIN_ADD_ROLE_FAILED'  => 'Rôle %s n’a pas pu être ajouté',
 'ADMIN_ADD_ROLE_SUCCESS'  => 'Rôle %s a été ajouté.',
 'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s est mise à jour',

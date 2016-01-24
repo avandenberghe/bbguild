@@ -225,6 +225,11 @@ class game_module extends Admin
 				if($gamesettings)
 				{
                     $editgame = $this->SaveGameSettings($this->request);
+					$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
+					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
+					trigger_error($success_message . $this->link, E_USER_NOTICE);
+
+
 				}
 
 				if($gamedelete)
