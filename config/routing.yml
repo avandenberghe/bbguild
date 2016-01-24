@@ -28,7 +28,7 @@ bbdkp_bbguild_03:
 #guild/player/2?dkpsys_id=3
 bbdkp_bbguild_04:
     path: /guild/player/{player_id}
-    defaults: { _controller: bbdkp.bbguild.controller:handleMember, player_id: 1 }
+    defaults: { _controller: bbdkp.bbguild.controller:handlePlayer, player_id: 1 }
     requirements:
      player_id: \d*
 #portal.php/guild/1

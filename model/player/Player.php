@@ -1,6 +1,6 @@
 <?php
 /**
- * Member class file
+ * Player class file
  *
  * @package bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
@@ -294,7 +294,7 @@ class Player extends Admin
 
 
     /**
-     * Member class constructor
+     * Player class constructor
      *
      * @param int $player_id
      * @param array $guildlist
@@ -1230,7 +1230,7 @@ class Player extends Admin
 
 		$sql_arr = array(
 			'player_rank_id' => 99 ,
-			'player_comment' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
+			'player_comment' => "Player left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
 			'player_outdate' => $this->time ,
 			'player_guild_id' => 0);
 
@@ -1246,7 +1246,7 @@ class Player extends Admin
 			'L_RANK_BEFORE' => $this->old_player['player_rank_id'] ,
 			'L_COMMENT_BEFORE' => $this->old_player['player_comment'] ,
 			'L_RANK_AFTER' => 99 ,
-			'L_COMMENT_AFTER' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
+			'L_COMMENT_AFTER' => "Player left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
 			'L_UPDATED_BY' => $user->data['username']);
 
 		$this->log_insert(array(
@@ -1482,7 +1482,7 @@ class Player extends Admin
 	/**
 	 * Claim a character to your phpbb User
 	 */
-	public function Claim_Member()
+	public function Claim_Player()
 	{
 		global $db, $user;
 

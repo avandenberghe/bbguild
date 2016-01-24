@@ -1,6 +1,6 @@
 <?php
 /**
- * bbguild acp language file for Guild and Members (FR)
+ * bbguild acp language file for Guild and Players (FR)
  *
  * @package phpBB Extension - bbguild
  * @copyright 2009 bbguild <https://github.com/bbDKP>
@@ -27,7 +27,7 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    	'ACP_BBGUILD_PLAYER'	=> 'Guild and Member management',
+    	'ACP_BBGUILD_PLAYER'	=> 'Guild and Player management',
 	'ACP_BBGUILD_PLAYER_ADD'	=> 'Add player',
 	'ACP_BBGUILD_PLAYER_LIST'	=> 'Roster',
 ));

@@ -170,7 +170,7 @@ class admin_controller
 	* @param $guild_id
 	 * @return JsonResponse
 	 */
-	public function getMemberList($guild_id)
+	public function getPlayerList($guild_id)
 	{
 		$players = new Player();
 		$players->listallplayers($guild_id);
