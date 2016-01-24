@@ -90,17 +90,17 @@ class log
      */
     const ITEM_DELETED= 13;
     /**
-     * new member was added
+     * new player was added
      */
-    const MEMBER_ADDED = 14;
+    const PLAYER_ADDED = 14;
     /**
-     * member file was updated
+     * player file was updated
      */
-    const MEMBER_UPDATED = 15;
+    const PLAYER_UPDATED = 15;
     /**
-     * member was removed
+     * player was removed
      */
-    const MEMBER_DELETED = 16;
+    const PLAYER_DELETED = 16;
     /**
      * rank was added
      */
@@ -170,13 +170,13 @@ class log
      */
     const GUILD_ADDED = 33;
     /**
-     * new member points account was opened
+     * new player points account was opened
      */
-    const MEMBERDKP_UPDATED = 34;
+    const PLAYERDKP_UPDATED = 34;
     /**
      * points account was deleted
      */
-    const MEMBERDKP_DELETED = 35;
+    const PLAYERDKP_DELETED = 35;
     /**
      * a game was added
      */
@@ -229,9 +229,9 @@ class log
      */
     const CLASS_UPDATED = 48;
     /**
-     * a previously inactive member was reactivated
+     * a previously inactive player was reactivated
      */
-    const MEMBER_DEACTIVATED = 49;
+    const PLAYER_DEACTIVATED = 49;
     /**
      * a guild was updated
      */
@@ -279,9 +279,9 @@ class log
         self::ITEM_ADDED =>'ITEM_ADDED' ,
         self::ITEM_UPDATED =>'ITEM_UPDATED' ,
         self::CLASS_UPDATED =>'ITEM_DELETED' ,
-        self::MEMBER_ADDED =>'MEMBER_ADDED' ,
-        self::MEMBER_UPDATED =>'MEMBER_UPDATED' ,
-        self::MEMBER_DELETED =>'MEMBER_DELETED' ,
+        self::PLAYER_ADDED =>'PLAYER_ADDED' ,
+        self::PLAYER_UPDATED =>'PLAYER_UPDATED' ,
+        self::PLAYER_DELETED =>'PLAYER_DELETED' ,
         self::RANK_ADDED =>'RANK_ADDED' ,
         self::RANK_UPDATED =>'RANK_UPDATED' ,
         self::RANK_DELETED =>'RANK_DELETED' ,
@@ -299,8 +299,8 @@ class log
         self::DKPSYNC =>'DKPSYNC' ,
         self::DEFAULT_DKP_CHANGED =>'DEFAULT_DKP_CHANGED' ,
         self::GUILD_ADDED =>'GUILD_ADDED' ,
-        self::MEMBERDKP_UPDATED =>'MEMBERDKP_UPDATED' ,
-        self::CLASS_UPDATED =>'MEMBERDKP_DELETED',
+        self::PLAYERDKP_UPDATED =>'PLAYERDKP_UPDATED' ,
+        self::CLASS_UPDATED =>'PLAYERDKP_DELETED',
         self::GAME_ADDED => 'GAME_ADDED',
         self::GAME_DELETED => 'GAME_DELETED',
         self::SETTINGS_CHANGED => 'SETTINGS_CHANGED',
@@ -314,7 +314,7 @@ class log
         self::CLASS_DELETED => 'CLASS_DELETED',
         self::RACE_UPDATED => 'RACE_UPDATED',
         self::CLASS_UPDATED => 'CLASS_UPDATED',
-        self::MEMBER_DEACTIVATED => 'MEMBER_DEACTIVATED',
+        self::PLAYER_DEACTIVATED => 'PLAYER_DEACTIVATED',
         self::GUILD_UPDATED => 'GUILD_UPDATED',
         self::ARMORY_DOWN => 'ARMORY_DOWN',
         self::FACTION_UPDATED => 'FACTION_UPDATED',
@@ -369,8 +369,8 @@ class log
 				'L_BUYERS_BEFORE',
 				'L_ADJUSTMENT',
 				'L_ADJUSTMENT_BEFORE',
-				'L_MEMBERS',
-				'L_MEMBERS_AFTER',
+				'L_PLAYERS',
+				'L_PLAYERS_AFTER',
 				'L_FROM',
 				'L_TO',
 				'L_DKPSYS_NAME',
@@ -505,7 +505,7 @@ class log
         'id' => $adjust_id ,
         'L_ADJUSTMENT' => $deleteadj->adjustment_value ,
         'L_REASON' => $deleteadj->adjustment_reason ,
-        'L_MEMBERS' =>  $deleteadj->member_name );
+        'L_PLAYERS' =>  $deleteadj->player_name );
 
         $this->log_insert(array(
         'log_type' => $log_action['header'] ,
@@ -787,13 +787,13 @@ class log
 					$logline = sprintf($this->getLogMessage('HISTORY_TRANSFER', $verbose), $userstring, $log['L_FROM'] , $log['L_TO'] );
 					break;
 				case 'INDIVADJ_ADDED':
-					$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count( explode(",", $log['L_MEMBERS']) ), $log['L_MEMBERS']);
+					$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count( explode(",", $log['L_PLAYERS']) ), $log['L_PLAYERS']);
 					break;
 				case 'INDIVADJ_UPDATED':
-					$logline = sprintf($this->getLogMessage('INDIVADJ_UPDATED', $verbose), $userstring, $log['L_ADJUSTMENT_BEFORE'], $log['L_MEMBERS_AFTER']);
+					$logline = sprintf($this->getLogMessage('INDIVADJ_UPDATED', $verbose), $userstring, $log['L_ADJUSTMENT_BEFORE'], $log['L_PLAYERS_AFTER']);
 					break;
 				case 'INDIVADJ_DELETED':
-					$logline = sprintf($this->getLogMessage('INDIVADJ_DELETED', $verbose), $userstring, $log['L_ADJUSTMENT'], $log['L_MEMBERS']);
+					$logline = sprintf($this->getLogMessage('INDIVADJ_DELETED', $verbose), $userstring, $log['L_ADJUSTMENT'], $log['L_PLAYERS']);
 					break;
 				case 'ITEM_ADDED':
 					$logline = sprintf($this->getLogMessage('ITEM_ADDED', $verbose), $userstring,
@@ -807,14 +807,14 @@ class log
 				case 'ITEM_DELETED':
 					$logline = sprintf($this->getLogMessage('ITEM_DELETED', $verbose), $userstring, $log['L_NAME'], (isset($log['L_BUYER']) ? $log['L_BUYER'] : '') , (isset($log['L_VALUE']) ? $log['L_VALUE'] : '0')  );
 					break;
-				case 'MEMBER_ADDED':
-					$logline = sprintf($this->getLogMessage('MEMBER_ADDED', $verbose), $userstring, $log['L_NAME']);
+				case 'PLAYER_ADDED':
+					$logline = sprintf($this->getLogMessage('PLAYER_ADDED', $verbose), $userstring, $log['L_NAME']);
 					break;
-				case 'MEMBER_UPDATED':
-					$logline = sprintf($this->getLogMessage('MEMBER_UPDATED', $verbose), $userstring, $log['L_NAME']);
+				case 'PLAYER_UPDATED':
+					$logline = sprintf($this->getLogMessage('PLAYER_UPDATED', $verbose), $userstring, $log['L_NAME']);
 					break;
-				case 'MEMBER_DELETED':
-					$logline = sprintf($this->getLogMessage('MEMBER_DELETED', $verbose), $userstring, $log['L_NAME']);
+				case 'PLAYER_DELETED':
+					$logline = sprintf($this->getLogMessage('PLAYER_DELETED', $verbose), $userstring, $log['L_NAME']);
 					break;
 				case 'RANK_DELETED':
 					$logline = sprintf($this->getLogMessage('RANK_DELETED', $verbose), $userstring, $log['L_NAME']);
@@ -912,8 +912,8 @@ class log
 				case 'GUILD_DELETED':
 					$logline = sprintf($this->getLogMessage('GUILD_DELETED', $verbose), $userstring , $log['L_NAME'] ) ;
 					break;
-				case 'MEMBERDKP_UPDATED':
-					$logline = sprintf($this->getLogMessage('MEMBERDKP_UPDATED', $verbose), $userstring, $log['L_NAME'],
+				case 'PLAYERDKP_UPDATED':
+					$logline = sprintf($this->getLogMessage('PLAYERDKP_UPDATED', $verbose), $userstring, $log['L_NAME'],
 					$log['L_EARNED_BEFORE'], $log['L_EARNED_AFTER'], $log['L_SPENT_BEFORE'], $log['L_SPENT_AFTER']);
 					break;
 				case 'GAME_ADDED':
@@ -949,8 +949,8 @@ class log
 				case 'CLASS_UPDATED':
 					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']  ) ;
 					break;
-				case 'MEMBER_DEACTIVATED':
-					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], '' ) ;
+				case 'PLAYER_DEACTIVATED':
+					$logline = sprintf($this->getLogMessage('PLAYER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], '' ) ;
 					break;
                 case 'ARMORY_DOWN':
                     $logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring , ' ', ' ' ) ;

@@ -64,9 +64,9 @@ class release_2_0_0_m03_config extends migration
             // portal settings
             array('config.add', array('bbguild_portal_links', 1)),
             array('config.add', array('bbguild_portal_loot', 1)),
-            array('config.add', array('bbguild_portal_maxnewmembers', 5)),
+            array('config.add', array('bbguild_portal_maxnewplayers', 5)),
             array('config.add', array('bbguild_portal_menu', 1)),
-            array('config.add', array('bbguild_portal_newmembers', 1)),
+            array('config.add', array('bbguild_portal_newplayers', 1)),
             array('config.add', array('bbguild_portal_onlineblockposition', 1)),
             array('config.add', array('bbguild_portal_recent', 1)),
             array('config.add', array('bbguild_portal_recruitments', 1)),

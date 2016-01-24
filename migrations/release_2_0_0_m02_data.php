@@ -17,7 +17,7 @@ use phpbb\db\migration\container_aware_migration;
 class release_2_0_0_m02_data extends container_aware_migration
 {
     protected $guild_table;
-    protected $member_ranks_table;
+    protected $player_ranks_table;
     protected $bb_gamerole_table;
     protected $bb_language;
     protected $welcome_msg_table;
@@ -25,7 +25,7 @@ class release_2_0_0_m02_data extends container_aware_migration
     protected $bbgames_table;
     protected $news_table;
     protected $bblogs_table;
-    protected $member_list_table;
+    protected $player_list_table;
     protected $class_table;
     protected $race_table;
     protected $faction_table;
@@ -60,7 +60,7 @@ class release_2_0_0_m02_data extends container_aware_migration
         $this->bbgames_table = $this->table_prefix  . 'bb_games';
         $this->news_table = $this->table_prefix  . 'bb_news';
         $this->bblogs_table = $this->table_prefix  . 'bb_logs';
-        $this->member_ranks_table = $this->table_prefix  . 'bb_ranks';
+        $this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
         $this->guild_table = $this->table_prefix  . 'bb_guild';
         $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
         $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
@@ -77,7 +77,7 @@ class release_2_0_0_m02_data extends container_aware_migration
                 'aion_legion_id'    => 0,
                 'aion_server_id'    => 0,
                 'level'             => 0,
-                'members'           => 0,
+                'players'           => 0,
                 'achievementpoints' =>  0,
                 'guildarmoryurl'    => '',
                 'emblemurl'         => '',
@@ -106,9 +106,9 @@ class release_2_0_0_m02_data extends container_aware_migration
                 'rank_suffix'	=> '',
             ));
 
-        if ( $this->db_tools->sql_table_exists($this->member_ranks_table))
+        if ( $this->db_tools->sql_table_exists($this->player_ranks_table))
         {
-            $this->db->sql_multi_insert($this->member_ranks_table, $outrank);
+            $this->db->sql_multi_insert($this->player_ranks_table, $outrank);
         }
 
         $welcome = array(

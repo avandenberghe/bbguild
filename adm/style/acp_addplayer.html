@@ -2,24 +2,24 @@
 
 <a name="maincontent"></a>
 <!-- IF S_ADD -->
-<h1>{L_ACP_MM_ADDMEMBER}</h1>
+<h1>{L_ACP_MM_ADDPLAYER}</h1>
 <!-- ELSE -->
-<h1>{L_ACP_MM_EDITMEMBER}</h1>
+<h1>{L_ACP_MM_EDITPLAYER}</h1>
 <!-- ENDIF -->
 
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_MEMBER}" id="mm_addmember" onsubmit="return check_form(this)" >
+<form method="post" action="{F_ADD_PLAYER}" id="mm_addplayer" onsubmit="return check_form(this)" >
 
     <fieldset>
-        <legend>{L_ACP_MM_ADDMEMBER}</legend>
+        <legend>{L_ACP_MM_ADDPLAYER}</legend>
 
         <br />
 
         <dl>
-            <dt><label for="member_name">{L_NAME}, {L_SURNAME} :</label></dt>
-            <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" />
-                <input type="text" name="member_title" id="member_title" size="30" maxlength="40" value="{MEMBER_TITLE}" class="input" />
+            <dt><label for="player_name">{L_NAME}, {L_SURNAME} :</label></dt>
+            <dd><input type="text" name="player_name" id="player_name" size="20" maxlength="30" value="{PLAYER_NAME}" class="input" />
+                <input type="text" name="player_title" id="player_title" size="30" maxlength="40" value="{PLAYER_TITLE}" class="input" />
             </dd>
         </dl>
 
@@ -41,9 +41,9 @@
         </dl>
 
         <dl>
-            <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
+            <dt><label for="player_guild_id">{L_GUILD}:</label></dt>
             <dd>
-                <select name="member_guild_id" id="member_guild_id" class="input" onchange="return GetRank(this.value)">
+                <select name="player_guild_id" id="player_guild_id" class="input" onchange="return GetRank(this.value)">
                     <!-- BEGIN guild_row -->
                     <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
                     <!-- END guild_row -->
@@ -52,9 +52,9 @@
         </dl>
 
         <dl>
-            <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
+            <dt><label for="player_rank_id">{L_PLAYER_RANK}:</label></dt>
             <dd>
-                <select id="member_rank_id" name="member_rank_id" class="input">
+                <select id="player_rank_id" name="player_rank_id" class="input">
                     <!-- BEGIN rank_row -->
                     <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
                     <!-- END rank_row -->
@@ -77,23 +77,23 @@
 
 
         <dl>
-            <dt><label for="member_level">{L_LEVEL}:</label></dt>
-            <dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" />
-                <a id="levelup"  href="{F_ADD_MEMBER}" target="_blank"><img src="./images/icon_up.gif" /></a>
-                <a id="leveldown" href="{F_ADD_MEMBER}" target="_blank"><img src="./images/icon_down.gif" /></a>
+            <dt><label for="player_level">{L_LEVEL}:</label></dt>
+            <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{PLAYER_LEVEL}" class="input" />
+                <a id="levelup"  href="{F_ADD_PLAYER}" target="_blank"><img src="./images/icon_up.gif" /></a>
+                <a id="leveldown" href="{F_ADD_PLAYER}" target="_blank"><img src="./images/icon_down.gif" /></a>
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="member_level">{L_ACHIEV}:</label></dt>
-            <dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{MEMBER_ACHIEV}" class="input" /></dd>
+            <dt><label for="player_level">{L_ACHIEV}:</label></dt>
+            <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{PLAYER_ACHIEV}" class="input" /></dd>
         </dl>
 
 
 
         <dl>
-            <dt><label for="member_race_id">{L_RACE}:</label></dt>
-            <dd><select id="member_race_id" name="member_race_id" class="input">
+            <dt><label for="player_race_id">{L_RACE}:</label></dt>
+            <dd><select id="player_race_id" name="player_race_id" class="input">
                 <!-- BEGIN race_row -->
                 <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
                 <!-- END race_row -->
@@ -103,9 +103,9 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="member_class_id">{L_CLASS}:</label></dt>
+            <dt><label for="player_class_id">{L_CLASS}:</label></dt>
             <dd>
-                <select id="member_class_id" name="member_class_id" class="input">
+                <select id="player_class_id" name="player_class_id" class="input">
                     <!-- BEGIN class_row -->
                     <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
                     <!-- END class_row -->
@@ -116,9 +116,9 @@
 
 
         <dl>
-            <dt><label for="member_role">{L_ROLES}:</label></dt>
+            <dt><label for="player_role">{L_ROLES}:</label></dt>
             <dd>
-                <select name="member_role" id="member_role" class="input" >
+                <select name="player_role" id="player_role" class="input" >
                     <!-- BEGIN role_row -->
                     <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
                     <!-- END role_row -->
@@ -151,12 +151,12 @@
         <dl>
             <dt><label>{L_ARMORY_URL}:</label></dt>
             <dd>
-                <a href="{MEMBER_URL}" alt="{MEMBER_NAME}" />
-                <!-- IF S_MEMBER_PORTRAIT_EXISTS -->
-                <img src="{MEMBER_PORTRAIT}" alt="image" width="64" height="64"></img>
+                <a href="{PLAYER_URL}" alt="{PLAYER_NAME}" />
+                <!-- IF S_PLAYER_PORTRAIT_EXISTS -->
+                <img src="{PLAYER_PORTRAIT}" alt="image" width="64" height="64"></img>
                 <!-- ENDIF -->
                 </a>
-                <input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
+                <input type="text" name="player_armorylink" size="80%" maxlength="300" value="{PLAYER_URL}" class="input" />
                 <br/>
             </dd>
         </dl>
@@ -166,9 +166,9 @@
             <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
 
             <dd>
-                {L_DAY}: <select id="member_joindate_d" name="member_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
-                {L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select>
-                {L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
+                {L_DAY}: <select id="player_joindate_d" name="player_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
+                {L_MONTH}: <select name="player_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select>
+                {L_YEAR}: <select name="player_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
             </dd>
         </dl>
 
@@ -176,9 +176,9 @@
             <dt><label>{L_OUTDATE} (YYYY-MM-DD):</label></dt>
 
             <dd>
-                {L_DAY}: <select id="member_outdate_d" name="member_outdate_d">{S_OUTDATE_DAY_OPTIONS}</select>
-                {L_MONTH}: <select name="member_outdate_mo">{S_OUTDATE_MONTH_OPTIONS}</select>
-                {L_YEAR}: <select name="member_outdate_y">{S_OUTDATE_YEAR_OPTIONS}</select>
+                {L_DAY}: <select id="player_outdate_d" name="player_outdate_d">{S_OUTDATE_DAY_OPTIONS}</select>
+                {L_MONTH}: <select name="player_outdate_mo">{S_OUTDATE_MONTH_OPTIONS}</select>
+                {L_YEAR}: <select name="player_outdate_y">{S_OUTDATE_YEAR_OPTIONS}</select>
             </dd>
         </dl>
 
@@ -189,20 +189,20 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="member_comment">{L_COMMENT}:</label></dt>
-            <dd><textarea name="member_comment" id="member_comment" rows="5" cols="30" style="width: 100%" class="input">{MEMBER_COMMENT}</textarea></dd>
+            <dt><label for="player_comment">{L_COMMENT}:</label></dt>
+            <dd><textarea name="player_comment" id="player_comment" rows="5" cols="30" style="width: 100%" class="input">{PLAYER_COMMENT}</textarea></dd>
         </dl>
 
 
         <p class="quick">
             {S_FORM_TOKEN}
-            <input type="hidden" name="hidden_member_id" value="{MEMBER_ID}" />
-            <input type="hidden" name="hidden_member_name" value="{MEMBER_NAME}" />
+            <input type="hidden" name="hidden_player_id" value="{PLAYER_ID}" />
+            <input type="hidden" name="hidden_player_name" value="{PLAYER_NAME}" />
             <!-- IF S_ADD -->
-            <input type="submit" name="add" value="{L_ADD_MEMBER}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+            <input type="submit" name="add" value="{L_ADD_PLAYER}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
             <!-- ELSE -->
-            <input type="submit" name="update" value="{L_UPDATE_MEMBER}" class="button1" />
-            <input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="button1" />
+            <input type="submit" name="update" value="{L_UPDATE_PLAYER}" class="button1" />
+            <input type="submit"  name="delete" value="{L_DELETE_PLAYER}" class="button1" />
             <!-- ENDIF -->
         </p>
     </fieldset>
@@ -213,7 +213,7 @@
     // <![CDATA[
     function check_form()
     {
-        if (document.post.member_name.value.length < 2)
+        if (document.post.player_name.value.length < 2)
         {
             alert('{LA_MSG_NAME_EMPTY}');
             return false;
@@ -230,12 +230,12 @@
         var leveldown = document.getElementById("leveldown");
 
         levelup.onclick = function() {
-            var textBox = document.getElementById("member_level");
+            var textBox = document.getElementById("player_level");
             textBox.value++;
             return false;}
 
         leveldown.onclick = function() {
-            var textBox = document.getElementById("member_level");
+            var textBox = document.getElementById("player_level");
             textBox.value--;
             return false;}
     }
@@ -300,7 +300,7 @@
             if (xmlhttp.status == 200)
             {
                 //remove select options
-                var rsel = document.getElementById('member_rank_id');
+                var rsel = document.getElementById('player_rank_id');
                 rsel.options.length = 0;
 
                 //receive xml
@@ -359,7 +359,7 @@
                 var classes = classlist.getElementsByTagName("class");
 
                 //now modify html : first remove old select options
-                var rsel = document.getElementById('member_race_id');
+                var rsel = document.getElementById('player_race_id');
                 rsel.options.length = 0;
 
 
@@ -372,7 +372,7 @@
                     rsel.options[i] = new Option(racename,raceid, true, false);
                 }
 
-                var csel = document.getElementById('member_class_id');
+                var csel = document.getElementById('player_class_id');
                 csel.options.length = 0;
 
 

@@ -11,7 +11,7 @@
 namespace bbdkp\bbguild\model\player;
 use bbdkp\bbguild\model\admin\Admin;
 use bbdkp\bbguild\model\games\Game;
-use bbdkp\bbguild\model\player\Members;
+use bbdkp\bbguild\model\player\Player;
 use bbdkp\bbguild\model\player\Ranks;
 use bbdkp\bbguild\model\wowapi\BattleNet;
 
@@ -24,7 +24,7 @@ use bbdkp\bbguild\model\wowapi\BattleNet;
  * @property string $realm
  * @property string $region
  * @property int $achievements
- * @property int $membercount
+ * @property int $playercount
  * @property int $startdate
  * @property int $showroster
  * @property int $min_armory
@@ -38,7 +38,7 @@ use bbdkp\bbguild\model\wowapi\BattleNet;
  * @property array $emblem
  * @property string $battlegroup
  * @property string $guildarmoryurl
- * @property array $memberdata
+ * @property array $playerdata
  * @property int $side
  * @property array $possible_recstatus
  * @property boolean $armory_enabled
@@ -82,10 +82,10 @@ class Guilds extends Admin
 	 */
 	protected $achievements = 0;
 	/**
-	 * guild member count
+	 * guild player count
 	 * @var int
 	 */
-	protected $membercount = 0;
+	protected $playercount = 0;
 	/**
 	 * guild start date
 	 * @var int
@@ -156,10 +156,10 @@ class Guilds extends Admin
 	 */
 	protected $guildarmoryurl = '';
 	/**
-	 * guild members
+	 * guild players
 	 * @var array
 	 */
-	protected $memberdata = array();
+	protected $playerdata = array();
 	/**
 	 * guild side
 	 * @var int 0 or 1
@@ -266,8 +266,8 @@ class Guilds extends Admin
 		global $user;
 		switch ($property)
 		{
-			case 'membercount':
-				$this->countmembers();
+			case 'playercount':
+				$this->countplayers();
 				break;
 			default:
 				if (property_exists($this, $property))
@@ -286,8 +286,8 @@ class Guilds extends Admin
 	 *
 	 * we always add guilds with an id greater than zero. this way, the guild with id=zero is the "guildless" guild
 	 * the zero guild is added by default in a new install.
-	 * do not delete the zero record in the guild table or you will see that guildless members
-	 * become invisible in the roster and in the memberlist or in any list member selection that makes
+	 * do not delete the zero record in the guild table or you will see that guildless players
+	 * become invisible in the roster and in the playerlist or in any list player selection that makes
 	 * an inner join with the guild table.
 	 */
 	public function MakeGuild()
@@ -333,7 +333,7 @@ class Guilds extends Admin
 				'armory_enabled' => $this->armory_enabled,
                 'rec_status' => $this->recstatus,
 				'recruitforum' => $this->recruitforum,
-				'members' => 0,
+				'players' => 0,
                 'armoryresult' => 'NA',
 			));
 
@@ -396,7 +396,7 @@ class Guilds extends Admin
 				trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 			}
 		}
-		$this->countmembers();
+		$this->countplayers();
 
 		$query = $db->sql_build_array('UPDATE', array(
 				'game_id' => $this->game_id,
@@ -409,7 +409,7 @@ class Guilds extends Admin
 				'aion_server_id' => $this->aionserverid,
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
-				'members' => $this->membercount,
+				'players' => $this->playercount,
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
                 'emblemurl' => $this->emblempath,
@@ -454,17 +454,17 @@ class Guilds extends Admin
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
 		}
         $cache->destroy('sql', GUILD_TABLE);
-		// check if guild has members
-		$sql = 'SELECT COUNT(*) as mcount FROM ' . MEMBER_LIST_TABLE . '
-           WHERE member_guild_id = ' . $this->guildid;
+		// check if guild has players
+		$sql = 'SELECT COUNT(*) as mcount FROM ' . PLAYER_LIST_TABLE . '
+           WHERE player_guild_id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
 		if ((int) $db->sql_fetchfield('mcount') >= 1)
 		{
-			trigger_error($user->lang['ERROR_GUILDHASMEMBERS'], E_USER_WARNING);
+			trigger_error($user->lang['ERROR_GUILDHASPLAYERS'], E_USER_WARNING);
 		}
         $db->sql_freeresult($result);
 
-		$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE guild_id = ' .  $this->guildid;
+		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . ' WHERE guild_id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
@@ -689,7 +689,7 @@ class Guilds extends Admin
     {
         global $db;
 
-        $sql = 'SELECT id, name, realm, region, roster, game_id, members,
+        $sql = 'SELECT id, name, realm, region, roster, game_id, players,
 				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult, recruitforum
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
@@ -715,7 +715,7 @@ class Guilds extends Admin
             $this->recstatus = $row['rec_status'];
             $this->armory_enabled = $row['armory_enabled'];
 			$this->armoryresult = $row['armoryresult'];
-            $this->countmembers();
+            $this->countplayers();
             $this->guilddefault = $row['guilddefault'];
             $this->raidtrackerrank = $this->maxrank();
             $this->applyrank = $this->maxrank();
@@ -726,7 +726,7 @@ class Guilds extends Admin
     }
 
     /**
-     * returns a member listing for this guild
+     * returns a player listing for this guild
      *
      * @param string $order
      * @param int $start
@@ -735,21 +735,21 @@ class Guilds extends Admin
      * @param int $maxlevel
      * @param int $selectactive
      * @param int $selectnonactive
-     * @param string $member_filter
+     * @param string $player_filter
      * @param bool $last_update
      * @return array
      */
-	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1, $member_filter= '', $last_update = false)
+	public function listplayers($order = 'm.player_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1, $player_filter= '', $last_update = false)
 	{
 
 		global $db, $config;
 		$sql_array = array(
-				'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id,
+				'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as player_class, r.rank_id,
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
-								 c.colorcode , c.imagename, m.member_gender_id, a.image_female, a.image_male' ,
+								 c.colorcode , c.imagename, m.player_gender_id, a.image_female, a.image_male' ,
 				'FROM' => array(
-						MEMBER_LIST_TABLE => 'm' ,
-						MEMBER_RANKS_TABLE => 'r' ,
+						PLAYER_LIST_TABLE => 'm' ,
+						PLAYER_RANKS_TABLE => 'r' ,
 						CLASS_TABLE => 'c' ,
 						RACE_TABLE => 'a' ,
 						BB_LANGUAGE => 'l' ,
@@ -759,27 +759,27 @@ class Guilds extends Admin
 								'FROM' => array(
 										USERS_TABLE => 'u') ,
 								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
-				'WHERE' => " (m.member_rank_id = r.rank_id)
+				'WHERE' => " (m.player_rank_id = r.rank_id)
 			    				and m.game_id = l.game_id
 			    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
-								AND (m.member_guild_id = g.id)
-								AND (m.member_guild_id = r.guild_id)
-								AND (m.member_guild_id = " . $this->guildid . ')
+								AND (m.player_guild_id = g.id)
+								AND (m.player_guild_id = r.guild_id)
+								AND (m.player_guild_id = " . $this->guildid . ')
 								AND m.game_id =  a.game_id
 								AND m.game_id =  c.game_id
-								AND m.member_race_id =  a.race_id
-								AND (m.member_class_id = c.class_id)
-								AND m.member_level >= ' . $minlevel . '
-								AND m.member_level <= ' . $maxlevel,
+								AND m.player_race_id =  a.race_id
+								AND (m.player_class_id = c.class_id)
+								AND m.player_level >= ' . $minlevel . '
+								AND m.player_level <= ' . $maxlevel,
 				'ORDER_BY' => $order);
 
 		if($selectactive == 0 && $selectnonactive == 1)
 		{
-			$sql_array['WHERE'] .= ' AND m.member_status = 0 ';
+			$sql_array['WHERE'] .= ' AND m.player_status = 0 ';
 		}
 		elseif ($selectactive == 1 && $selectnonactive == 0)
 		{
-			$sql_array['WHERE'] .= ' AND m.member_status = 1 ';
+			$sql_array['WHERE'] .= ' AND m.player_status = 1 ';
 		}
         elseif($selectactive == 1 && $selectnonactive == 1)
         {
@@ -795,23 +795,23 @@ class Guilds extends Admin
             $sql_array['WHERE'] .= ' AND m.last_update >= 0 and m.last_update < ' . ($this->time - 900) ;
         }
 
-        if ($member_filter != '')
+        if ($player_filter != '')
         {
-            $sql_array['WHERE'] .= ' AND lcase(m.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($member_filter)) . $db->any_char);
+            $sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($player_filter)) . $db->any_char);
         }
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
 		if($mode == 1)
 		{
-			$members_result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
+			$players_result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
 		}
 		else
 		{
-			$members_result = $db->sql_query($sql);
+			$players_result = $db->sql_query($sql);
 		}
 
-		return $members_result;
+		return $players_result;
 
 	}
 
@@ -827,11 +827,11 @@ class Guilds extends Admin
 
 		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
-		$sql .= ' Count(m.member_class_id) AS classcount ';
+		$sql .= ' Count(m.player_class_id) AS classcount ';
 		$sql .= ' FROM  ' . CLASS_TABLE . ' c ';
 		$sql .= ' INNER JOIN ' . GUILD_TABLE . ' g ON c.game_id = g.game_id ';
-		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE member_level >= ' . $this->min_armory . ') m';
-		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . PLAYER_LIST_TABLE . ' WHERE player_level >= ' . $this->min_armory . ') m';
+		$sql .= '   ON m.game_id = c.game_id  AND m.player_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
 		$sql .= " AND l.language = '" . $config['bbguild_lang']."' AND l.attribute = 'class' ";
@@ -855,17 +855,17 @@ class Guilds extends Admin
 	}
 
 	/**
-	 * counts all guild members
+	 * counts all guild players
 	 */
-	private function countmembers()
+	private function countplayers()
 	{
 		global $db, $config;
-		//get total members
+		//get total players
 		$sql_array = array(
-				'SELECT' => 'count(*) as membercount ' ,
+				'SELECT' => 'count(*) as playercount ' ,
 				'FROM' => array(
-						MEMBER_LIST_TABLE => 'm' ,
-						MEMBER_RANKS_TABLE => 'r' ,
+						PLAYER_LIST_TABLE => 'm' ,
+						PLAYER_RANKS_TABLE => 'r' ,
 						CLASS_TABLE => 'c' ,
 						RACE_TABLE => 'a' ,
 						BB_LANGUAGE => 'l' ,
@@ -875,33 +875,33 @@ class Guilds extends Admin
 								'FROM' => array(
 										USERS_TABLE => 'u') ,
 								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
-				'WHERE' => " (m.member_rank_id = r.rank_id)
+				'WHERE' => " (m.player_rank_id = r.rank_id)
 				    				and m.game_id = l.game_id
 				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
-									AND (m.member_guild_id = g.id)
-									AND (m.member_guild_id = r.guild_id)
-									AND (m.member_guild_id = " . $this->guildid . ')
+									AND (m.player_guild_id = g.id)
+									AND (m.player_guild_id = r.guild_id)
+									AND (m.player_guild_id = " . $this->guildid . ')
 									AND m.game_id =  a.game_id
 									AND m.game_id =  c.game_id
-									AND m.member_race_id =  a.race_id
-									AND (m.member_class_id = c.class_id)');
+									AND m.player_race_id =  a.race_id
+									AND (m.player_class_id = c.class_id)');
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
-		$total_members = (int) $db->sql_fetchfield('membercount');
+		$total_players = (int) $db->sql_fetchfield('playercount');
 		$db->sql_freeresult($result);
-		$this->membercount = $total_members;
-		return $total_members;
+		$this->playercount = $total_players;
+		return $total_players;
 	}
 
 	/**
-	 * get default rank to add new member to
+	 * get default rank to add new player to
 	 *
 	 * @return number
 	 */
 	private function maxrank()
 	{
 		global $db;
-		$sql = 'select max(rank_id) AS rank_id from ' . MEMBER_RANKS_TABLE . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
+		$sql = 'select max(rank_id) AS rank_id from ' . PLAYER_RANKS_TABLE . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
 		$result = $db->sql_query_limit($sql,1);
 		$defaultrank_id = (int) $db->sql_fetchfield ('rank_id', false, $result );
 		$db->sql_freeresult($result);
@@ -918,19 +918,19 @@ class Guilds extends Admin
 	{
 		global $db;
 		$sql_array = array(
-				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.member_id) as membercount, max(b.rank_id) as joinrank ' ,
+				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.player_id) as playercount, max(b.rank_id) as joinrank ' ,
 				'FROM' => array(
 						GUILD_TABLE => 'a' ,
-						MEMBER_RANKS_TABLE => 'b' ,),
+						PLAYER_RANKS_TABLE => 'b' ,),
 				'LEFT_JOIN' => array(
 						array(
-								'FROM'  => array(MEMBER_LIST_TABLE => 'c'),
-								'ON'    => 'a.id = c.member_guild_id '
+								'FROM'  => array(PLAYER_LIST_TABLE => 'c'),
+								'ON'    => 'a.id = c.player_guild_id '
 						)
 				),
 				'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $guild_id,
 				'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
- 				'ORDER_BY' => ' a.guilddefault desc,  count(c.member_id) desc, a.id asc'
+ 				'ORDER_BY' => ' a.guilddefault desc,  count(c.player_id) desc, a.id asc'
 				);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -943,7 +943,7 @@ class Guilds extends Admin
 				'id' => $row['id'] ,
 				'name' => $row['name'],
 				'guilddefault' => $row['guilddefault'],
-				'membercount' => $row['membercount'],
+				'playercount' => $row['playercount'],
 				'realm' => $row['realm'],
 				'joinrank' => $row['joinrank'],
 			);
@@ -981,7 +981,7 @@ class Guilds extends Admin
             trim($game->getApilocale()) != ''
         )
         {
-            //available extra fields : 'members', 'achievements','news'
+            //available extra fields : 'players', 'achievements','news'
             $api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey(), $this->ext_path);
             $data = $api->Guild->getGuild($this->name, $this->realm, $params);
             $data = $data['response'];
@@ -1062,7 +1062,7 @@ class Guilds extends Admin
 
         $this->emblem = isset($data['emblem']) ? $data['emblem']: '';
         $this->emblempath = isset($data['emblem']) ?  $this->createEmblem(false)  : '';
-        $this->memberdata = isset($data['members']) ? $data['members']: '';
+        $this->playerdata = isset($data['players']) ? $data['players']: '';
 
         $query = $db->sql_build_array('UPDATE', array(
             'achievementpoints' => $this->achievementpoints,
@@ -1074,14 +1074,14 @@ class Guilds extends Admin
         ));
 
         $db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-        if (in_array("members", $params))
+        if (in_array("players", $params))
         {
             // update ranks table
             $rank = new Ranks($this->guildid);
-            $rank->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region);
-            //update member table
-            $mb = new Members();
-            $mb->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region, $this->min_armory);
+            $rank->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region);
+            //update player table
+            $mb = new Player();
+            $mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
         }
 
 	}

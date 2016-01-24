@@ -83,7 +83,7 @@ class Ranks extends Guilds
 	{
 	    global $db;
 	    $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
-    			FROM ' . MEMBER_RANKS_TABLE . '
+    			FROM ' . PLAYER_RANKS_TABLE . '
     			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->RankGuild;
 	    $result = $db->sql_query($sql);
 	    while ($row = $db->sql_fetchrow($result))
@@ -104,7 +104,7 @@ class Ranks extends Guilds
 	{
 		global $user, $db, $cache;
 
-        $cache->destroy('sql', MEMBER_RANKS_TABLE);
+        $cache->destroy('sql', PLAYER_RANKS_TABLE);
 
 		if ($this->RankName == '')
 		{
@@ -117,7 +117,7 @@ class Ranks extends Guilds
 			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
 
-		$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . '
+		$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_RANKS_TABLE . '
                    	WHERE rank_id != 99
                    	AND rank_id = ' . (int) $this->RankId . '
                    	AND guild_id = ' . (int) $this->RankGuild . '
@@ -137,7 +137,7 @@ class Ranks extends Guilds
 				'rank_suffix' => $this->RankSuffix ,
 				'guild_id' => (int) $this->RankGuild));
 		// insert new rank
-		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
+		$db->sql_query('INSERT INTO ' . PLAYER_RANKS_TABLE . $query);
 		// log the action
 
 		$log_action = array(
@@ -167,7 +167,7 @@ class Ranks extends Guilds
 	{
 		global $user, $db;
 
-		if ($this->countmembers() > 0 )
+		if ($this->countplayers() > 0 )
 		{
 			return false;
 		}
@@ -175,18 +175,18 @@ class Ranks extends Guilds
 		if (! $override)
 		{
 			// check if rank is used
-			$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_LIST_TABLE . ' WHERE
-            		 member_rank_id   = ' . (int) $this->RankId . ' and
-            		 member_guild_id =  ' . (int) $this->RankGuild;
+			$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_LIST_TABLE . ' WHERE
+            		 player_rank_id   = ' . (int) $this->RankId . ' and
+            		 player_guild_id =  ' . (int) $this->RankGuild;
 			$result = $db->sql_query($sql);
 			if ((int) $db->sql_fetchfield('rankcount') >= 1)
 			{
-				trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
+				trigger_error('Cannot delete rank ' . $this->RankId . '. There are players with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
 			}
 		}
 
 		// hardcoded exclusion of ranks 90/99
-		$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
+		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
 				$this->RankId . ' and guild_id = ' . $this->RankGuild;
 		$db->sql_query($sql);
 
@@ -229,7 +229,7 @@ class Ranks extends Guilds
 				);
 
 
-		$sql = 'UPDATE ' . MEMBER_RANKS_TABLE . '
+		$sql = 'UPDATE ' . PLAYER_RANKS_TABLE . '
 			SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 			WHERE rank_id=' . (int) $old_rank->RankId . '
 			AND guild_id = ' . (int) $old_rank->RankGuild;
@@ -264,7 +264,7 @@ class Ranks extends Guilds
 	{
 		global $db;
 		// rank 99 is the out-rank
-		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
+		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . PLAYER_RANKS_TABLE . '
 	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 
@@ -274,14 +274,14 @@ class Ranks extends Guilds
 	}
 
 	/**
-	 * counts members in guild with a given rank
+	 * counts players in guild with a given rank
 	 */
-	public function countmembers()
+	public function countplayers()
 	{
 		global $db;
 
-		$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-			WHERE member_rank_id = ' . $this->RankId . ' and member_guild_id = ' . $this->RankGuild;
+		$sql = 'SELECT count(*) as countm FROM ' . PLAYER_LIST_TABLE . '
+			WHERE player_rank_id = ' . $this->RankId . ' and player_guild_id = ' . $this->RankGuild;
 		$result = $db->sql_query($sql);
 		$countm = (int) $db->sql_fetchfield('countm');
 		$db->sql_freeresult($result);
@@ -293,24 +293,24 @@ class Ranks extends Guilds
 	/**
 	 * updates a wow guild rank list from Battle.NET API -- except guildless
 	 *
-	 * @param array $memberdata
+	 * @param array $playerdata
 	 * @param int $guild_id
      *
 	 */
-	public function WoWArmoryUpdate($memberdata, $guild_id)
+	public function WoWArmoryUpdate($playerdata, $guild_id)
 	{
 		global  $db;
 
 		$newranks = array();
 
 		//init the rank counts per rank
-		foreach ( $memberdata as $new )
+		foreach ( $playerdata as $new )
 		{
 			$newranks[$new['rank']] = 0;
 		}
 
-		//count the number of members per rank
-		foreach ( $memberdata as $new )
+		//count the number of players per rank
+		foreach ( $playerdata as $new )
 		{
 			$newranks[$new['rank']] += 1;
 		}
@@ -318,7 +318,7 @@ class Ranks extends Guilds
 		ksort($newranks);
 
 		/* GET OLD RANKS */
-		$sql = ' select rank_id from ' . MEMBER_RANKS_TABLE . ' WHERE
+		$sql = ' select rank_id from ' . PLAYER_RANKS_TABLE . ' WHERE
 				 guild_id =  ' . (int) $guild_id . ' and rank_id < 90 order by rank_id ASC';
 		$result = $db->sql_query ($sql);
 		$oldranks = array ();

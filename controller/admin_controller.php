@@ -8,7 +8,7 @@
 
 namespace bbdkp\bbguild\controller;
 
-use bbdkp\bbguild\model\player\Members;
+use bbdkp\bbguild\model\player\Player;
 use phpbb\cache\service;
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -143,7 +143,7 @@ class admin_controller
 	public function getGuildRank($guild_id)
 	{
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
-        FROM ' . MEMBER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
+        FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
         a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
 
 		$result = $this->db->sql_query($sql);
@@ -164,7 +164,7 @@ class admin_controller
 
 
 	/**
-	 * returns memberlist json based on ajax call
+	 * returns playerlist json based on ajax call
 	 * used by acp_addraid.html
 	 *
 	* @param $guild_id
@@ -172,18 +172,18 @@ class admin_controller
 	 */
 	public function getMemberList($guild_id)
 	{
-		$members = new Members();
-		$members->listallmembers($guild_id);
+		$players = new Player();
+		$players->listallplayers($guild_id);
 
 		$data =array();
-		foreach ( (array) $members->guildmemberlist as $member )
+		foreach ( (array) $players->guildplayerlist as $player )
 		{
 			$data =array(
-				'member_id' => $member['member_id'],
-				'member_name' =>  $member['rank_name'] . ' '.  $member['member_name'],
+				'player_id' => $player['player_id'],
+				'player_name' =>  $player['rank_name'] . ' '.  $player['player_name'],
 			);
 		}
-		unset($members);
+		unset($players);
 		//transform array to json using phpbb class
 		$jsonresponse = new JsonResponse($data);
 		return $jsonresponse;

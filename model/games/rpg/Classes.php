@@ -224,14 +224,14 @@ use bbdkp\bbguild\model\games\Game;
 	{
 		global $user, $db, $config, $cache;
 
-		// see if there are members in this class
+		// see if there are players in this class
 		$sql_array = array (
 				'SELECT' => ' c.class_id, COUNT(*) AS classcount  ',
 				'FROM' => array (
-						MEMBER_LIST_TABLE => 'm',
+						PLAYER_LIST_TABLE => 'm',
 						CLASS_TABLE => 'c' ),
 				'WHERE' => 	"m.game_id = c.game_id AND m.game_id = '" . $this->game_id . "'
-    					and m.member_class_id = c.class_id AND c.class_id =  " . $this->class_id ,
+    					and m.player_class_id = c.class_id AND c.class_id =  " . $this->class_id ,
 				'GROUP_BY' => 'c.class_id'
 		);
 

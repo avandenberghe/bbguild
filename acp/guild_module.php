@@ -138,9 +138,9 @@ class guild_module extends Admin
 
                 $this->url_id = $this->request->variable(URI_GUILD, 0);
                 $updateguild = new Guilds($this->url_id);
-                if ($this->request->is_set_post('memberadd'))
+                if ($this->request->is_set_post('playeradd'))
                 {
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;' . URI_GUILD . "=" . $this->url_id  ));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=mm_addplayer&amp;' . URI_GUILD . "=" . $this->url_id  ));
                 }
 
                 $action = $this->request->variable('action', '');
@@ -296,7 +296,7 @@ class guild_module extends Admin
 
         if($updateArmory)
         {
-            $GuildAPIParameters = array('members');
+            $GuildAPIParameters = array('players');
         }
 
         if($updateguild->Guildupdate($old_guild, $GuildAPIParameters))
@@ -416,7 +416,7 @@ class guild_module extends Admin
         }
         else
         {
-            // delete the rank only if there are no members left
+            // delete the rank only if there are no players left
             $rank_id = $this->request->variable('ranktodelete', 999);
             $guildid = $this->request->variable(URI_GUILD, 0);
             $old_guild = new Guilds($guildid);
@@ -477,7 +477,7 @@ class guild_module extends Admin
             'GUILD_NAME'         => $updateguild->name,
             'REALM'              => $updateguild->realm,
             'REGION'             => $updateguild->region,
-            'MEMBERCOUNT'        => $updateguild->membercount,
+            'PLAYERCOUNT'        => $updateguild->playercount,
             'ARMORY_URL'         => $updateguild->guildarmoryurl,
             'MIN_ARMORYLEVEL'    => $updateguild->min_armory,
             'SHOW_ROSTER'        => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
@@ -627,7 +627,7 @@ class guild_module extends Admin
                     'REALM'        => $listguild->realm,
                     'REGION'       => $listguild->region,
                     'GAME'         => $listguild->game_id,
-                    'MEMBERCOUNT'  => $listguild->membercount,
+                    'PLAYERCOUNT'  => $listguild->playercount,
                     'SHOW_ROSTER'  => ($listguild->showroster == 1 ? 'yes' : 'no'),
                     'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $listguild->guildid)
                 )
@@ -648,7 +648,7 @@ class guild_module extends Admin
             'O_REGION'               => $current_order['uri'][3],
             'O_ROSTER'               => $current_order['uri'][4],
             'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
-            'GUILDMEMBERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count)));
+            'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count)));
         $this->page_title = 'ACP_LISTGUILDS';
     }
 }
