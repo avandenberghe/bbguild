@@ -60,7 +60,7 @@ Find support and more on
 
 ## Changelog 
 
-2.0.0a1 06-12-2015
+2.0.0a1 - not released
 - [NEW] Conversion to extension
 - [CHG] Functionality reductions : DKP no longer part of core. 
     
