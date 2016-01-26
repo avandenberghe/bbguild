@@ -12,7 +12,7 @@ namespace bbdkp\bbguild\migrations;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\db\migration\migration;
-use phpbb\db\tools\tools_interface;
+use phpbb\db\tools;
 
 /**
  * Migration stage 1: Initial schema
@@ -49,12 +49,12 @@ class release_2_0_0_m01_schema extends migration
      *
      * @param config $config
      * @param driver_interface $db
-     * @param tools_interface $db_tools
+     * @param tools $db_tools
      * @param string $phpbb_root_path
      * @param string $php_ext
      * @param string $table_prefix
      */
-    public function __construct(config $config, driver_interface $db, tools_interface $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
+    public function __construct(config $config, driver_interface $db, tools $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
     {
         parent::__construct($config, $db, $db_tools,  $phpbb_root_path, $php_ext, $table_prefix);
 
