@@ -389,7 +389,9 @@ class guild_module extends Admin
             $newrank->RankId = $rank_id;
             $newrank->RankGuild = $oldrank->RankGuild;
             $newrank->RankName = $rank_name;
-            $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
+            $newrank->RankHide = ($this->request->is_set_post('hide') && isset($this->request->variable('hide', array(0 => ''), true)[$rank_id])) ? 1 : 0;
+
+            //$newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
 
             $rank_prefix = $this->request->variable('prefix', array((int) $rank_id => ''), true);
             $newrank->RankPrefix = $rank_prefix[$rank_id];
