@@ -233,7 +233,7 @@ class release_2_0_0_m01_schema extends migration
 
                     ),
                     'PRIMARY_KEY'  => 'player_id',
-                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('player_guild_id', 'player_name'))),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('player_guild_id', 'player_name', 'player_realm'))),
                 ),
 
                 /*18*/
