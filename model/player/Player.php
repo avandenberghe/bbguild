@@ -379,7 +379,7 @@ class Player extends Admin
 	 */
 	public function Getplayer()
 	{
-		global $db, $config, $phpbb_root_path;
+		global $db, $config;
 
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS player_class, l1.name AS player_race,
@@ -448,8 +448,8 @@ class Player extends Admin
             $this->deactivate_reason = $row['deactivate_reason'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbguild/race_images/" . $race_image . ".png" : '';
-			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbguild/class_images/" . $row['imagename'] . ".png" : '';
+			$this->race_image = (strlen($race_image) > 1) ? $this->ext_path . "images/race_images/" . $race_image . ".png" : '';
+			$this->class_image = (strlen($row['imagename']) > 1) ? $this->ext_path . "images/class_images/" . $row['imagename'] . ".png" : '';
 			$this->player_title  = $row['player_title'];
 
 			return $this->player_id;
@@ -1544,7 +1544,7 @@ class Player extends Admin
     public function getplayerlist($start, $mode, $query_by_armor, $query_by_class, $filter,
 			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $player_filter = '' , $all=1)
 	{
-		global $db, $config, $user, $phpbb_root_path;
+		global $db, $config, $user;
 		$sql_array = array();
 
 		$sql_array['SELECT'] =  'm.player_id, m.game_id, m.player_guild_id,  m.player_name, m.player_level, m.player_race_id, e1.name as race_name,
@@ -1703,10 +1703,10 @@ class Player extends Admin
 					'colorcode' => $row['colorcode'],
 					'player_class_id' => $row['player_class_id'],
 					'class_name' => $row['class_name'],
-					'class_image' => $phpbb_root_path . 'images/bbguild/class_images/' . $row['imagename'] . '.png',
+					'class_image' => $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png',
 					'race_name' => $row['race_name'],
 					'player_gender_id' => $row['player_gender_id'],
-					'race_image' =>  $phpbb_root_path . 'images/bbguild/race_images/' . (($row['player_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
+					'race_image' =>  $this->ext_path . 'images/race_images/' . (($row['player_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
 					'image_female' => $row['image_female'],
 					'image_male' => $row['image_male'],
 					'player_rank'	=> $row['rank_prefix'] . ' ' . $row['rank_name'] . ' ' . $row['rank_suffix'],

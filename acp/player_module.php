@@ -932,7 +932,7 @@ class player_module extends Admin
             'COLORCODE'                => ($editplayer->colorcode == '') ? '#254689' : $editplayer->colorcode,
             'CLASS_IMAGE'              => $editplayer->class_image,
             'S_CLASS_IMAGE_EXISTS'     => (strlen($editplayer->class_image) > 1) ? true : false,
-            'RACE_IMAGE'               => $editplayer->race_image,
+            'RACE_IMAGE'               => (strlen($editplayer->race_image) > 1) ? $editplayer->race_image : '',
             'S_RACE_IMAGE_EXISTS'      => (strlen($editplayer->race_image) > 1) ? true : false,
             'S_JOINDATE_DAY_OPTIONS'   => $s_playerjoin_day_options,
             'S_JOINDATE_MONTH_OPTIONS' => $s_playerjoin_month_options,
