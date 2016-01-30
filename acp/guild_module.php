@@ -52,7 +52,7 @@ class guild_module extends Admin
 
     public $id;
     public $mode;
-
+	public $auth;
     /**
      * ACP guild function
      * @param int $id the id of the node who parent has to be returned by function
@@ -61,7 +61,7 @@ class guild_module extends Admin
     public function main($id, $mode)
     {
         global $config, $user, $template, $db, $phpbb_admin_path, $phpEx;
-        global $request;
+        global $request, $auth;
 
         $this->config = $config;
         $this->id = $id;
@@ -70,6 +70,7 @@ class guild_module extends Admin
         $this->template=$template;
         $this->user=$user;
         $this->db=$db;
+	    $this->auth=$auth;
 
         parent::__construct();
         $form_key = 'bbdkp/bbguild';
@@ -78,6 +79,11 @@ class guild_module extends Admin
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds') . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
         $this->page_title = 'ACP_LISTGUILDS';
+
+        if (! $this->auth->acl_get('a_bbguild'))
+        {
+            trigger_error($user->lang['NOAUTH_A_GUILD_MAN'] );
+        }
 
         switch ($mode)
         {

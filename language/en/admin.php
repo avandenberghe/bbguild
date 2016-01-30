@@ -321,6 +321,8 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_RAID_DEL' => 'You do not have permission to delete raids.',
 'NOAUTH_A_CONFIG_MAN' => 'You do not have permission to manage bbGuild configuration settings.',
 'NOAUTH_A_PLAYERS_MAN' => 'You do not have permission to manage guild players.',
+'NOAUTH_A_GUILD_MAN' => 'You do not have permission to change guild settngs.',
+'NOAUTH_A_GAME_MAN' => 'You do not have permission to change game settings.',
 'NOAUTH_A_LOGS_VIEW' => 'You do not have permission to view bbGuild logs.',
 
 // Manage Players Menu (yes, MMM)

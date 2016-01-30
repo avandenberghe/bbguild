@@ -45,6 +45,7 @@ class game_module extends Admin
     public $u_action;
     public $id;
     public $mode;
+	public $auth;
 
 	/**
 	 * main ACP game function
@@ -56,7 +57,7 @@ class game_module extends Admin
 	{
 
 		global $user, $template, $phpbb_admin_path, $phpEx;
-        global $phpbb_container, $request;
+        global $phpbb_container, $request, $auth;
         parent::__construct();
 
 		// Get an instance of the admin controller
@@ -67,10 +68,17 @@ class game_module extends Admin
         $this->request=$request;
         $this->template=$template;
         $this->user=$user;
+		$this->auth=$auth;
 
 		$form_key = 'bbdkp/bbguild';
 		add_form_key ( $form_key );
 		$this->tpl_name = 'acp_' . $this->mode;
+
+		if (! $this->auth->acl_get('a_bbguild'))
+		{
+			trigger_error($user->lang['NOAUTH_A_GAME_MAN'] );
+		}
+
 
         //list installed games
         $listgames = new Game;

@@ -41,11 +41,12 @@ class player_module extends Admin
 
     public $id;
     public $mode;
+    public $auth;
 
     public function main ($id, $mode)
     {
         global $user, $db, $template, $phpbb_admin_path, $phpEx;
-        global $request, $phpbb_container;
+        global $request, $phpbb_container, $auth;
 
         $this->id = $id;
         $this->mode = $mode;
@@ -54,12 +55,18 @@ class player_module extends Admin
         $this->user=$user;
         $this->db=$db;
         $this->phpbb_container = $phpbb_container;
+        $this->auth=$auth;
 
         parent::__construct();
 
         $form_key = 'bbdkp/bbguild';
         add_form_key($form_key);
         $this->tpl_name   = 'acp_' . $mode;
+
+        if (! $this->auth->acl_get('a_bbguild'))
+        {
+            trigger_error($user->lang['NOAUTH_A_PLAYERS_MAN'] );
+        }
 
         switch ($mode)
         {
