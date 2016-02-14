@@ -12,7 +12,7 @@ namespace bbdkp\bbguild\migrations;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\db\migration\migration;
-use phpbb\db\tools\tools_interface;
+use phpbb\db\tools;
 
 /**
  * Migration stage 1: Initial schema
@@ -54,7 +54,7 @@ class release_2_0_0_m01_schema extends migration
      * @param string $php_ext
      * @param string $table_prefix
      */
-    public function __construct(config $config, driver_interface $db, tools_interface $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
+	public function __construct(config $config, driver_interface $db, tools $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
     {
         parent::__construct($config, $db, $db_tools,  $phpbb_root_path, $php_ext, $table_prefix);
 
@@ -72,6 +72,7 @@ class release_2_0_0_m01_schema extends migration
         $this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
         $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
         $this->plugins_table = $this->table_prefix  . 'bb_plugins';
+        $this->config = $config;
     }
 
     public function effectively_installed()

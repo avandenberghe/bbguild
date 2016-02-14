@@ -32,7 +32,7 @@ class ext extends base
         $user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
         ini_set('max_execution_time', 300);
 
-        if (version_compare($config['version'], '3.2.*', '<'))
+        if (version_compare($config['version'], '3.1.*', '<'))
         {
             trigger_error($user->lang['REQUIREDPHPBB'] );
         }
