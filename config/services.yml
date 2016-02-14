@@ -1,7 +1,7 @@
 # mapping of service "sajaki.bbguild.controller" to class sajaki\bbguild\controller\main
 services:
     bbdkp.bbguild.controller:
-        class: bbdkp\bbguild\controller\main
+        class: bbdkp\bbguild\controller\handleGuild
         arguments:
             - '@config'
             - '@config_text'
@@ -10,7 +10,7 @@ services:
             - '@user'
             - '%core.php_ext%'
     bbdkp.bbguild.portalcontroller:
-        class: bbdkp\bbguild\controller\main
+        class: bbdkp\bbguild\controller\handleGuild
         arguments:
             - '@config'
             - '@config_text'
@@ -32,6 +32,7 @@ services:
             - '@ext.manager'
             - '%core.root_path%'
             - '%core.php_ext%'
+#
     bbdkp.bbguild.listener:
         class: bbdkp\bbguild\event\main_listener
         arguments:

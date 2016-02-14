@@ -8,7 +8,7 @@
 
 namespace bbdkp\bbguild\controller;
 
-class main
+class main_controller
 {
 	/* @var \phpbb\config\config */
 	protected $config;

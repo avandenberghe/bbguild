@@ -28,7 +28,16 @@ class ext extends base
      */
     function enable_step($old_state)
     {
+        global $user, $config;
+        $user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
         ini_set('max_execution_time', 300);
+
+        if (version_compare($config['version'], '3.2.*', '<'))
+        {
+            trigger_error($user->lang['REQUIREDPHPBB'] );
+        }
+
+
         return parent::enable_step($old_state);
     }
 }

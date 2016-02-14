@@ -45,6 +45,7 @@ $lang = array();
 
 // DKP
 $lang = array_merge($lang, array(
+'REQUIREDPHPBB' => 'This extension requires 3.2 or higher.',
 'NOT_UP_TO_DATE_TITLE' => 'Your %s is out of date.',
 'PRELELEASE_TITLE' => 'Your %s is a prelease version.',
 'BBGUILD_LATESTVERSION' => 'Latest Version:',
