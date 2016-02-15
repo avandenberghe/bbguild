@@ -75,26 +75,4 @@ class main_controller
         return $response;
     }
 
-
-    /**
-     * Controller for route app.php/dkp.php and /dkp
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function handlePlayer($player_id)
-    {
-        if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
-        {
-            $l_message = 'DEMO_GOODBYE';
-        } else
-        {
-            $l_message = 'DEMO_HELLO';
-        }
-        $a = $this->user->lang($l_message, $player_id);
-        $this->template->assign_var('DEMO_MESSAGE', $a);
-        $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
-        // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('main.html', $player_id);
-        return $response;
-    }
 }
