@@ -6,7 +6,7 @@
 #guild/guild/1
 bbdkp_bbguild_00:
     path: /guild
-    defaults: { _controller: bbdkp.bbguild.controller:handleGuild }
+    defaults: { _controller: bbdkp.bbguild.controller:handleGuild,  guild_id: 1 }
 bbdkp_bbguild_01:
     path: /guild
     defaults: { _controller: bbdkp.bbguild.controller:handleGuild, guild_id: 1 }

@@ -32,7 +32,6 @@ class main_listener implements EventSubscriberInterface
     protected $config;
 
     /**
-    x
      *
      * @param helper $helper Controller helper object
      * @param \phpbb\template|template $template Template object
