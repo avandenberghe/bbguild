@@ -58,28 +58,6 @@ class main_controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-	public function handleRaid($raid_id)
-    {
-        if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
-        {
-            $l_message = 'DEMO_GOODBYE';
-        } else
-        {
-            $l_message = 'DEMO_HELLO';
-        }
-        $a = $this->user->lang($l_message, $raid_id);
-        $this->template->assign_var('DEMO_MESSAGE', $a);
-        $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
-        // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('dkp/dkpmain.html', $raid_id);
-        return $response;
-    }
-
-    /**
-     * Controller for route app.php/dkp.php and /dkp
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handleGuild($guild_id)
     {
         if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
@@ -93,7 +71,7 @@ class main_controller
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('dkp/dkpmain.html', $guild_id);
+        $response = $this->helper->render('main.html', $guild_id);
         return $response;
     }
 
@@ -116,7 +94,7 @@ class main_controller
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('dkp/dkpmain.html', $player_id);
+        $response = $this->helper->render('main.html', $player_id);
         return $response;
     }
 }
