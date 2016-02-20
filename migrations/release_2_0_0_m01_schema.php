@@ -45,14 +45,14 @@ class release_2_0_0_m01_schema extends migration
     }
 
     /**
-     * custom constructor
+     * release_2_0_0_m01_schema constructor.
      *
-     * @param config $config
+     * @param config           $config
      * @param driver_interface $db
-     * @param tools_interface $db_tools
-     * @param string $phpbb_root_path
-     * @param string $php_ext
-     * @param string $table_prefix
+     * @param tools            $db_tools
+     * @param string           $phpbb_root_path
+     * @param string           $php_ext
+     * @param string           $table_prefix
      */
 	public function __construct(config $config, driver_interface $db, tools $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
     {
@@ -234,7 +234,7 @@ class release_2_0_0_m01_schema extends migration
 
                     ),
                     'PRIMARY_KEY'  => 'player_id',
-                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('player_guild_id', 'player_name'))),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('player_guild_id', 'player_name', 'player_realm'))),
                 ),
 
                 /*18*/

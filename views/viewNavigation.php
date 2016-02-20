@@ -11,8 +11,12 @@
 namespace bbdkp\bbguild\views;
 use bbdkp\bbguild\model\admin\Admin;
 use bbdkp\bbguild\model\player\Guilds;
+use phpbb\config\config;
+use phpbb\controller\helper;
+use phpbb\db\driver\driver_interface;
 use phpbb\request\request;
 use phpbb\user;
+use phpbb\template\template;
 
 class viewNavigation extends Admin implements iViews
 {
@@ -21,6 +25,14 @@ class viewNavigation extends Admin implements iViews
     protected $request;
     /** @var \phpbb\user */
     protected $user;
+    /** @var \phpbb\template\template */
+    protected $template;
+    /** @var driver_interface */
+    protected $db;
+    /** @var config */
+    protected $config;
+    /** @var helper */
+    protected $helper;
 
     /**
      * guild id
@@ -205,11 +217,23 @@ class viewNavigation extends Admin implements iViews
     }
 
 
-    function __construct($page, request $request, user $user)
+    /**
+     * viewNavigation constructor.
+     *
+     * @param          $page
+     * @param request  $request
+     * @param user     $user
+     * @param template $this->template
+     */
+    function __construct($page, request $request, user $user, template $template, driver_interface $db, config $config, helper $helper)
     {
         $this->request = $request;
+        $this->config = $config;
         $this->user = $user;
         $this->page = $page;
+        $this->template = $template;
+        $this->db = $db;
+        $this->helper = $helper;
         $this->buildNavigation();
     }
 
@@ -257,23 +281,19 @@ class viewNavigation extends Admin implements iViews
 
         $this->template->assign_vars(array(
             // Form values
-            /*
+
             'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
-            'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;guild_id=' . $this->guild_id),
-            'U_LISTPLAYERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;guild_id=' . $this->guild_id),
-            'U_LOOTDB'     		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=lootdb&amp;guild_id=' . $this->guild_id),
-            'U_LOOTHIST'  		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;guild_id=' . $this->guild_id),
-            'U_LISTEVENTS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents&amp;guild_id=' . $this->guild_id),
-            'U_LISTRAIDS'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listraids&amp;guild_id=' . $this->guild_id),
-            'U_VIEWITEM'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=item&amp;guild_id=' . $this->guild_id),
-            'U_VIEWPLAYER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=player&amp;guild_id=' . $this->guild_id),
-            'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;guild_id=' . $this->guild_id),
-            'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&amp;guild_id=' . $this->guild_id),
-            'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id . '&amp;rosterlayout='.$mode),
-            'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
-            'U_PLANNER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=planner&amp;guild_id=' . $this->guild_id),
-            'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbguild.$phpEx"),
-            */
+            'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => 1,
+                    'page' => 'news'
+                )),
+            'U_ROSTER'   		=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => 1,
+                    'page' => 'roster'
+                )),
+
             'GAME_ID'			=> $this->guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,
             'GUILD_NAME' 		=> $this->guilds->name,
@@ -360,13 +380,13 @@ class viewNavigation extends Admin implements iViews
 
         // generic armor list
         $sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
-        $result = $db->sql_query ( $sql);
-        while ( $row = $db->sql_fetchrow ( $result ) )
+        $result = $this->db->sql_query ( $sql);
+        while ( $row = $this->db->sql_fetchrow ( $result ) )
         {
             $filtervalues [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
             $this->armor_type [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
         }
-        $db->sql_freeresult ( $result );
+        $this->db->sql_freeresult ( $result );
         $filtervalues ['separator2'] = '--------';
 
 
@@ -379,7 +399,7 @@ class viewNavigation extends Admin implements iViews
                 PLAYER_LIST_TABLE	=> 'i',
             ),
             'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
-				 		AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
+				 		AND l.language= '" . $this->config['bbguild_lang'] . "' AND l.attribute = 'class'
 				 		AND i.player_class_id = c.class_id and i.game_id = c.game_id AND i.game_id = '" .  $this->game_id . "'" ,
 
             'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
@@ -388,38 +408,26 @@ class viewNavigation extends Admin implements iViews
 
         $sql_array[ 'WHERE'] .= ' AND i.player_guild_id = ' . $this->guild_id . ' ';
 
-        if($this->page =='standings' or $this->page =='stats')
-        {
-            $sql_array['FROM'][PLAYER_DKP_TABLE] = 'd';
-            $sql_array[ 'WHERE'] .= 'AND d.player_id = i.player_id';
-            if ($config ['bbguild_hide_inactive'] == '1' && ! $this->show_all )
-            {
-                // don't show inactive players
-                $sql_array['WHERE'] .= ' AND i.player_status = 1 ';
-            }
-        }
-
-        $sql = $db->sql_build_query('SELECT', $sql_array);
-        $result = $db->sql_query ($sql);
+        $sql = $this->db->sql_build_query('SELECT', $sql_array);
+        $result = $this->db->sql_query ($sql);
         $this->classarray = array();
-        while ( $row = $db->sql_fetchrow ( $result ) )
+        while ( $row = $this->db->sql_fetchrow ( $result ) )
         {
             $this->classarray[] = $row;
             $filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
             $this->classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
         }
-        $db->sql_freeresult ( $result );
+        $this->db->sql_freeresult ( $result );
 
         // dump filtervalues to dropdown template
         foreach ( $filtervalues as $fid => $fname )
         {
-            $template->assign_block_vars ( 'filter_row', array (
+            $this->template->assign_block_vars ( 'filter_row', array (
                 'VALUE' => $fid,
                 'SELECTED' => ($fid == $this->filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
                 'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
                 'OPTION' => (! empty ( $fname )) ? $fname : $this->user->lang['ALL'] ) );
         }
-
 
     }
 
