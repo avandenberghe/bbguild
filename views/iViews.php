@@ -1,20 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Nix
- * Date: 16/03/14
- * Time: 20:04
+ * view classes interface
+ *
+ * @package bbguild
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
  */
-namespace sajaki\bbguild\views;
 
-
-/**
- * @ignore
- */
-if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
-{
-	exit;
-}
+namespace bbdkp\bbguild\views;
 
 interface iViews {
 

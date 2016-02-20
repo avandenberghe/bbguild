@@ -2,22 +2,17 @@
 /**
  * left front navigation block
  *
- * @link http://www.avathar.be/bbguild
- * @author Sajaki@gmail.com
- * @copyright 2013 bbguild
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @package bbguild
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
  */
-namespace sajaki\bbguild\views;
-/**
- * @ignore
- */
-if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
-{
-	exit;
-}
 
-class viewNavigation extends \bbguild\admin\Admin implements iViews
+namespace bbdkp\bbguild\views;
+use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\player\Guilds;
+
+class viewNavigation extends Admin implements iViews
 {
     /**
      * guild id
@@ -130,30 +125,6 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
     }
 
     /**
-     * @return int
-     */
-    public function getDefaultpool()
-    {
-        return $this->defaultpool;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDkpsysId()
-    {
-        return $this->dkpsys_id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDkpsysName()
-    {
-        return $this->dkpsys_name;
-    }
-
-    /**
      * @return string
      */
     public function getFilter()
@@ -178,7 +149,7 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
     }
 
     /**
-     * @return \bbguild\views\unknown
+     * @return string
      */
     public function getQueryByClass()
     {
@@ -191,14 +162,6 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
     public function getQueryByArmor()
     {
         return $this->query_by_armor;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getQueryByPool()
-    {
-        return $this->query_by_pool;
     }
 
     /**
@@ -249,19 +212,6 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
     {
         global $phpbb_root_path, $phpEx, $user, $db, $template, $config;
 
-        if (isset($config['bbguild_plugin_bbtips_version']))
-        {
-            //check if config value and parser file exist.
-            if($config['bbguild_plugin_bbtips_version'] >= '1.0.4')
-            {
-                if ( !class_exists('bbtips_parser'))
-                {
-                    require($phpbb_root_path . 'includes/bbguild/bbtips/bbtips_parser.' . $phpEx);
-                }
-                $this->bbtips = new \bbtips_parser;
-            }
-        }
-        // get inputs
         $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
         $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
@@ -412,18 +362,13 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
     }
 
     /**
-     * build sidebar
+     * Build Guild Sidebar
      * @return array
      */
     private function getGuildinfo()
     {
         global $phpbb_root_path, $phpEx, $template;
-        //include the guilds class
-        if (!class_exists('\bbguild\controller\guilds\Guilds'))
-        {
-            require("{$phpbb_root_path}includes/bbguild/controller/guilds/Guilds.$phpEx");
-        }
-        $this->guilds = new \bbguild\controller\guilds\Guilds();
+        $this->guilds = new Guilds();
 
         $guildlist = $this->guilds->guildlist(1);
         if(count($guildlist) > 0)
@@ -548,9 +493,6 @@ class viewNavigation extends \bbguild\admin\Admin implements iViews
 
 
     }
-
-
-
 
 
 }
