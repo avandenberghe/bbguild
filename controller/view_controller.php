@@ -10,47 +10,50 @@ namespace bbdkp\bbguild\controller;
 
 class view_controller
 {
-	/* @var \phpbb\config\config */
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+	/** @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\config\db_text */
-	protected $config_text;
-
-	/* @var \phpbb\controller\helper */
+	/** @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\template\template */
+	/** @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\request\request */
+	protected $request;
+	/** @var \phpbb\user */
 	protected $user;
-
-	/* @var string phpEx */
-	protected $php_ext;
+	/** @var string phpEx */
+	protected $phpEx;
 
 	/**
 	* Constructor
-	*
+	* @param \phpbb\auth\auth $auth
 	* @param \phpbb\config\config		$config
-	* @param \phpbb\config\db_text		$config_text
 	* @param \phpbb\controller\helper	$helper
 	* @param \phpbb\template\template	$template
 	* @param \phpbb\user				$user
 	* @param string						$php_ext	phpEx
 	*/
-	public function __construct(\phpbb\config\config $config,
-                                \phpbb\config\db_text $config_text,
-                                \phpbb\controller\helper $helper,
-                                \phpbb\template\template $template,
-                                \phpbb\user $user,
-                                $php_ext)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\config\config $config,
+        \phpbb\controller\helper $helper,
+        \phpbb\template\template $template,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\request\request $request,
+		\phpbb\user $user,
+        $php_ext)
 	{
+		$this->auth 	= $auth;
 		$this->config 	= $config;
 		$this->helper 	= $helper;
 		$this->template = $template;
+		$this->db       = $db;
+		$this->request  = $request;
 		$this->user 	= $user;
 		$this->php_ext 	= $php_ext;
-		$this->config_text = $config_text;
 	}
 
 	private $valid_views = array('news', 'roster', 'standings', 'welcome', 'loothistory', 'lootdb',

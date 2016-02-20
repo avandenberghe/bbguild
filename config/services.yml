@@ -1,12 +1,14 @@
-# mapping of service "sajaki.bbguild.controller" to class sajaki\bbguild\controller\main
+# mapping of services to controller classes
 services:
     bbdkp.bbguild.controller:
         class: bbdkp\bbguild\controller\view_controller
         arguments:
+            - '@auth'
             - '@config'
-            - '@config_text'
             - '@controller.helper'
             - '@template'
+            - '@dbal.conn'
+            - '@request'
             - '@user'
             - '%core.php_ext%'
     bbdkp.bbguild.admin.controller:
@@ -23,7 +25,6 @@ services:
             - '@ext.manager'
             - '%core.root_path%'
             - '%core.php_ext%'
-#
     bbdkp.bbguild.listener:
         class: bbdkp\bbguild\event\main_listener
         arguments:
