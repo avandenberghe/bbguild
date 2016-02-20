@@ -8,7 +8,7 @@
 
 namespace bbdkp\bbguild\controller;
 
-class main_controller
+class view_controller
 {
 	/* @var \phpbb\config\config */
 	protected $config;
@@ -53,26 +53,34 @@ class main_controller
 		$this->config_text = $config_text;
 	}
 
-    /**
-     * Controller for route app.php/dkp.php and /dkp
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function handleGuild($guild_id)
+	private $valid_views = array('news', 'roster', 'standings', 'welcome', 'loothistory', 'lootdb',
+		'listevents', 'stats', 'listraids', 'event',
+		'item', 'raid', 'member', 'bossprogress', 'planner');
+
+	/**
+     * ViewController
+	 *
+	 * @param $guild_id
+	 * @param $page
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function handleGuild($guild_id, $page)
     {
-        if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
-        {
-            $l_message = 'DEMO_GOODBYE';
-        } else
-        {
-            $l_message = 'DEMO_HELLO';
-        }
-        $a = $this->user->lang($l_message, $guild_id);
-        $this->template->assign_var('DEMO_MESSAGE', $a);
-        $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
-        // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('main.html', $guild_id);
-        return $response;
+
+		if (in_array($page, $this->valid_views))
+	    {
+		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page);
+		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
+		    return new $viewtype($Navigation);
+	    }
+	    else
+	    {
+		    if (isset($this->user->lang['NOVIEW']))
+		    {
+			    trigger_error(sprintf($this->user->lang['NOVIEW'], $page ));
+		    }
+	    }
+
     }
 
 }

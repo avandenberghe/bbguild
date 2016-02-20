@@ -1,16 +1,7 @@
 # mapping of service "sajaki.bbguild.controller" to class sajaki\bbguild\controller\main
 services:
     bbdkp.bbguild.controller:
-        class: bbdkp\bbguild\controller\main_controller
-        arguments:
-            - '@config'
-            - '@config_text'
-            - '@controller.helper'
-            - '@template'
-            - '@user'
-            - '%core.php_ext%'
-    bbdkp.bbguild.portalcontroller:
-        class: bbdkp\bbguild\controller\portal_controller
+        class: bbdkp\bbguild\controller\view_controller
         arguments:
             - '@config'
             - '@config_text'
