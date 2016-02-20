@@ -98,7 +98,7 @@ class main_listener implements EventSubscriberInterface
             'U_GUILD'	=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => 1,
-                    'page' => 'welcome'
+                    'page' => 'roster'
                 )),
         ));
     }

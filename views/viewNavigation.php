@@ -22,17 +22,17 @@ class viewNavigation extends Admin implements iViews
 {
 
     /** @var request */
-    protected $request;
+    public $request;
     /** @var \phpbb\user */
-    protected $user;
+    public $user;
     /** @var \phpbb\template\template */
-    protected $template;
+    public $template;
     /** @var driver_interface */
-    protected $db;
+    public $db;
     /** @var config */
-    protected $config;
+    public $config;
     /** @var helper */
-    protected $helper;
+    public $helper;
 
     /**
      * guild id
@@ -237,7 +237,10 @@ class viewNavigation extends Admin implements iViews
         $this->buildNavigation();
     }
 
-    public function buildpage(viewNavigation $Navigation)
+	/**
+     *
+     */
+    public function buildpage()
     {
 
     }

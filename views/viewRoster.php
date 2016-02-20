@@ -1,54 +1,58 @@
 <?php
 /**
- * roster module
+ * Guild roster
  *
- * @link http://www.avathar.be/bbguild
- * @author Sajaki@gmail.com
- * @copyright 2009 bbguild
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @package bbguild
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
  */
-namespace sajaki\bbguild\views;
-/**
- * @ignore
- */
-if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
-{
-	exit;
-}
-// Include the player class
-if (!class_exists('\bbguild\controller\players\Players'))
-{
-	require("{$phpbb_root_path}includes/bbguild/controller/players/Players.$phpEx");
-}
+
+namespace bbdkp\bbguild\views;
+
 
 class viewRoster implements iViews
 {
-    function __construct(viewNavigation $Navigation)
+    private $navigation;
+
+	/**
+     * viewRoster constructor.
+     *
+     * @param viewnavigation $this->navigation
+     */
+    function __construct(viewnavigation $navigation)
     {
-        $this->buildpage($Navigation);
+        $this->navigation = $navigation;
+        $this->buildpage();
     }
 
-    public function buildpage(viewNavigation $Navigation)
+	/**
+     *
+     */
+    public function buildpage()
     {
-        global $config, $phpbb_root_path, $phpEx, $user, $template;
-        $classes=array();
-        $players = new \bbguild\controller\players\Players;
-        $players->game_id = $Navigation->getGameId();
-        $start = request_var('start' ,0);
-        $mode = request_var('rosterlayout', 0);
-        $player_filter = utf8_normalize_nfc(request_var('player_name', '', true)) ;
-        $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $Navigation->getGuildId());
-
-        $characters = $players->getplayerlist($start, $mode, $Navigation->getQueryByArmor(), $Navigation->getQueryByClass(), $Navigation->getFilter(),
-            $Navigation->getGameId(), $Navigation->getGuildId(), $Navigation->getClassId(), $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2(), false, $player_filter, 0);
+        $classes = array();
+        $players = new \bbdkp\bbguild\model\player\Player;
+        $players->game_id = $this->navigation->getGameId();
+        $start = $this->navigation->request->variable('start' ,0);
+        $mode = $this->navigation->request->variable('rosterlayout', 0);
+        $player_filter = $this->navigation->request->variable('player_name', '', true) ;
+        //$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->navigation->getGuildId());
+        $url= '';
+        $tpl = '';
+        if (!empty($players))
+        {
+            $characters = $players->getplayerlist($start, $mode, $this->navigation->getQueryByArmor(), $this->navigation->getQueryByClass(), $this->navigation->getFilter(),
+                $this->navigation->getGameId(), $this->navigation->getGuildId(), $this->navigation->getClassId(), $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2(), false, $player_filter, 0);
+        }
 
         $rosterlayoutlist = array(
-            0 => $user->lang['ARM_STAND'] ,
-            1 => $user->lang['ARM_CLASS']);
+            0 => $this->navigation->user->lang['ARM_STAND'] ,
+            1 => $this->navigation->user->lang['ARM_CLASS']);
+
         foreach ($rosterlayoutlist as $lid => $lname)
         {
-            $template->assign_block_vars('rosterlayout_row', array(
+            $this->navigation->template->assign_block_vars('rosterlayout_row', array(
                 'VALUE' => $lid ,
                 'SELECTED' => ($lid == $mode) ? ' selected="selected"' : '' ,
                 'OPTION' => $lname));
@@ -63,11 +67,9 @@ class viewRoster implements iViews
 
             foreach ($characters[0] as $char)
             {
-                $template->assign_block_vars('players_row', array(
+                $this->navigation->template->assign_block_vars('players_row', array(
                     'PLAYER_ID'		=> $char['player_id'],
-                    'U_VIEW_PLAYER'	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=player&amp;'.
-                        URI_NAMEID . '=' . $char ['player_id'] . '&amp;' .
-                        URI_DKPSYS . '=' . 0 ),
+                    'U_VIEW_PLAYER'	=> '',
                     'GAME'			=> $char['game_id'],
                     'COLORCODE'		=> $char['colorcode'],
                     'CLASS'			=> $char['class_name'],
@@ -84,24 +86,25 @@ class viewRoster implements iViews
                 ));
             }
 
-            $rosterpagination = $Navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] , $characters[2], $config['bbguild_user_llimit'], $start, true, 'start' );
+            //$rosterpagination = $this->navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] , $characters[2], $config['bbguild_user_llimit'], $start, true, 'start' );
+            $rosterpagination = '';
 
             // add navigationlinks
             $navlinks_array = array(
                 array(
-                    'DKPPAGE' => $user->lang['MENU_ROSTER'],
+                    'DKPPAGE' => $this->navigation->user->lang['MENU_ROSTER'],
                     'U_DKPPAGE' => $url,
                 ));
 
             foreach($navlinks_array as $name )
             {
-                $template->assign_block_vars('dkpnavlinks', array(
+                $this->navigation->template->assign_block_vars('dkpnavlinks', array(
                     'DKPPAGE' => $name['DKPPAGE'],
                     'U_DKPPAGE' => $name['U_DKPPAGE'],
                 ));
             }
 
-            $template->assign_vars(array(
+            $this->navigation->template->assign_vars(array(
                 'ROSTERPAGINATION' 		=> $rosterpagination ,
                 'O_NAME'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][0],
                 'O_CLASS'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][2],
@@ -113,20 +116,20 @@ class viewRoster implements iViews
 
 
             // add template constants
-            $template->assign_vars(array(
+            $this->navigation->template->assign_vars(array(
                 'S_RSTYLE'		    => '0',
-                'S_SHOWACH'			=> $config['bbguild_show_achiev'],
+                'S_SHOWACH'			=> $this->navigation->config['bbguild_show_achiev'],
                 'LISTPLAYERS_FOOTCOUNT' => 'Total players : ' . $characters[2] ,
                 'S_DISPLAY_ROSTERLISTING' => true
             ));
 
-
+            $tpl = 'view/rosterlisting.html';
         }
         elseif($mode == 1)
         {
             //display grid
-            $classgroup = $players->get_classes($Navigation->getFilter(), $Navigation->getQueryByArmor(),
-                $Navigation->getClassId(), $Navigation->getGameId(), $Navigation->getGuildId(),  $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2());
+            $classgroup = $players->get_classes($this->navigation->getFilter(), $this->navigation->getQueryByArmor(),
+                $this->navigation->getClassId(), $this->navigation->getGameId(), $this->navigation->getGuildId(),  $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2());
 
             if(count($classgroup) > 0)
             {
@@ -139,10 +142,10 @@ class viewRoster implements iViews
 
                 foreach ($classes as  $classid => $class)
                 {
-                    $classimgurl =  $phpbb_root_path . "images/bbguild/roster_classes/" . $class['imagename'] .'.png';
+                    $classimgurl =  $this->navigation->ext_path . "images/roster_classes/" . $class['imagename'] .'.png';
                     $classcolor = $class['colorcode'];
 
-                    $template->assign_block_vars('class', array(
+                    $this->navigation->template->assign_block_vars('class', array(
                         'CLASSNAME'     => $class['name'],
                         'CLASSIMG'		=> $classimgurl,
                         'COLORCODE'		=> $classcolor,
@@ -153,7 +156,7 @@ class viewRoster implements iViews
                     {
                         if($row2['player_class_id'] == $classid)
                         {
-                            $template->assign_block_vars('class.players_row', array(
+                            $this->navigation->template->assign_block_vars('class.players_row', array(
                                 'PLAYER_ID'		=> $row2['player_id'],
                                 'GAME'			=> $row2['game_id'],
                                 'COLORCODE'		=> $row2['colorcode'],
@@ -174,12 +177,12 @@ class viewRoster implements iViews
                     }
                 }
 
-                $rosterpagination = $Navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
-                    count($characters[0]), $config ['bbguild_user_llimit'], $start, true, 'start' );
+                $rosterpagination = $this->navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
+                    count($characters[0]), $this->navigation->config ['bbguild_user_llimit'], $start, true, 'start' );
 
                 if (isset($characters[1]) && sizeof ($characters[1]) > 0)
                 {
-                    $template->assign_vars(array(
+                    $this->navigation->template->assign_vars(array(
                         'ROSTERPAGINATION' 		=> $rosterpagination ,
                         'U_LIST_PLAYERS0'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][0],
                         'U_LIST_PLAYERS1'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][1],
@@ -191,8 +194,8 @@ class viewRoster implements iViews
                 }
 
                 // add template constants
-                $template->assign_vars(array(
-                    'S_SHOWACH'			=> $config['bbguild_show_achiev'],
+                $this->navigation->template->assign_vars(array(
+                    'S_SHOWACH'			=> $this->navigation->config['bbguild_show_achiev'],
                     'LISTPLAYERS_FOOTCOUNT' => 'Total players : ' . count($characters[0]),
                     'S_DISPLAY_ROSTERGRID' => true
                 ));
@@ -201,34 +204,53 @@ class viewRoster implements iViews
             // add menu navigationlinks
             $navlinks_array = array(
                 array(
-                    'DKPPAGE' => $user->lang['MENU_ROSTER'],
+                    'DKPPAGE' => $this->navigation->user->lang['MENU_ROSTER'],
                     'U_DKPPAGE' => $url,
                 ));
 
             foreach( $navlinks_array as $name )
             {
-                $template->assign_block_vars('dkpnavlinks', array(
+                $this->navigation->template->assign_block_vars('dkpnavlinks', array(
                     'DKPPAGE' => $name['DKPPAGE'],
                     'U_DKPPAGE' => $name['U_DKPPAGE'],
                 ));
             }
 
-            $template->assign_vars(array(
+            $this->navigation->template->assign_vars(array(
                 'S_RSTYLE'		    => '1',
+            ));
+            $tpl = 'view/rostergrid.html';
+
+        }
+        if ((sizeof($this->navigation->games) > 1))
+        {
+            $this->navigation->template->assign_vars(array(
+                'PLAYER_NAME'      => $player_filter,
+                'S_MULTIGAME'      => true,
+                'S_DISPLAY_ROSTER' => true,
+                'F_ROSTER'         => $url,
+                'S_GAME'           => $players->game_id,
             ));
 
         }
+        else
+        {
+            $this->navigation->template->assign_vars(array(
+                'PLAYER_NAME'      => $player_filter,
+                'S_MULTIGAME'      => false,
+                'S_DISPLAY_ROSTER' => true,
+                'F_ROSTER'         => $url,
+                'S_GAME'           => $players->game_id,
+            ));
+        }
 
-        $template->assign_vars(array(
-            'PLAYER_NAME'       => $player_filter,
-            'S_MULTIGAME'		=> (sizeof($Navigation->games) > 1) ? true:false,
-            'S_DISPLAY_ROSTER'  => true,
-            'F_ROSTER'			=> $url,
-            'S_GAME'		    => $players->game_id,
-        ));
+        $title = $this->navigation->user->lang['GUILDROSTER'];
 
-        $header = $user->lang['GUILDROSTER'];
-        page_header($header);
+        // full rendered page source that will be output on the screen.
+        $response = $this->navigation->helper->render($tpl, $title);
+
+        return $response;
 
     }
+
 }

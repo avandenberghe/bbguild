@@ -4,6 +4,9 @@
         <!-- INCLUDE view/profile-sidebar.html -->
     </div>
     <div id="bbguildmiddle">
+        <!-- IF S_ERROR -->
+            <h2>{ERROR_MESSAGE}</h2>
+        <!-- ENDIF -->
         <!-- IF S_DISPLAY_ROSTERGRID -->
         <!-- INCLUDE view/rostergrid.html -->
         <!-- ENDIF -->

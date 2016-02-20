@@ -12,6 +12,6 @@ namespace bbdkp\bbguild\views;
 
 interface iViews {
 
-    public function buildpage(viewNavigation $Navigation);
+    public function buildpage();
 
 }
