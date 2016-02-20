@@ -72,7 +72,7 @@ class view_controller
 
 		if (in_array($page, $this->valid_views))
 	    {
-		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page);
+		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page, $this->request, $this->user);
 		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
 		    return new $viewtype($Navigation);
 	    }

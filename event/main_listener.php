@@ -95,7 +95,7 @@ class main_listener implements EventSubscriberInterface
     public function add_page_header_link($event)
     {
         $this->template->assign_vars(array(
-            'U_BBGUILD'	=> $this->helper->route('bbdkp_bbguild_00',
+            'U_GUILD'	=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => 1,
                     'page' => 'welcome'

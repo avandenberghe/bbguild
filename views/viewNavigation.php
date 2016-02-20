@@ -11,9 +11,17 @@
 namespace bbdkp\bbguild\views;
 use bbdkp\bbguild\model\admin\Admin;
 use bbdkp\bbguild\model\player\Guilds;
+use phpbb\request\request;
+use phpbb\user;
 
 class viewNavigation extends Admin implements iViews
 {
+
+    /** @var request */
+    protected $request;
+    /** @var \phpbb\user */
+    protected $user;
+
     /**
      * guild id
      * @var int
@@ -197,8 +205,10 @@ class viewNavigation extends Admin implements iViews
     }
 
 
-    function __construct($page)
+    function __construct($page, request $request, user $user)
     {
+        $this->request = $request;
+        $this->user = $user;
         $this->page = $page;
         $this->buildNavigation();
     }
@@ -210,23 +220,21 @@ class viewNavigation extends Admin implements iViews
 
     private function buildNavigation()
     {
-        global $phpbb_root_path, $phpEx, $user, $db, $template, $config;
 
-        $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
-
-        $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
+        $this->show_all = ( $this->request->variable ( 'show', $this->request->variable ( 'hidden_show', '' )) == $this->user->lang['ALL']) ? true : false;
+        $this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id', 0));
         $guildlist = $this->getGuildinfo();
 
-        $this->race_id =  request_var('race_id',0);
-        $this->level1 =  request_var('level1',0);
-        $this->level2 =  request_var('level2', 200);
-        $this->filter = request_var('filter', $user->lang['ALL']);
+        $this->race_id =  $this->request->variable('race_id',0);
+        $this->level1 =  $this->request->variable('level1',0);
+        $this->level2 =  $this->request->variable('level2', 200);
+        $this->filter = $this->request->variable('filter', $this->user->lang['ALL']);
 
         $this->query_by_armor = false;
         $this->query_by_class = false;
         $this->armor();
 
-        if ($this->filter != $user->lang['ALL'])
+        if ($this->filter != $this->user->lang['ALL'])
         {
             if (array_key_exists ( $this->filter, $this->armor_type ))
             {
@@ -245,51 +253,11 @@ class viewNavigation extends Admin implements iViews
             }
         }
 
-        $this->query_by_pool = false;
-        $this->dkpsys_id = 0;
-        $this->dkpsys_name = $user->lang['ALL'];
-        if(isset( $_POST ['pool']) )
-        {
-            $this->dkpsys_id = intval($_POST ['pool']);
-        }
-        if(isset ( $_GET [URI_DKPSYS] ) )
-        {
-            $this->dkpsys_id = intval($_GET [URI_DKPSYS]);
-        }
+        $mode = $this->request->variable('rosterlayout', 0);
 
-        $sql_array = array(
-            'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-            'FROM'		=> array(
-                DKPSYS_TABLE => 'a',
-            ),
-            'WHERE'     => " a.dkpsys_status != 'N' ",
-            'GROUP_BY'  => ' a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-            'ORDER_BY'  => ' a.dkpsys_default desc, a.dkpsys_id '
-        );
-
-        $sql = $db->sql_build_query('SELECT', $sql_array);
-        $result = $db->sql_query ($sql);
-        $dkpvalues = array();
-        while ( $row = $db->sql_fetchrow ( $result ) )
-        {
-            $dkpvalues[$row ['dkpsys_id']]['id'] = $row ['dkpsys_id'];
-            $dkpvalues[$row ['dkpsys_id']]['text'] = $row ['dkpsys_name'];
-            $dkpvalues[$row ['dkpsys_id']]['default'] = $row ['dkpsys_default'];
-            if($row ['dkpsys_default'] =='Y')
-            {
-                $this->defaultpool = $row ['dkpsys_id'];
-                $this->dkpsys_id = $this->defaultpool;
-            }
-        }
-        $db->sql_freeresult ( $result );
-        $this->query_by_pool = true;
-
-        $this->dkppulldown($dkpvalues);
-
-        $mode = request_var('rosterlayout', 0);
-
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             // Form values
+            /*
             'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
             'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;guild_id=' . $this->guild_id),
             'U_LISTPLAYERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;guild_id=' . $this->guild_id),
@@ -305,6 +273,7 @@ class viewNavigation extends Admin implements iViews
             'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
             'U_PLANNER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=planner&amp;guild_id=' . $this->guild_id),
             'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbguild.$phpEx"),
+            */
             'GAME_ID'			=> $this->guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,
             'GUILD_NAME' 		=> $this->guilds->name,
@@ -318,47 +287,10 @@ class viewNavigation extends Admin implements iViews
             'EMBLEMFILE' 		=> basename($this->guilds->emblempath),
             'ARMORY'			=> $this->guilds->guildarmoryurl,
             'ACHIEV'			=> $this->guilds->achievementpoints,
-            'SHOWALL'			=> ($this->show_all) ? $user->lang['ALL']: '',
-            'F_NAVURL' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
+            'SHOWALL'			=> ($this->show_all) ? $this->user->lang['ALL']: '',
         ));
 
 
-    }
-
-    /**
-     * build dkp drop down for standings/stats
-     *
-     * @param $dkpvalues
-     */
-    private function dkppulldown($dkpvalues)
-    {
-        global $user, $template;
-        $template->assign_block_vars ( 'pool_row', array (
-            'VALUE' => $user->lang['ALL'],
-            'SELECTED' => (!$this->query_by_pool) ? ' selected="selected"' : '',
-            'OPTION' => $user->lang['ALL'],
-        ));
-        $template->assign_block_vars ( 'pool_row', array (
-            'VALUE' => '------',
-            'SELECTED' => '',
-            'DISABLED' => ' disabled="disabled"',
-            'OPTION' => '------',
-        ));
-
-        sort($dkpvalues);
-        foreach ($dkpvalues as $key => $value)
-        {
-            $template->assign_block_vars ( 'pool_row', array (
-                'VALUE' => $value['id'],
-                'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
-                'OPTION' => $value['text'],
-            ));
-
-            if($this->dkpsys_id == $value['id'] && $this->query_by_pool )
-            {
-                $this->dkpsys_name = $value['text'];
-            }
-        }
     }
 
     /**
@@ -367,7 +299,6 @@ class viewNavigation extends Admin implements iViews
      */
     private function getGuildinfo()
     {
-        global $phpbb_root_path, $phpEx, $template;
         $this->guilds = new Guilds();
 
         $guildlist = $this->guilds->guildlist(1);
@@ -398,7 +329,7 @@ class viewNavigation extends Admin implements iViews
                 //populate guild popup
                 if($g['id'] > 0) // exclude guildless
                 {
-                    $template->assign_block_vars('guild_row', array(
+                    $this->template->assign_block_vars('guild_row', array(
                         'VALUE' => $g['id'] ,
                         'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
                         'OPTION' =>  $g['name']));
@@ -423,10 +354,8 @@ class viewNavigation extends Admin implements iViews
      */
     private function armor()
     {
-        global $config, $user, $db, $template;
-
         $filtervalues = array();
-        $filtervalues ['all'] = $user->lang['ALL'];
+        $filtervalues ['all'] = $this->user->lang['ALL'];
         $filtervalues ['separator1'] = '--------';
 
         // generic armor list
@@ -434,8 +363,8 @@ class viewNavigation extends Admin implements iViews
         $result = $db->sql_query ( $sql);
         while ( $row = $db->sql_fetchrow ( $result ) )
         {
-            $filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
-            $this->armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+            $filtervalues [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
+            $this->armor_type [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
         }
         $db->sql_freeresult ( $result );
         $filtervalues ['separator2'] = '--------';
@@ -488,7 +417,7 @@ class viewNavigation extends Admin implements iViews
                 'VALUE' => $fid,
                 'SELECTED' => ($fid == $this->filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
                 'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
-                'OPTION' => (! empty ( $fname )) ? $fname : $user->lang['ALL'] ) );
+                'OPTION' => (! empty ( $fname )) ? $fname : $this->user->lang['ALL'] ) );
         }
 
 
