@@ -75,7 +75,9 @@ class view_controller
 		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page, $this->request, $this->user,
 			    $this->template, $this->db, $this->config, $this->helper);
 		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
-		    return new $viewtype($Navigation);
+		    $view = new $viewtype($Navigation);
+		    $response = $view->response;
+		    return $response;
 	    }
 	    else
 	    {

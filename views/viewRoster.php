@@ -14,6 +14,7 @@ namespace bbdkp\bbguild\views;
 class viewRoster implements iViews
 {
     private $navigation;
+    public  $response;
 
 	/**
      * viewRoster constructor.
@@ -247,9 +248,7 @@ class viewRoster implements iViews
         $title = $this->navigation->user->lang['GUILDROSTER'];
 
         // full rendered page source that will be output on the screen.
-        $response = $this->navigation->helper->render($tpl, $title);
-
-        return $response;
+        $this->response = $this->navigation->helper->render($tpl, $title);
 
     }
 
