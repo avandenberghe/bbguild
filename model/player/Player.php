@@ -1718,7 +1718,6 @@ class Player extends Admin
                     'player_status' => $row['player_status'],
 			);
 		}
-		$db->sql_freeresult($result);
 
 		return array($characters, $current_order, $player_count);
 	}
