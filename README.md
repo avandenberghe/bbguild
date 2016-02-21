@@ -28,7 +28,7 @@ Further development requests, support questions are welcome at our [Support Foru
 	
 ## Current
 
-2.0.0-a1-dev
+2.0.0-a2
 
 This code is not ready for testing yet...
 
