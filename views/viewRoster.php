@@ -203,9 +203,9 @@ class viewRoster implements iViews
     private function DisplayListing($characters, $url)
     {
         /*
-					 * Displays the listing
-					*/
-        // use pagination
+		 * Displays the listing
+		 */
+
         foreach ($characters[0] as $char)
         {
             $this->navigation->template->assign_block_vars('players_row', array(
@@ -226,8 +226,15 @@ class viewRoster implements iViews
                 'RACE_IMAGE'    => $char['race_image'],
             ));
         }
-        //$rosterpagination = $this->navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] , $characters[2], $config['bbguild_user_llimit'], $start, true, 'start' );
-        $rosterpagination = '';
+
+        //pagination url
+        $base_url = $this->navigation->helper->route('bbdkp_bbguild_00',
+            array(
+                'guild_id' => 1,
+                'page' => 'roster'
+            ));
+        $rosterpagination = $this->navigation->pagination->generate_template_pagination( $base_url,'pagination','start', $characters[2], $this->navigation->config['bbguild_user_llimit'], $start, true);
+
         // add navigationlinks
         $navlinks_array = array(
             array(
@@ -243,6 +250,7 @@ class viewRoster implements iViews
         }
         $this->navigation->template->assign_vars(array(
             'ROSTERPAGINATION' => $rosterpagination,
+            'PAGE_NUMBER'      => $this->navigation->pagination->on_page($characters[2], $this->navigation->config['bbguild_user_llimit'], $start),
             'O_NAME'           => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][0],
             'O_CLASS'          => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][2],
             'O_RANK'           => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][3],

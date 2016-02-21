@@ -33,6 +33,8 @@ class viewNavigation extends Admin implements iViews
     public $config;
     /** @var helper */
     public $helper;
+    /** @var \phpbb\pagination $pagination  */
+    public $pagination;
 
     /**
      * guild id
@@ -225,7 +227,7 @@ class viewNavigation extends Admin implements iViews
      * @param user     $user
      * @param template $this->template
      */
-    function __construct($page, request $request, user $user, template $template, driver_interface $db, config $config, helper $helper)
+    function __construct($page, request $request, user $user, template $template, driver_interface $db, config $config, helper $helper, \phpbb\pagination $pagination)
     {
         parent::__construct();
         $this->request = $request;
@@ -235,6 +237,7 @@ class viewNavigation extends Admin implements iViews
         $this->template = $template;
         $this->db = $db;
         $this->helper = $helper;
+        $this->pagination = $pagination;
         $this->buildNavigation();
     }
 
