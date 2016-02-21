@@ -9,10 +9,8 @@
  */
 
 namespace bbdkp\bbguild\migrations;
-use phpbb\config\config;
-use phpbb\db\driver\driver_interface;
 use phpbb\db\migration\migration;
-use phpbb\db\tools\tools;
+
 
 /**
  * Migration stage 1: Initial schema
@@ -44,45 +42,11 @@ class release_2_0_0_m01_schema extends migration
         return array('\phpbb\db\migration\data\v310\gold');
     }
 
-    /**
-     * release_2_0_0_m01_schema constructor.
-     *
-     * @param config           $config
-     * @param driver_interface $db
-     * @param tools            $db_tools
-     * @param string           $phpbb_root_path
-     * @param string           $php_ext
-     * @param string           $table_prefix
-     */
-	public function __construct(config $config, driver_interface $db, tools $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
-    {
-        parent::__construct($config, $db, $db_tools,  $phpbb_root_path, $php_ext, $table_prefix);
-
-        $this->bbgames_table = $this->table_prefix  . 'bb_games';
-        $this->news_table = $this->table_prefix  . 'bb_news';
-        $this->bblogs_table = $this->table_prefix  . 'bb_logs';
-        $this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
-        $this->player_list_table = $this->table_prefix  . 'bb_players';
-        $this->class_table = $this->table_prefix  . 'bb_classes';
-        $this->race_table = $this->table_prefix  . 'bb_races';
-        $this->faction_table = $this->table_prefix  . 'bb_factions';
-        $this->guild_table = $this->table_prefix  . 'bb_guild';
-        $this->bb_language = $this->table_prefix  . 'bb_language';
-        $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
-        $this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
-        $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
-        $this->plugins_table = $this->table_prefix  . 'bb_plugins';
-        $this->config = $config;
-    }
-
     public function effectively_installed()
     {
-        $installed = false;
-        if ( $this->db_tools->sql_table_exists($this->guild_table))
-        {
-            $installed = phpbb_version_compare($this->config['bbguild_version'], $this->bbguild_version, '>=');
-        }
-        return $installed;
+        $this->GetTablenames();
+        $guild_table_exists = $this->db_tools->sql_table_exists($this->guild_table);
+        return $guild_table_exists;
     }
 
     /**
@@ -91,6 +55,8 @@ class release_2_0_0_m01_schema extends migration
      */
     public function update_schema()
     {
+        $this->GetTablenames();
+
         return array(
             'add_tables'	=> array(
                 /*1*/
@@ -345,6 +311,8 @@ class release_2_0_0_m01_schema extends migration
      */
     public function revert_schema()
     {
+        $this->GetTablenames();
+
         return array(
             'drop_tables'	=> array(
                 $this->news_table,
@@ -364,4 +332,26 @@ class release_2_0_0_m01_schema extends migration
             ),
         );
     }
+
+    /**
+     * populate table names
+     */
+    public function GetTablenames()
+    {
+        $this->bbgames_table = $this->table_prefix  . 'bb_games';
+        $this->news_table = $this->table_prefix  . 'bb_news';
+        $this->bblogs_table = $this->table_prefix  . 'bb_logs';
+        $this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
+        $this->player_list_table = $this->table_prefix  . 'bb_players';
+        $this->class_table = $this->table_prefix  . 'bb_classes';
+        $this->race_table = $this->table_prefix  . 'bb_races';
+        $this->faction_table = $this->table_prefix  . 'bb_factions';
+        $this->guild_table = $this->table_prefix  . 'bb_guild';
+        $this->bb_language = $this->table_prefix  . 'bb_language';
+        $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
+        $this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
+        $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
+        $this->plugins_table = $this->table_prefix  . 'bb_plugins';
+    }
+
 }
