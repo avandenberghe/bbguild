@@ -22,7 +22,7 @@ class viewRoster implements iViews
      *
      * @param viewnavigation $this->navigation
      */
-    function __construct(viewnavigation $navigation)
+    function __construct(viewNavigation $navigation)
     {
         $this->navigation = $navigation;
         $this->buildpage();
@@ -43,9 +43,6 @@ class viewRoster implements iViews
         $mode = $this->navigation->request->variable('rosterlayout', 0);
         $player_filter = $this->navigation->request->variable('player_name', '', true) ;
 
-        //$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->navigation->getGuildId());
-        $url= '';
-
         $characters = $players->getplayerlist($start, $mode, $this->navigation->getQueryByArmor(), $this->navigation->getQueryByClass(), $this->navigation->getFilter(),
             $this->navigation->getGameId(), $this->navigation->getGuildId(), $this->navigation->getClassId(), $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2(), false, $player_filter, 0);
 
@@ -61,14 +58,20 @@ class viewRoster implements iViews
                 'SELECTED' => ($lid == $mode) ? ' selected="selected"' : '' ,
                 'OPTION' => $lname));
         }
+        //pagination url
+        $base_url = $this->navigation->helper->route('bbdkp_bbguild_00',
+            array(
+                'guild_id' => 1,
+                'page' => 'roster'
+            ));
 
         if ($mode ==0)
         {
-            $this->DisplayListing($characters, $url);
+            $this->DisplayListing($characters, $base_url, $start);
         }
         elseif($mode == 1)
         {
-            $this->DisplayGrid($players, $classes, $characters, $url, $start);
+            $this->DisplayGrid($players, $classes, $characters, $base_url, $start);
         }
 
         if ((sizeof($this->navigation->games) > 1))
@@ -77,7 +80,7 @@ class viewRoster implements iViews
                 'PLAYER_NAME'      => $player_filter,
                 'S_MULTIGAME'      => true,
                 'S_DISPLAY_ROSTER' => true,
-                'F_ROSTER'         => $url,
+                'F_ROSTER'         => $base_url,
                 'S_GAME'           => $players->game_id,
             ));
 
@@ -88,7 +91,7 @@ class viewRoster implements iViews
                 'PLAYER_NAME'      => $player_filter,
                 'S_MULTIGAME'      => false,
                 'S_DISPLAY_ROSTER' => true,
-                'F_ROSTER'         => $url,
+                'F_ROSTER'         => $base_url,
                 'S_GAME'           => $players->game_id,
             ));
         }
@@ -106,14 +109,15 @@ class viewRoster implements iViews
      * @param $players
      * @param $classes
      * @param $characters
-     * @param $url
+     * @param $base_url
      * @param $start
      */
-    private function DisplayGrid($players, $classes, $characters, $url, $start)
+    private function DisplayGrid($players, $classes, $characters, $base_url, $start)
     {
-
         $classgroup = $players->get_classes($this->navigation->getFilter(), $this->navigation->getQueryByArmor(),
-            $this->navigation->getClassId(), $this->navigation->getGameId(), $this->navigation->getGuildId(), $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2());
+            $this->navigation->getClassId(), $this->navigation->getGameId(), $this->navigation->getGuildId(),
+            $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2());
+
         if (count($classgroup) > 0)
         {
             foreach ($classgroup as $row1)
@@ -122,16 +126,22 @@ class viewRoster implements iViews
                 $classes[$row1['class_id']]['imagename'] = $row1['imagename'];
                 $classes[$row1['class_id']]['colorcode'] = $row1['colorcode'];
             }
+
             foreach ($classes as $classid => $class)
             {
-                $classimgurl = $this->navigation->ext_path . "images/roster_classes/" . $class['imagename'] . '.png';
+                //$web_root_path 	= $this->navigation->path_helper->get_web_root_path();
+                $classimgurl = $this->navigation->ext_path_images . "roster_classes/" . $class['imagename'] . '.png';
+
                 $classcolor  = $class['colorcode'];
+
                 $this->navigation->template->assign_block_vars('class', array(
                     'CLASSNAME' => $class['name'],
                     'CLASSIMG'  => $classimgurl,
                     'COLORCODE' => $classcolor,
                 ));
+
                 $classplayers = 1;
+
                 foreach ($characters[0] as $row2)
                 {
                     if ($row2['player_class_id'] == $classid)
@@ -156,17 +166,18 @@ class viewRoster implements iViews
                     }
                 }
             }
-            $rosterpagination = $this->navigation->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'],
-                count($characters[0]), $this->navigation->config ['bbguild_user_llimit'], $start, true, 'start');
+
+            $rosterpagination = $this->navigation->pagination->generate_template_pagination( $base_url,'pagination','start', count($characters[0]), $this->navigation->config['bbguild_user_llimit'], $start, true);
+
             if (isset($characters[1]) && sizeof($characters[1]) > 0)
             {
                 $this->navigation->template->assign_vars(array(
                     'ROSTERPAGINATION' => $rosterpagination,
-                    'U_LIST_PLAYERS0'  => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][0],
-                    'U_LIST_PLAYERS1'  => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][1],
-                    'U_LIST_PLAYERS2'  => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][2],
-                    'U_LIST_PLAYERS3'  => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][3],
-                    'U_LIST_PLAYERS4'  => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][4],
+                    'U_LIST_PLAYERS0'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][0],
+                    'U_LIST_PLAYERS1'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][1],
+                    'U_LIST_PLAYERS2'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][2],
+                    'U_LIST_PLAYERS3'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][3],
+                    'U_LIST_PLAYERS4'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][4],
                 ));
             }
             // add template constants
@@ -180,7 +191,7 @@ class viewRoster implements iViews
         $navlinks_array = array(
             array(
                 'DKPPAGE'   => $this->navigation->user->lang['MENU_ROSTER'],
-                'U_DKPPAGE' => $url,
+                'U_DKPPAGE' => $base_url,
             ));
         foreach ($navlinks_array as $name)
         {
@@ -198,9 +209,11 @@ class viewRoster implements iViews
      * a simple list
      *
      * @param $characters
-     * @param $url
+     * @param $base_url
+     * @param $start
+     * @internal param $url
      */
-    private function DisplayListing($characters, $url)
+    private function DisplayListing($characters, $base_url, $start)
     {
         /*
 		 * Displays the listing
@@ -227,19 +240,13 @@ class viewRoster implements iViews
             ));
         }
 
-        //pagination url
-        $base_url = $this->navigation->helper->route('bbdkp_bbguild_00',
-            array(
-                'guild_id' => 1,
-                'page' => 'roster'
-            ));
         $rosterpagination = $this->navigation->pagination->generate_template_pagination( $base_url,'pagination','start', $characters[2], $this->navigation->config['bbguild_user_llimit'], $start, true);
 
         // add navigationlinks
         $navlinks_array = array(
             array(
                 'DKPPAGE'   => $this->navigation->user->lang['MENU_ROSTER'],
-                'U_DKPPAGE' => $url,
+                'U_DKPPAGE' => $base_url,
             ));
         foreach ($navlinks_array as $name)
         {
@@ -251,12 +258,12 @@ class viewRoster implements iViews
         $this->navigation->template->assign_vars(array(
             'ROSTERPAGINATION' => $rosterpagination,
             'PAGE_NUMBER'      => $this->navigation->pagination->on_page($characters[2], $this->navigation->config['bbguild_user_llimit'], $start),
-            'O_NAME'           => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][0],
-            'O_CLASS'          => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][2],
-            'O_RANK'           => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][3],
-            'O_LEVEL'          => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][4],
-            'O_PHPBB'          => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][5],
-            'O_ACHI'           => $url . '&amp;' . URI_ORDER . '=' . $characters[1]['uri'][6]
+            'O_NAME'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][0],
+            'O_CLASS'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][2],
+            'O_RANK'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][3],
+            'O_LEVEL'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][4],
+            'O_PHPBB'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][5],
+            'O_ACHI'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][6]
         ));
         // add template constants
         $this->navigation->template->assign_vars(array(

@@ -12,6 +12,9 @@ services:
             - '@user'
             - '@pagination'
             - '%core.php_ext%'
+            - '@path_helper'
+            - '@ext.manager'
+            - '%core.root_path%'
     bbdkp.bbguild.admin.controller:
         class: bbdkp\bbguild\controller\admin_controller
         arguments:

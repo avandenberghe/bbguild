@@ -14,6 +14,7 @@ use bbdkp\bbguild\model\player\Guilds;
 use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
+use phpbb\pagination;
 use phpbb\request\request;
 use phpbb\user;
 use phpbb\template\template;
@@ -33,8 +34,16 @@ class viewNavigation extends Admin implements iViews
     public $config;
     /** @var helper */
     public $helper;
-    /** @var \phpbb\pagination $pagination  */
+    /** @var pagination $pagination  */
     public $pagination;
+    /** @var extension path */
+    public $ext_path;
+    /** @var webroot extension path */
+    public $ext_path_web;
+    /** @var webroot image extension path */
+    public $ext_path_images;
+	/** @var string */
+	public $root_path;
 
     /**
      * guild id
@@ -222,12 +231,29 @@ class viewNavigation extends Admin implements iViews
     /**
      * viewNavigation constructor.
      *
-     * @param          $page
-     * @param request  $request
-     * @param user     $user
-     * @param template $this->template
+     * @param                   $page
+     * @param request           $request
+     * @param user              $user
+     * @param template          $template
+     * @param driver_interface  $db
+     * @param config            $config
+     * @param helper            $helper
+     * @param pagination $pagination
+     * @internal param template $this ->template
      */
-    function __construct($page, request $request, user $user, template $template, driver_interface $db, config $config, helper $helper, \phpbb\pagination $pagination)
+    function __construct(
+        $page,
+        request $request,
+        user $user,
+        template $template,
+        driver_interface $db,
+        config $config,
+        helper $helper,
+        pagination $pagination,
+        $ext_path,
+        $ext_path_web,
+        $ext_path_images,
+		$root_path)
     {
         parent::__construct();
         $this->request = $request;
@@ -238,10 +264,15 @@ class viewNavigation extends Admin implements iViews
         $this->db = $db;
         $this->helper = $helper;
         $this->pagination = $pagination;
-        $this->buildNavigation();
+        $this->ext_path = $ext_path;
+        $this->ext_path_web = $ext_path_web;
+        $this->ext_path_images = $ext_path_images;
+	    $this->root_path  = $root_path;
+
+	    $this->buildNavigation();
     }
 
-	/**
+    /**
      *
      */
     public function buildpage()
@@ -317,6 +348,7 @@ class viewNavigation extends Admin implements iViews
             'SHOWALL'			=> ($this->show_all) ? $this->user->lang['ALL']: '',
         ));
 
+	    $a=1;
 
     }
 
