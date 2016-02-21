@@ -15,6 +15,7 @@ class viewRoster implements iViews
 {
     private $navigation;
     public  $response;
+    private $tpl;
 
 	/**
      * viewRoster constructor.
@@ -32,6 +33,7 @@ class viewRoster implements iViews
      */
     public function buildpage()
     {
+        $this->tpl = 'main.html';
         $classes = array();
         $players = new \bbdkp\bbguild\model\player\Player;
         $players->game_id = $this->navigation->getGameId();
@@ -124,7 +126,7 @@ class viewRoster implements iViews
                 'S_DISPLAY_ROSTERLISTING' => true
             ));
 
-            $tpl = 'view/rosterlisting.html';
+
         }
         elseif($mode == 1)
         {
@@ -220,7 +222,7 @@ class viewRoster implements iViews
             $this->navigation->template->assign_vars(array(
                 'S_RSTYLE'		    => '1',
             ));
-            $tpl = 'view/rostergrid.html';
+
 
         }
         if ((sizeof($this->navigation->games) > 1))
@@ -248,7 +250,7 @@ class viewRoster implements iViews
         $title = $this->navigation->user->lang['GUILDROSTER'];
 
         // full rendered page source that will be output on the screen.
-        $this->response = $this->navigation->helper->render($tpl, $title);
+        $this->response = $this->navigation->helper->render($this->tpl, $title);
 
     }
 
