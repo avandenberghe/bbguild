@@ -12,7 +12,7 @@ namespace bbdkp\bbguild\migrations;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\db\migration\migration;
-use phpbb\db\tools;
+use phpbb\db\tools\tools;
 
 /**
  * Migration stage 1: Initial schema
