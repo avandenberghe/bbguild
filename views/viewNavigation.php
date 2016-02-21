@@ -227,6 +227,7 @@ class viewNavigation extends Admin implements iViews
      */
     function __construct($page, request $request, user $user, template $template, driver_interface $db, config $config, helper $helper)
     {
+        parent::__construct();
         $this->request = $request;
         $this->config = $config;
         $this->user = $user;
