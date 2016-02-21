@@ -67,10 +67,24 @@ class main_listener implements EventSubscriberInterface
     {
         return array(
             // for all defined events, write a function below
-            'core.permissions'						=> 'add_permission_cat',
+            'core.common'                           => 'global_calls',
             'core.user_setup'						=> 'load_language_on_setup',
             'core.page_header'						=> 'add_page_header_link',
+            'core.permissions'						=> 'add_permission_cat',
         );
+    }
+    /**
+     * core.common
+     * Handles logic that needs to be called on every page.
+     *
+     * @param array $event   Array containing situational data.
+     */
+    public function global_calls($event)
+    {
+        // Assign global template vars.
+        $this->template->assign_vars(array(
+            'S_BBGUILD_ENABLED'   => true,
+        ));
     }
 
     /**

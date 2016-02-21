@@ -35,19 +35,20 @@ class viewRoster implements iViews
     {
         $this->tpl = 'main.html';
         $classes = array();
+
         $players = new \bbdkp\bbguild\model\player\Player;
         $players->game_id = $this->navigation->getGameId();
+
         $start = $this->navigation->request->variable('start' ,0);
         $mode = $this->navigation->request->variable('rosterlayout', 0);
         $player_filter = $this->navigation->request->variable('player_name', '', true) ;
+
         //$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->navigation->getGuildId());
         $url= '';
-        $tpl = '';
-        if (!empty($players))
-        {
-            $characters = $players->getplayerlist($start, $mode, $this->navigation->getQueryByArmor(), $this->navigation->getQueryByClass(), $this->navigation->getFilter(),
-                $this->navigation->getGameId(), $this->navigation->getGuildId(), $this->navigation->getClassId(), $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2(), false, $player_filter, 0);
-        }
+
+        $characters = $players->getplayerlist($start, $mode, $this->navigation->getQueryByArmor(), $this->navigation->getQueryByClass(), $this->navigation->getFilter(),
+            $this->navigation->getGameId(), $this->navigation->getGuildId(), $this->navigation->getClassId(), $this->navigation->getRaceId(), $this->navigation->getLevel1(), $this->navigation->getLevel2(), false, $player_filter, 0);
+
 
         $rosterlayoutlist = array(
             0 => $this->navigation->user->lang['ARM_STAND'] ,
