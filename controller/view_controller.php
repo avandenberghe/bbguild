@@ -26,6 +26,8 @@ class view_controller
 	protected $user;
 	/** @var string phpEx */
 	protected $phpEx;
+	/** @var \phpbb\pagination */
+	protected $pagination;
 
 	/**
 	* Constructor
@@ -44,16 +46,18 @@ class view_controller
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\request\request $request,
 		\phpbb\user $user,
+		\phpbb\pagination $pagination,
         $php_ext)
 	{
-		$this->auth 	= $auth;
-		$this->config 	= $config;
-		$this->helper 	= $helper;
-		$this->template = $template;
-		$this->db       = $db;
-		$this->request  = $request;
-		$this->user 	= $user;
-		$this->php_ext 	= $php_ext;
+		$this->auth 	    = $auth;
+		$this->config 	    = $config;
+		$this->helper 	    = $helper;
+		$this->template     = $template;
+		$this->db           = $db;
+		$this->request      = $request;
+		$this->user 	    = $user;
+		$this->pagination 	= $pagination;
+		$this->php_ext 	    = $php_ext;
 	}
 
 	private $valid_views = array('news', 'roster', 'standings', 'welcome', 'loothistory', 'lootdb',
@@ -73,7 +77,7 @@ class view_controller
 		if (in_array($page, $this->valid_views))
 	    {
 		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page, $this->request, $this->user,
-			    $this->template, $this->db, $this->config, $this->helper);
+			    $this->template, $this->db, $this->config, $this->helper, $this->pagination);
 		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
 		    $view = new $viewtype($Navigation);
 		    $response = $view->response;

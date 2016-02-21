@@ -49,12 +49,14 @@ list layout
 **************
 -->
 
-<!-- IF ROSTERPAGINATION -->
 <div class="pagination">
-		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
-		<span>{ROSTERPAGINATION}<br /><br /></span>
+	<!-- IF .pagination -->
+	<!-- INCLUDE pagination.html -->
+	<!-- ELSE -->
+	{PAGE_NUMBER}
+	<!-- ENDIF -->
 </div>
-<!-- ENDIF -->
+
 <!-- IF .players_row -->
 <div class="forumbg forumbg-table">
 <div class="inner">
@@ -113,12 +115,14 @@ list layout
 </div>
 <!-- ENDIF -->
 
-<!-- IF ROSTERPAGINATION -->
 <div class="pagination">
-		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
-		<span>{ROSTERPAGINATION}<br /><br /></span>
+	<!-- IF .pagination -->
+	<!-- INCLUDE pagination.html -->
+	<!-- ELSE -->
+	{PAGE_NUMBER}
+	<!-- ENDIF -->
 </div>
-<!-- ENDIF -->
+
 
 <span class="corners-bottom"><span></span></span>
 </div>

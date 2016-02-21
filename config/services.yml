@@ -10,6 +10,7 @@ services:
             - '@dbal.conn'
             - '@request'
             - '@user'
+            - '@pagination'
             - '%core.php_ext%'
     bbdkp.bbguild.admin.controller:
         class: bbdkp\bbguild\controller\admin_controller
