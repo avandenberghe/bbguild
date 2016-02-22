@@ -49,11 +49,11 @@ Find support and more on
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
 ### Changelog 
-2.0.0a2 - 21/02/2016
-- [NEW] - viewcontroller is now done, with a first frontpage : the guild roster. 
-2.0.0a1 - not released
-- [NEW] Conversion to extension
-- [CHG] Functionality reductions : DKP no longer part of core. 
+- 2.0.0a2 - 21/02/2016
+  - [NEW] - viewcontroller is now done, with a first frontpage : the guild roster. 
+- 2.0.0a1 - not released
+  - [NEW] Conversion to extension
+  - [CHG] Functionality reductions : DKP no longer part of core. 
 
 ### contribute
 You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbguild/graphs/contributors).
