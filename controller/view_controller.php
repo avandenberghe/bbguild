@@ -92,18 +92,18 @@ class view_controller
 		'listevents', 'stats', 'listraids', 'event',
 		'item', 'raid', 'member', 'bossprogress', 'planner');
 
-	/**
-     * ViewController
-	 *
-	 * @param $guild_id
-	 * @param $page
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
+    /**
+    * View factory
+    *
+    * @param $guild_id
+    * @param $page
+    * @return \Symfony\Component\HttpFoundation\Response
+    */
     public function handleGuild($guild_id, $page)
     {
 
-		if (in_array($page, $this->valid_views))
-	    {
+	if (in_array($page, $this->valid_views))
+	{
 		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page, $this->request, $this->user,
 			    $this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
 			    $this->ext_path_web, $this->ext_path_images, $this->root_path);
