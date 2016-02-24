@@ -14,7 +14,7 @@
  */
 
 namespace bbdkp\bbguild\model\wowapi;
-use bbdkp\bbguild\model\Admin\admin;
+use bbdkp\bbguild\model\admin\Admin;
 
 /**
  * Resource skeleton
