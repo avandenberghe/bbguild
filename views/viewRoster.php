@@ -40,6 +40,8 @@ class viewRoster implements iViews
         $players->game_id = $this->navigation->getGameId();
 
         $start = $this->navigation->request->variable('start' ,0);
+
+
         $mode = $this->navigation->request->variable('rosterlayout', 0);
         $player_filter = $this->navigation->request->variable('player_name', '', true) ;
 
@@ -61,7 +63,7 @@ class viewRoster implements iViews
         //pagination url
         $base_url = $this->navigation->helper->route('bbdkp_bbguild_00',
             array(
-                'guild_id' => 1,
+                'guild_id' => $this->navigation->getGuildId(),
                 'page' => 'roster'
             ));
 
@@ -167,6 +169,11 @@ class viewRoster implements iViews
                 }
             }
 
+            if($start >  count($characters[0]))
+            {
+                $start = 1;
+            }
+
             $rosterpagination = $this->navigation->pagination->generate_template_pagination( $base_url,'pagination','start', count($characters[0]), $this->navigation->config['bbguild_user_llimit'], $start, true);
 
             if (isset($characters[1]) && sizeof($characters[1]) > 0)
@@ -240,6 +247,10 @@ class viewRoster implements iViews
             ));
         }
 
+        if($start > $characters[2])
+        {
+            $start = 1;
+        }
         $rosterpagination = $this->navigation->pagination->generate_template_pagination( $base_url,'pagination','start', $characters[2], $this->navigation->config['bbguild_user_llimit'], $start, true);
 
         // add navigationlinks
