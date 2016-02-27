@@ -17,7 +17,7 @@ use phpbb\db\migration\migration;
 class release_2_0_0_m03_config extends migration
 {
 
-    protected $bbguild_version = '2.0.0-a3';
+    protected $bbguild_version = '2.0.0-a4';
 
     /**
      * Assign migration file dependencies for this migration

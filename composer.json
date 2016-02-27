@@ -3,7 +3,7 @@
   "type": "phpbb-extension",
   "description": "bbGuild Extension for phpBB 3.1. bbGuild is a Guild Manager for your phpBB3 Bulletin board. Features : Integration of Game, Guild management facilities; Clean report screens, Player, Roster, ACP and UCP modules. Games supported : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard, EverQuest I/II,  Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor, Lineage 2, TERA, FFXIV and Custom Game. Languages supported : English, French, German, Italian. Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  There will be a number of extension plugins, DKP Manager, Raidtracker, bbTips, Apply, Bossprogress, Raidplanner. Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or @bbDKP on Twitter.",
   "homepage": "https://github.com/bbdkp/bbguild",
-  "version": "2.0.0-a3",
+  "version": "2.0.0-a4",
   "time": "2016-02-21",
   "license": "GPL-2.0",
   "authors": [{
@@ -23,7 +23,7 @@
   "extra": {
     "display-name": "bbGuild",
     "soft-require": {
-      "phpbb/phpbb": ">=3.2.0"
+      "phpbb/phpbb": ">=3.1.0"
     },
     "version-check": {
       "host": "www.avathar.be",
