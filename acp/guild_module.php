@@ -395,8 +395,7 @@ class guild_module extends Admin
             $newrank->RankId = $rank_id;
             $newrank->RankGuild = $oldrank->RankGuild;
             $newrank->RankName = $rank_name;
-            $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
-
+            $newrank->RankHide = $this->request->is_set_post(['hide'][$rank_id]);
             $rank_prefix = $this->request->variable('prefix', array((int) $rank_id => ''), true);
             $newrank->RankPrefix = $rank_prefix[$rank_id];
 
@@ -600,12 +599,12 @@ class guild_module extends Admin
                 'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
         }
-        $guilddefaultupdate = (isset($_POST['upddefaultguild'])) ? true : false;
+        $guilddefaultupdate = $this->request->is_set_post('upddefaultguild');
         if ($guilddefaultupdate)
         {
             $this->UpdateDefaultGuild($updateguild);
         }
-        $guildadd = (isset($_POST['addguild'])) ? true : false;
+        $guildadd = $this->request->is_set_post('addguild');
         if ($guildadd)
         {
             redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=addguild'));

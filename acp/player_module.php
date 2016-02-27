@@ -113,7 +113,7 @@ class player_module extends Admin
                 }
 
                 // guild dropdown query
-                $getguild_dropdown = isset ( $_POST ['player_guild_id'] )  ? true : false;
+                $getguild_dropdown = $this->request->is_set_post('player_guild_id');
                 if ($getguild_dropdown)
                 {
                     // user selected dropdown - get guildid

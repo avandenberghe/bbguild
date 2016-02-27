@@ -1198,7 +1198,7 @@ class game_module extends Admin
         $role = new Roles();
         $role->game_id = $editgame->game_id;
         $add=true;
-        if( isset($_POST['role_id']) ||isset($_GET['role_id']) )
+        if( $this->request->is_set_post('role_id')  ||  isset($_GET['role_id']) )
         {
             $role->role_id = $this->request->variable('role_id', 0);
             $role->Get();
