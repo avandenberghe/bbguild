@@ -117,7 +117,8 @@ class Roles
         $resultc = $db->sql_query ($sql);
 
         $this->role_id = (int) $db->sql_fetchfield ( 'new_role_id', false, $resultc );
-
+        $db->sql_freeresult ( $resultc );
+        
         $data = array (
             'game_id' => ( string ) $this->game_id,
             'role_id' => ( int ) $this->role_id,
