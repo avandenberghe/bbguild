@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.6
  */
 // don't add this file to namespace bbdkp
 
@@ -540,7 +540,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             trigger_error('FORM_INVALID');
         }
         $role->rolename = utf8_normalize_nfc(request_var('rolename', '', true));
-        $role->role_id = request_var('role_id', 0);
         $role->role_color = request_var('role_color', '');
         $role->role_icon = request_var('role_icon', '');
         $role->role_cat_icon = request_var('role_cat_icon', '');

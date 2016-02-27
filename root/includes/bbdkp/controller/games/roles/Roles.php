@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2014 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.6
  * @since 1.4.1
  */
 namespace bbdkp\controller\games;
@@ -135,18 +135,14 @@ class Roles extends \bbdkp\controller\games\Game
      */
     public function Make()
     {
-        global $user, $db, $config, $cache;
+        global $db, $config, $cache;
 
-        $sql = 'SELECT count(*) AS countrole FROM ' . BB_GAMEROLE_TABLE . ' WHERE role_id  = ' .
-            $this->role_id . " AND game_id = '" . $this->game_id . "'";
+        $sql = 'SELECT max(role_id) + 1 AS new_role_id FROM ' . BB_GAMEROLE_TABLE . ' WHERE ' .
+            " game_id = '" . $this->game_id . "'";
         $resultc = $db->sql_query ($sql);
 
-        if (( int ) $db->sql_fetchfield ( 'countrole', false, $resultc ) > 0)
-        {
-            trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_ROLE_FAILED'], $this->rolename ), E_USER_WARNING );
-        }
+        $this->role_id = (int) $db->sql_fetchfield ( 'new_role_id', false, $resultc );
         $db->sql_freeresult ( $resultc );
-        unset ( $resultc );
 
         $data = array (
             'game_id' => ( string ) $this->game_id,
