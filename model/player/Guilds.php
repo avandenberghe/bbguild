@@ -289,6 +289,8 @@ class Guilds extends Admin
 	 * do not delete the zero record in the guild table or you will see that guildless players
 	 * become invisible in the roster and in the playerlist or in any list player selection that makes
 	 * an inner join with the guild table.
+	 *
+	 * @return integer
 	 */
 	public function MakeGuild()
 	{
@@ -361,13 +363,30 @@ class Guilds extends Admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-        if ($this->game_id == 'wow')
+        if ($this->game_id != 'wow')
         {
-            $data =  $this->GetApiInfo(array());
-            $this->ApiUpdateBattleNet($data, array() );
+			return 0;
         }
+		else
+		{
+            $data =  $this->GetApiInfo(array());
 
-		return true;
+			if ($this->armoryresult == 'OK')
+			{
+	            $this->ApiUpdateBattleNet($data, array() );
+
+				return 1;
+			}
+			else
+			{
+				return 2;
+			}
+
+
+
+		}
+
+
 
 	}
 

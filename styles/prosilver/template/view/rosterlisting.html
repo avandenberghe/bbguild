@@ -18,6 +18,7 @@
     <div class="navbar" style="clear:both;">
         <span class="corners-top"><span></span></span>
         <form method="post" action="{F_PLAYERS}">
+			<input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
             <div style="white-space:nowrap; text-align: right;">
                 <div style="text-align:right; white-space:nowrap; width:100%" >
                     <select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();">

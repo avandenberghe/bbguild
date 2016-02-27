@@ -252,17 +252,27 @@ class guild_module extends Admin
         $addguild->armory_enabled = $this->request->variable('armory_enabled', 0);
         $addguild->recstatus = $this->request->variable('switchon_recruitment', 0);
         $addguild->recruitforum = $this->request->variable('recruitforum', 0);
+        $result = $addguild->MakeGuild();
 
-        if ($addguild->MakeGuild() == true)
+        switch($result)
         {
-            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
+            case 0:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_NOTICE);
+                break;
+            case 1:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_NOTICE);
+                break;
+            case 2:
+                $success_message = sprintf($this->user->lang['ERROR_ARMORY_NOTFOUND'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_WARNING);
+                break;
+            default:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_WARNING);
         }
-        else
-        {
-            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_WARNING);
-        }
+
     }
 
     /**

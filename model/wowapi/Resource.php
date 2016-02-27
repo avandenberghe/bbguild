@@ -116,7 +116,7 @@ abstract class Resource extends admin
 		//check if locale is allowed
 		if (!in_array($this->locale, $this->locales_allowed[$this->region] ))
 		{
-			trigger_error($user->lang['WOWAPI_LOCALE_NOTALLOWED']);
+			trigger_error(sprintf($user->lang['WOWAPI_LOCALE_NOTALLOWED'], $this->locale));
 		}
 
 		// either a valid method is required or an asterisk

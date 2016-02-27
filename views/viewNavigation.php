@@ -291,7 +291,11 @@ class viewNavigation extends Admin implements iViews
 
         $this->show_all = ( $this->request->variable ( 'show', $this->request->variable ( 'hidden_show', '' )) == $this->user->lang['ALL']) ? true : false;
 
-        //$this->guild_id = $this->request->variable(URI_GUILD, $this->guild_id);
+        $a = $this->guild_id;
+        $b = $this->request->variable('hidden_guild_id', 0);
+        $c = $this->request->variable(URI_GUILD, 0);
+
+        $this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id' , $this->guild_id));
         $guildlist = $this->getGuildinfo();
 
         $this->race_id =  $this->request->variable('race_id',0);

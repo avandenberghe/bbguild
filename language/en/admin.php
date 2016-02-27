@@ -621,6 +621,9 @@ $lang = array_merge($lang, array(
 'WOWPRIVKEY_EXPLAIN' => 'your Secret Mashery key',
 'WOWAPILOCALE' => 'Locale',
 'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
+'WOWAPI_LOCALE_NOTALLOWED' => 'illegal Locale %s : choose one of depending on your WoW Region : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
+'WOWAPI_KEY_MISSING' => 'Please request a Mashery Account at https://dev.battle.net/ and get an API key.',
+
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
