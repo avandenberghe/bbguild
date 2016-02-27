@@ -538,8 +538,8 @@ class game_module extends Admin
         {
             trigger_error('FORM_INVALID');
         }
+
         $role->rolename = $this->request->variable('rolename', '', true);
-        $role->role_id = $this->request->variable('role_id', 0);
         $role->role_color = $this->request->variable('role_color', '');
         $role->role_icon = $this->request->variable('role_icon', '');
         $role->role_cat_icon = $this->request->variable('role_cat_icon', '');

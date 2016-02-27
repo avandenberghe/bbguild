@@ -112,16 +112,11 @@ class Roles
     {
         global $user, $db, $config, $cache;
 
-        $sql = 'SELECT count(*) AS countrole FROM ' . BB_GAMEROLE_TABLE . ' WHERE role_id  = ' .
-            $this->role_id . " AND game_id = '" . $this->game_id . "'";
+        $sql = 'SELECT max(role_id) + 1 AS new_role_id FROM ' . BB_GAMEROLE_TABLE . ' WHERE ' .
+            " game_id = '" . $this->game_id . "'";
         $resultc = $db->sql_query ($sql);
 
-        if (( int ) $db->sql_fetchfield ( 'countrole', false, $resultc ) > 0)
-        {
-            trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_ROLE_FAILED'], $this->rolename ), E_USER_WARNING );
-        }
-        $db->sql_freeresult ( $resultc );
-        unset ( $resultc );
+        $this->role_id = (int) $db->sql_fetchfield ( 'new_role_id', false, $resultc );
 
         $data = array (
             'game_id' => ( string ) $this->game_id,
