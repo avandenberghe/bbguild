@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.4
+ * @version 1.4.6
  */
 
 
@@ -1127,9 +1127,16 @@ $versions = array(
         // fix bug #262, logging table width
         'custom' => array(
             'tableupdates',
+        ),
+    ),
+    '1.4.6' => array(
+        // fix bug #269, role adding
+        'custom' => array(
             'bbdkp_caches'
         ),
     ),
+
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
