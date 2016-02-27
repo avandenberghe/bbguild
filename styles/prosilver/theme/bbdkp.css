@@ -78,7 +78,6 @@ ul.portalmenu {
     background-clip: border-box;
     background-color: #eef5f9;
     background-image: none;
-    background-image: url("{T_THEME_PATH}/images/gradient.gif");
     background-origin: padding-box;
     background-position: 0 0;
     background-repeat: repeat-x;
@@ -104,7 +103,7 @@ ul.portalmenu li {
     list-style-type: none;
     padding-left: 20px;
     text-align: left;
-    background-image: url("{T_THEME_PATH}/images/dkp/menu.png");
+    background-image: url("./images/menu.png");
 }
 
 .portalmenu a {

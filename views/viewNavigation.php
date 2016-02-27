@@ -49,7 +49,7 @@ class viewNavigation extends Admin implements iViews
      * guild id
      * @var int
      */
-    private $guild_id;
+    public $guild_id;
 
     /**
      * game id
@@ -231,15 +231,19 @@ class viewNavigation extends Admin implements iViews
     /**
      * viewNavigation constructor.
      *
-     * @param                   $page
-     * @param request           $request
-     * @param user              $user
-     * @param template          $template
-     * @param driver_interface  $db
-     * @param config            $config
-     * @param helper            $helper
-     * @param pagination $pagination
-     * @internal param template $this ->template
+     * @param                  $page
+     * @param request          $request
+     * @param user             $user
+     * @param template         $template
+     * @param driver_interface $db
+     * @param config           $config
+     * @param helper           $helper
+     * @param pagination       $pagination
+     * @param                  $ext_path
+     * @param                  $ext_path_web
+     * @param                  $ext_path_images
+     * @param                  $root_path
+     * @param                  $guild_id
      */
     function __construct(
         $page,
@@ -253,7 +257,8 @@ class viewNavigation extends Admin implements iViews
         $ext_path,
         $ext_path_web,
         $ext_path_images,
-		$root_path)
+		$root_path,
+        $guild_id)
     {
         parent::__construct();
         $this->request = $request;
@@ -268,6 +273,7 @@ class viewNavigation extends Admin implements iViews
         $this->ext_path_web = $ext_path_web;
         $this->ext_path_images = $ext_path_images;
 	    $this->root_path  = $root_path;
+        $this->guild_id = $guild_id;
 
 	    $this->buildNavigation();
     }
@@ -284,7 +290,8 @@ class viewNavigation extends Admin implements iViews
     {
 
         $this->show_all = ( $this->request->variable ( 'show', $this->request->variable ( 'hidden_show', '' )) == $this->user->lang['ALL']) ? true : false;
-        $this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id', 0));
+
+        //$this->guild_id = $this->request->variable(URI_GUILD, $this->guild_id);
         $guildlist = $this->getGuildinfo();
 
         $this->race_id =  $this->request->variable('race_id',0);
@@ -341,7 +348,7 @@ class viewNavigation extends Admin implements iViews
             'ARMORY_URL' 		=> $this->guilds->guildarmoryurl ,
             'MIN_ARMORYLEVEL' 	=> $this->guilds->min_armory ,
             'SHOW_ROSTER' 		=> $this->guilds->showroster,
-            'EMBLEM'			=> $this->guilds->emblempath,
+            'EMBLEM'			=> $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
             'EMBLEMFILE' 		=> basename($this->guilds->emblempath),
             'ARMORY'			=> $this->guilds->guildarmoryurl,
             'ACHIEV'			=> $this->guilds->achievementpoints,

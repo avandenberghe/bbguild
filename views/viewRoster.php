@@ -159,8 +159,8 @@ class viewRoster implements iViews
                             'PHPBBUID'    => $row2['username'],
                             'PORTRAIT'    => $row2['player_portrait_url'],
                             'ACHIEVPTS'   => $row2['player_achiev'],
-                            'CLASS_IMAGE' => $row2['class_image'],
-                            'RACE_IMAGE'  => $row2['race_image'],
+                            'CLASS_IMAGE' => $this->navigation->ext_path_images . "class_images/" . basename($row2['class_image']),
+                            'RACE_IMAGE'  => $this->navigation->ext_path_images . "race_images/" . basename($row2['race_image']),
                         ));
                         $classplayers++;
                     }
@@ -235,8 +235,8 @@ class viewRoster implements iViews
                 'PHPBBUID'      => $char['username'],
                 'PORTRAIT'      => $char['player_portrait_url'],
                 'ACHIEVPTS'     => $char['player_achiev'],
-                'CLASS_IMAGE'   => $char['class_image'],
-                'RACE_IMAGE'    => $char['race_image'],
+                'CLASS_IMAGE'   => $this->navigation->ext_path_images . "class_images/" . basename($char['class_image']),
+                'RACE_IMAGE'    => $this->navigation->ext_path_images . "race_images/" . basename($char['race_image']),
             ));
         }
 

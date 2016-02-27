@@ -8,6 +8,8 @@
 
 namespace bbdkp\bbguild\controller;
 
+use bbdkp\bbguild\views\viewNavigation;
+
 class view_controller
 {
 	/** @var \phpbb\auth\auth */
@@ -104,9 +106,9 @@ class view_controller
 
 	if (in_array($page, $this->valid_views))
 	{
-		    $Navigation = new \bbdkp\bbguild\views\viewNavigation($page, $this->request, $this->user,
+		    $Navigation = new viewNavigation($page, $this->request, $this->user,
 			    $this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
-			    $this->ext_path_web, $this->ext_path_images, $this->root_path);
+			    $this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id);
 		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
 		    $view = new $viewtype($Navigation);
 		    $response = $view->response;

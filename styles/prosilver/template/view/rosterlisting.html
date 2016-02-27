@@ -89,10 +89,10 @@ list layout
 	<tr class="<!-- IF players_row.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
 	    <td style="text-align:left;">{players_row.PLAYER_ID}</td>
 	    <!-- IF S_GAME == wow || S_GAME == aion -->
-	    <td style="text-align:left;"><a href="{players_row.ARMORY}"><img src="images/bbguild/icons/link.png"  alt="View" /></a></td>
+	    <td style="text-align:left;"><a href="{players_row.ARMORY}"><img src="./images/link.png"  alt="View" /></a></td>
 	    <!-- ENDIF -->
 		<td style="text-align: left;">
-			<a style="white-space: nowrap; color:{players_row.COLORCODE}" href="{players_row.U_VIEW_PLAYER}"><strong>{players_row.NAME}</strong></a>
+			<a style="white-space: nowrap; color:{players_row.COLORCODE}" href="{players_row.ARMORY}"><strong>{players_row.NAME}</strong></a>
 		</td>
     	<td style="text-align:center;">{players_row.LVL}</td>
 		<td style="text-align: left;"><img src="{players_row.RACE_IMAGE}" alt="" />&nbsp;{players_row.RACE}</td>
