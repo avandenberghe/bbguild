@@ -17,7 +17,7 @@ use phpbb\db\migration\migration;
  */
 class release_2_0_0_m01_schema extends migration
 {
-    protected $bbguild_version = '2.0.0-a2';
+    protected $bbguild_version = '2.0.0-a3';
 
     protected $table_prefix;
 
