@@ -41,11 +41,12 @@ class player_module extends Admin
 
     public $id;
     public $mode;
+    public $auth;
 
     public function main ($id, $mode)
     {
         global $user, $db, $template, $phpbb_admin_path, $phpEx;
-        global $request, $phpbb_container;
+        global $request, $phpbb_container, $auth;
 
         $this->id = $id;
         $this->mode = $mode;
@@ -54,12 +55,18 @@ class player_module extends Admin
         $this->user=$user;
         $this->db=$db;
         $this->phpbb_container = $phpbb_container;
+        $this->auth=$auth;
 
         parent::__construct();
 
         $form_key = 'bbdkp/bbguild';
         add_form_key($form_key);
         $this->tpl_name   = 'acp_' . $mode;
+
+        if (! $this->auth->acl_get('a_bbguild'))
+        {
+            trigger_error($user->lang['NOAUTH_A_PLAYERS_MAN'] );
+        }
 
         switch ($mode)
         {
@@ -106,7 +113,7 @@ class player_module extends Admin
                 }
 
                 // guild dropdown query
-                $getguild_dropdown = isset ( $_POST ['player_guild_id'] )  ? true : false;
+                $getguild_dropdown = $this->request->is_set_post('player_guild_id');
                 if ($getguild_dropdown)
                 {
                     // user selected dropdown - get guildid
@@ -932,7 +939,7 @@ class player_module extends Admin
             'COLORCODE'                => ($editplayer->colorcode == '') ? '#254689' : $editplayer->colorcode,
             'CLASS_IMAGE'              => $editplayer->class_image,
             'S_CLASS_IMAGE_EXISTS'     => (strlen($editplayer->class_image) > 1) ? true : false,
-            'RACE_IMAGE'               => $editplayer->race_image,
+            'RACE_IMAGE'               => (strlen($editplayer->race_image) > 1) ? $editplayer->race_image : '',
             'S_RACE_IMAGE_EXISTS'      => (strlen($editplayer->race_image) > 1) ? true : false,
             'S_JOINDATE_DAY_OPTIONS'   => $s_playerjoin_day_options,
             'S_JOINDATE_MONTH_OPTIONS' => $s_playerjoin_month_options,

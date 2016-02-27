@@ -96,8 +96,9 @@ class Admin
             'it' => $user->lang['LANG_IT']
         );
 
-        $boardtime = getdate(time() + $user->timezone + $user->timezone->getOffset(new \DateTime('UTC')));
+        $boardtime = getdate(time());
         $this->time = $boardtime[0];
+
         $listgames = new Game;
         $this->games = $listgames->games;
         unset($listgames);

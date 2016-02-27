@@ -1,0 +1,21 @@
+<!-- INCLUDE overall_header.html -->
+<div id="bbguildwrap">
+    <div id= "bbguildleftside">
+        <!-- INCLUDE view/profile-sidebar.html -->
+    </div>
+    <div id="bbguildmiddle">
+        <!-- IF S_ERROR -->
+            <h2>{ERROR_MESSAGE}</h2>
+        <!-- ENDIF -->
+        <!-- IF S_DISPLAY_ROSTERGRID -->
+        <!-- INCLUDE view/rostergrid.html -->
+        <!-- ENDIF -->
+        <!-- IF S_DISPLAY_ROSTERLISTING -->
+        <!-- INCLUDE view/rosterlisting.html -->
+        <!-- ENDIF -->
+        <!-- IF S_DISPLAY_NEWS -->
+        <!-- INCLUDE view/news.html -->
+        <!-- ENDIF -->
+    </div>
+</div>
+<!-- INCLUDE overall_footer.html -->

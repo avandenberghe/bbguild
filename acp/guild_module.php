@@ -52,7 +52,7 @@ class guild_module extends Admin
 
     public $id;
     public $mode;
-
+	public $auth;
     /**
      * ACP guild function
      * @param int $id the id of the node who parent has to be returned by function
@@ -61,7 +61,7 @@ class guild_module extends Admin
     public function main($id, $mode)
     {
         global $config, $user, $template, $db, $phpbb_admin_path, $phpEx;
-        global $request;
+        global $request, $auth;
 
         $this->config = $config;
         $this->id = $id;
@@ -70,6 +70,7 @@ class guild_module extends Admin
         $this->template=$template;
         $this->user=$user;
         $this->db=$db;
+	    $this->auth=$auth;
 
         parent::__construct();
         $form_key = 'bbdkp/bbguild';
@@ -78,6 +79,11 @@ class guild_module extends Admin
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds') . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
         $this->page_title = 'ACP_LISTGUILDS';
+
+        if (! $this->auth->acl_get('a_bbguild'))
+        {
+            trigger_error($user->lang['NOAUTH_A_GUILD_MAN'] );
+        }
 
         switch ($mode)
         {
@@ -246,17 +252,27 @@ class guild_module extends Admin
         $addguild->armory_enabled = $this->request->variable('armory_enabled', 0);
         $addguild->recstatus = $this->request->variable('switchon_recruitment', 0);
         $addguild->recruitforum = $this->request->variable('recruitforum', 0);
+        $result = $addguild->MakeGuild();
 
-        if ($addguild->MakeGuild() == true)
+        switch($result)
         {
-            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
+            case 0:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_NOTICE);
+                break;
+            case 1:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_NOTICE);
+                break;
+            case 2:
+                $success_message = sprintf($this->user->lang['ERROR_ARMORY_NOTFOUND'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_WARNING);
+                break;
+            default:
+                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
+                trigger_error($success_message . $this->link, E_USER_WARNING);
         }
-        else
-        {
-            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_WARNING);
-        }
+
     }
 
     /**
@@ -389,8 +405,7 @@ class guild_module extends Admin
             $newrank->RankId = $rank_id;
             $newrank->RankGuild = $oldrank->RankGuild;
             $newrank->RankName = $rank_name;
-            $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
-
+            $newrank->RankHide = $this->request->is_set_post(['hide'][$rank_id]);
             $rank_prefix = $this->request->variable('prefix', array((int) $rank_id => ''), true);
             $newrank->RankPrefix = $rank_prefix[$rank_id];
 
@@ -594,12 +609,12 @@ class guild_module extends Admin
                 'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
         }
-        $guilddefaultupdate = (isset($_POST['upddefaultguild'])) ? true : false;
+        $guilddefaultupdate = $this->request->is_set_post('upddefaultguild');
         if ($guilddefaultupdate)
         {
             $this->UpdateDefaultGuild($updateguild);
         }
-        $guildadd = (isset($_POST['addguild'])) ? true : false;
+        $guildadd = $this->request->is_set_post('addguild');
         if ($guildadd)
         {
             redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=addguild'));

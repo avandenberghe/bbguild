@@ -45,6 +45,7 @@ $lang = array();
 
 // DKP
 $lang = array_merge($lang, array(
+'REQUIREDPHPBB' => 'This extension requires 3.2 or higher.',
 'NOT_UP_TO_DATE_TITLE' => 'Your %s is out of date.',
 'PRELELEASE_TITLE' => 'Your %s is a prelease version.',
 'BBGUILD_LATESTVERSION' => 'Latest Version:',
@@ -321,6 +322,8 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_RAID_DEL' => 'You do not have permission to delete raids.',
 'NOAUTH_A_CONFIG_MAN' => 'You do not have permission to manage bbGuild configuration settings.',
 'NOAUTH_A_PLAYERS_MAN' => 'You do not have permission to manage guild players.',
+'NOAUTH_A_GUILD_MAN' => 'You do not have permission to change guild settngs.',
+'NOAUTH_A_GAME_MAN' => 'You do not have permission to change game settings.',
 'NOAUTH_A_LOGS_VIEW' => 'You do not have permission to view bbGuild logs.',
 
 // Manage Players Menu (yes, MMM)
@@ -618,6 +621,9 @@ $lang = array_merge($lang, array(
 'WOWPRIVKEY_EXPLAIN' => 'your Secret Mashery key',
 'WOWAPILOCALE' => 'Locale',
 'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
+'WOWAPI_LOCALE_NOTALLOWED' => 'illegal Locale %s : choose one of depending on your WoW Region : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
+'WOWAPI_KEY_MISSING' => 'Please request a Mashery Account at https://dev.battle.net/ and get an API key.',
+
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',

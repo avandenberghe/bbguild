@@ -15,7 +15,7 @@ if ( !defined('IN_PHPBB') )
 }
 global $table_prefix;
 
-define('BBGUILD_VERSION' , '2.0.0-a1-dev');
+define('BBGUILD_VERSION' , '2.0.0-a3');
 define('BBGUILD_VERSIONURL' , 'http://www.avathar.be/versioncheck/');
 define('URI_LOG' , 'log');
 define('URI_NAME' , 'name');

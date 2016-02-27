@@ -52,6 +52,7 @@ class recruit_module  extends Admin
 
     public $id;
     public $mode;
+    public $auth;
 
     /**
      *

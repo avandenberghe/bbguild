@@ -28,7 +28,7 @@ class main_module extends Admin
 
     public $id;
     public $mode;
-
+    public $auth;
     /**
      * @param $id
      * @param $mode
@@ -36,7 +36,7 @@ class main_module extends Admin
     function main ($id, $mode)
     {
         global $db, $user, $template, $request, $phpbb_admin_path, $cache;
-        global $config, $phpEx, $phpbb_container;
+        global $config, $phpEx, $phpbb_container, $auth;
 
         $this->id = $id;
         $this->mode = $mode;
@@ -44,6 +44,7 @@ class main_module extends Admin
         $this->template=$template;
         $this->user=$user;
         $this->db=$db;
+        $this->auth=$auth;
 
         parent::__construct();
 
@@ -52,6 +53,11 @@ class main_module extends Admin
         $this->page_title = 'ACP_BBGUILD_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module') . '"><h3>' . $this->user->lang['ACP_BBGUILD'] . '</h3></a>';
+
+        if (! $this->auth->acl_get('a_bbguild'))
+        {
+            trigger_error($user->lang['NOAUTH_A_CONFIG_MAN'] );
+        }
 
         switch ($mode)
         {
