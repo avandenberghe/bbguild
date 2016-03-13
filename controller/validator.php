@@ -3,19 +3,19 @@
  * validator
  *
  * Data validation class
- * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
- * @copyright   Arvind Gupta (c) 2011
- * @link        http://www.arvindgupta.co.in
- * @license     You're free to do whatever with this as long as this notice
+ *
+ * @author    Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
+ * @copyright Arvind Gupta (c) 2011
+ * @link      http://www.arvindgupta.co.in
+ * @license   You're free to do whatever with this as long as this notice
  *              remains intact.
  */
 namespace sajaki\bbguild\controller\admin;
 /**
  * @ignore
  */
-if (! defined('IN_PHPBB'))
-{
-	exit();
+if (! defined('IN_PHPBB')) {
+    exit();
 }
 
 /**
@@ -23,24 +23,28 @@ if (! defined('IN_PHPBB'))
  */
 class validator
 {
- 	/**
- 	 * error rules
- 	 * @var array
- 	 */
+    /**
+      * error rules
+   *
+      * @var array
+      */
     protected $_rules = array();
 
     /**
      * userdata array
+     *
      * @var array
      */
     protected $_data = array();
     /**
      * message array
+     *
      * @var array
      */
     protected $_messages = array();
     /**
      * error array
+     *
      * @var array
      */
     protected $_errors = array();
@@ -67,7 +71,7 @@ class validator
     /**
      * Set data to be validated
      *
-     * @param array $data   Data to be validated
+     * @param array $data Data to be validated
      */
     public function setData(array $data)
     {
@@ -77,8 +81,8 @@ class validator
     /**
      * Set error message for rule
      *
-     * @param string $rule  Rule name
-     * @param string $message   New message
+     * @param string $rule    Rule name
+     * @param string $message New message
      */
     public function setMessage($rule, $message)
     {
@@ -100,18 +104,15 @@ class validator
             foreach ($rules as $rule => $parameter)
             {
                 // If rule does not require parameter
-                if (is_int($rule))
-                {
+                if (is_int($rule)) {
                     $rule = $parameter;
                     $parameter = null;
                 }
 
-                if (!$this->check($value, $rule, $parameter))
-                {
+                if (!$this->check($value, $rule, $parameter)) {
                     $valid = false;
 
-                    if (stripos($this->_messages[$rule], '%s') !== false)
-                    {
+                    if (stripos($this->_messages[$rule], '%s') !== false) {
                         $this->_errors[$field][] = sprintf($this->_messages[$rule], $parameter);
                     }
                     else
@@ -137,39 +138,41 @@ class validator
 
     /**
      * check for errors
-     * @param string $value
-     * @param string $rule
-     * @param string $parameter
+     *
+     * @param  string $value
+     * @param  string $rule
+     * @param  string $parameter
      * @return boolean|number
      */
     protected function check($value, $rule, $parameter)
     {
         switch ($rule)
         {
-            case 'required' :
-                return!(trim($value) == '');
+        case 'required' :
+            return!(trim($value) == '');
 
-            case 'maxlength' :
-                return (strlen($value) <= $parameter);
+        case 'maxlength' :
+            return (strlen($value) <= $parameter);
 
-            case 'minlength' :
-                return (strlen($value) >= $parameter);
+        case 'minlength' :
+            return (strlen($value) >= $parameter);
 
-            case 'numeric' :
-                return is_numeric($value);
+        case 'numeric' :
+            return is_numeric($value);
 
-            case 'int' :
-                return is_int($value);
+        case 'int' :
+            return is_int($value);
 
-            case 'min' :
-                return $value >= $parameter ? true : false;
+        case 'min' :
+            return $value >= $parameter ? true : false;
 
-            case 'max' :
-                return $value <= $parameter ? true : false;
+        case 'max' :
+            return $value <= $parameter ? true : false;
 
-            case 'url':
-                // Regex taken from symfony
-                return preg_match('~^
+        case 'url':
+            // Regex taken from symfony
+            return preg_match(
+                '~^
                   (https?)://                           # protocol
                   (
                 ([a-z0-9-]+\.)+[a-z]{2,6}               # a domain name
@@ -178,22 +181,23 @@ class validator
                   )
                   (:[0-9]+)?                                # a port (optional)
                   (/?|/\S+)                                 # a /, nothing or a / with something
-                $~ix', $value);
+                $~ix', $value
+            );
 
-            case 'email':
-                return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
+        case 'email':
+            return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
 
-            case 'hexcode':
-            	//Checks if a field is a valid hexadecimal color code (#FFFFFF)
-            	return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
-            case 'regex':
-                return preg_match($parameter, $value);
+        case 'hexcode':
+            //Checks if a field is a valid hexadecimal color code (#FFFFFF)
+            return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
+        case 'regex':
+            return preg_match($parameter, $value);
 
-            case 'pass':
-                return true;
+        case 'pass':
+            return true;
 
-            default :
-                return false;
+        default :
+            return false;
         }
     }
 
@@ -212,42 +216,40 @@ class validator
                 'min' => 'Value must be at least %s',
                 'url' => 'Value must be a valid URL.',
                 'email' => 'Value must be a valid email.',
-        		'hexcode' => 'Value must be a hexcode',
+                'hexcode' => 'Value must be a hexcode',
                 'regex' => 'Invalid value.',
-     );
+        );
     }
 
-	/**
-	 * funnel error messages to user
-	 */
+    /**
+     * funnel error messages to user
+     */
     public function displayerrors()
     {
-    	global $user;
+        global $user;
 
-    	if(!$this->isValid())
-    	{
-    		$out 	='';
-    		foreach($this->getErrors() as $field => $messages)
-    		{
-    			if (count($messages) == 1)
-    			{
-	    			$out .= "<li><strong>$field</strong>: $messages[0]</li>";
-    			}
-    				else
-    				{
-    				    // If a field has more than one error
-    					$out .= "<li><strong>$field</strong>:</li>";
-    					$out .= '<ol>';
-    					foreach ($messages as $message)
-    					{
-    					$out .= "<li>$message</li>";
-    				}
-    				$out .= '</ol>';
-    			}
-    		}
+        if(!$this->isValid()) {
+            $out     ='';
+            foreach($this->getErrors() as $field => $messages)
+            {
+                if (count($messages) == 1) {
+                    $out .= "<li><strong>$field</strong>: $messages[0]</li>";
+                }
+                else
+                {
+                    // If a field has more than one error
+                    $out .= "<li><strong>$field</strong>:</li>";
+                    $out .= '<ol>';
+                    foreach ($messages as $message)
+                    {
+                        $out .= "<li>$message</li>";
+                    }
+                    $out .= '</ol>';
+                }
+            }
 
-    		trigger_error ( $user->lang['FORM_ERROR'] . $out, E_USER_WARNING );
-    	}
+            trigger_error($user->lang['FORM_ERROR'] . $out, E_USER_WARNING);
+        }
 
 
     }

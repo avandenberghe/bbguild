@@ -2,11 +2,9 @@
 /**
  * bbGuild Admin class file
  *
- *
- * @package bbguild v2.0
+ * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\model\admin;
@@ -17,8 +15,8 @@ use bbdkp\bbguild\model\admin\log;
 use phpbb\file_downloader;
 
 /**
- *
  * bbDKP Admin foundation
+ *
  *   @package bbguild
  */
 class Admin
@@ -26,11 +24,13 @@ class Admin
 
     /**
      * bbguild timestamp
+     *
      * @var integer
      */
     public $time = 0;
     /**
      * game ragions
+     *
      * @var array
      */
     public $regions;
@@ -45,18 +45,21 @@ class Admin
 
     /**
      * bbtips is installed ?
+     *
      * @var boolean
      */
     public $bbtips = false;
 
     /**
      * installed games
+     *
      * @var array
      */
     public $games;
 
     /**
      * extension path
+     *
      * @var
      */
     public $ext_path;
@@ -69,11 +72,10 @@ class Admin
         global $user, $phpEx, $phpbb_extension_manager;
         $this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
         $user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
-        include_once($this->ext_path . 'model/admin/constants.' . $phpEx);
+        include_once $this->ext_path . 'model/admin/constants.' . $phpEx;
 
         // Check for required extensions
-        if (!function_exists('curl_init'))
-        {
+        if (!function_exists('curl_init')) {
             trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
         }
 
@@ -107,9 +109,9 @@ class Admin
     /**
      * creates a unique key, used as adjustments, import, items and raid identifier
      *
-     * @param string $part1
-     * @param string $part2
-     * @param string $part3
+     * @param  string $part1
+     * @param  string $part2
+     * @param  string $part3
      * @return string $group_key
      */
     public final function gen_group_key($part1, $part2, $part3)
@@ -127,31 +129,31 @@ class Admin
 
     /**
      * connects to remote site and gets xml or html using Curl
-     * @param $url
-     * @param array $return_Server_Response_Header
-     * @param bool $loud
-     * @param bool $json
+     *
+     * @param  $url
+     * @param  array $return_Server_Response_Header
+     * @param  bool  $loud
+     * @param  bool  $json
      * @return array
      */
     public final function curl($url, $return_Server_Response_Header, $loud= false, $json=true)
     {
 
         $data = array(
-            'response'		    => '',
+            'response'            => '',
             'response_headers'  => '',
-            'error'				=> '',
+            'error'                => '',
         );
 
-        if ( function_exists ( 'curl_init' ))
-        {
+        if (function_exists('curl_init')) {
             /* Create a CURL handle. */
-            if (($curl = curl_init($url)) === false)
-            {
-                trigger_error('curl_init Failed' , E_USER_WARNING);
+            if (($curl = curl_init($url)) === false) {
+                trigger_error('curl_init Failed', E_USER_WARNING);
             }
 
             // set options
-            curl_setopt_array($curl, array(
+            curl_setopt_array(
+                $curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_URL => $url,
                 CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
@@ -162,32 +164,31 @@ class Admin
                 CURLOPT_VERBOSE => true,
                 CURLOPT_HEADER => $return_Server_Response_Header,
                 CURLOPT_HEADER => false
-            ));
+                )
+            );
 
             $response = curl_exec($curl);
             $headers = curl_getinfo($curl);
 
-            if($response === FALSE || $response === "" )
-            {
+            if($response === false || $response === "" ) {
                 trigger_error(curl_error($curl), E_USER_WARNING);
             }
             else
             {
                 $data = array(
-                    'response'		    => $json && $this->isJSON($response) ? json_decode($response, true) : $response,
+                    'response'            => $json && $this->isJSON($response) ? json_decode($response, true) : $response,
                     'response_headers'  => (array) $headers,
-                    'error'				=> '',
+                    'error'                => '',
                 );
             }
 
-            curl_close ($curl);
+            curl_close($curl);
             return $data;
 
         }
 
         //report errors?
-        if($loud == true)
-        {
+        if($loud == true) {
             trigger_error($data['error'], E_USER_WARNING);
         }
         return $data['response'];
@@ -198,13 +199,15 @@ class Admin
      * @param $string
      * @return bool check if is json
      */
-    function isJSON($string){
+    function isJSON($string)
+    {
         return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 
 
     /**
      * sends POST request to bbguild.com for registration
+     *
      * @param array $regdata
      */
     public final function post_register_request($regdata)
@@ -223,7 +226,8 @@ class Admin
         $ch = curl_init();
 
         // set options
-        curl_setopt_array($ch, array(
+        curl_setopt_array(
+            $ch, array(
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST=> 4,
             CURLOPT_URL => $url,
@@ -235,16 +239,18 @@ class Admin
             CURLOPT_TIMEOUT => 60,
             CURLOPT_VERBOSE => true,
             CURLOPT_HEADER => false
-        ));
+            )
+        );
 
         curl_exec($ch);
-        curl_close( $ch );
+        curl_close($ch);
 
         $this->get_register_request($rndhash);
     }
 
     /**
      * GET requests for registration ID
+     *
      * @param $regcode
      */
     private final function get_register_request($regcode)
@@ -253,22 +259,22 @@ class Admin
         $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
         $data = $this->Curl($url, 'GET');
         $regID = isset($data['response']) ? isset($data['response']['registration']) ? $data['response']['registration'] : '' : '';
-        if( $regID != '')
-        {
+        if($regID != '') {
             $config->set('bbguild_regid', $regID, true);
             $cache->destroy('config');
-            trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE );
+            trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE);
         }
         else
         {
-            trigger_error('Registration failed ', E_USER_WARNING );
+            trigger_error('Registration failed ', E_USER_WARNING);
         }
     }
 
     /**
      * get latest plugin info
-     * @param bool $force_update
-     * @param int $ttl
+     *
+     * @param  bool $force_update
+     * @param  int  $ttl
      * @return array|bool
      */
     public final function get_plugin_info($force_update = false, $ttl = 86400)
@@ -278,14 +284,13 @@ class Admin
         $plugins = $cache->get('bbguildplugins');
 
         //if update is forced or cache expired then make the query to refresh latest productversion
-        if ($plugins === false || $force_update)
-        {
+        if ($plugins === false || $force_update) {
             $plugins = array();
             $sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
-            $result = $db->sql_query ($sql);
+            $result = $db->sql_query($sql);
             while($row = $db->sql_fetchrow($result))
             {
-                $data = $this->curl(BBGUILD_VERSIONURL . $row['name'] .'.json' , false, false, false);
+                $data = $this->curl(BBGUILD_VERSIONURL . $row['name'] .'.json', false, false, false);
                 $response = $data['response'];
                 $latest_version = json_decode($response, true);
                 $latest_version_a = $latest_version['stable']['3.1']['current'];
@@ -301,7 +306,7 @@ class Admin
             $db->sql_freeresult($result);
 
             $cache->destroy('bbguildplugins');
-            $cache->put( 'bbguildplugins', $plugins, $ttl);
+            $cache->put('bbguildplugins', $plugins, $ttl);
         }
         return $plugins;
 
@@ -309,9 +314,10 @@ class Admin
 
     /**
      * retrieve latest bbguild productversion
-     * @param bool $force_update Ignores cached data. Defaults to false.
-     * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
-     * @param int $ttl  Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+     *
+     * @param  bool $force_update Ignores cached data. Defaults to false.
+     * @param  bool $warn_fail    Trigger a warning if obtaining the latest version information fails. Defaults to false.
+     * @param  int  $ttl          Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
      * @return bool
      */
     public final function get_productversion($force_update = false, $warn_fail = false, $ttl = 86400)
@@ -322,14 +328,11 @@ class Admin
         $latest_version_a = $cache->get('latest_bbguild');
 
         //if update is forced or cache expired then make the call to refresh latest productversion
-        if ($latest_version_a === false || $force_update)
-        {
+        if ($latest_version_a === false || $force_update) {
             $data = $this->curl(BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
-            if (empty($data))
-            {
+            if (empty($data)) {
                 $cache->destroy('latest_bbguild');
-                if ($warn_fail)
-                {
+                if ($warn_fail) {
                     trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
                 }
                 return false;
@@ -340,7 +343,7 @@ class Admin
             $latest_version_a = $latest_version['stable']['2.0']['current'];
 
             //put this info in the cache
-            $cache->put('latest_bbguild' , $latest_version_a, $ttl);
+            $cache->put('latest_bbguild', $latest_version_a, $ttl);
         }
 
         return $latest_version_a;
@@ -350,8 +353,7 @@ class Admin
     {
         global $cache, $config, $user;
         $meta = $md_manager->get_metadata('all');
-        if (!isset($meta['extra']['version-check']))
-        {
+        if (!isset($meta['extra']['version-check'])) {
             throw new \RuntimeException($this->user->lang('NO_VERSIONCHECK'), 1);
         }
         $version_check = $meta['extra']['version-check'];
@@ -370,9 +372,9 @@ class Admin
      * use to pass the sort value through the URI.  URI is in the format
      * checks that the 2nd element is either 0 or 1
      *
-     * @param $sort_order
-     * @param string $arg
-     * @param string $defaultorder
+     * @param  $sort_order
+     * @param  string     $arg
+     * @param  string     $defaultorder
      * @return mixed
      */
     public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
@@ -384,15 +386,13 @@ class Admin
         $element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
         $element2 = ( isset($uri_order[1]) ) ? $uri_order[1] : 0;
         // check if correct input
-        if ( $element2 != 1 )
-        {
+        if ($element2 != 1 ) {
             $element2 = 0;
         }
 
         foreach((array) $sort_order as $key => $value )
         {
-            if ( $element1 == $key )
-            {
+            if ($element1 == $key ) {
                 $uri_element2 = ( $element2 == 0 ) ? 1 : 0;
             }
             else
@@ -411,8 +411,9 @@ class Admin
 
     /**
      * remove end of a string
-     * @param string $string
-     * @param string $stringToRemove
+     *
+     * @param  string $string
+     * @param  string $stringToRemove
      * @return string
      */
     public function removeFromEnd($string, $stringToRemove)
@@ -437,7 +438,7 @@ class Admin
      * log_result    varchar(255)    utf8_bin        No
      * log_userid    mediumint(8)    UNSIGNED    No    0
      *
-     * @param array $values
+     * @param  array $values
      * @return bool
      */
     public final function log_insert($values = array())

@@ -3,12 +3,12 @@
  * @package bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
  */
 
 namespace bbdkp\bbguild\acp;
 /**
  * info class for acp module dkp
+ *
  *   @package bbguild
  */
 class main_info
@@ -19,11 +19,11 @@ class main_info
     function module()
     {
         return array(
-            'filename'	=> '\bbdkp\bbguild\acp\main_module',
-            'title'		=> 'ACP_BBGUILD_MAINPAGE',
-            'version'	=> '2.0.0',
-            'modes'		=> array(
-                'panel'	    => array(
+            'filename'    => '\bbdkp\bbguild\acp\main_module',
+            'title'        => 'ACP_BBGUILD_MAINPAGE',
+            'version'    => '2.0.0',
+            'modes'        => array(
+                'panel'        => array(
                     'title' => 'ACP_BBGUILD_PANEL',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MAINPAGE')),
@@ -35,7 +35,7 @@ class main_info
                     'title' => 'ACP_BBGUILD_INDEX',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MAINPAGE')),
-                'logs'	=> array(
+                'logs'    => array(
                     'title' => 'ACP_BBGUILD_LOGS',
                     'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MAINPAGE')),

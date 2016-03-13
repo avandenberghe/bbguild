@@ -1,30 +1,27 @@
 <?php
 /**
  * bbguild common language file - [Italian]
- * @author lucasari
- * @package phpBB Extension - bbguild
+ *
+ * @author    lucasari
+ * @package   phpBB Extension - bbguild
  * @copyright 2011 bbguild <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author sajaki <sajaki@gmail.com>
- * @link http://www.avathar.be/bbdkp
- * @version 2.0
- *
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @author    sajaki <sajaki@gmail.com>
+ * @link      http://www.avathar.be/bbdkp
+ * @version   2.0
  */
 
 /**
  * DO NOT CHANGE
  */
-if (!defined('IN_PHPBB'))
-{
+if (!defined('IN_PHPBB')) {
     exit;
 }
 
 /**
  * DO NOT CHANGE
  */
-if (empty($lang) || !is_array($lang))
-{
+if (empty($lang) || !is_array($lang)) {
     $lang = array();
 }
 
@@ -44,13 +41,14 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge(
+    $lang, array(
     'BBDKPDISABLED' => 'bbDKP è attualmente disabilitato.',
     'FOOTERBBDKP' => 'bbDKP',
 
-//---- Portal blocks -----
+    //---- Portal blocks -----
     'PORTAL' => 'Portale',
-    'USER_MENU'			=> 'menù Utente',
+    'USER_MENU'            => 'menù Utente',
     'RECENTLOOT' => 'Ultimi Oggetti',
     'REMEMBERME' => 'Ricordami',
     'INFORUM' => 'Inserito',
@@ -72,7 +70,7 @@ $lang = array_merge($lang, array(
     'POSTED_BY_ON' => 'da %1$s il %2$s',
     'LATESTPLAYERS' => 'Ultimi Iscritti',
 
-// Main Menu
+    // Main Menu
     'MENU' => 'Menù',
     'MENU_ADMIN_PANEL' => 'Pannello Amministrativo',
     'MENU_BOSS' => 'Bossprogress',
@@ -91,7 +89,7 @@ $lang = array_merge($lang, array(
     'MENU_VIEWEVENT' => 'Vedi Eventi',
     'MENU_PLANNER' => 'Calendario',
 
-//links
+    //links
     'MENU_LINKS' => 'Weblinks',
     'LINK1' => 'http://www.avathar.be/bbdkp',
     'LINK1T' => 'Powered By: bbDKP',
@@ -124,7 +122,7 @@ $lang = array_merge($lang, array(
     'LINK15' => 'http://www.worldofwarcraft.com',
     'LINK15T' => 'World of Warcraft',
 
-//games preinstalled
+    //games preinstalled
     'AION'       => 'Aion' ,
     'DAOC'       => 'Dark Age of Camelot' ,
     'EQ'         => 'EverQuest' ,
@@ -142,7 +140,7 @@ $lang = array_merge($lang, array(
     'FFXIV'        => 'Final Fantasy XIV' ,
     'PREINSTALLED' => 'Preinstalled games: %s',
 
-//Recruitment
+    //Recruitment
     'RECRUITMENT_BLOCK' => 'Reclutamento',
     'RECRUIT_CLOSED' => 'Chiusa !',
     'TANK' => 'Difensore',
@@ -151,7 +149,7 @@ $lang = array_merge($lang, array(
     'HEALER' => 'Curatore',
     'RECRUIT_MESSAGE' => 'Attualmente stiamo cercando giocatori per le seguenti specializzazioni:',
 
-//ROSTER
+    //ROSTER
     'GUILDROSTER' => 'Elenco personaggi',
     'RANK'   => 'Grado',
     'CLASS'   => 'Classe',
@@ -161,7 +159,7 @@ $lang = array_merge($lang, array(
     'ACHIEV'  => 'Imprese',
     'PROFFESSION' => 'Professioni',
 
-//listplayers
+    //listplayers
     'ADJUSTMENT' => 'Modifiche',
     'ALL' => 'Tutti',
     'CURRENT' => 'Correnti',
@@ -202,7 +200,7 @@ $lang = array_merge($lang, array(
     'NOUCPUPDCHARS' => 'Non sei autorizzato ad aggiornare personaggi',
     'NOUCPDELCHARS' => 'Non sei autorizzato a cancellari personaggi',
 
-// Various
+    // Various
     'ACCOUNT' => 'Account',
     'ACTION' => 'Azioni',
     'ADD' => 'Aggiungi',
@@ -225,7 +223,7 @@ $lang = array_merge($lang, array(
     'STATS_RAIDER' => '< 50% Presenza',
     'STATS_CORERAIDER' => '> 70% Presenza',
 
-// TYPES of armor are static across games, no need to put it in DB
+    // TYPES of armor are static across games, no need to put it in DB
     'CLOTH' => 'Molto Leggera / Stoffa',
     'ROBE' => 'Robes',
     'LEATHER' => 'Leggera / Pelle',
@@ -357,7 +355,7 @@ $lang = array_merge($lang, array(
     'ZSVALUE' => 'SommaZero',
     'ZEROSUM' => 'Bonus SommaZero',
 
-//lootsystems
+    //lootsystems
     'EP' => 'EP',
     'EPLONG' => 'Punti Efficienza',
     'EPNET' => 'EP net',
@@ -371,7 +369,7 @@ $lang = array_merge($lang, array(
     'ADJDECAY' => 'Modifiche decadimento',
     'DECAY' => 'Decadimento',
 
-// Page Foot Counts
+    // Page Foot Counts
 
     'LISTEVENTS_FOOTCOUNT' => '... trovati %d eventi',
     'LISTIADJ_FOOTCOUNT' => '... trovate %d modifiche individuali / %d per pagina',
@@ -393,24 +391,24 @@ $lang = array_merge($lang, array(
     'VIEWRAID_ATTENDEES_FOOTCOUNT' => '... trovato %d partceipante(i)',
     'VIEWRAID_DROPS_FOOTCOUNT' => '... trovato %d bottino(i)',
 
-// Submit Buttons
+    // Submit Buttons
     'LOG_ADD_DATA' => 'Add Data to Form',
     'PROCEED' => 'Procedi',
     'UPGRADE' => 'Aggiorna',
 
-// Form Element Descriptions
+    // Form Element Descriptions
     'ENDING_DATE' => 'Data Fine',
     'GUILD_TAG' => 'Tag di Gilda',
     'LANGUAGE' => 'Lingua',
     'STARTING_DATE' => 'Data Inizio',
     'TO' => 'A',
 
-// Pagination
+    // Pagination
     'NEXT_PAGE' => 'Pagina Successiva',
     'PAGE' => 'Pagina',
     'PREVIOUS_PAGE' => 'Pagina Precedente',
 
-// Permission Messages
+    // Permission Messages
     'NOAUTH_DEFAULT_TITLE' => 'Permesso Negato',
     'NOAUTH_U_EVENT_LIST' => 'Non hai il permesso di visualizzare lista eventi.',
     'NOAUTH_U_EVENT_VIEW' => 'Non hai il permesso di visualizzare eventi.',
@@ -421,7 +419,7 @@ $lang = array_merge($lang, array(
     'NOAUTH_U_RAID_LIST' => 'Non hai il permesso di visualizzare l elenco incursioni.',
     'NOAUTH_U_RAID_VIEW' => 'Non hai il permesso di visualizzare le incursioni.',
 
-// Miscellaneous
+    // Miscellaneous
     'DEACTIVATED_BY_API' => 'Disattivato da API',
     'DEACTIVATED_BY_USR' => 'Disattivato da User',
 
@@ -463,7 +461,7 @@ $lang = array_merge($lang, array(
     'GRCT30' => 'Tut.Conteggio 30d',
     'ATT30' => 'Conteggio 30d',
 
-//---- About --- here be dragons
+    //---- About --- here be dragons
 
     'ABOUT' => 'About',
     'MAINIMG' => 'bbguild.png',
@@ -530,4 +528,5 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
     'ADDITIONS' => 'Code Additions',
     'CONTRIB' => 'Contributions',
 
-));
+    )
+);

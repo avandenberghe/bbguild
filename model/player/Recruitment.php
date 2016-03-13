@@ -2,10 +2,9 @@
 /**
  * Recruitment Class
  *
- * @package bbguild v2.0
+ * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\model\player;
@@ -15,8 +14,8 @@ use bbdkp\bbguild\model\games\rpg\Roles;
  * holds vacancies per guild, game, role and class
  *
  * class hierarchy Game --> Roles --> Recruitment
- *   @package bbguild
  *
+ *   @package bbguild
  */
 class Recruitment extends Roles
 {
@@ -253,7 +252,6 @@ class Recruitment extends Roles
 
     /**
      * Recruitment class constructor
-     *
      */
     public function __construct()
     {
@@ -274,7 +272,7 @@ class Recruitment extends Roles
     /**
      * construct recruitment object
      *
-     * @param int $id
+     * @param  int $id
      * @return int|void
      */
     public function get($id = 0)
@@ -302,8 +300,7 @@ class Recruitment extends Roles
         $result = $db->sql_query($sql);
         $row    = $db->sql_fetchrow($result);
         $db->sql_freeresult($result);
-        if (!$row)
-        {
+        if (!$row) {
             return 0;
         }
         else
@@ -334,7 +331,8 @@ class Recruitment extends Roles
     {
         global $db;
 
-        $query = $db->sql_build_array('INSERT', array(
+        $query = $db->sql_build_array(
+            'INSERT', array(
             'guild_id'   => $this->guild_id,
             'role_id'    => $this->role_id,
             'class_id'   => $this->class_id,
@@ -345,7 +343,8 @@ class Recruitment extends Roles
             'level'      => $this->level,
             'status'     => $this->status,
             'applytemplate_id' => $this->applytemplate_id,
-        ));
+            )
+        );
         $db->sql_query('INSERT INTO ' . BBRECRUIT_TABLE . $query);
         return 1;
     }
@@ -356,7 +355,8 @@ class Recruitment extends Roles
     public function update()
     {
         global $db;
-        $query = $db->sql_build_array('UPDATE', array(
+        $query = $db->sql_build_array(
+            'UPDATE', array(
             'guild_id'   => $this->guild_id,
             'role_id'    => $this->role_id,
             'class_id'   => $this->class_id,
@@ -367,7 +367,8 @@ class Recruitment extends Roles
             'last_update' => $this->last_update,
             'status'      => $this->status,
             'applytemplate_id' => $this->applytemplate_id,
-        ));
+            )
+        );
         $db->sql_query('UPDATE ' . BBRECRUIT_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
     }
 
@@ -383,7 +384,8 @@ class Recruitment extends Roles
 
     /**
      * get all current recruitments for a guild
-     * @param int $mode
+     *
+     * @param  int $mode
      * @return mixed
      */
     public function ListRecruitments($mode=0)
@@ -424,8 +426,7 @@ class Recruitment extends Roles
             'ORDER_BY' => 'c.game_id, c.class_id '
         );
 
-        if ($mode ==1)
-        {
+        if ($mode ==1) {
             $sql_array['WHERE'] .= ' AND u.status = 1 ';
         }
 

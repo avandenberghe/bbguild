@@ -2,28 +2,25 @@
 /**
  * bbguild common language file [French]
  *
- * @package phpBB Extension - bbguild
+ * @package   phpBB Extension - bbguild
  * @copyright 2009 bbguild <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author sajaki <sajaki@gmail.com>
- * @link http://www.avathar.be/bbdkp
- * @version 2.0
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @author    sajaki <sajaki@gmail.com>
+ * @link      http://www.avathar.be/bbdkp
+ * @version   2.0
  */
 
 /**
  * DO NOT CHANGE
  */
-if (!defined('IN_PHPBB'))
-{
+if (!defined('IN_PHPBB')) {
     exit;
 }
 
 /**
  * DO NOT CHANGE
  */
-if (empty($lang) || !is_array($lang))
-{
+if (empty($lang) || !is_array($lang)) {
     $lang = array();
 }
 
@@ -43,11 +40,12 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge(
+    $lang, array(
     'BBDKPDISABLED' => 'bbDKP est actuellement désactivé.',
     'FOOTERBBDKP' => 'bbDKP',
 
-//---- Portal blocks -----
+    //---- Portal blocks -----
     'PORTAL' => 'Portail',
     'RECENTLOOT' => 'Objets récents',
     'REMEMBERME' => 'Me retenir',
@@ -70,7 +68,7 @@ $lang = array_merge($lang, array(
     'POSTED_BY_ON' => 'par %1$s le %2$s',
     'LATESTPLAYERS' => 'Derniers membres',
 
-// Main Menu
+    // Main Menu
     'MENU' => 'Navigation',
     'MENU_ADMIN_PANEL' => 'PCA',
     'MENU_BOSS' => 'Avancée des Boss',
@@ -89,7 +87,7 @@ $lang = array_merge($lang, array(
     'MENU_VIEWEVENT' => 'Vue de l’évènement',
     'MENU_PLANNER' => 'Calendrier',
 
-//links
+    //links
     'MENU_LINKS' => 'Weblinks',
     'LINK1' => 'http://www.avathar.be/bbdkp',
     'LINK1T' => 'Powered By: bbDKP',
@@ -122,7 +120,7 @@ $lang = array_merge($lang, array(
     'LINK15' => 'http://www.worldofwarcraft.com',
     'LINK15T' => 'World of Warcraft',
 
-//games preinstalled
+    //games preinstalled
     'AION'       => 'Aion' ,
     'DAOC'       => 'Dark Age of Camelot' ,
     'EQ'         => 'EverQuest' ,
@@ -140,7 +138,7 @@ $lang = array_merge($lang, array(
     'FFXIV'        => 'Final Fantasy XIV' ,
     'PREINSTALLED' => 'Jeux préconfigurés: %s',
 
-//Recruitment
+    //Recruitment
     'RECRUITMENT_BLOCK' => 'Statut de Recruitment',
     'RECRUIT_CLOSED' => 'Fermé !',
     'TANK' => 'Tank',
@@ -150,7 +148,7 @@ $lang = array_merge($lang, array(
     'RECRUIT_MESSAGE' => 'Nous sommes actuellement à la recherche des classes suivantes:',
 
 
-//ROSTER
+    //ROSTER
     'GUILDROSTER' => 'Armurerie',
     'RANK' => 'Grade',
     'CLASS' => 'Classe',
@@ -160,7 +158,7 @@ $lang = array_merge($lang, array(
     'ACHIEV' => 'Hauts faits',
     'PROFFESSION' => 'Professions',
 
-//listplayers
+    //listplayers
     'ADJUSTMENT' => 'Ajustment',
     'ALL' => 'Tous',
     'CURRENT' => 'Courant',
@@ -203,7 +201,7 @@ $lang = array_merge($lang, array(
     'NOUCPUPDCHARS' => 'Vous ne pouvez pas mettre à jour vos caractères',
     'NOUCPDELCHARS' => 'Vous ne pouvez pas supprimer vos caractères',
 
-//Various
+    //Various
     'ACCOUNT' => 'Compte',
     'ACTION' => 'Action',
     'ADD' => 'Ajouter',
@@ -225,7 +223,7 @@ $lang = array_merge($lang, array(
     'STATS_RAIDER' => '< 50% participation',
     'STATS_CORERAIDER' => '> 70% participation',
 
-// TYPES of armor are static across games, no need to put it in DB
+    // TYPES of armor are static across games, no need to put it in DB
     'CLOTH' => 'Tissu',
     'ROBE' => 'Robes',
     'LEATHER' => 'Cuir',
@@ -359,7 +357,7 @@ $lang = array_merge($lang, array(
     'ZSVALUE' => 'Somme Zero',
     'ZEROSUM' => 'bonus Somme Zero',
 
-//lootsystems
+    //lootsystems
     'EP' => 'EP',
     'EPLONG' => 'Points d’effort',
     'EPNET' => 'EP net',
@@ -373,7 +371,7 @@ $lang = array_merge($lang, array(
     'ADJDECAY' => 'Amortissement des ajustement',
     'DECAY' => 'Amortissement',
 
-// Page Foot Counts
+    // Page Foot Counts
 
     'LISTEVENTS_FOOTCOUNT' => '... trouvé %d évènements / %d par page',
     'LISTIADJ_FOOTCOUNT' => '... trouvé %d ajustment(s) / %d par page',
@@ -396,24 +394,24 @@ $lang = array_merge($lang, array(
     'VIEWRAID_DROPS_FOOTCOUNT' => '... trouvé %d dépouilles(s)',
 
 
-// Submit Buttons
+    // Submit Buttons
     'LOG_ADD_DATA' => 'Ajouter Donnée',
     'PROCEED' => 'Procédez',
     'UPGRADE' => 'Mise à jour',
 
-// Form Element Descriptions
+    // Form Element Descriptions
     'ENDING_DATE' => 'Date de fin',
     'GUILD_TAG' => 'Nom de Guilde',
     'LANGUAGE' => 'Langue',
     'STARTING_DATE' => 'Date de début',
     'TO' => 'vers',
 
-// Pagination
+    // Pagination
     'NEXT_PAGE' => 'Page Suivante',
     'PAGE' => 'Page',
     'PREVIOUS_PAGE' => 'Page Précédente',
 
-// Permission Messages
+    // Permission Messages
     'NOAUTH_DEFAULT_TITLE' => 'Permission Denied',
     'NOAUTH_U_EVENT_LIST' => 'Vous n’avez pas la permission de voir la liste des évènements.',
     'NOAUTH_U_EVENT_VIEW' => 'Vous n’avez pas la permission de voir cet évènement.',
@@ -425,7 +423,7 @@ $lang = array_merge($lang, array(
     'NOAUTH_U_RAID_VIEW' => 'Vous n’avez pas la permission de voir ce Raid.',
 
 
-// Miscellaneous
+    // Miscellaneous
     'ADDED' => 'Ajouté',
     'BOSSKILLCOUNT' => 'Bosscount',
     'CLOSED' => 'fermé',
@@ -465,7 +463,7 @@ $lang = array_merge($lang, array(
     'GRCT30' => '#Raids Guilde 30d',
     'ATT30' => 'Participation 30d',
 
-//---- About --- do not change anything here
+    //---- About --- do not change anything here
     'ABOUT' => 'Au sujet de',
     'MAINIMG' => 'bbguild.png',
     'IMAGE_ALT' => 'Logo',
@@ -527,5 +525,6 @@ Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir 
     'ADDITIONS' => 'Code Additions',
     'CONTRIB' => 'Contributions',
 
-));
+    )
+);
 

@@ -2,10 +2,9 @@
 /**
  * Guild ACP file
  *
- * @package bbguild v2.0
+ * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\acp;
@@ -23,39 +22,53 @@ class guild_module extends Admin
 {
     /**
      * url action
+     *
      * @var string
      */
     public $u_action;
 
     /**
      * trigger url
+     *
      * @var string
      */
     public $link = ' ';
 
     /**
      * current url
+     *
      * @var string
      */
     public  $url_id;
 
-    /** @var \phpbb\request\request **/
+    /**
+ * @var \phpbb\request\request 
+**/
     protected $request;
-    /** @var \phpbb\template\template **/
+    /**
+ * @var \phpbb\template\template 
+**/
     protected $template;
-    /** @var \phpbb\user **/
+    /**
+ * @var \phpbb\user 
+**/
     protected $user;
-    /** @var \phpbb\db\driver\driver_interface */
+    /**
+ * @var \phpbb\db\driver\driver_interface 
+*/
     protected $db;
-    /** @var \phpbb\config\config */
+    /**
+ * @var \phpbb\config\config 
+*/
     protected $config;
 
     public $id;
     public $mode;
-	public $auth;
+    public $auth;
     /**
      * ACP guild function
-     * @param int $id the id of the node who parent has to be returned by function
+     *
+     * @param int $id   the id of the node who parent has to be returned by function
      * @param int $mode id of the submenu
      */
     public function main($id, $mode)
@@ -70,166 +83,156 @@ class guild_module extends Admin
         $this->template=$template;
         $this->user=$user;
         $this->db=$db;
-	    $this->auth=$auth;
+        $this->auth=$auth;
 
         parent::__construct();
         $form_key = 'bbdkp/bbguild';
-        add_form_key ( $form_key );
+        add_form_key($form_key);
 
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds') . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
         $this->page_title = 'ACP_LISTGUILDS';
 
-        if (! $this->auth->acl_get('a_bbguild'))
-        {
-            trigger_error($user->lang['NOAUTH_A_GUILD_MAN'] );
+        if (! $this->auth->acl_get('a_bbguild')) {
+            trigger_error($user->lang['NOAUTH_A_GUILD_MAN']);
         }
 
         switch ($mode)
         {
-            case 'listguilds':
-                $this->BuildTemplateListGuilds();
-                break;
-            case 'addguild':
-                $addguild = new Guilds();
+        case 'listguilds':
+            $this->BuildTemplateListGuilds();
+            break;
+        case 'addguild':
+            $addguild = new Guilds();
 
-                if ($this->request->is_set_post('newguild'))
+            if ($this->request->is_set_post('newguild')) {
+                $this->AddGuild($addguild);
+            }
+            $addguild->region = $config['bbguild_default_region'];
+            foreach ($this->regions as $key => $regionname)
+            {
+                $this->template->assign_block_vars(
+                    'region_row', array(
+                    'VALUE' => $key ,
+                    'SELECTED' => ($addguild->region == $key) ? ' selected="selected"' : '' ,
+                    'OPTION' => (! empty($regionname)) ? $regionname : '(None)')
+                );
+            }
+
+            $addguild->game_id = $config['bbguild_default_game'];
+
+            $thisgame = new Game;
+            $thisgame->game_id = $addguild->game_id;
+            $thisgame->Get();
+            if($thisgame->getApikey() != '' && $thisgame->game_id =='wow') {
+                $addguild->armory_enabled = true;
+            }
+
+            if(isset($this->games)) {
+                foreach ($this->games as $key => $gamename)
                 {
-                    $this->AddGuild($addguild);
+                    $this->template->assign_block_vars(
+                        'game_row', array(
+                        'VALUE' => $key,
+                        'SELECTED' => ($addguild->game_id == $key) ? ' selected="selected"' : '' ,
+                        'OPTION' => (! empty($gamename)) ? $gamename : '(None)')
+                    );
                 }
-                $addguild->region = $config['bbguild_default_region'];
-                foreach ($this->regions as $key => $regionname)
-                {
-                    $this->template->assign_block_vars('region_row', array(
-                        'VALUE' => $key ,
-                        'SELECTED' => ($addguild->region == $key) ? ' selected="selected"' : '' ,
-                        'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-                }
+            }
+            else
+            {
+                trigger_error('ERROR_NOGAMES', E_USER_WARNING);
+            }
 
-                $addguild->game_id = $config['bbguild_default_game'];
+            $this->template->assign_vars(
+                array(
+                'F_ENABLEARMORY'    => $addguild->armory_enabled,
+                'DEFAULTREALM'      => $config['bbguild_default_realm'],
+                'RECSTATUS'         => true,
+                'MIN_ARMORYLEVEL'   => $config['bbguild_minrosterlvl'],
+                    )
+            );
+            $this->page_title = $this->user->lang['ACP_ADDGUILD'];
 
-                $thisgame = new Game;
-                $thisgame->game_id = $addguild->game_id;
-                $thisgame->Get();
-                if($thisgame->getApikey() != '' && $thisgame->game_id =='wow')
-                {
-                    $addguild->armory_enabled = true;
-                }
+            break;
+        case 'editguild':
 
-                if(isset($this->games))
-                {
-                    foreach ($this->games as $key => $gamename)
-                    {
-                        $this->template->assign_block_vars('game_row', array(
-                            'VALUE' => $key,
-                            'SELECTED' => ($addguild->game_id == $key) ? ' selected="selected"' : '' ,
-                            'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+            $this->url_id = $this->request->variable(URI_GUILD, 0);
+            $updateguild = new Guilds($this->url_id);
+            if ($this->request->is_set_post('playeradd')) {
+                redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=addplayer&amp;' . URI_GUILD . "=" . $this->url_id));
+            }
+
+            $action = $this->request->variable('action', '');
+            switch($action)
+            {
+            case 'guildranks':
+                $updaterank = $this->request->is_set_post('updaterank');
+                $deleterank = ($this->request->variable('deleterank', '')) != '' ? true : false;
+                $addrank = $this->request->is_set_post('addrank');
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
+                if ($updaterank || $addrank) {
+                    if (! check_form_key('bbdkp/bbguild')) {
+                        trigger_error('FORM_INVALID');
                     }
                 }
-                else
-                {
-                    trigger_error('ERROR_NOGAMES', E_USER_WARNING );
+                if ($addrank) {
+                    $this->AddRank($updateguild);
+                }
+                if ($addrank) {
+                    $this->AddRank($updateguild);
+                }
+                if ($updaterank) {
+                    $this->UpdateRank($updateguild);
+                }
+                if ($deleterank) {
+                    $this->DeleteRank();
                 }
 
-                $this->template->assign_vars(array(
-                    'F_ENABLEARMORY'	=> $addguild->armory_enabled,
-                    'DEFAULTREALM'      => $config['bbguild_default_realm'],
-                    'RECSTATUS'         => true,
-                    'MIN_ARMORYLEVEL'   => $config['bbguild_minrosterlvl'],
-                ));
-                $this->page_title = $this->user->lang['ACP_ADDGUILD'];
-
+                $this->tpl_name = 'acp_editguild_ranks';
+                $this->BuildTemplateEditGuildRanks($updateguild);
                 break;
+
             case 'editguild':
-
-                $this->url_id = $this->request->variable(URI_GUILD, 0);
-                $updateguild = new Guilds($this->url_id);
-                if ($this->request->is_set_post('playeradd'))
-                {
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=addplayer&amp;' . URI_GUILD . "=" . $this->url_id  ));
-                }
-
-                $action = $this->request->variable('action', '');
-                switch($action)
-                {
-                    case 'guildranks':
-                        $updaterank = $this->request->is_set_post('updaterank');
-                        $deleterank = ($this->request->variable('deleterank', '')) != '' ? true : false;
-                        $addrank = $this->request->is_set_post('addrank');
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
-                        if ($updaterank || $addrank)
-                        {
-                            if (! check_form_key('bbdkp/bbguild'))
-                            {
-                                trigger_error('FORM_INVALID');
-                            }
-                        }
-                        if ($addrank)
-                        {
-                            $this->AddRank($updateguild);
-                        }
-                        if ($addrank)
-                        {
-                            $this->AddRank($updateguild);
-                        }
-                        if ($updaterank)
-                        {
-                            $this->UpdateRank($updateguild);
-                        }
-                        if ($deleterank)
-                        {
-                            $this->DeleteRank();
-                        }
-
-                        $this->tpl_name = 'acp_editguild_ranks';
-                        $this->BuildTemplateEditGuildRanks($updateguild);
-                        break;
-
-                    case 'editguild':
-                    default:
-                        $submit = $this->request->is_set_post('updateguild');
-                        $delete = $this->request->is_set_post('deleteguild');
-                        $armoryenabled = $this->request->is_set_post('armory_enabled');
-                        $updatearmory = $this->request->is_set_post('armory');
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
-                        // POST check
-                        if ($submit)
-                        {
-                            if (! check_form_key('bbdkp/bbguild'))
-                            {
-                                trigger_error('FORM_INVALID', E_USER_NOTICE);
-                            }
-
-                            if($armoryenabled)
-                            {
-                                $this->UpdateGuild($updateguild, true);
-                            }
-                            else
-                            {
-                                $this->UpdateGuild($updateguild, false);
-                            }
-                        }
-
-                        if($updatearmory)
-                        {
-                            $this->UpdateGuild($updateguild, true);
-                        }
-
-                        if ($delete)
-                        {
-                            $this->DeleteGuild($updateguild);
-                        }
-                        // start template loading
-                        $this->BuildTemplateEditGuild($updateguild);
-                        break;
-                }
-
-                break;
-
             default:
-                $this->page_title = 'ACP_BBGUILD_MAINPAGE';
-                $success_message = 'Error';
-                trigger_error($success_message . $this->link, E_USER_WARNING);
+                $submit = $this->request->is_set_post('updateguild');
+                $delete = $this->request->is_set_post('deleteguild');
+                $armoryenabled = $this->request->is_set_post('armory_enabled');
+                $updatearmory = $this->request->is_set_post('armory');
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
+                // POST check
+                if ($submit) {
+                    if (! check_form_key('bbdkp/bbguild')) {
+                        trigger_error('FORM_INVALID', E_USER_NOTICE);
+                    }
+
+                    if($armoryenabled) {
+                        $this->UpdateGuild($updateguild, true);
+                    }
+                    else
+                    {
+                        $this->UpdateGuild($updateguild, false);
+                    }
+                }
+
+                if($updatearmory) {
+                    $this->UpdateGuild($updateguild, true);
+                }
+
+                if ($delete) {
+                    $this->DeleteGuild($updateguild);
+                }
+                // start template loading
+                $this->BuildTemplateEditGuild($updateguild);
+                break;
+            }
+
+            break;
+
+        default:
+            $this->page_title = 'ACP_BBGUILD_MAINPAGE';
+            $success_message = 'Error';
+            trigger_error($success_message . $this->link, E_USER_WARNING);
         }
     }
 
@@ -238,8 +241,7 @@ class guild_module extends Admin
      */
     private function AddGuild(Guilds $addguild)
     {
-        if (!check_form_key('bbdkp/bbguild'))
-        {
+        if (!check_form_key('bbdkp/bbguild')) {
             trigger_error('FORM_INVALID');
         }
 
@@ -256,27 +258,28 @@ class guild_module extends Admin
 
         switch($result)
         {
-            case 0:
-                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
-                trigger_error($success_message . $this->link, E_USER_NOTICE);
-                break;
-            case 1:
-                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
-                trigger_error($success_message . $this->link, E_USER_NOTICE);
-                break;
-            case 2:
-                $success_message = sprintf($this->user->lang['ERROR_ARMORY_NOTFOUND'], $addguild->name);
-                trigger_error($success_message . $this->link, E_USER_WARNING);
-                break;
-            default:
-                $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
-                trigger_error($success_message . $this->link, E_USER_WARNING);
+        case 0:
+            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+            trigger_error($success_message . $this->link, E_USER_NOTICE);
+            break;
+        case 1:
+            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+            trigger_error($success_message . $this->link, E_USER_NOTICE);
+            break;
+        case 2:
+            $success_message = sprintf($this->user->lang['ERROR_ARMORY_NOTFOUND'], $addguild->name);
+            trigger_error($success_message . $this->link, E_USER_WARNING);
+            break;
+        default:
+            $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
+            trigger_error($success_message . $this->link, E_USER_WARNING);
         }
 
     }
 
     /**
      * update the default flag
+     *
      * @param $updateguild
      */
     private function UpdateDefaultGuild(Guilds $updateguild)
@@ -317,13 +320,11 @@ class guild_module extends Admin
 
         $GuildAPIParameters= array();
 
-        if($updateArmory)
-        {
+        if($updateArmory) {
             $GuildAPIParameters = array('members');
         }
 
-        if($updateguild->Guildupdate($old_guild, $GuildAPIParameters))
-        {
+        if($updateguild->Guildupdate($old_guild, $GuildAPIParameters)) {
             $success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
             trigger_error($success_message . $this->link, E_USER_NOTICE);
         }
@@ -336,14 +337,13 @@ class guild_module extends Admin
     }
 
     /**
-     *
      * delete a guild
+     *
      * @param $updateguild
      */
     private function DeleteGuild(Guilds $updateguild)
     {
-        if (confirm_box(true))
-        {
+        if (confirm_box(true)) {
             $deleteguild = new Guilds($this->request->variable('guildid', 0));
             $deleteguild->Getguild();
             $deleteguild->Guildelete();
@@ -353,12 +353,16 @@ class guild_module extends Admin
         }
         else
         {
-            $s_hidden_fields = build_hidden_fields(array(
+            $s_hidden_fields = build_hidden_fields(
+                array(
                 'deleteguild' => true,
-                'guildid' => $updateguild->guildid));
+                'guildid' => $updateguild->guildid)
+            );
 
-            $this->template->assign_vars(array(
-                'S_HIDDEN_FIELDS' => $s_hidden_fields));
+            $this->template->assign_vars(
+                array(
+                'S_HIDDEN_FIELDS' => $s_hidden_fields)
+            );
 
             confirm_box(false, $this->user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
 
@@ -367,6 +371,7 @@ class guild_module extends Admin
 
     /**
      * Add a guild rank
+     *
      * @param $updateguild
      */
     private function AddRank(Guilds $updateguild)
@@ -385,6 +390,7 @@ class guild_module extends Admin
 
     /**
      * Update a rank
+     *
      * @param $updateguild
      *
      * @return int|string
@@ -413,8 +419,7 @@ class guild_module extends Admin
             $newrank->RankSuffix = $rank_suffix[$rank_id];
 
             // compare old with new,
-            if ($oldrank != $newrank)
-            {
+            if ($oldrank != $newrank) {
                 $newrank->Rankupdate($oldrank);
             }
         }
@@ -429,8 +434,7 @@ class guild_module extends Admin
     private function DeleteRank()
     {
 
-        if (confirm_box(true))
-        {
+        if (confirm_box(true)) {
             $guildid = $this->request->variable('hidden_guildid', 0);
             $rank_id = $this->request->variable('hidden_rank_id', 999);
             $deleterank = new Ranks($guildid, $rank_id);
@@ -444,11 +448,13 @@ class guild_module extends Admin
             $old_guild = new Guilds($guildid);
             $deleterank = new Ranks($guildid, $rank_id);
 
-            $s_hidden_fields = build_hidden_fields(array(
+            $s_hidden_fields = build_hidden_fields(
+                array(
                 'deleterank' => true,
                 'hidden_rank_id' => $rank_id,
                 'hidden_guildid' => $guildid
-            ));
+                )
+            );
 
             confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_RANKS'], $deleterank->RankName, $old_guild->name), $s_hidden_fields);
         }
@@ -463,20 +469,23 @@ class guild_module extends Admin
 
         foreach ($this->regions as $key => $regionname)
         {
-            $this->template->assign_block_vars('region_row', array(
+            $this->template->assign_block_vars(
+                'region_row', array(
                 'VALUE'    => $key,
                 'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '',
-                'OPTION'   => (!empty($regionname)) ? $regionname : '(None)'));
+                'OPTION'   => (!empty($regionname)) ? $regionname : '(None)')
+            );
         }
 
-        if (isset($this->games))
-        {
+        if (isset($this->games)) {
             foreach ($this->games as $key => $gamename)
             {
-                $this->template->assign_block_vars('game_row', array(
+                $this->template->assign_block_vars(
+                    'game_row', array(
                     'VALUE'    => $key,
                     'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($gamename)) ? $gamename : '(None)'));
+                    'OPTION'   => (!empty($gamename)) ? $gamename : '(None)')
+                );
             }
         }
         else
@@ -489,10 +498,11 @@ class guild_module extends Admin
         $game->Get();
 
 
-        $this->template->assign_vars(array(
+        $this->template->assign_vars(
+            array(
             'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
             'F_ENABLEARMORY'     => $updateguild->armory_enabled,
-            'RECRUITFORUM_OPTIONS' => make_forum_select ($updateguild->recruitforum, false, false, true ),
+            'RECRUITFORUM_OPTIONS' => make_forum_select($updateguild->recruitforum, false, false, true),
             'RECSTATUS'          => $updateguild->recstatus,
             'GAME_ID'            => $updateguild->game_id,
             'GUILDID'            => $updateguild->guildid,
@@ -512,20 +522,21 @@ class guild_module extends Admin
             'MSG_NAME_EMPTY'     => $this->user->lang['FV_REQUIRED_NAME'],
             'EMBLEM'             => $updateguild->emblempath,
             'EMBLEMFILE'         => basename($updateguild->emblempath),
-
             'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;'. URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
-        ));
+            )
+        );
 
         // extra
-        if ($updateguild->game_id == 'wow')
-        {
-            $this->template->assign_vars(array(
+        if ($updateguild->game_id == 'wow') {
+            $this->template->assign_vars(
+                array(
                 'S_WOW'  => true,
                 'ARMORY' => $updateguild->guildarmoryurl,
                 'ACHIEV' => $updateguild->achievementpoints,
-            ));
+                )
+            );
         }
 
         $this->page_title = $this->user->lang['ACP_EDITGUILD'];
@@ -533,6 +544,7 @@ class guild_module extends Admin
 
     /**
      * list the ranks for this guild
+     *
      * @param $updateguild
      */
     private function BuildTemplateEditGuildRanks($updateguild)
@@ -546,7 +558,8 @@ class guild_module extends Admin
         {
             $prefix = $row['rank_prefix'];
             $suffix = $row['rank_suffix'];
-            $this->template->assign_block_vars('ranks_row', array(
+            $this->template->assign_block_vars(
+                'ranks_row', array(
                 'RANK_ID'       => $row['rank_id'],
                 'RANK_NAME'     => $row['rank_name'],
                 'RANK_PREFIX'   => $prefix,
@@ -554,7 +567,8 @@ class guild_module extends Admin
                 'HIDE_CHECKED'  => ($row['rank_hide'] == 1) ? 'checked="checked"' : '',
                 'S_READONLY'    => ($row['rank_id'] >= 90) ? true : false,
                 'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=' . $row['rank_id'] . "&amp;" . URI_GUILD . "=" . $updateguild->guildid)
-            ));
+                )
+            );
         }
         $this->db->sql_freeresult($result);
 
@@ -562,7 +576,8 @@ class guild_module extends Admin
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
-        $this->template->assign_vars(array(
+        $this->template->assign_vars(
+            array(
             // Form values
             'S_GUILDLESS'        => ($updateguild->guildid == 0) ? true : false,
             'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
@@ -583,20 +598,19 @@ class guild_module extends Admin
             'U_EDIT_GUILD'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRANKS'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRECRUITMENT'   => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
-        ));
+            )
+        );
 
         $this->page_title = $this->user->lang['ACP_EDITGUILD'];
     }
 
     /**
-     *
      * list the guilds
      */
     private function BuildTemplateListGuilds()
     {
         global   $phpbb_admin_path, $phpEx;
-        if (count($this->games) == 0)
-        {
+        if (count($this->games) == 0) {
             trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
@@ -604,19 +618,19 @@ class guild_module extends Admin
         $guildlist   = $updateguild->guildlist(1);
         foreach ($guildlist as $g)
         {
-            $this->template->assign_block_vars('defaultguild_row', array(
+            $this->template->assign_block_vars(
+                'defaultguild_row', array(
                 'VALUE'    => $g['id'],
                 'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
-                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
+                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
+            );
         }
         $guilddefaultupdate = $this->request->is_set_post('upddefaultguild');
-        if ($guilddefaultupdate)
-        {
+        if ($guilddefaultupdate) {
             $this->UpdateDefaultGuild($updateguild);
         }
         $guildadd = $this->request->is_set_post('addguild');
-        if ($guildadd)
-        {
+        if ($guildadd) {
             redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=addguild'));
         }
 
@@ -634,8 +648,7 @@ class guild_module extends Admin
         $show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
 
         $sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
-        if (!($guild_result = $this->db->sql_query($sql)))
-        {
+        if (!($guild_result = $this->db->sql_query($sql))) {
             trigger_error($this->user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
         }
         $lines = 0;
@@ -643,7 +656,8 @@ class guild_module extends Admin
         {
             $guild_count++;
             $listguild = new Guilds($row['id']);
-            $this->template->assign_block_vars('guild_row', array(
+            $this->template->assign_block_vars(
+                'guild_row', array(
                     'ID'           => $listguild->guildid,
                     'NAME'         => $listguild->name,
                     'REALM'        => $listguild->realm,
@@ -657,7 +671,8 @@ class guild_module extends Admin
             $previous_data = $row[$previous_source];
         }
 
-        $this->template->assign_vars(array(
+        $this->template->assign_vars(
+            array(
             'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module') . '&amp;mode=listguilds',
             'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module') . '&amp;mode=addguild',
             'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module') . '&amp;mode=editguild',
@@ -670,7 +685,8 @@ class guild_module extends Admin
             'O_REGION'               => $current_order['uri'][3],
             'O_ROSTER'               => $current_order['uri'][4],
             'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
-            'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count)));
+            'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count))
+        );
         $this->page_title = 'ACP_LISTGUILDS';
     }
 }

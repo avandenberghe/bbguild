@@ -3,7 +3,6 @@
  * @package bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
  */
 
 namespace bbdkp\bbguild\event;
@@ -40,17 +39,17 @@ class main_listener implements EventSubscriberInterface
      */
 
     /**
-     * @param helper $helper
+     * @param helper   $helper
      * @param template $template
-     * @param user $user
-     * @param config $config
+     * @param user     $user
+     * @param config   $config
      */
     public function __construct(helper $helper,
-                                template $template,
-                                user $user,
-                                config $config
-    )
-    {
+        template $template,
+        user $user,
+        config $config
+    ) {
+    
         $this->helper = $helper;
         $this->template = $template;
         $this->user = $user;
@@ -68,27 +67,30 @@ class main_listener implements EventSubscriberInterface
         return array(
             // for all defined events, write a function below
             'core.common'                           => 'global_calls',
-            'core.user_setup'						=> 'load_language_on_setup',
-            'core.page_header'						=> 'add_page_header_link',
-            'core.permissions'						=> 'add_permission_cat',
+            'core.user_setup'                        => 'load_language_on_setup',
+            'core.page_header'                        => 'add_page_header_link',
+            'core.permissions'                        => 'add_permission_cat',
         );
     }
     /**
      * core.common
      * Handles logic that needs to be called on every page.
      *
-     * @param array $event   Array containing situational data.
+     * @param array $event Array containing situational data.
      */
     public function global_calls($event)
     {
         // Assign global template vars.
-        $this->template->assign_vars(array(
+        $this->template->assign_vars(
+            array(
             'S_BBGUILD_ENABLED'   => true,
-        ));
+            )
+        );
     }
 
     /**
      * core.user_setup
+     *
      * @param $event
      */
     public function load_language_on_setup($event)
@@ -104,22 +106,28 @@ class main_listener implements EventSubscriberInterface
 
     /**
      * core.page_header
+     *
      * @param $event
      */
     public function add_page_header_link($event)
     {
-        $this->template->assign_vars(array(
-            'U_GUILD'	=> $this->helper->route('bbdkp_bbguild_00',
+        $this->template->assign_vars(
+            array(
+            'U_GUILD'    => $this->helper->route(
+                'bbdkp_bbguild_00',
                 array(
                     'guild_id' => 1,
                     'page' => 'roster'
-                )),
-        ));
+                )
+            ),
+            )
+        );
     }
 
 
     /**
      * bbGuild permission category
+     *
      * @param $event
      */
     public function add_permission_cat($event)
@@ -129,12 +137,12 @@ class main_listener implements EventSubscriberInterface
         $event['categories'] = $perm_cat;
 
         $permission = $event['permissions'];
-        $permission['a_bbguild']	= array('lang' => 'ACL_A_BBGUILD',		'cat' => 'bbguild');
-        $permission['u_bbguild']	= array('lang' => 'ACL_U_BBGUILD',		'cat' => 'bbguild');
-        $permission['u_charclaim']	= array('lang' => 'ACL_U_CHARCLAIM',	'cat' => 'bbguild');
-        $permission['u_charadd']	= array('lang' => 'ACL_U_CHARADD',	    'cat' => 'bbguild');
-        $permission['u_chardelete']	= array('lang' => 'ACL_U_CHARUPDATE',	'cat' => 'bbguild');
-        $permission['u_charupdate']	= array('lang' => 'ACL_U_CHARDELETE',	'cat' => 'bbguild');
+        $permission['a_bbguild']    = array('lang' => 'ACL_A_BBGUILD',        'cat' => 'bbguild');
+        $permission['u_bbguild']    = array('lang' => 'ACL_U_BBGUILD',        'cat' => 'bbguild');
+        $permission['u_charclaim']    = array('lang' => 'ACL_U_CHARCLAIM',    'cat' => 'bbguild');
+        $permission['u_charadd']    = array('lang' => 'ACL_U_CHARADD',        'cat' => 'bbguild');
+        $permission['u_chardelete']    = array('lang' => 'ACL_U_CHARUPDATE',    'cat' => 'bbguild');
+        $permission['u_charupdate']    = array('lang' => 'ACL_U_CHARDELETE',    'cat' => 'bbguild');
         $event['permissions'] = $permission;
     }
 

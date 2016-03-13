@@ -17,15 +17,12 @@ use phpbb\db\migration\migration;
  */
 class release_2_0_0_m01_schema extends migration
 {
-    protected $bbguild_version = '2.0.0-a4';
-
+    protected $bbguild_version = '2.0.0-a5';
     protected $table_prefix;
-
     protected $bbgames_table;
     protected $news_table;
     protected $bblogs_table;
     protected $player_ranks_table;
-
     protected $player_list_table;
     protected $class_table;
     protected $race_table;
