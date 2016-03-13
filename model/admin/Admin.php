@@ -337,7 +337,7 @@ class Admin
 
             $response = $data['response'];
             $latest_version = json_decode($response, true);
-            $latest_version_a = $latest_version['stable']['3.1']['current'];
+            $latest_version_a = $latest_version['stable']['2.0']['current'];
 
             //put this info in the cache
             $cache->put('latest_bbguild' , $latest_version_a, $ttl);

@@ -92,3 +92,38 @@
     line-height: 1.1em;
     white-space: nowrap;
 }
+
+
+.bbguild-activity-feed li {
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    border-top-color: #371b0d;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-bottom: 9px;
+    padding-left: 29px;
+    padding-right: 0;
+    padding-top: 9px;
+    position: relative;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+}
+
+.bbguild-activity-feed ol, ul {
+    list-style-type: none;
+}
+
+.bbguild-activity-feed dd {
+    padding-right: 4px;
+}
+.bbguild-activity-feed dd {
+    display: inline;
+}
+.bbguild-activity-feed dt {
+    color: #71401f;
+    display: inline;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+

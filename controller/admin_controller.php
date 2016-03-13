@@ -256,8 +256,4 @@ class admin_controller
 
 	}
 
-
-
-
-
 }

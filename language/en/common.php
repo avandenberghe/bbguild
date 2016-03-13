@@ -72,17 +72,20 @@ $lang = array_merge($lang, array(
     'POSTED_BY_ON' => 'by %1$s on %2$s',
     'LATESTPLAYERS' => 'Latest players',
 
-// Main Menu
+    // Main Menu
     'MENU' => 'Navigation',
-    'MENU_ADMIN_PANEL' => 'Administration Panel',
+    'MENU_WELCOME' => 'Welcome',
+    'MENU_ROSTER' => 'Roster',
+    'MENU_NEWS' => 'News',
+    'MENU_RAIDS' => 'Raids',
+    'MENU_STATS' => 'Statistics',
+    'MENU_PLAYER' => 'Player',
+
+    /*
     'MENU_BOSS' => 'Bossprogress',
     'MENU_EVENTS' => 'Events',
     'MENU_ITEMVAL' => 'Item Values',
     'MENU_ITEMHIST' => 'Item History',
-    'MENU_NEWS' => 'News',
-    'MENU_RAIDS' => 'Raids',
-    'MENU_ROSTER' => 'Roster',
-    'MENU_STATS' => 'Statistics',
     'MENU_SUMMARY' => 'Summary',
     'MENU_STANDINGS' => 'Leaderboard',
     'MENU_VIEWPLAYER' => 'View Player',
@@ -90,7 +93,7 @@ $lang = array_merge($lang, array(
     'MENU_VIEWRAID' => 'View Raid',
     'MENU_VIEWEVENT' => 'View Event',
     'MENU_PLANNER' => 'Planner',
-
+    */
 //links
     'MENU_LINKS' => 'Weblinks',
     'LINK1' => 'http://www.avathar.be/bbdkp',

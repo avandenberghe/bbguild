@@ -1,0 +1,84 @@
+<div class="panel">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+
+		<ul class="topiclist" style="padding: 4px">
+			<li class="header">
+				<dl>
+					<dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px; display:inline;width:auto;text-align:center;">
+					<div style="float: left; width:49%; white-space:nowrap; text-align: left;">
+						<h4 class="bbguildheader">{L_GUILD}</h4>
+					</div>
+					</dt>
+				</dl>
+			</li>
+		</ul>
+		<hr/>
+
+
+		<div class="panel">
+			<div class="inner">
+				<span class="corners-top" style="background-image:none !important ">
+                	<span style="background-image:none !important "></span>
+				</span>
+				<div class="guildinfo">
+					<div style="width: 95%; Margin:auto; float: left;">
+						<div style="width: 100%; float: left;">
+							<div class="guildname">
+								{GUILD_NAME}
+							</div>
+							<div class="undername">
+								{GUILD_REGION}-{GUILD_REALM}
+								<br/>
+								<br/>
+								{WELCOME_MESSAGE}
+							</div>
+						</div>
+					</div>
+
+					<div style="width: 90%; Margin:auto; float: left;">
+						<ul class="bbguild-activity-feed" >
+							<!-- IF 0 -->
+
+							<!-- ENDIF -->
+							<!-- IF .activityfeed -->
+							<!-- BEGIN activityfeed -->
+							<!-- IF activityfeed.TYPE == 'ITEM' -->
+							<li class="item-looted">
+								<dl>
+									<dd>
+										<a style="color: #FFB100" href="javascript:;" onmouseover="$WowheadPower.showTooltip(event, '{activityfeed.CHARACTER}', '')"
+										   onmousemove="$WowheadPower.moveTooltip(event)" onmouseout="$WowheadPower.hideTooltip();">{activityfeed.CHARACTER}</a>
+										{activityfeed.VERB} <a href="http://www.wowhead.com/item={activityfeed.ITEM}">link</a>
+									</dd>
+									<dt>{activityfeed.TIMESTAMP}</dt>
+								</dl>
+							</li>
+							<!-- ELSEIF activityfeed.TYPE == 'ACHI' -->
+							<li class="player-ach">
+								<dl>
+									<dd>
+										<a style="color: #FFB100" href="javascript:;" onmouseover="$WowheadPower.showTooltip(event, '{activityfeed.CHARACTER}', 'inv_sword_14')"
+										   onmousemove="$WowheadPower.moveTooltip(event)" onmouseout="$WowheadPower.hideTooltip();">{activityfeed.CHARACTER}</a>
+										{activityfeed.VERB}  <a style="color: #FFB100" href="http://www.wowhead.com/achievement={activityfeed.ACHIEVEMENT}">link</a>
+									</dd>
+									<dt>{activityfeed.TIMESTAMP}</dt>
+								</dl>
+							</li>
+							<!-- ENDIF -->
+							<!-- END activityfeed -->
+							<!-- ENDIF -->
+						</ul>
+					</div>
+				</div>
+
+				<span class="corners-bottom"  style="background-image:none !important">
+					<span style="background-image:none !important "></span>
+				</span>
+			</div>
+		</div>
+
+
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>

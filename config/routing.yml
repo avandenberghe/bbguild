@@ -4,4 +4,4 @@ bbdkp_bbguild_00:
     defaults: { _controller: bbdkp.bbguild.controller:handleGuild , guild_id: 1, page: welcome }
     requirements:
         guild_id: \d*
-        page: news|roster|welcome
+        page: news|roster|welcome|player|stats|raids

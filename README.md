@@ -24,7 +24,7 @@ There will be a number of extensions that enhance bbGuild
 Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
-2.0.0-a2
+2.0.0-a4
 
 ### Installation
 ##### Requirements
@@ -49,6 +49,8 @@ Find support and more on
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
 ### Changelog 
+- 2.0.0a4 - 13/03/2016
+  - [NEW] - guild news page added, Blizzard news feed data 
 - 2.0.0a2 - 21/02/2016
   - [NEW] - viewcontroller is now done, with a first frontpage : the guild roster. 
 - 2.0.0a1 - not released

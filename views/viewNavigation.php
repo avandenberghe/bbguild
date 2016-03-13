@@ -332,17 +332,38 @@ class viewNavigation extends Admin implements iViews
             // Form values
 
             'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
-            'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
+
+            'U_WELCOME'   		=> $this->helper->route('bbdkp_bbguild_00',
                 array(
-                    'guild_id' => 1,
-                    'page' => 'news'
+                    'guild_id' => $this->guild_id,
+                    'page' => 'welcome'
                 )),
             'U_ROSTER'   		=> $this->helper->route('bbdkp_bbguild_00',
                 array(
-                    'guild_id' => 1,
+                    'guild_id' => $this->guild_id,
                     'page' => 'roster'
                 )),
-
+            /*'U_PLAYER'   		=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => $this->guild_id,
+                    'page' => 'player'
+                )),
+            'U_STATS'   		=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => $this->guild_id,
+                    'page' => 'stats'
+                )),
+            'U_RAIDS'   		=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => $this->guild_id,
+                    'page' => 'raids'
+                )),
+            'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
+                array(
+                    'guild_id' => $this->guild_id,
+                    'page' => 'news'
+                )),
+            */
             'GAME_ID'			=> $this->guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,
             'GUILD_NAME' 		=> $this->guilds->name,

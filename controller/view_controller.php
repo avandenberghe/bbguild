@@ -86,13 +86,10 @@ class view_controller
 		$this->ext_path_web	    = $this->path_helper->get_web_root_path($this->ext_path);
 		$this->ext_path_images	= $this->ext_path_web . 'ext/bbdkp/bbguild/images/';
 		$this->root_path  = $root_path;
-
-
 	}
 
-	private $valid_views = array('news', 'roster', 'standings', 'welcome', 'loothistory', 'lootdb',
-		'listevents', 'stats', 'listraids', 'event',
-		'item', 'raid', 'member', 'bossprogress', 'planner');
+	private $valid_views = array('roster', 'welcome');
+	//private $valid_views = array('news', 'roster', 'standings', 'welcome', 'stats', 'player', 'raids');
 
     /**
     * View factory
@@ -103,16 +100,15 @@ class view_controller
     */
     public function handleGuild($guild_id, $page)
     {
-
-	if (in_array($page, $this->valid_views))
-	{
-		    $Navigation = new viewNavigation($page, $this->request, $this->user,
-			    $this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
-			    $this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id);
+		if (in_array($page, $this->valid_views))
+		{
+			$Navigation = new viewNavigation($page, $this->request, $this->user,
+				$this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
+				$this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id);
 		    $viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
-		    $view = new $viewtype($Navigation);
-		    $response = $view->response;
-		    return $response;
+			$view = new $viewtype($Navigation);
+			$response = $view->response;
+			return $response;
 	    }
 	    else
 	    {
