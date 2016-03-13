@@ -97,7 +97,7 @@ class release_2_0_0_m01_schema extends migration
                         'faction_hide'		=> array('BOOL', 0),
                     ),
                     'PRIMARY_KEY'    => 'f_index',
-                    'KEYS'         => array('UQ01'    => array('UNIQUE',  array('game_id', 'faction_id'))),
+                    'KEYS'         => array('UQ02'    => array('UNIQUE',  array('game_id', 'faction_id'))),
                 ),
                 /*4*/
                 $this->class_table	=> array(
@@ -176,10 +176,10 @@ class release_2_0_0_m01_schema extends migration
                     'COLUMNS'	=> array(
                         'player_id'        => array('UINT', NULL, 'auto_increment'),
                         'game_id'  		   => array('VCHAR:10', ''),
-                        'player_name'      => array('VCHAR_UNI:255', ''),
+                        'player_name'      => array('VCHAR_UNI:100', ''),
                         'player_region'     => array('VCHAR', ''),
-                        'player_realm'      => array('VCHAR', ''),
-                        'player_title'      => array('VCHAR_UNI:255', ''),
+                        'player_realm'      => array('VCHAR:30', ''),
+                        'player_title'      => array('VCHAR_UNI:100', ''),
                         'player_level'     => array('USINT', 0),
                         'player_race_id'   => array('USINT', 0),
                         'player_class_id'  => array('USINT', 0),
