@@ -12,16 +12,16 @@
     "homepage": "http://www.avathar.be",
     "role": "3.1 Ext developer"
   }],
-
   "require": {
     "php": ">=5.3.3"
   },
   "require-dev": {
-    "phpbb/epv": "dev-master",
+    "phpbb/epv": "dev-master"
   },
   "extra": {
     "display-name": "bbGuild",
-    "soft-require": {
+    "soft-require":
+    {
       "phpbb/phpbb": ">=3.1.0"
     },
     "version-check": {
