@@ -2,10 +2,9 @@
 /**
  * bbDKP database installer
  *
- * @package bbguild v2.0
+ * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\migrations;
@@ -49,25 +48,21 @@ class release_2_0_0_m04_permissions extends migration
         );
 
         //admin role can access bbguild acp
-        if($this->role_exists('ROLE_ADMIN_FULL'))
-        {
+        if($this->role_exists('ROLE_ADMIN_FULL')) {
             $data_sets[] =  array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_bbguild'));
         }
 
-        if($this->role_exists('ROLE_ADMIN_STANDARD'))
-        {
+        if($this->role_exists('ROLE_ADMIN_STANDARD')) {
             $data_sets[] =  array('permission.permission_set', array('ROLE_ADMIN_STANDARD', 'a_bbguild'));
         }
 
         //user can access pages
-        if($this->role_exists('ROLE_USER_STANDARD'))
-        {
+        if($this->role_exists('ROLE_USER_STANDARD')) {
             $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('u_bbguild',)));
         }
 
         //full user can access pages and ucp
-        if($this->role_exists('ROLE_USER_FULL'))
-        {
+        if($this->role_exists('ROLE_USER_FULL')) {
             $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('u_bbguild', 'u_charclaim', 'u_charadd', 'u_chardelete', 'u_charupdate')));
         }
         return $data_sets;
@@ -77,7 +72,7 @@ class release_2_0_0_m04_permissions extends migration
     /**
      * check if role exists
      *
-     * @param $role
+     * @param  $role
      * @return bool
      */
     protected function role_exists($role)

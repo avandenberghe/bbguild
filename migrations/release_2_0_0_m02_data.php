@@ -2,10 +2,9 @@
 /**
  * bbDKP database installer
  *
- * @package bbdkp v2.0
+ * @package   bbdkp v2.0
  * @copyright 2015 bbdkp <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\migrations;
@@ -68,7 +67,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
         $guildless = array(
             array(
-                'id'	        => 0,
+                'id'            => 0,
                 'name'          => 'Guildless',
                 'realm'         => 'default',
                 'region'        => 'us',
@@ -91,23 +90,21 @@ class release_2_0_0_m02_data extends container_aware_migration
             )
         );
 
-        if ( $this->db_tools->sql_table_exists($this->guild_table))
-        {
+        if ($this->db_tools->sql_table_exists($this->guild_table)) {
             $this->db->sql_multi_insert($this->guild_table, $guildless);
         }
 
         $outrank = array(
             array(
-                'guild_id'	    => 0,
-                'rank_id'	    => 99,
-                'rank_name'	    => 'Out',
-                'rank_hide'	    => 1,
-                'rank_prefix'	=> '',
-                'rank_suffix'	=> '',
+                'guild_id'        => 0,
+                'rank_id'        => 99,
+                'rank_name'        => 'Out',
+                'rank_hide'        => 1,
+                'rank_prefix'    => '',
+                'rank_suffix'    => '',
             ));
 
-        if ( $this->db_tools->sql_table_exists($this->player_ranks_table))
-        {
+        if ($this->db_tools->sql_table_exists($this->player_ranks_table)) {
             $this->db->sql_multi_insert($this->player_ranks_table, $outrank);
         }
 
@@ -122,8 +119,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             )
         );
 
-        if ( $this->db_tools->sql_table_exists($this->welcome_msg_table))
-        {
+        if ($this->db_tools->sql_table_exists($this->welcome_msg_table)) {
             $this->db->sql_multi_insert($this->welcome_msg_table, $welcome);
         }
 
@@ -155,8 +151,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
         );
 
-        if ( $this->db_tools->sql_table_exists($this->bb_gamerole_table))
-        {
+        if ($this->db_tools->sql_table_exists($this->bb_gamerole_table)) {
             $this->db->sql_multi_insert($this->bb_gamerole_table, $Standardoles);
         }
 
@@ -275,8 +270,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
         );
 
-        if ( $this->db_tools->sql_table_exists($this->bb_language))
-        {
+        if ($this->db_tools->sql_table_exists($this->bb_language)) {
             $this->db->sql_multi_insert($this->bb_language, $rolelangs);
         }
 
@@ -285,8 +279,8 @@ class release_2_0_0_m02_data extends container_aware_migration
     /**
      * encode welcome text
      *
-     * @param string $text
-     * @return array
+     * @param   string $text
+     * @return  array
      * @package bbdkp
      */
     private function encode_message($text)

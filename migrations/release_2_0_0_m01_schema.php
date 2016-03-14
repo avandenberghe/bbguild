@@ -2,10 +2,9 @@
 /**
  * bbDKP database installer
  *
- * @package bbguild v2.0
+ * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\migrations;
@@ -48,6 +47,7 @@ class release_2_0_0_m01_schema extends migration
 
     /**
      * Add the bbguild table schema to the database:
+     *
      * @return array Array of table schema
      */
     public function update_schema()
@@ -55,86 +55,86 @@ class release_2_0_0_m01_schema extends migration
         $this->GetTablenames();
 
         return array(
-            'add_tables'	=> array(
+            'add_tables'    => array(
                 /*1*/
-                $this->news_table	=> array(
-                    'COLUMNS'	=> array(
-                        'news_id'			=> array('UINT', NULL, 'auto_increment'),
-                        'news_headline'		=> array('VCHAR_UNI', ''),
-                        'news_message'		=> array('TEXT_UNI', ''),
-                        'news_date'			=> array('TIMESTAMP', 0),
-                        'user_id'			=> array('UINT', 0),
-                        'bbcode_bitfield'	=> array('VCHAR:20', ''),
-                        'bbcode_uid'		=> array('VCHAR:8', ''),
-                        'bbcode_options'	=> array('VCHAR:8', '')
+                $this->news_table    => array(
+                    'COLUMNS'    => array(
+                        'news_id'            => array('UINT', null, 'auto_increment'),
+                        'news_headline'        => array('VCHAR_UNI', ''),
+                        'news_message'        => array('TEXT_UNI', ''),
+                        'news_date'            => array('TIMESTAMP', 0),
+                        'user_id'            => array('UINT', 0),
+                        'bbcode_bitfield'    => array('VCHAR:20', ''),
+                        'bbcode_uid'        => array('VCHAR:8', ''),
+                        'bbcode_options'    => array('VCHAR:8', '')
                     ),
-                    'PRIMARY_KEY'	=> 'news_id',
+                    'PRIMARY_KEY'    => 'news_id',
                 ),
                 /*2*/
-                $this->bb_language	=> array(
-                    'COLUMNS'	=> array(
-                        'id'     	       => array('UINT', NULL, 'auto_increment'),
-                        'game_id' 	   => array('VCHAR:10', ''),
+                $this->bb_language    => array(
+                    'COLUMNS'    => array(
+                        'id'                => array('UINT', null, 'auto_increment'),
+                        'game_id'        => array('VCHAR:10', ''),
                         'attribute_id'   => array('UINT', 0),
                         'language'       => array('CHAR:2', ''),
-                        'attribute'	   => array('VCHAR:30', ''),
-                        'name'       	   => array('VCHAR_UNI:255', ''),
-                        'name_short' 	   => array('VCHAR_UNI:255', ''),
+                        'attribute'       => array('VCHAR:30', ''),
+                        'name'              => array('VCHAR_UNI:255', ''),
+                        'name_short'        => array('VCHAR_UNI:255', ''),
                     ),
                     'PRIMARY_KEY'     => array('id'),
                     'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id', 'attribute_id', 'language', 'attribute')),
                     )),
                 /*3*/
                 $this->faction_table  => array(
-                    'COLUMNS'	=> array(
-                        'game_id' 			=> array('VCHAR:10', ''),
-                        'f_index'    		=> array('USINT', NULL, 'auto_increment'),
-                        'faction_id'   		=> array('USINT', 0),
-                        'faction_name'     	=> array('VCHAR_UNI', ''),
-                        'faction_hide'		=> array('BOOL', 0),
+                    'COLUMNS'    => array(
+                        'game_id'             => array('VCHAR:10', ''),
+                        'f_index'            => array('USINT', null, 'auto_increment'),
+                        'faction_id'           => array('USINT', 0),
+                        'faction_name'         => array('VCHAR_UNI', ''),
+                        'faction_hide'        => array('BOOL', 0),
                     ),
                     'PRIMARY_KEY'    => 'f_index',
                     'KEYS'         => array('UQ02'    => array('UNIQUE',  array('game_id', 'faction_id'))),
                 ),
                 /*4*/
-                $this->class_table	=> array(
-                    'COLUMNS'	=> array(
-                        'c_index'    		=> array('USINT', NULL, 'auto_increment'),
-                        'game_id' 			=> array('VCHAR:10', ''),
-                        'class_id'   		=> array('USINT', 0),
-                        'class_faction_id' 	=> array('UINT', 0),
-                        'class_min_level'	=> array('USINT', 0),
-                        'class_max_level'	=> array('USINT', 0),
-                        'class_armor_type'	=> array('VCHAR_UNI', ''),
-                        'class_hide'		=> array('BOOL', 0),
-                        'imagename'			=> array('VCHAR:255', ''),
-                        'colorcode'			=> array('VCHAR:10', ''),
+                $this->class_table    => array(
+                    'COLUMNS'    => array(
+                        'c_index'            => array('USINT', null, 'auto_increment'),
+                        'game_id'             => array('VCHAR:10', ''),
+                        'class_id'           => array('USINT', 0),
+                        'class_faction_id'     => array('UINT', 0),
+                        'class_min_level'    => array('USINT', 0),
+                        'class_max_level'    => array('USINT', 0),
+                        'class_armor_type'    => array('VCHAR_UNI', ''),
+                        'class_hide'        => array('BOOL', 0),
+                        'imagename'            => array('VCHAR:255', ''),
+                        'colorcode'            => array('VCHAR:10', ''),
                     ),
                     'PRIMARY_KEY'    => 'c_index',
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'class_id'))),
                 ),
                 /*5*/
-                $this->race_table	=> array(
-                    'COLUMNS'	=> array(
-                        'game_id' 			=> array('VCHAR:10', ''),
-                        'race_id'			=> array('USINT', 0),
-                        'race_faction_id'	=> array('USINT', 0),
-                        'race_hide'			=> array('BOOL', 0),
-                        'image_female'	=> array('VCHAR:255', ''),
-                        'image_male'	=> array('VCHAR:255', ''),
+                $this->race_table    => array(
+                    'COLUMNS'    => array(
+                        'game_id'             => array('VCHAR:10', ''),
+                        'race_id'            => array('USINT', 0),
+                        'race_faction_id'    => array('USINT', 0),
+                        'race_hide'            => array('BOOL', 0),
+                        'image_female'    => array('VCHAR:255', ''),
+                        'image_male'    => array('VCHAR:255', ''),
                     ),
                     'PRIMARY_KEY'    => array('game_id', 'race_id') ,
                 ),
 
                 /*6*/
-                $this->guild_table	=> array(
-                    'COLUMNS'	=> array(
-                        'id'			    => array('USINT', 0),
-                        'name'			    => array('VCHAR_UNI:255', ''),
-                        'realm'			    => array('VCHAR_UNI:255', ''),
-                        'region'  		    => array('VCHAR:3', ''),
+                $this->guild_table    => array(
+                    'COLUMNS'    => array(
+                        'id'                => array('USINT', 0),
+                        'name'                => array('VCHAR_UNI:255', ''),
+                        'realm'                => array('VCHAR_UNI:255', ''),
+                        'region'              => array('VCHAR:3', ''),
                         'battlegroup'       => array('VCHAR:255', ''),
-                        'roster'  		    => array('BOOL', 0),
+                        'roster'              => array('BOOL', 0),
                         'aion_legion_id'    => array('USINT', 0),
                         'aion_server_id'    => array('USINT', 0),
                         'level'             => array('UINT', 0),
@@ -150,29 +150,29 @@ class release_2_0_0_m01_schema extends migration
                         'armoryresult'      => array('VCHAR_UNI:255', ''),
                         'recruitforum'      => array('UINT', 0),
                     ),
-                    'PRIMARY_KEY'  	=> array('id'),
+                    'PRIMARY_KEY'      => array('id'),
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('name', 'id') )),
                 ),
 
                 /*7*/
-                $this->player_ranks_table	=> array(
-                    'COLUMNS'	=> array(
+                $this->player_ranks_table    => array(
+                    'COLUMNS'    => array(
                         //rank_id is not auto-increment
-                        'guild_id'		=> array('USINT', 0),
-                        'rank_id'		=> array('USINT', 0),
-                        'rank_name'		=> array('VCHAR_UNI:50', ''),
-                        'rank_hide'		=> array('BOOL', 0),
-                        'rank_prefix'	=> array('VCHAR:75', ''),
-                        'rank_suffix'	=> array('VCHAR:75', ''),
+                        'guild_id'        => array('USINT', 0),
+                        'rank_id'        => array('USINT', 0),
+                        'rank_name'        => array('VCHAR_UNI:50', ''),
+                        'rank_hide'        => array('BOOL', 0),
+                        'rank_prefix'    => array('VCHAR:75', ''),
+                        'rank_suffix'    => array('VCHAR:75', ''),
                     ),
                     'PRIMARY_KEY'    => array('rank_id', 'guild_id'),
                 ),
 
                 /*8*/
-                $this->player_list_table	=> array(
-                    'COLUMNS'	=> array(
-                        'player_id'        => array('UINT', NULL, 'auto_increment'),
-                        'game_id'  		   => array('VCHAR:10', ''),
+                $this->player_list_table    => array(
+                    'COLUMNS'    => array(
+                        'player_id'        => array('UINT', null, 'auto_increment'),
+                        'game_id'             => array('VCHAR:10', ''),
                         'player_name'      => array('VCHAR_UNI:100', ''),
                         'player_region'     => array('VCHAR', ''),
                         'player_realm'      => array('VCHAR:30', ''),
@@ -190,7 +190,7 @@ class release_2_0_0_m01_schema extends migration
                         'player_achiev'    => array('UINT', 0),
                         'player_armory_url' => array('VCHAR:255', ''),
                         'player_portrait_url' => array('VCHAR', ''),
-                        'phpbb_user_id' 	=> array('UINT', 0),
+                        'phpbb_user_id'     => array('UINT', 0),
                         'player_status'     => array('BOOL', 0) ,
                         'deactivate_reason' => array('VCHAR_UNI:255', ''),
                         'last_update'       => array('TIMESTAMP', 0)
@@ -201,28 +201,28 @@ class release_2_0_0_m01_schema extends migration
                 ),
 
                 /*18*/
-                $this->welcome_msg_table	=> array(
-                    'COLUMNS'	=> array(
-                        'welcome_id'    		=> array('INT:8', NULL, 'auto_increment'),
-                        'welcome_title' 		=> array('VCHAR_UNI', ''),
-                        'welcome_msg'   		=> array('TEXT_UNI', ''),
-                        'welcome_timestamp' 	=> array('TIMESTAMP', 0),
-                        'bbcode_bitfield' 	=> array('VCHAR:255', ''),
-                        'bbcode_uid' 		=> array('VCHAR:8', ''),
-                        'user_id'     		=> array('INT:8', 0),
-                        'bbcode_options'		=> array('UINT', 7),
+                $this->welcome_msg_table    => array(
+                    'COLUMNS'    => array(
+                        'welcome_id'            => array('INT:8', null, 'auto_increment'),
+                        'welcome_title'         => array('VCHAR_UNI', ''),
+                        'welcome_msg'           => array('TEXT_UNI', ''),
+                        'welcome_timestamp'     => array('TIMESTAMP', 0),
+                        'bbcode_bitfield'     => array('VCHAR:255', ''),
+                        'bbcode_uid'         => array('VCHAR:8', ''),
+                        'user_id'             => array('INT:8', 0),
+                        'bbcode_options'        => array('UINT', 7),
                     ),
                     'PRIMARY_KEY'    => 'welcome_id'
                 ),
 
                 /*19*/
-                $this->bbgames_table	=> array(
-                    'COLUMNS'	=> array(
-                        'id'     	     => array('UINT', NULL, 'auto_increment'),
-                        'game_id' 	     => array('VCHAR:10', ''),
+                $this->bbgames_table    => array(
+                    'COLUMNS'    => array(
+                        'id'              => array('UINT', null, 'auto_increment'),
+                        'game_id'          => array('VCHAR:10', ''),
                         'game_name'      => array('VCHAR_UNI:255', ''),
-                        'status'	   	 => array('VCHAR:30', ''),
-                        'imagename'	     => array('VCHAR:20', ''),
+                        'status'            => array('VCHAR:30', ''),
+                        'imagename'         => array('VCHAR:20', ''),
                         'armory_enabled' => array('UINT', 0),
                         'bossbaseurl'    => array('VCHAR:255', ''),
                         'zonebaseurl'    => array('VCHAR:255', ''),
@@ -234,9 +234,9 @@ class release_2_0_0_m01_schema extends migration
                     'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id')))
                 ),
                 /*20*/
-                $this->bb_gamerole_table	=> array(
-                    'COLUMNS'	=> array(
-                        'role_pkid'        => array('INT:8', NULL, 'auto_increment'),
+                $this->bb_gamerole_table    => array(
+                    'COLUMNS'    => array(
+                        'role_pkid'        => array('INT:8', null, 'auto_increment'),
                         'game_id'          => array('VCHAR:10', ''),
                         'role_id'          => array('INT:8', 0),
                         'role_color'       => array('VCHAR', ''),
@@ -247,9 +247,9 @@ class release_2_0_0_m01_schema extends migration
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'role_id')))
                 ),
                 /*21*/
-                $this->bbrecruit_table	=> array(
-                    'COLUMNS'	=> array(
-                        'id'               => array('INT:8', NULL, 'auto_increment'),
+                $this->bbrecruit_table    => array(
+                    'COLUMNS'    => array(
+                        'id'               => array('INT:8', null, 'auto_increment'),
                         'guild_id'         => array('USINT', 0),
                         'role_id'          => array('INT:8', 0),
                         'class_id'         => array('UINT',  0),
@@ -265,9 +265,9 @@ class release_2_0_0_m01_schema extends migration
                 ),
 
                 /*16*/
-                $this->bblogs_table	=> array(
-                    'COLUMNS'	=> array(
-                        'log_id'        => array('UINT', NULL, 'auto_increment'),
+                $this->bblogs_table    => array(
+                    'COLUMNS'    => array(
+                        'log_id'        => array('UINT', null, 'auto_increment'),
                         'log_date'      => array('TIMESTAMP', 0),
                         'log_type'      => array('VCHAR_UNI:255', ''),
                         'log_action'    => array('TEXT_UNI', ''),
@@ -278,19 +278,19 @@ class release_2_0_0_m01_schema extends migration
                     ),
                     'PRIMARY_KEY'  => 'log_id',
                     'KEYS'         => array(
-                        'I01'	=> array('INDEX', 'log_userid'),
-                        'I02'		=> array('INDEX', 'log_type'),
-                        'I03'	=> array('INDEX', 'log_ipaddress')),
+                        'I01'    => array('INDEX', 'log_userid'),
+                        'I02'        => array('INDEX', 'log_type'),
+                        'I03'    => array('INDEX', 'log_ipaddress')),
                 ),
 
-                $this->plugins_table	=> array(
-                    'COLUMNS'	=> array(
-                        'name'			=> array('VCHAR_UNI:255', ''),
-                        'value'			=> array('BOOL', 0),
-                        'version'  		=> array('VCHAR:50', ''),
+                $this->plugins_table    => array(
+                    'COLUMNS'    => array(
+                        'name'            => array('VCHAR_UNI:255', ''),
+                        'value'            => array('BOOL', 0),
+                        'version'          => array('VCHAR:50', ''),
                         'installdate'   => array('TIMESTAMP', 0),
                         'orginal_copyright' => array('VCHAR_UNI:150', ''),
-                        'bbdkp_copyright'  	=> array('VCHAR_UNI:150', ''),
+                        'bbdkp_copyright'      => array('VCHAR_UNI:150', ''),
                     ),
                 ),
 
@@ -311,7 +311,7 @@ class release_2_0_0_m01_schema extends migration
         $this->GetTablenames();
 
         return array(
-            'drop_tables'	=> array(
+            'drop_tables'    => array(
                 $this->news_table,
                 $this->bb_language,
                 $this->faction_table,

@@ -1,7 +1,8 @@
 (function ($, window) {
-    $.fn.extend({
-        colorPicker: function(config) {
-            var renderCallback = function(colors, mode) {
+    $.fn.extend(
+        {
+            colorPicker: function(config) {
+                var renderCallback = function(colors, mode) {
                     var options = this,
                         $input = $(options.input),
                         $patch = $(options.patch),
@@ -14,15 +15,18 @@
                         isAlpha = colors.alpha !== 1 && !options.isIE8,
                         colorMode = $input.data('colorMode');
 
-                    $patch.css({
-                        'color': (colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd'), // Black...???
-                        'background-color': RGBAText,
-                        'filter' : (options.isIE8 ? 'progid:DXImageTransform.Microsoft.gradient(' + // IE<9
-                        'startColorstr=#' + AHEX + ',' + 'endColorstr=#' + AHEX + ')' : '')
-                    });
+                    $patch.css(
+                        {
+                            'color': (colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd'), // Black...???
+                            'background-color': RGBAText,
+                            'filter' : (options.isIE8 ? 'progid:DXImageTransform.Microsoft.gradient(' + // IE<9
+                            'startColorstr=#' + AHEX + ',' + 'endColorstr=#' + AHEX + ')' : '')
+                            }
+                    );
 
-                    $input.val(colorMode === 'HEX' && !isAlpha ? '#' + (options.isIE8 ? AHEX : colors.HEX) :
-                            colorMode === 'rgb' || (colorMode === 'HEX' && isAlpha) ?
+                    $input.val(
+                        colorMode === 'HEX' && !isAlpha ? '#' + (options.isIE8 ? AHEX : colors.HEX) :
+                        colorMode === 'rgb' || (colorMode === 'HEX' && isAlpha) ?
                                 (!isAlpha ? 'rgb(' + RGBInnerText + ')' : RGBAText) :
                                 ('hsl' + (isAlpha ? 'a(' : '(') + HSL.h + ', ' + HSL.s + '%, ' + HSL.l + '%' +
                                 (isAlpha ? ', ' + colors.alpha : '') + ')')
@@ -38,19 +42,20 @@
 
                     if (action === 'toMemery') {
                         var memos = colorPicker.nodes.memos,
-                            $memo,
-                            backgroundColor = '',
-                            opacity = 0,
-                            cookieTXT = [];
+                        $memo,
+                        backgroundColor = '',
+                        opacity = 0,
+                        cookieTXT = [];
 
                         for (var n = 0, m = memos.length; n < m; n++) {
                             $memo = $(memos[n]);
                             backgroundColor = $memo.css('background-color');
                             opacity = Math.round($memo.css('opacity') * 100) / 100;
-                            cookieTXT.push(backgroundColor.
-                                    replace(/, /g, ',').
-                                    replace('rgb(', 'rgba(').
-                                    replace(')', ',' + opacity + ')')
+                            cookieTXT.push(
+                                backgroundColor.
+                                replace(/, /g, ',').
+                                replace('rgb(', 'rgba(').
+                                replace(')', ',' + opacity + ')')
                             );
                         }
                         cookieTXT = '\'' + cookieTXT.join('\',\'') + '\'';
@@ -108,23 +113,27 @@
                                     {cancel: '.' + options.CSSPrefix + 'app div'}
                                 ) : $(colorPicker.nodes.colorPicker);
 
-                        options.color = elm.value; // brings color to default on reset
-                        $colorPicker.css({
-                            'position': 'absolute',
-                            'left': position.left + options.margin.left,
-                            'top': position.top + +$input.outerHeight(true) + options.margin.top
-                        });
-                        if (!multiple) {
-                            options.input = elm;
-                            options.patch = elm; // check again???
-                            colorPicker.setColor(elm.value, undefined, undefined, true);
-                            colorPicker.saveAsBackground();
-                        }
-                        colorPickers.current = colorPickers[index];
-                        $(options.appendTo || document.body).append($colorPicker);
-                        setTimeout(function() { // compensating late style on onload in colorPicker
-                            $colorPicker.show(colorPicker.color.options.animationSpeed);
-                        }, 0);
+                            options.color = elm.value; // brings color to default on reset
+                            $colorPicker.css(
+                                {
+                                    'position': 'absolute',
+                                    'left': position.left + options.margin.left,
+                                    'top': position.top + +$input.outerHeight(true) + options.margin.top
+                                }
+                            );
+                            if (!multiple) {
+                                options.input = elm;
+                                options.patch = elm; // check again???
+                                colorPicker.setColor(elm.value, undefined, undefined, true);
+                                colorPicker.saveAsBackground();
+                            }
+                            colorPickers.current = colorPickers[index];
+                            $(options.appendTo || document.body).append($colorPicker);
+                            setTimeout(
+                                function() { // compensating late style on onload in colorPicker
+                                    $colorPicker.show(colorPicker.color.options.animationSpeed);
+                                }, 0
+                            );
                     });
 
                     $(window)[onOff]('mousedown.colorPicker', function(e) {
@@ -151,34 +160,36 @@
                 },
                 that = this,
                 colorPickers = $.fn.colorPicker.colorPickers || [], // this is a way to prevent data binding on HTMLElements
-                testColors = new window.Colors({
-                    customBG: (config && config.customBG) || '#FFFFFF',
-                    allMixDetails: true
-                });
-
-            $.fn.colorPicker.colorPickers = colorPickers;
-
-            $(this).each(function(idx, elm) {
-                // doEventListeners(elm, (config && config.multipleInstances), true);
-                $(elm).off('.colorPicker');
-                $(window).off('.colorPicker');
-                if (config !== 'destroy') {
-                    var value = elm.value.split('(');
-                    $(elm).data('colorMode', value[1] ? value[0].substr(0, 3) : 'HEX');
-                    doEventListeners(elm, (config && config.multipleInstances), false);
-                    if (config && config.readOnly) {
-                        elm.readOnly = true;
+                testColors = new window.Colors(
+                    {
+                        customBG: (config && config.customBG) || '#FFFFFF',
+                        allMixDetails: true
                     }
-                    testColors.setColor(elm.value);
-                    if (config && config.init) {
-                        config.init(elm, testColors.colors);
+                );
+                $.fn.colorPicker.colorPickers = colorPickers;
+                $(this).each(
+                    function(idx, elm) {
+                        // doEventListeners(elm, (config && config.multipleInstances), true);
+                        $(elm).off('.colorPicker');
+                        $(window).off('.colorPicker');
+                        if (config !== 'destroy') {
+                            var value = elm.value.split('(');
+                            $(elm).data('colorMode', value[1] ? value[0].substr(0, 3) : 'HEX');
+                            doEventListeners(elm, (config && config.multipleInstances), false);
+                            if (config && config.readOnly) {
+                                elm.readOnly = true;
+                            }
+                            testColors.setColor(elm.value);
+                            if (config && config.init) {
+                                config.init(elm, testColors.colors);
+                            }
+                        }
                     }
-                }
-            });
-
-            return this;
+                );
+                return this;
+            }
         }
-    });
+    );
 
     $.docCookies = function(key, val, options) {
         var encode = encodeURIComponent, decode = decodeURIComponent,
@@ -189,12 +200,12 @@
             cookies = document.cookie.split('; ') || []; // easier for decoding then with RegExp search // .split(/;\s*/)
             for (n = cookies.length; n--; ) {
                 tmp = cookies[n].split('=');
-                if (tmp[0]) cache[decode(tmp.shift())] = decode(tmp.join('=')); // there might be '='s in the value...
-            }
+                if (tmp[0]) { cache[decode(tmp.shift())] = decode(tmp.join('=')); // there might be '='s in the value...
+                }            }
 
-            if (!key) return cache; // return Json for easy access to all cookies
-            else return cache[key]; // easy access to cookies from here
-        } else { // write/delete cookie
+            if (!key) { return cache; // return Json for easy access to all cookies
+            }            else { return cache[key]; // easy access to cookies from here
+            }        } else { // write/delete cookie
             options = options || {};
 
             if (val === '' || options.expires < 0) { // prepare deleteing the cookie
@@ -212,6 +223,6 @@
             (options.path    ? '; path='    + options.path       : '') +
             (options.domain  ? '; domain='  + options.domain     : '') +
             (options.secure  ? '; secure'                        : '');
-        }
+            }
     };
 })(jQuery, this);

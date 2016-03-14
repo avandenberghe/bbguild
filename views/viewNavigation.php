@@ -2,10 +2,9 @@
 /**
  * left front navigation block
  *
- * @package bbguild
+ * @package   bbguild
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- *
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\views;
@@ -22,49 +21,75 @@ use phpbb\template\template;
 class viewNavigation extends Admin implements iViews
 {
 
-    /** @var request */
+    /**
+ * @var request 
+*/
     public $request;
-    /** @var \phpbb\user */
+    /**
+ * @var \phpbb\user 
+*/
     public $user;
-    /** @var \phpbb\template\template */
+    /**
+ * @var \phpbb\template\template 
+*/
     public $template;
-    /** @var driver_interface */
+    /**
+ * @var driver_interface 
+*/
     public $db;
-    /** @var config */
+    /**
+ * @var config 
+*/
     public $config;
-    /** @var helper */
+    /**
+ * @var helper 
+*/
     public $helper;
-    /** @var pagination $pagination  */
+    /**
+ * @var pagination $pagination  
+*/
     public $pagination;
-    /** @var extension path */
+    /**
+ * @var extension path 
+*/
     public $ext_path;
-    /** @var webroot extension path */
+    /**
+ * @var webroot extension path 
+*/
     public $ext_path_web;
-    /** @var webroot image extension path */
+    /**
+ * @var webroot image extension path 
+*/
     public $ext_path_images;
-	/** @var string */
-	public $root_path;
+    /**
+ * @var string 
+*/
+    public $root_path;
 
     /**
      * guild id
+     *
      * @var int
      */
     public $guild_id;
 
     /**
      * game id
+     *
      * @var string
      */
     private $game_id;
 
     /**
      * filter by pool ?
+     *
      * @var boolean
      */
     private $query_by_pool = true;
 
     /**
      * pool id
+     *
      * @var integer
      */
     private $dkpsys_id = 0;
@@ -72,23 +97,27 @@ class viewNavigation extends Admin implements iViews
 
     /**
      * name of pool
+     *
      * @var string
      */
     private $dkpsys_name = '';
 
     /**
      * filter by armor ?
+     *
      * @var boolean
      */
     private $query_by_armor = false;
     /**
      * values of armor types
+     *
      * @var array
      */
     private $armor_type = array();
 
     /**
      * filter by class ?
+     *
      * @var unknown
      */
     private $query_by_class = false;
@@ -106,12 +135,14 @@ class viewNavigation extends Admin implements iViews
 
     /**
      * the filter string
+     *
      * @var string
      */
     private $filter = '';
 
     /**
      * show all players even not active ?
+     *
      * @var boolean
      */
     private $show_all = false;
@@ -231,7 +262,7 @@ class viewNavigation extends Admin implements iViews
     /**
      * viewNavigation constructor.
      *
-     * @param                  $page
+     * @param $page
      * @param request          $request
      * @param user             $user
      * @param template         $template
@@ -239,11 +270,11 @@ class viewNavigation extends Admin implements iViews
      * @param config           $config
      * @param helper           $helper
      * @param pagination       $pagination
-     * @param                  $ext_path
-     * @param                  $ext_path_web
-     * @param                  $ext_path_images
-     * @param                  $root_path
-     * @param                  $guild_id
+     * @param $ext_path
+     * @param $ext_path_web
+     * @param $ext_path_images
+     * @param $root_path
+     * @param $guild_id
      */
     function __construct(
         $page,
@@ -257,9 +288,10 @@ class viewNavigation extends Admin implements iViews
         $ext_path,
         $ext_path_web,
         $ext_path_images,
-		$root_path,
-        $guild_id)
-    {
+        $root_path,
+        $guild_id
+    ) {
+    
         parent::__construct();
         $this->request = $request;
         $this->config = $config;
@@ -272,10 +304,10 @@ class viewNavigation extends Admin implements iViews
         $this->ext_path = $ext_path;
         $this->ext_path_web = $ext_path_web;
         $this->ext_path_images = $ext_path_images;
-	    $this->root_path  = $root_path;
+        $this->root_path  = $root_path;
         $this->guild_id = $guild_id;
 
-	    $this->buildNavigation();
+        $this->buildNavigation();
     }
 
     /**
@@ -289,17 +321,17 @@ class viewNavigation extends Admin implements iViews
     private function buildNavigation()
     {
 
-        $this->show_all = ( $this->request->variable ( 'show', $this->request->variable ( 'hidden_show', '' )) == $this->user->lang['ALL']) ? true : false;
+        $this->show_all = ( $this->request->variable('show', $this->request->variable('hidden_show', '')) == $this->user->lang['ALL']) ? true : false;
 
         $a = $this->guild_id;
         $b = $this->request->variable('hidden_guild_id', 0);
         $c = $this->request->variable(URI_GUILD, 0);
 
-        $this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id' , $this->guild_id));
+        $this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id', $this->guild_id));
         $guildlist = $this->getGuildinfo();
 
-        $this->race_id =  $this->request->variable('race_id',0);
-        $this->level1 =  $this->request->variable('level1',0);
+        $this->race_id =  $this->request->variable('race_id', 0);
+        $this->level1 =  $this->request->variable('level1', 0);
         $this->level2 =  $this->request->variable('level2', 200);
         $this->filter = $this->request->variable('filter', $this->user->lang['ALL']);
 
@@ -307,17 +339,14 @@ class viewNavigation extends Admin implements iViews
         $this->query_by_class = false;
         $this->armor();
 
-        if ($this->filter != $this->user->lang['ALL'])
-        {
-            if (array_key_exists ( $this->filter, $this->armor_type ))
-            {
+        if ($this->filter != $this->user->lang['ALL']) {
+            if (array_key_exists($this->filter, $this->armor_type)) {
                 // looking for an armor type
-                $this->filter= preg_replace ( '/ Armor/', '', $this->filter);
+                $this->filter= preg_replace('/ Armor/', '', $this->filter);
                 $this->query_by_armor = true;
                 $this->query_by_class = false;
             }
-            elseif (array_key_exists ( $this->filter, $this->classname ))
-            {
+            elseif (array_key_exists($this->filter, $this->classname)) {
                 // looking for a class
                 $this->query_by_class = true;
                 $t = explode("_", $this->filter);
@@ -328,64 +357,70 @@ class viewNavigation extends Admin implements iViews
 
         $mode = $this->request->variable('rosterlayout', 0);
 
-        $this->template->assign_vars(array(
+        $this->template->assign_vars(
+            array(
             // Form values
 
-            'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
-
-            'U_WELCOME'   		=> $this->helper->route('bbdkp_bbguild_00',
+            'S_GUILDDROPDOWN'    => count($guildlist) > 1 ? true : false,
+            'U_WELCOME'           => $this->helper->route(
+                'bbdkp_bbguild_00',
                 array(
                     'guild_id' => $this->guild_id,
                     'page' => 'welcome'
-                )),
-            'U_ROSTER'   		=> $this->helper->route('bbdkp_bbguild_00',
-                array(
+                )
+            ),
+                'U_ROSTER'           => $this->helper->route(
+                    'bbdkp_bbguild_00',
+                    array(
                     'guild_id' => $this->guild_id,
                     'page' => 'roster'
-                )),
-            /*'U_PLAYER'   		=> $this->helper->route('bbdkp_bbguild_00',
+                    )
+                ),
+                /*'U_PLAYER'   		=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => $this->guild_id,
                     'page' => 'player'
                 )),
-            'U_STATS'   		=> $this->helper->route('bbdkp_bbguild_00',
+                'U_STATS'   		=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => $this->guild_id,
                     'page' => 'stats'
                 )),
-            'U_RAIDS'   		=> $this->helper->route('bbdkp_bbguild_00',
+                'U_RAIDS'   		=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => $this->guild_id,
                     'page' => 'raids'
                 )),
-            'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
+                'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
                 array(
                     'guild_id' => $this->guild_id,
                     'page' => 'news'
                 )),
-            */
-            'GAME_ID'			=> $this->guilds->game_id,
-            'GUILD_ID' 			=> $this->guild_id,
-            'GUILD_NAME' 		=> $this->guilds->name,
-            'REALM' 			=> $this->guilds->realm,
-            'REGION' 			=> $this->guilds->region,
-            'PLAYERCOUNT' 		=> $this->guilds->playercount ,
-            'ARMORY_URL' 		=> $this->guilds->guildarmoryurl ,
-            'MIN_ARMORYLEVEL' 	=> $this->guilds->min_armory ,
-            'SHOW_ROSTER' 		=> $this->guilds->showroster,
-            'EMBLEM'			=> $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
-            'EMBLEMFILE' 		=> basename($this->guilds->emblempath),
-            'ARMORY'			=> $this->guilds->guildarmoryurl,
-            'ACHIEV'			=> $this->guilds->achievementpoints,
-            'SHOWALL'			=> ($this->show_all) ? $this->user->lang['ALL']: '',
-        ));
+                */
+                'GAME_ID'            => $this->guilds->game_id,
+                'GUILD_ID'             => $this->guild_id,
+                'GUILD_NAME'         => $this->guilds->name,
+                'REALM'             => $this->guilds->realm,
+                'REGION'             => $this->guilds->region,
+                'PLAYERCOUNT'         => $this->guilds->playercount ,
+                'ARMORY_URL'         => $this->guilds->guildarmoryurl ,
+                'MIN_ARMORYLEVEL'     => $this->guilds->min_armory ,
+                'SHOW_ROSTER'         => $this->guilds->showroster,
+                'EMBLEM'            => $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
+                'EMBLEMFILE'         => basename($this->guilds->emblempath),
+                'ARMORY'            => $this->guilds->guildarmoryurl,
+                'ACHIEV'            => $this->guilds->achievementpoints,
+                'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
+            )
+        );
 
-	    $a=1;
+        $a=1;
 
     }
 
     /**
      * Build Guild Sidebar
+     *
      * @return array
      */
     private function getGuildinfo()
@@ -393,26 +428,21 @@ class viewNavigation extends Admin implements iViews
         $this->guilds = new Guilds();
 
         $guildlist = $this->guilds->guildlist(1);
-        if(count($guildlist) > 0)
-        {
+        if(count($guildlist) > 0) {
             foreach ($guildlist as $g)
             {
                 //assign guild_id property
-                if($this->guild_id==0)
-                {
+                if($this->guild_id==0) {
                     //if there is a default guild
-                    if($g['guilddefault'] == 1)
-                    {
+                    if($g['guilddefault'] == 1) {
                         $this->guild_id = $g['id'];
                     }
-                    elseif($g['playercount'] > 1)
-                    {
+                    elseif($g['playercount'] > 1) {
                         $this->guild_id = $g['id'];
                     }
 
                     //if guild id field still 0
-                    if($this->guild_id == 0 && $g['id'] > 0)
-                    {
+                    if($this->guild_id == 0 && $g['id'] > 0) {
                         $this->guild_id = $g['id'];
                     }
                 }
@@ -420,17 +450,19 @@ class viewNavigation extends Admin implements iViews
                 //populate guild popup
                 if($g['id'] > 0) // exclude guildless
                 {
-                    $this->template->assign_block_vars('guild_row', array(
+                    $this->template->assign_block_vars(
+                        'guild_row', array(
                         'VALUE' => $g['id'] ,
                         'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
-                        'OPTION' =>  $g['name']));
+                        'OPTION' =>  $g['name'])
+                    );
                 }
             }
 
         }
         else
         {
-            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+            trigger_error('ERROR_NOGUILD', E_USER_WARNING);
         }
 
         $this->guilds->guildid = $this->guild_id;
@@ -451,53 +483,55 @@ class viewNavigation extends Admin implements iViews
 
         // generic armor list
         $sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
-        $result = $this->db->sql_query ( $sql);
-        while ( $row = $this->db->sql_fetchrow ( $result ) )
+        $result = $this->db->sql_query($sql);
+        while ( $row = $this->db->sql_fetchrow($result) )
         {
             $filtervalues [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
             $this->armor_type [strtoupper($row ['class_armor_type'])] = $this->user->lang[strtoupper($row ['class_armor_type'])];
         }
-        $this->db->sql_freeresult ( $result );
+        $this->db->sql_freeresult($result);
         $filtervalues ['separator2'] = '--------';
 
 
         // get classlist, depending on page
         $sql_array = array(
-            'SELECT'    => 	'  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode ',
+            'SELECT'    =>     '  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode ',
             'FROM'      => array(
-                CLASS_TABLE 	=> 'c',
-                BB_LANGUAGE		=> 'l',
-                PLAYER_LIST_TABLE	=> 'i',
+                CLASS_TABLE     => 'c',
+                BB_LANGUAGE        => 'l',
+                PLAYER_LIST_TABLE    => 'i',
             ),
-            'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
+            'WHERE'        => " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
 				 		AND l.language= '" . $this->config['bbguild_lang'] . "' AND l.attribute = 'class'
 				 		AND i.player_class_id = c.class_id and i.game_id = c.game_id AND i.game_id = '" .  $this->game_id . "'" ,
 
-            'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
-            'ORDER_BY'	=> 'c.game_id, c.class_id ',
+            'GROUP_BY'    => 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
+            'ORDER_BY'    => 'c.game_id, c.class_id ',
         );
 
         $sql_array[ 'WHERE'] .= ' AND i.player_guild_id = ' . $this->guild_id . ' ';
 
         $sql = $this->db->sql_build_query('SELECT', $sql_array);
-        $result = $this->db->sql_query ($sql);
+        $result = $this->db->sql_query($sql);
         $this->classarray = array();
-        while ( $row = $this->db->sql_fetchrow ( $result ) )
+        while ( $row = $this->db->sql_fetchrow($result) )
         {
             $this->classarray[] = $row;
             $filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
             $this->classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
         }
-        $this->db->sql_freeresult ( $result );
+        $this->db->sql_freeresult($result);
 
         // dump filtervalues to dropdown template
         foreach ( $filtervalues as $fid => $fname )
         {
-            $this->template->assign_block_vars ( 'filter_row', array (
+            $this->template->assign_block_vars(
+                'filter_row', array (
                 'VALUE' => $fid,
                 'SELECTED' => ($fid == $this->filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
                 'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
-                'OPTION' => (! empty ( $fname )) ? $fname : $this->user->lang['ALL'] ) );
+                'OPTION' => (! empty($fname)) ? $fname : $this->user->lang['ALL'] ) 
+            );
         }
 
     }
