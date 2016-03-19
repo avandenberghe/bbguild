@@ -7,13 +7,14 @@
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 namespace bbdkp\bbguild\model\games\library;
+
 use bbdkp\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
  */
 if (! defined('IN_PHPBB')) {
-    exit();
+	exit();
 }
 
 /**
@@ -23,33 +24,32 @@ if (! defined('IN_PHPBB')) {
  */
 class install_custom extends GameInstall
 {
-    protected $bossbaseurl = '';
-    protected $zonebaseurl = '';
+	protected $bossbaseurl = '';
+	protected $zonebaseurl = '';
 
-    /**
-     * Installs factions
-     */
-    protected function Installfactions()
-    {
+	/**
+	 * Installs factions
+	 */
+	protected function Installfactions()
+	{
 
+	}
 
-    }
+	/**
+	 * Installs game classes
+	 */
+	protected function InstallClasses()
+	{
 
-    /**
-     * Installs game classes
-     */
-    protected function InstallClasses()
-    {
+	}
 
-    }
+	/**
+	 * Installs races
+	 */
+	protected function InstallRaces()
+	{
 
-    /**
-     * Installs races
-     */
-    protected function InstallRaces()
-    {
-
-    }
+	}
 
 
 

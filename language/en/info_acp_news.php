@@ -14,21 +14,21 @@
 * @ignore
 */
 if (!defined('IN_PHPBB')) {
-    exit;
+	exit;
 }
 
 // Create the lang array if it does not already exist
 if (empty($lang) || !is_array($lang)) {
-    $lang = array();
+	$lang = array();
 }
 
 // Merge the following language entries into the lang array
 $lang = array_merge(
-    $lang, array(
-    'ACP_BBGUILD_NEWS'            => 'News Management',
-    'ACP_ADD_NEWS_EXPLAIN'     => 'Here you can add / change Guild news.',
-    'ACP_BBGUILD_NEWS_ADD'        => 'Add News',
-    'ACP_BBGUILD_NEWS_LIST'        => 'News',
-    'ACP_BBGUILD_NEWS_LIST_EXPLAIN'    => 'List of newsitem(s)',
-    )
+	$lang, array(
+	'ACP_BBGUILD_NEWS'            => 'News Management',
+	'ACP_ADD_NEWS_EXPLAIN'     => 'Here you can add / change Guild news.',
+	'ACP_BBGUILD_NEWS_ADD'        => 'Add News',
+	'ACP_BBGUILD_NEWS_LIST'        => 'News',
+	'ACP_BBGUILD_NEWS_LIST_EXPLAIN'    => 'List of newsitem(s)',
+	)
 );

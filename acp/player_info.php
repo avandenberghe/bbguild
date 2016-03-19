@@ -14,27 +14,26 @@ namespace bbdkp\bbguild\acp;
  */
 class player_info
 {
-    /**
-     * phpbb module function
-     */
-    function module()
-    {
-        return array(
-            'filename'    => '\bbdkp\bbguild\acp\player_module',
-            'title'        => 'ACP_BBGUILD_PLAYER',
-            'version'    => '2.0.0',
-            'modes'        => array(
-                'addplayer'        => array(
-                    'title' => 'ACP_BBGUILD_PLAYER_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_PLAYER'), 'display' => false ),
-                'listplayers'    => array(
-                    'title' => 'ACP_BBGUILD_PLAYER_LIST',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_PLAYER')),
-            ),
-        );
-    }
+	/**
+	 * phpbb module function
+	 */
+	function module()
+	{
+		return array(
+			'filename'    => '\bbdkp\bbguild\acp\player_module',
+			'title'        => 'ACP_BBGUILD_PLAYER',
+			'version'    => '2.0.0',
+			'modes'        => array(
+				'addplayer'        => array(
+					'title' => 'ACP_BBGUILD_PLAYER_ADD',
+					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
+					'cat' => array('ACP_BBGUILD_PLAYER'), 'display' => false ),
+				'listplayers'    => array(
+					'title' => 'ACP_BBGUILD_PLAYER_LIST',
+					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
+					'cat' => array('ACP_BBGUILD_PLAYER')),
+			),
+		);
+	}
 
 }
-

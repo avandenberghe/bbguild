@@ -14,33 +14,32 @@ namespace bbdkp\bbguild\acp;
  */
 class recruit_info
 {
-    /**
-     * phpbb module function
-     */
-    function module()
-    {
-        return array(
-            'filename'    => '\bbdkp\bbguild\acp\recruit_module',
-            'title'        => 'ACP_BBGUILD_RECRUIT',
-            'version'    => '2.0.0',
-            'modes'        => array(
-                'addrecruit'        => array(
-                    'title' => 'ACP_BBGUILD_RECRUIT_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_PLAYER'),
-                    'display' => false),
-                'editrecruit'        => array(
-                    'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_PLAYER'),
-                    'display' => false),
-                'listrecruit'        => array(
-                    'title' => 'ACP_BBGUILD_RECRUIT_LIST',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-                    'cat' => array('ACP_BBGUILD_PLAYER'),
-                    'display' => true),
-            ));
-    }
+	/**
+	 * phpbb module function
+	 */
+	function module()
+	{
+		return array(
+			'filename'    => '\bbdkp\bbguild\acp\recruit_module',
+			'title'        => 'ACP_BBGUILD_RECRUIT',
+			'version'    => '2.0.0',
+			'modes'        => array(
+				'addrecruit'        => array(
+					'title' => 'ACP_BBGUILD_RECRUIT_ADD',
+					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
+					'cat' => array('ACP_BBGUILD_PLAYER'),
+					'display' => false),
+				'editrecruit'        => array(
+					'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
+					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
+					'cat' => array('ACP_BBGUILD_PLAYER'),
+					'display' => false),
+				'listrecruit'        => array(
+					'title' => 'ACP_BBGUILD_RECRUIT_LIST',
+					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
+					'cat' => array('ACP_BBGUILD_PLAYER'),
+					'display' => true),
+			));
+	}
 
 }
-

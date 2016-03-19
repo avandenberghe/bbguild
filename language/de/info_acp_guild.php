@@ -15,20 +15,20 @@
 * @ignore
 */
 if (!defined('IN_PHPBB')) {
-    exit;
+	exit;
 }
 
 // Create the lang array if it does not already exist
 if (empty($lang) || !is_array($lang)) {
-    $lang = array();
+	$lang = array();
 }
 
 // Merge the following language entries into the lang array
 $lang = array_merge(
-    $lang, array(
-    'ACP_BBGUILD_GUILD'        => 'Gilden',
-     'ACP_BBGUILD_GUILD_ADD'    => 'Neue Gilde',
-    'ACP_BBGUILD_GUILD_EDIT'    => 'Gilde bearbeiten',
-    'ACP_BBGUILD_GUILD_LIST'    => 'Gildenliste',
-    )
+	$lang, array(
+	'ACP_BBGUILD_GUILD'        => 'Gilden',
+	 'ACP_BBGUILD_GUILD_ADD'    => 'Neue Gilde',
+	'ACP_BBGUILD_GUILD_EDIT'    => 'Gilde bearbeiten',
+	'ACP_BBGUILD_GUILD_LIST'    => 'Gildenliste',
+	)
 );

@@ -15,20 +15,20 @@
 * @ignore
 */
 if (!defined('IN_PHPBB')) {
-    exit;
+	exit;
 }
 
 // Create the lang array if it does not already exist
 if (empty($lang) || !is_array($lang)) {
-    $lang = array();
+	$lang = array();
 }
 
 // Merge the following language entries into the lang array
 $lang = array_merge(
-    $lang, array(
-    'ACP_BBGUILD_RECRUIT'        => 'Rekrutierungen',
-     'ACP_BBGUILD_RECRUIT_ADD'    => 'Rekrutierung hinzuf�gen',
-    'ACP_BBGUILD_RECRUIT_EDIT'    => 'Rekrutierung bearbeiten',
-    'ACP_BBGUILD_RECRUIT_LIST'    => 'Rekrutierungen',
-    )
+	$lang, array(
+	'ACP_BBGUILD_RECRUIT'        => 'Rekrutierungen',
+	 'ACP_BBGUILD_RECRUIT_ADD'    => 'Rekrutierung hinzuf�gen',
+	'ACP_BBGUILD_RECRUIT_EDIT'    => 'Rekrutierung bearbeiten',
+	'ACP_BBGUILD_RECRUIT_LIST'    => 'Rekrutierungen',
+	)
 );

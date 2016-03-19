@@ -13,117 +13,118 @@
  */
 
 namespace bbdkp\bbguild\model\wowapi;
+
 use bbdkp\bbguild\model\wowapi\Realm;
 use bbdkp\bbguild\model\wowapi\Guild;
 use bbdkp\bbguild\model\wowapi\Character;
 
 /**
  * Battle.net WoW API PHP SDK
- * 
+ *
  * @package bbguild
  */
 class BattleNet
 {
-    /**
-     * acceptable regions for WoW
-  *
-     * @var array
-     */
-    protected $region = array(
-    'us', 'eu', 'kr', 'tw', 'sea'
-    );
-    
-    /**
-     * Implemented API's
-  *
-     * @var array
-     */
-    protected $API = array(
-    'guild', 'realm', 'character'
-    );
+	/**
+	 * acceptable regions for WoW
+	*
+	 * @var array
+	 */
+	protected $region = array(
+	'us', 'eu', 'kr', 'tw', 'sea'
+	);
+
+	/**
+	 * Implemented API's
+	*
+	 * @var array
+	 */
+	protected $API = array(
+	'guild', 'realm', 'character'
+	);
 
 
-    /**
-     * Realm object instance
-     */
-    public $Realm;
-    
-    /**
-     * Guild object instance
-     *
-     * @var Guild
-     */
-    public $Guild;
+	/**
+	 * Realm object instance
+	 */
+	public $Realm;
 
-    
-    /**
-     * Character object instance
-     *
-     * @var Character
-     */
-    public $Character;
+	/**
+	 * Guild object instance
+	 *
+	 * @var Guild
+	 */
+	public $Guild;
 
-    /**
-     * locale
-     *
-     * @var string
-     */
-    public $locale;
 
-    /**
-     * Battle.net API key
-     */
-    public $apikey;
+	/**
+	 * Character object instance
+	 *
+	 * @var Character
+	 */
+	public $Character;
 
-    /**
-     * WoWAPI Class constructor
-     * 
-     * @param string $API
-     * @param string $region
-     * @param string $apikey
-     * @param string $locale
-     * @param string $privkey
-     * @param string $ext_path
-     */
-    public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path)
-    {
-        global $user;
+	/**
+	 * locale
+	 *
+	 * @var string
+	 */
+	public $locale;
 
-        // check for correct API call
-        if (!in_array($API, $this->API)) {
-            trigger_error($user->lang['WOWAPI_API_NOTIMPLEMENTED']);
-        }
+	/**
+	 * Battle.net API key
+	 */
+	public $apikey;
 
-        if (!in_array($region, $this->region)) {
-            trigger_error($user->lang['WOWAPI_REGION_NOTALLOWED']);
-        }
+	/**
+	 * WoWAPI Class constructor
+	 *
+	 * @param string $API
+	 * @param string $region
+	 * @param string $apikey
+	 * @param string $locale
+	 * @param string $privkey
+	 * @param string $ext_path
+	 */
+	public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path)
+	{
+		global $user;
 
-        $this->API = $API;
-        $this->region = $region;
-        $this->ext_path = $ext_path;
+		// check for correct API call
+		if (!in_array($API, $this->API)) {
+			trigger_error($user->lang['WOWAPI_API_NOTIMPLEMENTED']);
+		}
 
-        switch ($this->API)
-        {
-        case 'realm':
-            $this->Realm = new Realm($region);
-            $this->Realm->apikey = $apikey;
-            $this->Realm->locale = $locale;
-            $this->Realm->privkey = $privkey;
-            break;
-        case 'guild':
-            $this->Guild = new Guild($region);
-            $this->Guild->apikey = $apikey;
-            $this->Guild->locale = $locale;
-            $this->Guild->privkey = $privkey;
-            break;
-        case 'character':
-            $this->Character = new Character($region);
-            $this->Character->apikey = $apikey;
-            $this->Character->locale = $locale;
-            $this->Character->privkey = $privkey;
-            break;
+		if (!in_array($region, $this->region)) {
+			trigger_error($user->lang['WOWAPI_REGION_NOTALLOWED']);
+		}
 
-        }
+		$this->API = $API;
+		$this->region = $region;
+		$this->ext_path = $ext_path;
 
-    }
+		switch ($this->API)
+		{
+		case 'realm':
+			$this->Realm = new Realm($region);
+			$this->Realm->apikey = $apikey;
+			$this->Realm->locale = $locale;
+			$this->Realm->privkey = $privkey;
+			break;
+		case 'guild':
+			$this->Guild = new Guild($region);
+			$this->Guild->apikey = $apikey;
+			$this->Guild->locale = $locale;
+			$this->Guild->privkey = $privkey;
+			break;
+		case 'character':
+			$this->Character = new Character($region);
+			$this->Character->apikey = $apikey;
+			$this->Character->locale = $locale;
+			$this->Character->privkey = $privkey;
+			break;
+
+		}
+
+	}
 }

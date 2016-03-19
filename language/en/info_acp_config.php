@@ -14,22 +14,22 @@
 * @ignore
 */
 if (!defined('IN_PHPBB')) {
-    exit;
+	exit;
 }
 
 // Create the lang array if it does not already exist
 if (empty($lang) || !is_array($lang)) {
-    $lang = array();
+	$lang = array();
 }
 
 // Merge the following language entries into the lang array
 $lang = array_merge(
-    $lang, array(
-    'ACP_CAT_BBGUILD'            => 'BBDKP',
-    'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
-    'ACP_BBGUILD_PANEL'                => 'Adminpanel',
-    'ACP_BBGUILD_CONFIG'        => 'bbguild Settings',
-    'ACP_BBGUILD_INDEX'            => 'Portal Settings',
-    'ACP_BBGUILD_LOGS'            => 'View Logs',
-    )
+	$lang, array(
+	'ACP_CAT_BBGUILD'            => 'BBDKP',
+	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
+	'ACP_BBGUILD_PANEL'                => 'Adminpanel',
+	'ACP_BBGUILD_CONFIG'        => 'bbguild Settings',
+	'ACP_BBGUILD_INDEX'            => 'Portal Settings',
+	'ACP_BBGUILD_LOGS'            => 'View Logs',
+	)
 );

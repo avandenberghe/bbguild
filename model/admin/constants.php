@@ -9,7 +9,7 @@
 * connect to phpBB
 */
 if (!defined('IN_PHPBB') ) {
-    exit;
+	exit;
 }
 global $table_prefix;
 

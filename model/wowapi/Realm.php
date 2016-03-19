@@ -13,6 +13,7 @@
  */
 
 namespace bbdkp\bbguild\model\wowapi;
+
 use bbdkp\bbguild\model\wowapi\Resource;
 
 /**
@@ -22,60 +23,60 @@ use bbdkp\bbguild\model\wowapi\Resource;
  */
 class Realm extends Resource
 {
-    /**
-     * allowed realm api methods
-  *
-     * @var array
-     */
-    protected $methods_allowed = array(
-    'status'
-    );
+	/**
+	 * allowed realm api methods
+	*
+	 * @var array
+	 */
+	protected $methods_allowed = array(
+	'status'
+	);
 
-    /**
-     * Get status results for all realms.
-     *
-     * @return array
-     */
-    public function getAllRealmStatus() 
-    {
-        return $this->consume('status');
-    }
+	/**
+	 * Get status results for all realms.
+	 *
+	 * @return array
+	 */
+	public function getAllRealmStatus()
+	{
+		return $this->consume('status');
+	}
 
-    /**
-     * Get status results for specified realm(s).
-     *
-     * @param  mixed $realms String or array of realm(s)
-     * @return mixed
-     */
-    
-    public function getRealmStatus($realms = array()) 
-    {
-        global $user;
-        $data = array();
-        if (empty($realms)) {
-            trigger_error($user->lang['WOWAPI_NO_REALMS']);
-        }
-        
-        elseif (!is_array($realms)) {
-            $data = $this->consume(
-                'status', array(
-                'data' => 'realm='.$realms
-                )
-            );
-        } 
-        else 
-        {
-            $realm_str = 'realms=';
-            foreach($realms as $key => $realm) 
-            {
-                $realm_str .= ($key == 0 ? '' : ',') . rawurlencode($realm);
-            }
-            $data = $this->consume(
-                'status', array(
-                'data' => $realm_str
-                )
-            );
-        }
-        return $data;
-    }
+	/**
+	 * Get status results for specified realm(s).
+	 *
+	 * @param  mixed $realms String or array of realm(s)
+	 * @return mixed
+	 */
+
+	public function getRealmStatus($realms = array())
+	{
+		global $user;
+		$data = array();
+		if (empty($realms)) {
+			trigger_error($user->lang['WOWAPI_NO_REALMS']);
+		}
+
+		else if (!is_array($realms)) {
+			$data = $this->consume(
+				'status', array(
+				'data' => 'realm='.$realms
+				)
+			);
+		}
+		else
+		{
+			$realm_str = 'realms=';
+			foreach($realms as $key => $realm)
+			{
+				$realm_str .= ($key == 0 ? '' : ',') . rawurlencode($realm);
+			}
+			$data = $this->consume(
+				'status', array(
+				'data' => $realm_str
+				)
+			);
+		}
+		return $data;
+	}
 }
