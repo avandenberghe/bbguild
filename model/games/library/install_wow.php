@@ -52,18 +52,19 @@ class install_wow extends GameInstall
         // note class 10 does not exist
         $db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'wow'");
         $sql_ary = array ();
-        $sql_ary [] = array ('game_id' => $this->game_id , 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
-        $sql_ary [] = array ('game_id' => $this->game_id , 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 100 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
-        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
+        $sql_ary [] = array ('game_id' => $this->game_id , 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
+        $sql_ary [] = array ('game_id' => $this->game_id , 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 110, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 110 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
+        $sql_ary [] = array ('game_id' => $this->game_id ,'class_id' => 12, 'class_armor_type' => 'LEATHER', 'class_min_level' => 98, 'class_max_level' => 110 ,  'colorcode' =>  '#4dd827', 'imagename' => 'wow_demon_hunter');
         $db->sql_multi_insert(CLASS_TABLE, $sql_ary);
         unset($sql_ary);
 
@@ -83,6 +84,7 @@ class install_wow extends GameInstall
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 10, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Monk' ,  'name_short' =>  'Monk' );
+        $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 12, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Demon Hunter' ,  'name_short' =>  'Demon Hunter' );
 
         //classes in fr
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -97,6 +99,7 @@ class install_wow extends GameInstall
         $sql_ary[] = array('game_id' => $this->game_id ,'attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 10, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Moine' ,  'name_short' =>  'Moine' );
+        $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 12, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur de démons' ,  'name_short' =>  'Chasseur de démons' );
 
         //classes in de
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
@@ -111,6 +114,8 @@ class install_wow extends GameInstall
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 10, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Mönch' ,  'name_short' =>  'Mönch' );
+        $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 12, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Dämonenjäger' ,  'name_short' =>  'Dämonenjäger' );
+
 
         //classes in it
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 0, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Sconosciuto' ,  'name_short' =>  'Sconosciuto' );
@@ -125,6 +130,7 @@ class install_wow extends GameInstall
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 5, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Sacerdote' ,  'name_short' =>  'Sacerdote' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 6, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Cavaliere della Morte' ,  'name_short' =>  'Cavaliere della Morte' );
         $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 10, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Monaco' ,  'name_short' =>  'Monaco' );
+        $sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 12, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Cacciatore di Demoni' ,  'name_short' =>  'Cacciatore di Demoni' );
 
         $db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
         unset($sql_ary);
