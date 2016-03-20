@@ -13,7 +13,7 @@ use bbdkp\bbguild\model\admin\Admin;
 use bbdkp\bbguild\model\games\Game;
 use bbdkp\bbguild\model\player\Player;
 use bbdkp\bbguild\model\player\Ranks;
-use bbdkp\bbguild\model\wowapi\BattleNet;
+use bbdkp\bbguild\model\api\BattleNet;
 
 /**
  * Manages Guild creation
@@ -53,73 +53,73 @@ class Guilds extends Admin
 {
 	/**
 	 * guild game id
-	*
+	 *
 	 * @var string
 	 */
 	public $game_id = '';
 	/**
 	 * Guild pk
-	*
+	 *
 	 * @var int
 	 */
 	public $guildid = 0;
 	/**
 	 * guild name
-	*
+	 *
 	 * @var string
 	 */
 	private $name = '';
 	/**
 	 * guiled realm
-	*
+	 *
 	 * @var string
 	 */
 	protected $realm = '';
 	/**
 	 * guild region
-	*
+	 *
 	 * @var string
 	 */
 	protected $region = '';
 	/**
 	 * guild achievements
-	*
+	 *
 	 * @var int
 	 */
 	protected $achievements = 0;
 	/**
 	 * guild player count
-	*
+	 *
 	 * @var int
 	 */
 	protected $playercount = 0;
 	/**
 	 * guild start date
-	*
+	 *
 	 * @var int
 	 */
 	protected $startdate = 0;
 	/**
 	 * guild on roster ?
-	*
+	 *
 	 * @var int 1 or 0
 	 */
 	protected $showroster = 0;
 	/**
 	 * min. level on roster
-	*
+	 *
 	 * @var int
 	 */
 	protected $min_armory = 0;
 	/**
 	 * does guild recruit ?
-	*
+	 *
 	 * @var int 1 or 0
 	 */
 	protected $recstatus = 1;
 	/**
 	 * is this the default guild ?
-	*
+	 *
 	 * @var int 1 or 0
 	 */
 	protected $guilddefault = 1;
@@ -127,13 +127,13 @@ class Guilds extends Admin
 	//aion parameters
 	/**
 	 * Aion legion id
-	*
+	 *
 	 * @var int
 	 */
 	protected $aionlegionid = 0;
 	/**
 	 * Aion Server id
-	*
+	 *
 	 * @var int
 	 */
 	protected $aionserverid = 0;
@@ -141,13 +141,13 @@ class Guilds extends Admin
 	//wow parameters
 	/**
 	 * guild achievement points
-	*
+	 *
 	 * @var int
 	 */
 	protected $achievementpoints = 0;
 	/**
 	 * guild level
-	*
+	 *
 	 * @var int 1-25
 	 */
 	protected $level = 0;
@@ -158,45 +158,45 @@ class Guilds extends Admin
 
 	/**
 	 * battle net emblem info so we can make the image
-	*
+	 *
 	 * @var array
 	 */
 	protected $emblem = array();
 	/**
 	 * guild battlegroup
-	*
+	 *
 	 * @var string
 	 */
 	protected $battlegroup = '';
 	/**
 	 * guild armory url
-	*
+	 *
 	 * @var string
 	 */
 	protected $guildarmoryurl = '';
 	/**
 	 * guild players
-	*
+	 *
 	 * @var array
 	 */
 	protected $playerdata = array();
 	/**
 	 * guild side
-	*
+	 *
 	 * @var int 0 or 1
 	 */
 	protected $side = 0;
 
 	/**
 	 * holds recruitment statuses
-	*
+	 *
 	 * @var array
 	 */
 	protected $possible_recstatus = array();
 
 	/**
 	 * true if armory is on
-	*
+	 *
 	 * @var boolean
 	 */
 	public $armory_enabled;
@@ -239,7 +239,7 @@ class Guilds extends Admin
 
 	/**
 	 * guild class constructor
-	*
+	 *
 	 * @param int $guild_id
 	 */
 	function __construct($guild_id = 0)
@@ -247,13 +247,14 @@ class Guilds extends Admin
 		global $user;
 		parent::__construct();
 		$this->guildid = $guild_id;
-		if($guild_id>0) {
+		if ($guild_id>0)
+		{
 			$this->Getguild();
 		}
 
 		$this->possible_recstatus = array(
-		0 => $user->lang['CLOSED'] ,
-		1 => $user->lang['OPEN']);
+			0 => $user->lang['CLOSED'] ,
+			1 => $user->lang['OPEN']);
 
 	}
 
@@ -267,7 +268,8 @@ class Guilds extends Admin
 	{
 		global $user;
 
-		if (property_exists($this, $fieldName)) {
+		if (property_exists($this, $fieldName))
+		{
 			return $this->$fieldName;
 		}
 		else
@@ -280,7 +282,7 @@ class Guilds extends Admin
 
 	/**
 	 * guild class property setter
-	*
+	 *
 	 * @param string $property
 	 * @param string $value
 	 */
@@ -289,17 +291,18 @@ class Guilds extends Admin
 		global $user;
 		switch ($property)
 		{
-		case 'playercount':
-			$this->countplayers();
-			break;
-		default:
-			if (property_exists($this, $property)) {
-				$this->$property = $value;
-			}
-			else
-			{
-				trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
-			}
+			case 'playercount':
+				$this->countplayers();
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
 		}
 	}
 
@@ -318,7 +321,8 @@ class Guilds extends Admin
 	{
 		global $cache, $user, $db;
 
-		if ($this->name == null || $this->realm == null) {
+		if ($this->name == null || $this->realm == null)
+		{
 			trigger_error($user->lang['ERROR_GUILDEMPTY'], E_USER_WARNING);
 		}
 		$cache->destroy('sql', GUILD_TABLE);
@@ -331,7 +335,8 @@ class Guilds extends Admin
 		);
 		$grow = $db->sql_fetchrow($result);
 
-		if ($grow['evcount'] != 0) {
+		if ($grow['evcount'] != 0)
+		{
 			trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 		}
 
@@ -345,20 +350,20 @@ class Guilds extends Admin
 
 		$query = $db->sql_build_array(
 			'INSERT', array(
-			'game_id' => $this->game_id,
-			'id' => $this->guildid,
-			'name' => $this->name ,
-			'realm' => $this->realm,
-			'region' => $this->region ,
-			'roster' => $this->showroster ,
-			'aion_legion_id' => $this->aionlegionid ,
-			'aion_server_id' => $this->aionserverid,
-			'min_armory' => $this->min_armory,
-			'guilddefault' => $this->guilddefault,
-			'armory_enabled' => $this->armory_enabled,
+				'game_id' => $this->game_id,
+				'id' => $this->guildid,
+				'name' => $this->name ,
+				'realm' => $this->realm,
+				'region' => $this->region ,
+				'roster' => $this->showroster ,
+				'aion_legion_id' => $this->aionlegionid ,
+				'aion_server_id' => $this->aionserverid,
+				'min_armory' => $this->min_armory,
+				'guilddefault' => $this->guilddefault,
+				'armory_enabled' => $this->armory_enabled,
 				'rec_status' => $this->recstatus,
-			'recruitforum' => $this->recruitforum,
-			'players' => 0,
+				'recruitforum' => $this->recruitforum,
+				'players' => 0,
 				'armoryresult' => 'NA',
 			)
 		);
@@ -375,28 +380,30 @@ class Guilds extends Admin
 		$newrank->Makerank();
 
 		$log_action = array(
-		'header' => 'L_ACTION_GUILD_ADDED' ,
-		'id' =>  $this->guildid ,
-		'L_USER' => $user->data['user_id'] ,
-		'L_USERCOLOUR' => $user->data['user_colour'] ,
-		'L_NAME' => $this->name ,
-		'L_REALM' => $this->realm ,
-		'L_ADDED_BY' => $user->data['username']);
+			'header' => 'L_ACTION_GUILD_ADDED' ,
+			'id' =>  $this->guildid ,
+			'L_USER' => $user->data['user_id'] ,
+			'L_USERCOLOUR' => $user->data['user_colour'] ,
+			'L_NAME' => $this->name ,
+			'L_REALM' => $this->realm ,
+			'L_ADDED_BY' => $user->data['username']);
 
 		$this->log_insert(
 			array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action)
+				'log_type' => $log_action['header'] ,
+				'log_action' => $log_action)
 		);
 
-		if ($this->game_id != 'wow') {
+		if ($this->game_id != 'wow')
+		{
 			return 0;
 		}
 		else
 		{
 			$data =  $this->GetApiInfo(array());
 
-			if ($this->armoryresult == 'OK') {
+			if ($this->armoryresult == 'OK')
+			{
 				$this->ApiUpdateBattleNet($data, array());
 
 				return 1;
@@ -424,7 +431,8 @@ class Guilds extends Admin
 		$cache->destroy('sql', GUILD_TABLE);
 
 		// check if already exists
-		if($this->name != $old_guild->name || $this->realm != $old_guild->realm) {
+		if ($this->name != $old_guild->name || $this->realm != $old_guild->realm)
+		{
 			// check existing guild-realmname
 			$result = $db->sql_query(
 				"SELECT count(*) as evcount from " . GUILD_TABLE . "
@@ -432,7 +440,8 @@ class Guilds extends Admin
 				AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'"
 			);
 			$grow = $db->sql_fetchrow($result);
-			if ($grow['evcount'] != 0) {
+			if ($grow['evcount'] != 0)
+			{
 				trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 			}
 		}
@@ -440,21 +449,21 @@ class Guilds extends Admin
 
 		$query = $db->sql_build_array(
 			'UPDATE', array(
-			'game_id' => $this->game_id,
-			'id' => $this->guildid,
-			'name' => $this->name ,
-			'realm' => $this->realm,
-			'region' => $this->region ,
-			'roster' => $this->showroster ,
-			'aion_legion_id' => $this->aionlegionid ,
-			'aion_server_id' => $this->aionserverid,
-			'min_armory' => $this->min_armory,
-			'rec_status' => $this->recstatus,
-			'players' => $this->playercount,
-			'guilddefault' => $this->guilddefault,
-			'armory_enabled' => $this->armory_enabled,
+				'game_id' => $this->game_id,
+				'id' => $this->guildid,
+				'name' => $this->name ,
+				'realm' => $this->realm,
+				'region' => $this->region ,
+				'roster' => $this->showroster ,
+				'aion_legion_id' => $this->aionlegionid ,
+				'aion_server_id' => $this->aionserverid,
+				'min_armory' => $this->min_armory,
+				'rec_status' => $this->recstatus,
+				'players' => $this->playercount,
+				'guilddefault' => $this->guilddefault,
+				'armory_enabled' => $this->armory_enabled,
 				'emblemurl' => $this->emblempath,
-			'recruitforum' => $this->recruitforum,
+				'recruitforum' => $this->recruitforum,
 			)
 		);
 
@@ -492,7 +501,8 @@ class Guilds extends Admin
 	{
 		global $user, $cache, $db;
 
-		if($this->guildid == 0) {
+		if ($this->guildid == 0)
+		{
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
 		}
 		$cache->destroy('sql', GUILD_TABLE);
@@ -500,7 +510,8 @@ class Guilds extends Admin
 		$sql = 'SELECT COUNT(*) as mcount FROM ' . PLAYER_LIST_TABLE . '
            WHERE player_guild_id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
-		if ((int) $db->sql_fetchfield('mcount') >= 1) {
+		if ((int) $db->sql_fetchfield('mcount') >= 1)
+		{
 			trigger_error($user->lang['ERROR_GUILDHASPLAYERS'], E_USER_WARNING);
 		}
 		$db->sql_freeresult($result);
@@ -513,10 +524,12 @@ class Guilds extends Admin
 
 		$imgfile = $this->ext_path . "images/guildemblem/". $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
 
-		if (file_exists($imgfile)) {
+		if (file_exists($imgfile))
+		{
 			$fp = fopen($imgfile, "r+");
 			// try to  acquire an exclusive lock
-			if (flock($fp, LOCK_EX)) {
+			if (flock($fp, LOCK_EX))
+			{
 				unlink($imgfile);
 				flock($fp, LOCK_UN);
 				// release the lock
@@ -525,15 +538,15 @@ class Guilds extends Admin
 		}
 
 		$log_action = array(
-		'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
-		'L_NAME' => $this->name ,
-		'L_UPDATED_BY' => $user->data['username'],
+			'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
+			'L_NAME' => $this->name ,
+			'L_UPDATED_BY' => $user->data['username'],
 		);
 
 		$this->log_insert(
 			array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action)
+				'log_type' => $log_action['header'] ,
+				'log_action' => $log_action)
 		);
 
 	}
@@ -541,7 +554,7 @@ class Guilds extends Admin
 	/**
 	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
 	 *
-	  * @author    Thomas Andersen <acoon@acoon.dk>
+	 * @author    Thomas Andersen <acoon@acoon.dk>
 	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
 	 * @param     bool $showlevel
 	 * @param     int  $width
@@ -553,14 +566,16 @@ class Guilds extends Admin
 		$imgfile = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
 		$outputpath = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
 
-		if (file_exists($imgfile) and $width==(imagesx(imagecreatefrompng($imgfile))) and (filemtime($imgfile)+86000) > time()) {
+		if (file_exists($imgfile) and $width==(imagesx(imagecreatefrompng($imgfile))) and (filemtime($imgfile)+86000) > time())
+		{
 			$finalimg = imagecreatefrompng($imgfile);
 			imagesavealpha($finalimg, true);
 			imagealphablending($finalimg, true);
 		}
 		else
 		{
-			if ($width > 1 and $width < 215) {
+			if ($width > 1 and $width < 215)
+			{
 				$height = ($width/215)*230;
 				$finalimg = imagecreatetruecolor($width, $height);
 				$trans_colour = imagecolorallocatealpha($finalimg, 0, 0, 0, 127);
@@ -569,7 +584,8 @@ class Guilds extends Admin
 				imagealphablending($finalimg, true);
 			}
 
-			if ($this->side == 0) {
+			if ($this->side == 0)
+			{
 				$ring = 'alliance';
 			}
 			else
@@ -680,7 +696,8 @@ class Guilds extends Admin
             */
 			//endregion
 
-			if ($width > 1 and $width < 215) {
+			if ($width > 1 and $width < 215)
+			{
 				imagecopyresampled($finalimg, $imgOut, 0, 0, 0, 0, $width, $height, 215, 230);
 			}
 			else
@@ -696,7 +713,7 @@ class Guilds extends Admin
 
 	/**
 	 * replace string in utf8 string
-	*
+	 *
 	 * @param  $needle
 	 * @param  $replacement
 	 * @param  $haystack
@@ -706,7 +723,8 @@ class Guilds extends Admin
 	{
 		$needle_len = mb_strlen($needle);
 		$pos = mb_strpos($haystack, $needle);
-		while (!($pos ===false)) {
+		while (!($pos ===false))
+		{
 			$front = mb_substr($haystack, 0, $pos);
 			$back  = mb_substr($haystack, $pos + $needle_len);
 			$haystack = $front.$replacement.$back;
@@ -733,7 +751,8 @@ class Guilds extends Admin
 
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
-		if ($row) {
+		if ($row)
+		{
 			// load guild object
 			$this->game_id = $row['game_id'];
 			$this->guildid = $row['id'];
@@ -778,22 +797,22 @@ class Guilds extends Admin
 
 		global $db, $config;
 		$sql_array = array(
-		'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as player_class, r.rank_id,
+			'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as player_class, r.rank_id,
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
 								 c.colorcode , c.imagename, m.player_gender_id, a.image_female, a.image_male' ,
-		'FROM' => array(
-		 PLAYER_LIST_TABLE => 'm' ,
-		 PLAYER_RANKS_TABLE => 'r' ,
-		 CLASS_TABLE => 'c' ,
-		 RACE_TABLE => 'a' ,
-		 BB_LANGUAGE => 'l' ,
-		 GUILD_TABLE => 'g') ,
-		'LEFT_JOIN' => array(
-		 array(
-								'FROM' => array(
-										USERS_TABLE => 'u') ,
-								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
-		'WHERE' => " (m.player_rank_id = r.rank_id)
+			'FROM' => array(
+				PLAYER_LIST_TABLE => 'm' ,
+				PLAYER_RANKS_TABLE => 'r' ,
+				CLASS_TABLE => 'c' ,
+				RACE_TABLE => 'a' ,
+				BB_LANGUAGE => 'l' ,
+				GUILD_TABLE => 'g') ,
+			'LEFT_JOIN' => array(
+				array(
+					'FROM' => array(
+						USERS_TABLE => 'u') ,
+					'ON' => 'u.user_id = m.phpbb_user_id ')) ,
+			'WHERE' => " (m.player_rank_id = r.rank_id)
 			    				and m.game_id = l.game_id
 			    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
 								AND (m.player_guild_id = g.id)
@@ -805,32 +824,39 @@ class Guilds extends Admin
 								AND (m.player_class_id = c.class_id)
 								AND m.player_level >= ' . $minlevel . '
 								AND m.player_level <= ' . $maxlevel,
-		'ORDER_BY' => $order);
+			'ORDER_BY' => $order);
 
-		if($selectactive == 0 && $selectnonactive == 1) {
+		if ($selectactive == 0 && $selectnonactive == 1)
+		{
 			$sql_array['WHERE'] .= ' AND m.player_status = 0 ';
 		}
-		else if ($selectactive == 1 && $selectnonactive == 0) {
+		else if ($selectactive == 1 && $selectnonactive == 0)
+		{
 			$sql_array['WHERE'] .= ' AND m.player_status = 1 ';
 		}
-		else if($selectactive == 1 && $selectnonactive == 1) {
+		else if ($selectactive == 1 && $selectnonactive == 1)
+		{
 			$sql_array['WHERE'] .= ' AND 1=1 ';
 		}
-		else if($selectactive == 0 && $selectnonactive == 0) {
+		else if ($selectactive == 0 && $selectnonactive == 0)
+		{
 			$sql_array['WHERE'] .= ' AND 1=0 ';
 		}
 
-		if ($last_update) {
+		if ($last_update)
+		{
 			$sql_array['WHERE'] .= ' AND m.last_update >= 0 and m.last_update < ' . ($this->time - 900) ;
 		}
 
-		if ($player_filter != '') {
+		if ($player_filter != '')
+		{
 			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($player_filter)) . $db->any_char);
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
-		if($mode == 1) {
+		if ($mode == 1)
+		{
 			$players_result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
 		}
 		else
@@ -844,7 +870,7 @@ class Guilds extends Admin
 
 	/**
 	 * returns a class distribution array for this guild
-	*
+	 *
 	 * @return array
 	 */
 	public function classdistribution()
@@ -868,11 +894,11 @@ class Guilds extends Admin
 
 		$result = $db->sql_query($sql);
 		$classes = array();
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$classes[$row['class_id']] = array(
-			'classname' => $row['classname'],
-			'classcount' => $row['classcount']
+				'classname' => $row['classname'],
+				'classcount' => $row['classcount']
 			);
 		}
 		$db->sql_freeresult($result);
@@ -888,20 +914,20 @@ class Guilds extends Admin
 		global $db, $config;
 		//get total players
 		$sql_array = array(
-		'SELECT' => 'count(*) as playercount ' ,
-		'FROM' => array(
-		 PLAYER_LIST_TABLE => 'm' ,
-		 PLAYER_RANKS_TABLE => 'r' ,
-		 CLASS_TABLE => 'c' ,
-		 RACE_TABLE => 'a' ,
-		 BB_LANGUAGE => 'l' ,
-		 GUILD_TABLE => 'g') ,
-		'LEFT_JOIN' => array(
-		 array(
-								'FROM' => array(
-										USERS_TABLE => 'u') ,
-								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
-		'WHERE' => " (m.player_rank_id = r.rank_id)
+			'SELECT' => 'count(*) as playercount ' ,
+			'FROM' => array(
+				PLAYER_LIST_TABLE => 'm' ,
+				PLAYER_RANKS_TABLE => 'r' ,
+				CLASS_TABLE => 'c' ,
+				RACE_TABLE => 'a' ,
+				BB_LANGUAGE => 'l' ,
+				GUILD_TABLE => 'g') ,
+			'LEFT_JOIN' => array(
+				array(
+					'FROM' => array(
+						USERS_TABLE => 'u') ,
+					'ON' => 'u.user_id = m.phpbb_user_id ')) ,
+			'WHERE' => " (m.player_rank_id = r.rank_id)
 				    				and m.game_id = l.game_id
 				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
 									AND (m.player_guild_id = g.id)
@@ -944,19 +970,19 @@ class Guilds extends Admin
 	{
 		global $db;
 		$sql_array = array(
-		'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.player_id) as playercount, max(b.rank_id) as joinrank ' ,
-		'FROM' => array(
-		 GUILD_TABLE => 'a' ,
-		 PLAYER_RANKS_TABLE => 'b' ,),
-		'LEFT_JOIN' => array(
-		 array(
-								'FROM'  => array(PLAYER_LIST_TABLE => 'c'),
-								'ON'    => 'a.id = c.player_guild_id '
-		 )
-		),
-		'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $guild_id,
-		'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
-		'ORDER_BY' => ' a.guilddefault desc,  count(c.player_id) desc, a.id asc'
+			'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.player_id) as playercount, max(b.rank_id) as joinrank ' ,
+			'FROM' => array(
+				GUILD_TABLE => 'a' ,
+				PLAYER_RANKS_TABLE => 'b' ,),
+			'LEFT_JOIN' => array(
+				array(
+					'FROM'  => array(PLAYER_LIST_TABLE => 'c'),
+					'ON'    => 'a.id = c.player_guild_id '
+				)
+			),
+			'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $guild_id,
+			'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
+			'ORDER_BY' => ' a.guilddefault desc,  count(c.player_id) desc, a.id asc'
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -965,13 +991,13 @@ class Guilds extends Admin
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$guild[] = array (
-			'game_id' => $row['game_id'] ,
-			'id' => $row['id'] ,
-			'name' => $row['name'],
-			'guilddefault' => $row['guilddefault'],
-			'playercount' => $row['playercount'],
-			'realm' => $row['realm'],
-			'joinrank' => $row['joinrank'],
+				'game_id' => $row['game_id'] ,
+				'id' => $row['id'] ,
+				'name' => $row['name'],
+				'guilddefault' => $row['guilddefault'],
+				'playercount' => $row['playercount'],
+				'realm' => $row['realm'],
+				'joinrank' => $row['joinrank'],
 			);
 		}
 		$db->sql_freeresult($result);
@@ -987,12 +1013,14 @@ class Guilds extends Admin
 	 */
 	public function GetApiInfo($params)
 	{
-		global $user;
+		global $user, $cache;
 		$data= 0;
-		if ($this->game_id != 'wow') {
+		if ($this->game_id != 'wow')
+		{
 			return false;
 		}
-		if ($this->guildid == "0") {
+		if ($this->guildid == "0")
+		{
 			return false;
 		}
 		$game          = new Game;
@@ -1003,13 +1031,15 @@ class Guilds extends Admin
 			&& $this->armory_enabled == 1
 			&& trim($game->getApikey()) != ''
 			&& trim($game->getApilocale()) != ''
-		) {
+		)
+		{
 			//available extra fields : 'members', 'achievements','news'
-			$api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey(), $this->ext_path);
+			$api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey(), $this->ext_path, $cache);
 			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
 			$data = $data['response'];
 			unset($api);
-			if (!isset($data)) {
+			if (!isset($data))
+			{
 				$this->armoryresult = 'KO';
 				$log_action         = array(
 					'header'       => 'L_ERROR_ARMORY_DOWN',
@@ -1018,16 +1048,18 @@ class Guilds extends Admin
 				);
 				$this->log_insert(
 					array(
-					'log_type'   => $log_action['header'],
-					'log_action' => $log_action,
-					'log_result' => 'L_ERROR'
+						'log_type'   => $log_action['header'],
+						'log_action' => $log_action,
+						'log_result' => 'L_ERROR'
 					)
 				);
 				return false;
 			}
 			//if we get error code
-			if (isset($data['code'])) {
-				if ($data['code'] == '403') {
+			if (isset($data['code']))
+			{
+				if ($data['code'] == '403')
+				{
 					// even if we have active API account, it may be that Blizzard account is inactive
 					$this->armoryresult = 'KO';
 					$log_action         = array(
@@ -1037,9 +1069,9 @@ class Guilds extends Admin
 					);
 					$this->log_insert(
 						array(
-						'log_type'   => $log_action['header'],
-						'log_action' => $log_action,
-						'log_result' => 'L_ERROR'
+							'log_type'   => $log_action['header'],
+							'log_action' => $log_action,
+							'log_result' => 'L_ERROR'
 						)
 					);
 					return false;
@@ -1058,7 +1090,7 @@ class Guilds extends Admin
 
 	/**
 	 * fetch Guild API information
-	*
+	 *
 	 * @param $data
 	 * @param $params
 	 */
@@ -1066,7 +1098,8 @@ class Guilds extends Admin
 	{
 		global $db;
 
-		if($this->armoryresult == 'KO') {
+		if ($this->armoryresult == 'KO')
+		{
 			return;
 		}
 
@@ -1075,7 +1108,8 @@ class Guilds extends Admin
 		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
 		$this->side = isset($data['side']) ? $data['side']: '';
 
-		if(isset($data['name'])) {
+		if (isset($data['name']))
+		{
 			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
 		}
 		else
@@ -1089,17 +1123,18 @@ class Guilds extends Admin
 
 		$query = $db->sql_build_array(
 			'UPDATE', array(
-			'achievementpoints' => $this->achievementpoints,
-			'level'             => $this->level,
-			'guildarmoryurl'    => $this->guildarmoryurl,
-			'emblemurl'         => $this->emblempath,
-			'battlegroup'       => $this->battlegroup,
-			'armoryresult'      => $this->armoryresult,
+				'achievementpoints' => $this->achievementpoints,
+				'level'             => $this->level,
+				'guildarmoryurl'    => $this->guildarmoryurl,
+				'emblemurl'         => $this->emblempath,
+				'battlegroup'       => $this->battlegroup,
+				'armoryresult'      => $this->armoryresult,
 			)
 		);
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-		if (in_array('members', $params)) {
+		if (in_array('members', $params))
+		{
 			// update ranks table
 			$rank = new Ranks($this->guildid);
 			$rank->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region);
@@ -1117,7 +1152,8 @@ class Guilds extends Admin
 	 */
 	public function GetGuildNews($data)
 	{
-		if($this->armoryresult == 'KO') {
+		if ($this->armoryresult == 'KO')
+		{
 			return;
 		}
 

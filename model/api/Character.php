@@ -15,14 +15,15 @@
  * @link      https://github.com/bbDKP
  */
 
-namespace bbdkp\bbguild\model\wowapi;
+namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\wowapi\Resource;
+use bbdkp\bbguild\model\api\Resource;
 
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB')) {
+if (!defined('IN_PHPBB'))
+{
 	exit;
 }
 
@@ -91,14 +92,16 @@ class Character extends Resource
 	{
 		global $user;
 
-		if(empty($name)) {
+		if (empty($name))
+		{
 			trigger_error($user->lang['WOWAPI_NO_CHARACTER']);
 		}
 
 		/* caution input has to be utf8 */
 		/* RFC 3986 as per http://us.battle.net/wow/en/forum/topic/3050125211 */
 		$name = rawurlencode($name);
-		if (empty($realm)) {
+		if (empty($realm))
+		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}
 
@@ -106,18 +109,20 @@ class Character extends Resource
 
 		// URL = Host + "/api/wow/character/" + Realm + "/" + Name
 		$field_str = '';
-		if (is_array($fields) && count($fields) > 0) {
+		if (is_array($fields) && count($fields) > 0)
+		{
 			$field_str = 'fields=' . implode(',', $fields);
 			//check if correct keys were requested
 			$keys = $this->getFields();
-			if (count(array_intersect($fields, $keys)) == 0 ) {
+			if (count(array_intersect($fields, $keys)) == 0 )
+			{
 				trigger_error(sprintf($user->lang['WOWAPI_INVALID_FIELD'], $field_str));
 			}
 
 			$data = $this->consume(
 				$realm. '/'. $name, array(
-				'data' => $field_str
-				 )
+					'data' => $field_str
+				)
 			);
 
 		}

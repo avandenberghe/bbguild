@@ -12,11 +12,11 @@
  * @link      https://github.com/bbDKP
  */
 
-namespace bbdkp\bbguild\model\wowapi;
+namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\wowapi\Realm;
-use bbdkp\bbguild\model\wowapi\Guild;
-use bbdkp\bbguild\model\wowapi\Character;
+use bbdkp\bbguild\model\api\Realm;
+use bbdkp\bbguild\model\api\Guild;
+use bbdkp\bbguild\model\api\Character;
 
 /**
  * Battle.net WoW API PHP SDK
@@ -25,6 +25,8 @@ use bbdkp\bbguild\model\wowapi\Character;
  */
 class BattleNet
 {
+
+	public $cache;
 	/**
 	 * acceptable regions for WoW
 	*
@@ -75,50 +77,63 @@ class BattleNet
 	 * Battle.net API key
 	 */
 	public $apikey;
+	/**
+	 * @type int
+	 */
+	private $cacheTtl;
 
 	/**
-	 * WoWAPI Class constructor
+	 * BattleNet constructor.
 	 *
-	 * @param string $API
-	 * @param string $region
-	 * @param string $apikey
-	 * @param string $locale
-	 * @param string $privkey
-	 * @param string $ext_path
+	 * @param                      $API
+	 * @param                      $region
+	 * @param                      $apikey
+	 * @param                      $locale
+	 * @param                      $privkey
+	 * @param                      $ext_path
+	 * @param \phpbb\cache\service $cache
+	 * @param int                  $cacheTtl
 	 */
-	public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path)
+	public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path,
+	                            \phpbb\cache\service $cache, $cacheTtl = 3600)
 	{
 		global $user;
 
+
 		// check for correct API call
-		if (!in_array($API, $this->API)) {
+		if (!in_array($API, $this->API))
+		{
 			trigger_error($user->lang['WOWAPI_API_NOTIMPLEMENTED']);
 		}
 
-		if (!in_array($region, $this->region)) {
+		if (!in_array($region, $this->region))
+		{
 			trigger_error($user->lang['WOWAPI_REGION_NOTALLOWED']);
 		}
 
 		$this->API = $API;
 		$this->region = $region;
 		$this->ext_path = $ext_path;
+		$this->cache = $cache;
+		$this->cacheTtl = $cacheTtl;
 
 		switch ($this->API)
 		{
 		case 'realm':
-			$this->Realm = new Realm($region);
+			$this->Realm = new Realm($this->cache,$region, $this->cacheTtl);
 			$this->Realm->apikey = $apikey;
 			$this->Realm->locale = $locale;
 			$this->Realm->privkey = $privkey;
+
 			break;
 		case 'guild':
-			$this->Guild = new Guild($region);
+			$this->Guild = new Guild($this->cache,$region, $this->cacheTtl);
 			$this->Guild->apikey = $apikey;
 			$this->Guild->locale = $locale;
 			$this->Guild->privkey = $privkey;
 			break;
 		case 'character':
-			$this->Character = new Character($region);
+			$this->Character = new Character($this->cache,$region, $this->cacheTtl);
 			$this->Character->apikey = $apikey;
 			$this->Character->locale = $locale;
 			$this->Character->privkey = $privkey;

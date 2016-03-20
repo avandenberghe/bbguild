@@ -32,7 +32,14 @@ class install_gw2 extends GameInstall
 	 */
 	protected function Installfactions()
 	{
-		global  $db;
+
+		global  $cache, $db;
+
+		//https://wiki.guildwars2.com/wiki/API:1/guild_details
+		$gw2api = new \bbdkp\bbguild\model\api\gw2api($cache);
+
+		$guild = $gw2api->getGuildDetails(array('guild_id' => '75FD83CF-0C45-4834-BC4C-097F93A487AF',
+				  'guild_name' => 'Veterans Of Lions Arch'),3600);
 
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" . $this->game_id . "'");

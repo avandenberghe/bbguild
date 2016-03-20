@@ -12,9 +12,9 @@
  * @link      https://github.com/bbDKP
  */
 
-namespace bbdkp\bbguild\model\wowapi;
+namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\wowapi\Resource;
+use bbdkp\bbguild\model\api\Resource;
 
 /**
  * Realm resource.
@@ -25,11 +25,11 @@ class Realm extends Resource
 {
 	/**
 	 * allowed realm api methods
-	*
+	 *
 	 * @var array
 	 */
 	protected $methods_allowed = array(
-	'status'
+		'status'
 	);
 
 	/**
@@ -53,27 +53,29 @@ class Realm extends Resource
 	{
 		global $user;
 		$data = array();
-		if (empty($realms)) {
+
+		if (empty($realms))
+		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}
-
-		else if (!is_array($realms)) {
+		else if (!is_array($realms))
+		{
 			$data = $this->consume(
 				'status', array(
-				'data' => 'realm='.$realms
+					'data' => 'realm='.$realms
 				)
 			);
 		}
 		else
 		{
 			$realm_str = 'realms=';
-			foreach($realms as $key => $realm)
+			foreach ($realms as $key => $realm)
 			{
 				$realm_str .= ($key == 0 ? '' : ',') . rawurlencode($realm);
 			}
 			$data = $this->consume(
 				'status', array(
-				'data' => $realm_str
+					'data' => $realm_str
 				)
 			);
 		}

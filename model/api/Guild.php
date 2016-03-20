@@ -22,14 +22,14 @@
  *    fields are listed in the subsection titled "Optional Fields".
  */
 
-namespace bbdkp\bbguild\model\wowapi;
+namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\wowapi\Resource;
+use bbdkp\bbguild\model\api\Resource;
 
 /**
  * Guild resource.
  *
- * @package bbdkp\bbguild\model\wowapi
+ * @package bbdkp\bbguild\model\api
  */
 class Guild extends Resource
 {
@@ -54,7 +54,7 @@ class Guild extends Resource
 	private $extrafields = array(
 		'members',
 		'achievements',
-	'news'
+		'news'
 	);
 
 	/**
