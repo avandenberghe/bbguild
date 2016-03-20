@@ -145,7 +145,8 @@ class Admin
 		if (function_exists('curl_init'))
 		{
 			/* Create a CURL handle. */
-			if (($curl = curl_init($url)) === false) {
+			if (($curl = curl_init($url)) === false)
+			{
 				trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
 			}
 
@@ -168,7 +169,8 @@ class Admin
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
 
-			if($response === false || $response === "" ) {
+			if ($response === false || $response === "" )
+			{
 				trigger_error(curl_error($curl), E_USER_WARNING);
 			}
 			else
@@ -186,7 +188,8 @@ class Admin
 		}
 
 		//report errors?
-		if($loud == true) {
+		if ($loud == true)
+		{
 			trigger_error($data['error'], E_USER_WARNING);
 		}
 		return $data['response'];
@@ -200,72 +203,6 @@ class Admin
 	function isJSON($string)
 	{
 		return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
-	}
-
-
-	/**
-	 * sends POST request to bbguild.com for registration
-	 *
-	 * @param array $regdata
-	 */
-	public final function post_register_request($regdata)
-	{
-		$rndhash = base_convert(mt_rand(5, 60466175) . mt_rand(5, 60466175), 10, 36);
-		// bbguild registration url
-		$url = "http://www.avathar.be/services/registerbbkdp.php";
-		// Create URL parameter string
-		$fields_string = '';
-		foreach($regdata as $key => $value)
-		{
-			$fields_string .= $key.'='.$value.'&';
-		}
-		$fields_string .= 'rndhash='.$rndhash;
-
-		$ch = curl_init();
-
-		// set options
-		curl_setopt_array(
-			$ch, array(
-			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_POST=> 4,
-			CURLOPT_URL => $url,
-			CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
-			CURLOPT_SSL_VERIFYHOST => false,
-			CURLOPT_POSTFIELDS => $fields_string,
-			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_FOLLOWLOCATION, true,
-			CURLOPT_TIMEOUT => 60,
-			CURLOPT_VERBOSE => true,
-			CURLOPT_HEADER => false
-			)
-		);
-
-		curl_exec($ch);
-		curl_close($ch);
-
-		$this->get_register_request($rndhash);
-	}
-
-	/**
-	 * GET requests for registration ID
-	 *
-	 * @param $regcode
-	 */
-	private final function get_register_request($regcode)
-	{
-		global $cache, $config;
-		$url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
-		$data = $this->Curl($url, 'GET');
-		$regID = isset($data['response']) ? isset($data['response']['registration']) ? $data['response']['registration'] : '' : '';
-		if($regID != '') {
-			$config->set('bbguild_regid', $regID, true);
-			$cache->destroy('config');
-			trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE);
-		}
-		else
-		{
-			trigger_error('Registration failed ', E_USER_WARNING);
-		}
 	}
 
 	/**
@@ -282,11 +219,12 @@ class Admin
 		$plugins = $cache->get('bbguildplugins');
 
 		//if update is forced or cache expired then make the query to refresh latest productversion
-		if ($plugins === false || $force_update) {
+		if ($plugins === false || $force_update)
+		{
 			$plugins = array();
 			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
 			$result = $db->sql_query($sql);
-			while($row = $db->sql_fetchrow($result))
+			while ($row = $db->sql_fetchrow($result))
 			{
 				$data = $this->curl(BBGUILD_VERSIONURL . $row['name'] .'.json', false, false, false);
 				$response = $data['response'];
@@ -326,11 +264,14 @@ class Admin
 		$latest_version_a = $cache->get('latest_bbguild');
 
 		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($latest_version_a === false || $force_update) {
+		if ($latest_version_a === false || $force_update)
+		{
 			$data = $this->curl(BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
-			if (empty($data)) {
+			if (empty($data))
+			{
 				$cache->destroy('latest_bbguild');
-				if ($warn_fail) {
+				if ($warn_fail)
+				{
 					trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
 				}
 				return false;
@@ -351,7 +292,8 @@ class Admin
 	{
 		global $cache, $config, $user;
 		$meta = $md_manager->get_metadata('all');
-		if (!isset($meta['extra']['version-check'])) {
+		if (!isset($meta['extra']['version-check']))
+		{
 			throw new \RuntimeException($this->user->lang('NO_VERSIONCHECK'), 1);
 		}
 		$version_check = $meta['extra']['version-check'];
@@ -384,13 +326,15 @@ class Admin
 		$element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
 		$element2 = ( isset($uri_order[1]) ) ? $uri_order[1] : 0;
 		// check if correct input
-		if ($element2 != 1 ) {
+		if ($element2 != 1 )
+		{
 			$element2 = 0;
 		}
 
-		foreach((array) $sort_order as $key => $value)
+		foreach ((array) $sort_order as $key => $value)
 		{
-			if ($element1 == $key ) {
+			if ($element1 == $key )
+			{
 				$uri_element2 = ( $element2 == 0 ) ? 1 : 0;
 			}
 			else

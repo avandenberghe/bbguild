@@ -59,11 +59,6 @@ $lang = array_merge(
 	'UPDATE_NEWS' => 'Newsbeitrag aktualisieren',
 	'UPDATE_DATE_TO' => 'Aktualisiere Datum zu<br /> %s ?',
 
-	//REGISTRATION
-	'REGISTRATIONID' => 'bbGuild Registrierungsschlüssel',
-	'NOTREGISTERED' => 'Nicht registriert',
-	'REGISTRATION_EXPLAIN' => 'Wenn du die Registrierung Taste drückst, werden dein Domainname, phpBB-Version, bbGuild-Version nach avathar.be gesendet und du bekommst ein Registrierungsschlüssel. Dies ist kostenlos.',
-
 	//JAVASCRIPT
 	'B_HELP' => 'fetter Text: [b]text[/b]',
 	'I_HELP' => 'kursiver Text: [i]text[/i]',

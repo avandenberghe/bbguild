@@ -59,11 +59,6 @@ $lang = array_merge(
 	'UPDATE_NEWS' => 'Aggiorna News',
 	'UPDATE_DATE_TO' => 'Aggiornato a <br />%s?',
 
-	//REGISTRATION
-	'REGISTRATIONID' => 'Chiave di registrazione bbDKP',
-	'NOTREGISTERED' => 'Non Registrato',
-	'REGISTRATION_EXPLAIN' => 'Se premi il tasto di registrazione, il tuo nome di dominio, la versione di phbb e la versione di bbGuild verranno inviati a avathar.be ed otterrai una chiave di registrazione. La chiave è a vostro esclusivo utilizzo, e la registrazione non è obbligatoria ai fini dell‘utilizzo di questo software. ',
-
 	//JAVASCRIPT
 	'B_HELP' => 'Testo Grassetto: [b]testo[/b]',
 	'I_HELP' => 'Testo Corsivo: [i]testo[/i]',

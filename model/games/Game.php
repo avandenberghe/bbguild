@@ -312,11 +312,13 @@ class Game
 		//insert into phpbb_bbguild_games table
 		global $user, $phpEx, $config;
 
-		if ($this->game_id == '') {
+		if ($this->game_id == '')
+		{
 			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
-		if(array_key_exists($this->game_id, $this->preinstalled_games)) {
+		if (array_key_exists($this->game_id, $this->preinstalled_games))
+		{
 			//game id is one of the preinstallable games
 			$this->name= $this->preinstalled_games[$this->game_id];
 			//build name of the namespaced game installer class
@@ -329,8 +331,10 @@ class Game
 			);
 
 			//is gameworld installed ?
-			if(isset($config['bbguild_gameworld_version'])) {
-				if ($config['bbguild_gameworld_version'] >= '2.0') {
+			if (isset($config['bbguild_gameworld_version']))
+			{
+				if ($config['bbguild_gameworld_version'] >= '2.0')
+				{
 					$classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
 					$installworld = new $classname;
 					$installworld->Install($this->game_id);
@@ -341,7 +345,8 @@ class Game
 		else
 		{
 			//custom game, this is dispatched to dummy game installer
-			if ($this->name == '') {
+			if ($this->name == '')
+			{
 				$this->name='Custom';
 			}
 			$installgame = new install_custom;
@@ -349,14 +354,16 @@ class Game
 			$installgame->Install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl());
 
 			//is gameworld installed ?
-			if(isset($config['bbguild_gameworld_version'])) {
-				if ($config['bbguild_gameworld_version'] >= '2.0') {
-					if (!class_exists('\bbdkp\bbworld\model\games\library\world_custom')) {
+			if (isset($config['bbguild_gameworld_version']))
+			{
+				if ($config['bbguild_gameworld_version'] >= '2.0')
+				{
+					if (!class_exists('\bbdkp\bbworld\model\games\library\world_custom'))
+					{
 						include $this->ext_path .'model/games/library/world_custom.' . $phpEx;
 					}
 					$installworld = new \bbdkp\bbworld\model\games\library\world_custom;
 					$installworld->Install($this->game_id);
-
 				}
 			}
 		}
@@ -368,29 +375,36 @@ class Game
 	public function Delete()
 	{
 		global $user, $phpEx, $config;
-		if ($this->game_id == '') {
+		if ($this->game_id == '')
+		{
 			\trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
-		if(array_key_exists($this->game_id, $this->preinstalled_games)) {
+		if (array_key_exists($this->game_id, $this->preinstalled_games))
+		{
 			//fetch installer
-			if (!class_exists('\bbdkp\bbguild\model\games\library\install_' . $this->game_id)) {
+			if (!class_exists('\bbdkp\bbguild\model\games\library\install_' . $this->game_id))
+			{
 				include $this->ext_path .'model/games/library/install_' . $this->game_id . '.' . $phpEx;
 			}
 			$gameclassname = '\bbdkp\bbguild\model\games\library\install_' . $this->game_id;
 		}
 		else
 		{
-			if (!class_exists('\bbdkp\bbguild\model\games\library\install_custom')) {
+			if (!class_exists('\bbdkp\bbguild\model\games\library\install_custom'))
+			{
 				include $this->ext_path .'model/games/library/install_custom.' . $phpEx;
 			}
 			$gameclassname = '\bbdkp\bbguild\model\games\library\install_custom';
 		}
 
 		//is bossprogress installed ?
-		if(isset($config['bbguild_gameworld_version'])) {
-			if ($config['bbguild_gameworld_version'] >= '2.0') {
-				if(array_key_exists($this->game_id, $this->preinstalled_games)) {
+		if (isset($config['bbguild_gameworld_version']))
+		{
+			if ($config['bbguild_gameworld_version'] >= '2.0')
+			{
+				if (array_key_exists($this->game_id, $this->preinstalled_games))
+				{
 					$gameworld_classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
 					$installworld = new $gameworld_classname;
 				}
@@ -415,7 +429,8 @@ class Game
 	public function Get()
 	{
 		global $db;
-		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey, apilocale, privkey
+		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled,
+ 				bossbaseurl, zonebaseurl, apikey, apilocale, privkey
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -484,7 +499,7 @@ class Game
 		$sql .= ' ORDER BY g.game_id';
 		// cache for 1 days
 		$result = $db->sql_query($sql, 86400);
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$this->games[$row['game_id']] = $row['game_name'];
 		}

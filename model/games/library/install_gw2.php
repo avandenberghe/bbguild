@@ -73,7 +73,7 @@ class install_gw2 extends GameInstall
 		//Necromancer
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#00FF88',  'imagename' => 'gw2_necromancer');
 		// Revenant
-		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#00FF88',  'imagename' => 'gw2_revenant');
+		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 9, 'class_faction_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#00FF88',  'imagename' => 'gw2_revenant');
 
 		//Commando
 		//$sql_ary [] = array ('game_id' => $this->game_id,'class_id' => 9, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#0077BB',  'imagename' => 'gw2_comm');
@@ -93,6 +93,7 @@ class install_gw2 extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Elementalist' ,  'name_short' =>  'Elementalist' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mesmer' ,  'name_short' =>  'Mesmer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
+		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Revenant' ,  'name_short' =>  'Revenant' );
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Inconnu' ,  'name_short' =>  'Inconnu' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Guerrier' ,  'name_short' =>  'Guerrier' );
@@ -103,6 +104,7 @@ class install_gw2 extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Élémentaliste' ,  'name_short' =>  'Élémentaliste' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Envoûteur' ,  'name_short' =>  'Envoûteur' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Nécromant' ,  'name_short' =>  'Nécromant' );
+		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Revenant' ,  'name_short' =>  'Revenant' );
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
@@ -113,6 +115,7 @@ class install_gw2 extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Elementalist' ,  'name_short' =>  'Elementalist' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Mesmer' ,  'name_short' =>  'Mesmer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
+		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Revenant' ,  'name_short' =>  'Revenant' );
 
 		//http://www.tapugames.it/articles.php
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Sconosciuto' ,  'name_short' =>  'Sconosciuto' );
@@ -124,6 +127,7 @@ class install_gw2 extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Elementalist' ,  'name_short' =>  'Elementalist' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Mesmer' ,  'name_short' =>  'Mesmer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
+		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Revenant' ,  'name_short' =>  'Revenant' );
 
 		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
 		unset($sql_ary);

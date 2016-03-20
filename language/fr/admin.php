@@ -58,11 +58,6 @@ $lang = array_merge(
 	'UPDATE_NEWS' => 'Mise à jour d’un qrticle',
 	'UPDATE_DATE_TO' => 'M.a.j. date à<br />%s?',
 
-	//REGISTRATION
-	'REGISTRATIONID' => 'clef d’enregistrement bbDKP',
-	'NOTREGISTERED' => 'pas registré',
-	'REGISTRATION_EXPLAIN' => 'en cliquant le bouton enregistrement, vous envoyez votre nom de domaine, version phpbb, verion bbGuild vers avathar.be et vous obtenez une clef. ceci est volontaire. ',
-
 	//JAVASCRIPT
 	'B_HELP' => 'Texte en gras: [b]text[/b]',
 	'I_HELP' => 'Texte italique: [i]text[/i]',
