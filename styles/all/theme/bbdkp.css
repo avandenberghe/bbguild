@@ -1,0 +1,366 @@
+/* Custom CSS for bbGuild */
+
+/* the bbguild page
+--------------------------------------------- */
+#bbguildwrap
+{
+    width: 100%;
+    color: #c09a67;
+    margin: 0 auto;
+    position: relative;
+    min-height: 600px;
+    clear: both;
+    background: rgba(0, 0, 0, 0) url("./images/bg-alliance.jpg") no-repeat scroll left top;
+}
+
+.profile-sidebar-anchor {
+    float: left;
+    height: 0;
+    position: relative;
+    width: 0;
+}
+
+.profile-sidebar-outer {
+    left: 0;
+    position: relative;
+    top: 0;
+}
+
+.profile-sidebar-inner {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+
+.profile-sidebar-inner {
+   /* background: rgba(0, 0, 0, 0) url("./images/sidebar-bg.jpg") no-repeat scroll 0 0;*/
+    height: 684px;
+    width: 230px;
+}
+
+.profile-wrapper-alliance {
+    background-image: url("./images/sidebar-bg-alliance.png");
+}
+.profile-wrapper-horde {
+    background-image: url("./images/sidebar-bg-horde.png");
+}
+
+.profile-info-anchor, .profile-info {
+    width: 700px;
+}
+
+.profile-info-anchor {
+    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
+    height: 218px;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-guild-info-anchor .guild-tabard {
+    left: 720px;
+    top: 20px;
+}
+
+.guild-tabard {
+    height: 150px;
+    position: absolute;
+    width: 150px;
+}
+
+.profile-info {
+    left: 25px;
+    letter-spacing: -0.05em;
+    line-height: normal;
+    position: absolute;
+    top: 45px;
+}
+
+.profile-info-anchor, .profile-info {
+    width: 700px;
+}
+
+.profile-guild-info .name {
+    float: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 760px;
+}
+
+.profile-info .name {
+    color: white;
+    float: left;
+    font-size: 56px;
+    font-weight: bold;
+    left: -3px;
+    letter-spacing: -0.05em;
+    line-height: 1.1em;
+    position: relative;
+    font-family: Arial,Verdana,sans-serif;
+}
+
+a {
+    color: #ffb100;
+}
+
+.profile-info .name a {
+    color: white;
+    outline: medium none;
+    text-decoration: none;
+}
+
+
+.profile-info .under-name {
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 14px;
+}
+
+.profile-info .comma {
+    color: #cccccc;
+}
+
+
+.profile-wrapper-alliance .realm, .profile-wrapper-alliance .realm a {
+    color: #0078ff;
+}
+
+.profile-wrapper-horde .realm, .profile-wrapper-horde .realm a {
+    color: #b30000;
+}
+
+.profile-info .realm {
+    border-bottom: 0 none;
+}
+
+.profile-info .achievements {
+    margin-top: 20px;
+}
+
+.profile-info .achievements a {
+    background: rgba(0, 0, 0, 0) url("./images/achievements.gif") no-repeat scroll left 7px;
+    color: white;
+    font-family: "Arial Black",Arial,sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 23px;
+    padding-left: 11px;
+}
+
+ul.profile-sidebar-menu {
+    position: absolute;
+    list-style-type: none;
+}
+
+ul.profile-sidebar-menu {
+    background: rgba(0, 0, 0, 0) url("./images/sidebar-menu-sep.gif") no-repeat scroll left bottom;
+    font-size: 13px;
+    margin: 14px 0 0 25px;
+    padding-bottom: 1px;
+    width: 196px;
+}
+
+ul.profile-sidebar-menu li {
+    background: rgba(0, 0, 0, 0) url("./images/sidebar-menu-sep.gif") no-repeat scroll left top;
+    padding-top: 1px;
+    white-space: nowrap;
+}
+ul.profile-sidebar-menu a {
+    display: block;
+    padding-left: 3px;
+}
+
+ul.profile-sidebar-menu a .arrow {
+    display: block;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.profile-guild-menu {
+    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
+    height: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-guild-chooser {
+    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
+    height: 30px;
+    position: relative;
+    z-index: 1;
+    padding: 20px 5px 20px 20px;
+}
+
+.profile-section {
+    min-height: 723px;
+}
+
+.profile-section {
+    background: rgba(0, 0, 0, 0) url("./images/section-bg.png") no-repeat scroll 0 0;
+    min-height: 400px;
+    padding: 15px;
+}
+
+.profile-contents {
+    margin-left: 230px;
+    min-height: 807px;
+    padding-bottom: 40px;
+}
+
+
+.summary, .roster {
+    padding-top: 224px;
+}
+
+.category, .subheader-3 {
+    color: #7e3406;
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: -0.05em;
+}
+
+.profile-box-simple {
+    border-top: 2px solid #4a240f;
+    margin-top: 5px;
+    padding: 11px 0;
+}
+
+.bbguild-activity-feed li {
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    border-top: 1px solid #371b0d;
+    padding: 13px 0 13px 29px;
+    position: relative;
+}
+
+.color-q4, .color-q4 a {
+    color: #c600ff !important;
+}
+
+.color-blizz, .color-blizz a {
+    color: #ffb100;
+}
+
+/*fixed width left pane*/
+#bbguildleftside
+{
+    display: table;
+    display: table-cell;
+    vertical-align: top;
+}
+
+
+#bbguildmiddle
+{
+    display: table-cell;
+    vertical-align: top;
+    padding-left: 3px;
+}
+
+
+#bbguildrightside
+{
+    display: table-cell;
+    vertical-align: top;
+    width: 180px;
+    padding-left: 3px;
+    float: left;
+}
+
+
+
+
+
+/* the left menu
+--------------------------------------------- */
+.portalmenu ul
+{
+    list-style-type: none;
+    margin: 0 0 8px;
+    padding: 0;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    background-size: auto auto;
+    list-style-image: none;
+    list-style-position: outside;
+    margin-bottom: 1px;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    text-align: center;
+}
+
+.portalmenu ul li {
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    line-height: 14px;
+    padding-left: 20px;
+    text-align: left;
+    background-image: url("./images/menu.png");
+}
+
+.portalmenu a {
+    font-size: 105%;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0px;
+    padding: 4px 0px 0px 1px;
+    text-decoration: none;
+}
+
+.portalmenu a:hover {
+    color: #D31141;
+}
+
+.bbguildheader {
+    color: #71401f;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -0.05em;
+    line-height: 1.1em;
+    white-space: nowrap;
+}
+
+
+ul#bbguild-activity-feed {
+    list-style-type: none;
+}
+
+ul#bbguild-activity-feed li {
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    border-top-color: #371b0d;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-bottom: 9px;
+    padding-left: 29px;
+    padding-right: 0;
+    padding-top: 9px;
+    position: relative;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+}
+
+
+ul#bbguild-activity-feed li dl dd  {
+    padding-right: 4px;
+    display: inline;
+}
+ul#bbguild-activity-feed li dl dt {
+    color: #71401f;
+    display: inline;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+

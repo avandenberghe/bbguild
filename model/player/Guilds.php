@@ -40,7 +40,8 @@ use bbdkp\bbguild\model\api\BattleNet;
  * @property string $battlegroup
  * @property string $guildarmoryurl
  * @property array $playerdata
- * @property int $side
+ * @property int $faction
+ * @property string $factionname
  * @property array $possible_recstatus
  * @property boolean $armory_enabled
  * @property int $raidtrackerrank
@@ -181,11 +182,11 @@ class Guilds extends Admin
 	 */
 	protected $playerdata = array();
 	/**
-	 * guild side
+	 * guild faction
 	 *
 	 * @var int 0 or 1
 	 */
-	protected $side = 0;
+	protected $faction = 0;
 
 	/**
 	 * holds recruitment statuses
@@ -236,6 +237,10 @@ class Guilds extends Admin
 	 */
 	public $guildnews;
 
+	/**
+	 * @type string
+	 */
+	public $factionname;
 
 	/**
 	 * guild class constructor
@@ -354,7 +359,7 @@ class Guilds extends Admin
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
-				'region' => $this->region ,
+				'region' => $this->region,
 				'roster' => $this->showroster ,
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid,
@@ -365,6 +370,7 @@ class Guilds extends Admin
 				'recruitforum' => $this->recruitforum,
 				'players' => 0,
 				'armoryresult' => 'NA',
+				'faction' => $this->faction,
 			)
 		);
 
@@ -464,6 +470,7 @@ class Guilds extends Admin
 				'armory_enabled' => $this->armory_enabled,
 				'emblemurl' => $this->emblempath,
 				'recruitforum' => $this->recruitforum,
+				'faction' => $this->faction,
 			)
 		);
 
@@ -560,7 +567,7 @@ class Guilds extends Admin
 	 * @param     int  $width
 	 * @return    string
 	 */
-	private function createEmblem($showlevel = true, $width = 115)
+	private function createEmblem($showlevel = true, $width = 200)
 	{
 		//location to create the file
 		$imgfile = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
@@ -584,7 +591,7 @@ class Guilds extends Admin
 				imagealphablending($finalimg, true);
 			}
 
-			if ($this->side == 0)
+			if ($this->faction == 1)
 			{
 				$ring = 'alliance';
 			}
@@ -743,9 +750,12 @@ class Guilds extends Admin
 	{
 		global $db;
 
-		$sql = 'SELECT id, name, realm, region, roster, game_id, players,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult, recruitforum
-				FROM ' . GUILD_TABLE . '
+		$sql = 'SELECT g.id, g.name, g.realm, g.region, g.roster, g.game_id, g.players,
+				g.achievementpoints, g.level, g.battlegroup, g.guildarmoryurl,
+				g.emblemurl, g.min_armory, g.rec_status, g.guilddefault, g.armory_enabled, g.armoryresult, g.recruitforum,
+				g.faction, f.faction_name
+				FROM ' . GUILD_TABLE . ' g
+				INNER JOIN '  . FACTION_TABLE . ' f ON f.game_id=g.game_id and f.faction_id=g.faction
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql, 604800);
 
@@ -774,6 +784,8 @@ class Guilds extends Admin
 			$this->raidtrackerrank = $this->maxrank();
 			$this->applyrank = $this->maxrank();
 			$this->recruitforum = $row['recruitforum'];
+			$this->faction = $row['faction'];
+			$this->factionname = $row['faction_name'];
 		}
 
 	}
@@ -1106,7 +1118,7 @@ class Guilds extends Admin
 		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
 		$this->level = isset($data['level']) ? $data['level']: 0;
 		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-		$this->side = isset($data['side']) ? $data['side']: '';
+		$this->faction = isset($data['side']) ? ($data['side'] == 0 ? 1: 2) : ''; // bbguild wants Alliance 1 and Horde 2
 
 		if (isset($data['name']))
 		{
@@ -1129,6 +1141,7 @@ class Guilds extends Admin
 				'emblemurl'         => $this->emblempath,
 				'battlegroup'       => $this->battlegroup,
 				'armoryresult'      => $this->armoryresult,
+				'faction'           => $this->faction,
 			)
 		);
 

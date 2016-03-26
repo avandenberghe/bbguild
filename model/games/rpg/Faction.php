@@ -63,7 +63,8 @@ class Faction
 	public function __get($fieldName)
 	{
 		global $user;
-		if (property_exists($this, $fieldName)) {
+		if (property_exists($this, $fieldName))
+		{
 			return $this->$fieldName;
 		}
 		else
@@ -88,7 +89,8 @@ class Faction
 		case 'f_index':
 			break;
 		default:
-			if (property_exists($this, $property)) {
+			if (property_exists($this, $property))
+			{
 				$this->$property = $value;
 			}
 			else

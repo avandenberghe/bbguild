@@ -87,6 +87,7 @@ class viewWelcome implements iViews
 		$template->assign_vars(
 			array(
 			'EMBLEM'                => $guild->emblempath,
+			'GUILD_FACTION'         => $guild->factionname,
 			'GUILD_REALM'           => $guild->realm,
 			'GUILD_REGION'          => $guild->region,
 			'GUILD_NAME'            => $guild->name,

@@ -290,6 +290,7 @@ $lang = array_merge(
 	'LOW' => 'Low',
 	'MANAGE' => 'Manage',
 	'MEDIUM' => 'Medium',
+	'MEMBERS' => 'Members',
 	'PLAYER' => 'Player',
 	'PLAYERS' => 'Players',
 	'NA' => 'N/A',

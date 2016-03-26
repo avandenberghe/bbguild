@@ -341,14 +341,17 @@ class viewNavigation extends Admin implements iViews
 		$this->query_by_class = false;
 		$this->armor();
 
-		if ($this->filter != $this->user->lang['ALL']) {
-			if (array_key_exists($this->filter, $this->armor_type)) {
+		if ($this->filter != $this->user->lang['ALL'])
+		{
+			if (array_key_exists($this->filter, $this->armor_type))
+			{
 				// looking for an armor type
 				$this->filter= preg_replace('/ Armor/', '', $this->filter);
 				$this->query_by_armor = true;
 				$this->query_by_class = false;
 			}
-			else if (array_key_exists($this->filter, $this->classname)) {
+			else if (array_key_exists($this->filter, $this->classname))
+			{
 				// looking for a class
 				$this->query_by_class = true;
 				$t = explode("_", $this->filter);
@@ -399,19 +402,21 @@ class viewNavigation extends Admin implements iViews
                     'page' => 'news'
                 )),
                 */
+				'FACTION'            => $this->guilds->faction,
+				'FACTION_NAME'       => $this->guilds->factionname,
 				'GAME_ID'            => $this->guilds->game_id,
-				'GUILD_ID'             => $this->guild_id,
+				'GUILD_ID'           => $this->guild_id,
 				'GUILD_NAME'         => $this->guilds->name,
-				'REALM'             => $this->guilds->realm,
+				'REALM'              => $this->guilds->realm,
 				'REGION'             => $this->guilds->region,
-				'PLAYERCOUNT'         => $this->guilds->playercount ,
+				'PLAYERCOUNT'        => $this->guilds->playercount ,
 				'ARMORY_URL'         => $this->guilds->guildarmoryurl ,
-				'MIN_ARMORYLEVEL'     => $this->guilds->min_armory ,
-				'SHOW_ROSTER'         => $this->guilds->showroster,
-				'EMBLEM'            => $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
+				'MIN_ARMORYLEVEL'    => $this->guilds->min_armory ,
+				'SHOW_ROSTER'        => $this->guilds->showroster,
+				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
 				'EMBLEMFILE'         => basename($this->guilds->emblempath),
-				'ARMORY'            => $this->guilds->guildarmoryurl,
-				'ACHIEV'            => $this->guilds->achievementpoints,
+				'ARMORY'             => $this->guilds->guildarmoryurl,
+				'ACHIEV'             => $this->guilds->achievementpoints,
 				'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
 			)
 		);
@@ -430,27 +435,32 @@ class viewNavigation extends Admin implements iViews
 		$this->guilds = new Guilds();
 
 		$guildlist = $this->guilds->guildlist(1);
-		if(count($guildlist) > 0) {
+		if (count($guildlist) > 0)
+		{
 			foreach ($guildlist as $g)
 			{
 				//assign guild_id property
-				if($this->guild_id==0) {
+				if ($this->guild_id==0)
+				{
 					//if there is a default guild
-					if($g['guilddefault'] == 1) {
+					if ($g['guilddefault'] == 1)
+					{
 						$this->guild_id = $g['id'];
 					}
-					else if($g['playercount'] > 1) {
+					else if ($g['playercount'] > 1)
+					{
 						$this->guild_id = $g['id'];
 					}
 
 					//if guild id field still 0
-					if($this->guild_id == 0 && $g['id'] > 0) {
+					if ($this->guild_id == 0 && $g['id'] > 0)
+					{
 						$this->guild_id = $g['id'];
 					}
 				}
 
 				//populate guild popup
-				if($g['id'] > 0) // exclude guildless
+				if ($g['id'] > 0) // exclude guildless
 				{
 					$this->template->assign_block_vars(
 						'guild_row', array(
