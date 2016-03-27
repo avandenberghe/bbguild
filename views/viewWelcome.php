@@ -8,9 +8,12 @@
  */
 namespace bbdkp\bbguild\views;
 
-use bbdkp\bbguild\model\player\Guilds;
-
-class viewWelcome implements iViews
+/**
+ * Class viewwelcome
+ *
+ * @package bbdkp\bbguild\views
+ */
+class viewwelcome implements iViews
 {
 	private $navigation;
 	public  $response;
@@ -19,9 +22,9 @@ class viewWelcome implements iViews
 	/**
 	 * viewWelcome constructor.
 	 *
-	 * @param \bbdkp\bbguild\views\viewNavigation $navigation
+	 * @param \bbdkp\bbguild\views\viewnavigation $navigation
 	 */
-	function __construct(viewNavigation $navigation)
+	function __construct(viewnavigation $navigation)
 	{
 		$this->navigation = $navigation;
 		$this->buildpage();
@@ -35,13 +38,13 @@ class viewWelcome implements iViews
 		global $user, $template;
 		$this->tpl = 'main.html';
 
-		$guild = new Guilds($this->navigation->getGuildId());
-		$data = $guild->GetApiInfo(array('news'));
-		$guild->GetGuildNews($data);
-		$newsarr = $guild->guildnews;
+		$data = $this->navigation->guild->GetApiInfo(array('news'));
+		$this->navigation->guild->GetGuildNews($data);
+		$newsarr =  $this->navigation->guild->guildnews;
 		$welcometext = $this->GetWelcomeText();
 
-		if (isset($newsarr)) {
+		if (isset($newsarr))
+		{
 			$i=0;
 			foreach ($newsarr as $id => $news)
 			{
@@ -78,7 +81,8 @@ class viewWelcome implements iViews
 					);
 					break;
 				}
-				if ($i > 10) {
+				if ($i > 25)
+				{
 					break;
 				}
 			}
@@ -86,11 +90,12 @@ class viewWelcome implements iViews
 
 		$template->assign_vars(
 			array(
-			'EMBLEM'                => $guild->emblempath,
-			'GUILD_FACTION'         => $guild->factionname,
-			'GUILD_REALM'           => $guild->realm,
-			'GUILD_REGION'          => $guild->region,
-			'GUILD_NAME'            => $guild->name,
+			'EMBLEM'                =>  $this->navigation->guild->emblempath,
+			'GUILD_FACTION'         =>  $this->navigation->guild->factionname,
+			'GUILD_REALM'           =>  $this->navigation->guild->realm,
+			'GUILD_REGION'          =>  $this->navigation->guild->region,
+			'GUILD_NAME'            =>  $this->navigation->guild->name,
+			'S_GUILD_ALLIANCE'      => ( $this->navigation->guild->game_id == 'wow' &&  $this->navigation->guild->faction == 1) ? true: false,
 			'WELCOME_MESSAGE'        => $welcometext,
 			'S_DISPLAY_WELCOME'     => true,
 			)
@@ -98,7 +103,7 @@ class viewWelcome implements iViews
 		$title = $this->navigation->user->lang['WELCOME'];
 
 		unset($newsarr);
-		// full rendered page source that will be output on the screen.
+		// fully rendered page source that will be output on the screen.
 		$this->response = $this->navigation->helper->render($this->tpl, $title);
 
 	}
@@ -136,7 +141,6 @@ class viewWelcome implements iViews
 	 */
 	private function dateDiff($epoch)
 	{
-		$dateDiff = '';
 		$epoch = $epoch / 1000;
 		$datetime1 = new \DateTime("@$epoch");
 		$datetime2 = new \DateTime();
@@ -148,25 +152,30 @@ class viewWelcome implements iViews
 		$mon=$interval->format('%m');
 		$day=$interval->format('%d');
 		$year=$interval->format('%y');
-		if($interval->format('%i%h%d%m%y')=="00000") {
+		if ($interval->format('%i%h%d%m%y')=="00000")
+		{
 			//echo $interval->format('%i%h%d%m%y')."<br>";
 			$dateDiff= $sec." Seconds";
 
 		}
 
-		else if($interval->format('%h%d%m%y')=="0000") {
+		else if ($interval->format('%h%d%m%y')=="0000")
+		{
 			$dateDiff= $min." Minutes";
 		}
 
-		else if($interval->format('%d%m%y')=="000") {
+		else if ($interval->format('%d%m%y')=="000")
+		{
 			$dateDiff= $hour." Hours";
 		}
 
-		else if($interval->format('%m%y')=="00") {
+		else if ($interval->format('%m%y')=="00")
+		{
 			$dateDiff= $day." Days";
 		}
 
-		else if($interval->format('%y')=="0") {
+		else if ($interval->format('%y')=="0")
+		{
 			$dateDiff= $mon." Months";
 		}
 

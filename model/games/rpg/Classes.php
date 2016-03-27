@@ -369,7 +369,7 @@ class Classes
 							AND l.attribute='class' AND l.language= '" . $config['bbguild_lang'] . "'",
 		'ORDER_BY' => $order );
 
-		if($mode == 0) {
+		if ($mode == 0) {
 			$sql_array['WHERE'] .=    'AND c.class_id = ' . $this->class_id;
 		}
 

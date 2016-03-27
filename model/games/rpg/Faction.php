@@ -102,13 +102,13 @@ class Faction
 
 	/**
 	 * Faction class constructor
+	 *
+	 * @param $game_id
 	 */
-	public function __construct()
+	public function __construct($game_id)
 	{
-		$this->game_id='';
-		$this->faction_id=0;
-		$this->faction_name='';
-		$this->faction_hide=0;
+		$this->game_id=$game_id;
+		$this->get();
 	}
 
 	/**
@@ -204,7 +204,8 @@ class Faction
 		$result = $db->sql_query($sql);
 		$factioncount = (int) $db->sql_fetchfield('factioncount');
 
-		if ($factioncount == 0) {
+		if ($factioncount == 0)
+		{
 			$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $this->faction_id . " AND game_id = '" .   $this->game_id . "'"  ;
 			$db->sql_query($sql);
 			$cache->destroy('sql', FACTION_TABLE);

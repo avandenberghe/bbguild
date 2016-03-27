@@ -7,7 +7,7 @@
 
 namespace bbdkp\bbguild\controller;
 
-use bbdkp\bbguild\views\viewNavigation;
+use bbdkp\bbguild\views\viewnavigation;
 
 class view_controller
 {
@@ -130,7 +130,7 @@ class view_controller
 	public function handleGuild($guild_id, $page)
 	{
 		if (in_array($page, $this->valid_views)) {
-			$Navigation = new viewNavigation(
+			$Navigation = new viewnavigation(
 				$page, $this->request, $this->user,
 				$this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
 				$this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id

@@ -534,6 +534,19 @@ class Game
 		$db->sql_freeresult($result);
 
 		return $gamelist;
+	}
+
+	/**
+	 * updates the default game flag
+	 *
+	 * @param int $id
+	 */
+	public function update_gamedefault($id)
+	{
+		global $config;
+		$config->set('bbguild_default_game', $id, true);
 
 	}
+
+
 }

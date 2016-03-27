@@ -111,7 +111,7 @@ class bbguild_module extends Admin
 
         // list all guild except noguild
         $guildlist = $guilds->guildlist(1);
-        if(count($guildlist) == 0) {
+        if (count($guildlist) == 0) {
             trigger_error('ERROR_NOGUILD', E_USER_WARNING);
         }
         $mode = ($mode == '' ? 'characters' :$mode);
@@ -148,11 +148,11 @@ class bbguild_module extends Admin
             $show_buttons = true;
             $s_guildplayers = ' ';
             //if user has no access to claiming chars, don't show the add button.
-            if(!$this->auth->acl_get('u_charclaim')) {
+            if (!$this->auth->acl_get('u_charclaim')) {
                 $show_buttons = false;
             }
 
-            if($player->has_reached_maxbbguildaccounts()) {
+            if ($player->has_reached_maxbbguildaccounts()) {
                 $show_buttons = false;
             }
 
@@ -175,7 +175,7 @@ class bbguild_module extends Admin
 
                 $player->listallplayers($guilds->guildid, true);
 
-                if(count($player->guildplayerlist) > 0) {
+                if (count($player->guildplayerlist) > 0) {
                     foreach ($player->guildplayerlist as $id => $m  )
                     {
                         $s_guildplayers .= '<option value="' . $m['player_id'] .'">'. $m['rank_name']  . ' ' . $m['player_name'] . '-' . $m['player_realm'] . '</option>';
@@ -221,9 +221,9 @@ class bbguild_module extends Admin
             $update     = $this->request->is_set_post('update');
             $delete     = $this->request->is_set_post('delete');
             if ($submit || $update || $delete ) {
-                if($delete) {
+                if ($delete) {
                     // check if user can delete character
-                    if(!$this->auth->acl_get('u_chardelete') ) {
+                    if (!$this->auth->acl_get('u_chardelete') ) {
                         trigger_error($this->user->lang['NOUCPDELCHARS']);
                     }
 
@@ -254,14 +254,14 @@ class bbguild_module extends Admin
 
                 }
 
-                if($submit) {
+                if ($submit) {
                     // add character
                     if (!check_form_key('characteradd')) {
                         trigger_error('FORM_INVALID');
                     }
 
                     $newplayer = new Player();
-                    if($newplayer->has_reached_maxbbguildaccounts()) {
+                    if ($newplayer->has_reached_maxbbguildaccounts()) {
                         trigger_error(sprintf($this->user->lang['MAX_CHARS_EXCEEDED'], $this->config['bbguild_maxchars']), E_USER_WARNING);
                     }
 
@@ -308,14 +308,14 @@ class bbguild_module extends Admin
                     }
                 }
 
-                if($update) {
+                if ($update) {
                     //update
                     if (!check_form_key('characteradd')) {
                         trigger_error('FORM_INVALID');
                     }
 
                     // check if user can update character
-                    if(!$this->auth->acl_get('u_charupdate') ) {
+                    if (!$this->auth->acl_get('u_charupdate') ) {
                         trigger_error($this->user->lang['NOUCPUPDCHARS']);
                     }
                     $updateplayer = $this->UpdateMyCharacter($player_id);
@@ -404,17 +404,17 @@ class bbguild_module extends Admin
         $this->user->add_lang(array('mods/admin'));
         $show=true;
 
-        if($player_id == 0) {
+        if ($player_id == 0) {
             // check if user can add character
-            if(!$this->auth->acl_get('u_charadd') ) {
+            if (!$this->auth->acl_get('u_charadd') ) {
                 trigger_error($this->user->lang['NOUCPADDCHARS']);
             }
 
-            if(!$this->auth->acl_get('u_charclaim')) {
+            if (!$this->auth->acl_get('u_charclaim')) {
                 trigger_error($this->user->lang['NOUCPADDCHARS']);
             }
 
-            if($players->has_reached_maxbbguildaccounts()) {
+            if ($players->has_reached_maxbbguildaccounts()) {
                 $show=false;
                 $this->template->assign_vars(
                     array(
@@ -437,25 +437,25 @@ class bbguild_module extends Admin
         foreach ($guildlist as $g)
         {
             //assign guild_id property
-            if($players->player_guild_id == 0) {
+            if ($players->player_guild_id == 0) {
                 //if there is a default guild
-                if($g['guilddefault'] == 1) {
+                if ($g['guilddefault'] == 1) {
                     $players->player_guild_id = $g['id'];
                 }
 
                 //if player count > 0
-                if($players->player_guild_id == 0 && $g['playercount'] > 1) {
+                if ($players->player_guild_id == 0 && $g['playercount'] > 1) {
                     $players->player_guild_id = $g['id'];
                 }
 
                 //if guild id field > 0
-                if($players->player_guild_id == 0 && $g['id'] > 0) {
+                if ($players->player_guild_id == 0 && $g['id'] > 0) {
                     $players->player_guild_id = $g['id'];
                 }
             }
 
             //populate guild popup
-            if($g['id'] > 0) // exclude guildless
+            if ($g['id'] > 0) // exclude guildless
             {
                 $this->template->assign_block_vars(
                     'guild_row', array(
@@ -664,12 +664,12 @@ class bbguild_module extends Admin
 
         // check if user can add character
         $S_UPDATE = true;
-        if(!$this->auth->acl_get('u_charupdate') ) {
+        if (!$this->auth->acl_get('u_charupdate') ) {
             $S_UPDATE = false;
         }
 
         $S_DELETE = true;
-        if(!$this->auth->acl_get('u_chardelete') ) {
+        if (!$this->auth->acl_get('u_chardelete') ) {
             $S_DELETE = false;
         }
 

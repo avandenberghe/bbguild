@@ -86,11 +86,11 @@ class player_module extends Admin
 			$Guild = new Guilds();
 
 			$guildlist = $Guild->guildlist(1);
-			if(count((array) $guildlist) == 0  ) {
+			if (count((array) $guildlist) == 0  ) {
 				trigger_error('ERROR_NOGUILD', E_USER_WARNING);
 			}
 
-			if(count((array) $guildlist) == 1 ) {
+			if (count((array) $guildlist) == 1 ) {
 				$Guild->guildid = $guildlist[0]['id'];
 				$Guild->name = $guildlist[0]['name'];
 				if ($Guild->guildid == 0 && $Guild->name == 'Guildless' ) {
@@ -123,13 +123,13 @@ class player_module extends Admin
 			}
 
 			$sortlink = isset($_GET[URI_GUILD])  ? true : false;
-			if($sortlink) {
+			if ($sortlink) {
 				// user selected dropdown - get guildid
 				$Guild->guildid = $this->request->variable(URI_GUILD, 0);
 			}
 
 			$charapicall = $this->request->is_set_post('charapicall');
-			if($charapicall) {
+			if ($charapicall) {
 				if (confirm_box(true)) {
 					list($i, $log) = $this->CallCharacterAPI();
 					trigger_error(sprintf($this->user->lang['CHARAPIDONE'], $i, $log), E_USER_NOTICE);
@@ -466,7 +466,7 @@ class player_module extends Admin
 			$diff = \round(\abs((\time() - $last_update)) / 86400, 2);
 
 			// 1 days ago ? call armory
-			if($diff > 1) {
+			if ($diff > 1) {
 				$i += 1;
 				if ($log != '') { $log .= ', ';
 				}

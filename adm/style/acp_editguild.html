@@ -19,6 +19,15 @@
                     <legend>{L_EDIT_GUILD_TITLE}</legend>
                     <div class="tablewrap">
                         <dl>
+                            <dt><label for="game_id">{L_GAME}:</label></dt>
+                            <dd>
+                                <select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
+                                    <!-- BEGIN game_row -->
+                                    <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+                                    <!-- END game_row -->
+                                </select></dd>
+                        </dl>
+                        <dl>
                             <dt><label for="guild_name">{L_GUILD_NAME}:</label></dt>
                             <dd><input class="medium" type="text" id="guild_name" name="guild_name" value="{GUILD_NAME}" /></dd>
                         </dl>
@@ -38,6 +47,17 @@
                             </dd>
                         </dl>
                         <dl>
+                            <dt>
+                                <label for="faction_id">{L_FACTION}:</label></dt>
+                            <dd>
+                                <select id="faction_id" name="faction_id" class="input">
+                                    <!-- BEGIN faction_row -->
+                                    <option value="{faction_row.VALUE}"{faction_row.SELECTED}>{faction_row.OPTION}</option>
+                                    <!-- END faction_row -->
+                                </select>
+                            </dd>
+                        </dl>
+                        <dl>
                             <dt><label for="guild_emblem">{L_GUILD_EMBLEM}:</label>{L_GUILD_EMBLEM_EXPLAIN}
                             </dt>
                             <dd>
@@ -45,15 +65,7 @@
                                 <input type="text" size="40" id="guild_emblem" name="guild_emblem" value="{EMBLEMFILE}" />
                             </dd>
                         </dl>
-                        <dl>
-                            <dt><label for="game_id">{L_GAME}:</label></dt>
-                            <dd>
-                                <select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
-                                    <!-- BEGIN game_row -->
-                                    <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-                                    <!-- END game_row -->
-                                </select></dd>
-                        </dl>
+
                         <dl>
                             <dt><label>{L_PLAYERCOUNT}:</label></dt>
                             <dd>{PLAYERCOUNT}</dd>

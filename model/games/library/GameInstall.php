@@ -112,8 +112,7 @@ abstract class GameInstall
 
 		$db->sql_transaction('begin');
 
-		$factions = new Faction;
-		$factions->game_id = $this->game_id;
+		$factions = new Faction($this->game_id);
 		$factions->Delete_all_factions();
 
 		$races = new Races;

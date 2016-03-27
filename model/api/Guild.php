@@ -79,7 +79,7 @@ class Guild extends Resource
 	{
 		global $user;
 
-		if(empty($name)) {
+		if (empty($name)) {
 			trigger_error($user->lang['WOWAPI_NO_GUILD']);
 		}
 

@@ -19,52 +19,67 @@ use phpbb\request\request;
 use phpbb\user;
 use phpbb\template\template;
 
-class viewNavigation extends Admin implements iViews
+/**
+ * Class viewNavigation
+ *
+ * @package bbdkp\bbguild\views
+ */
+class viewnavigation extends Admin implements iViews
 {
 
 	/**
- * @var request
-*/
+	* @var request
+	*/
 	public $request;
+
 	/**
- * @var \phpbb\user
-*/
+	* @var \phpbb\user
+	*/
 	public $user;
+
 	/**
- * @var \phpbb\template\template
-*/
+	* @var \phpbb\template\template
+	*/
 	public $template;
+
 	/**
- * @var driver_interface
-*/
+	* @var driver_interface
+	*/
 	public $db;
+
 	/**
- * @var config
-*/
+	* @var config
+	*/
 	public $config;
+
 	/**
- * @var helper
-*/
+	* @var helper
+	*/
 	public $helper;
+
 	/**
- * @var pagination $pagination
-*/
+	* @var pagination $pagination
+	*/
 	public $pagination;
+
 	/**
- * @var extension path
-*/
+	* @var extension path
+	*/
 	public $ext_path;
+
 	/**
- * @var webroot extension path
-*/
+	 * @var webroot extension path
+	*/
 	public $ext_path_web;
+
 	/**
- * @var webroot image extension path
-*/
+	* @var webroot image extension path
+	*/
 	public $ext_path_images;
+
 	/**
- * @var string
-*/
+	* @var string
+	*/
 	public $root_path;
 
 	/**
@@ -80,28 +95,6 @@ class viewNavigation extends Admin implements iViews
 	 * @var string
 	 */
 	private $game_id;
-
-	/**
-	 * filter by pool ?
-	 *
-	 * @var boolean
-	 */
-	private $query_by_pool = true;
-
-	/**
-	 * pool id
-	 *
-	 * @var integer
-	 */
-	private $dkpsys_id = 0;
-	private $defaultpool = 0;
-
-	/**
-	 * name of pool
-	 *
-	 * @var string
-	 */
-	private $dkpsys_name = '';
 
 	/**
 	 * filter by armor ?
@@ -153,7 +146,12 @@ class viewNavigation extends Admin implements iViews
 
 	private $page;
 
-	public $guilds;
+	/**
+	 * @type Guilds
+	 */
+	public $guild;
+
+	private $guildlist;
 
 	/**
 	 * @return array
@@ -310,28 +308,123 @@ class viewNavigation extends Admin implements iViews
 		$this->guild_id = $guild_id;
 
 		$this->buildNavigation();
+		$this->buildpage();
 	}
 
-	/**
-	 *
-	 */
 	public function buildpage()
 	{
+		$this->template->assign_vars(
+			array(
+				// Form values
+				'S_GUILDDROPDOWN'    => count($this->guildlist) > 1 ? true : false,
+				'U_WELCOME'           => $this->helper->route(
+					'bbdkp_bbguild_00',
+					array(
+						'guild_id' => $this->guild_id,
+						'page' => 'welcome'
+					)
+				),
+				'U_ROSTER'           => $this->helper->route(
+					'bbdkp_bbguild_00',
+					array(
+						'guild_id' => $this->guild_id,
+						'page' => 'roster'
+					)
+				),
+				'FACTION'            => $this->guild->faction,
+				'FACTION_NAME'       => $this->guild->factionname,
+				'GAME_ID'            => $this->guild->game_id,
+				'GUILD_ID'           => $this->guild_id,
+				'GUILD_NAME'         => $this->guild->name,
+				'REALM'              => $this->guild->realm,
+				'REGION'             => $this->guild->region,
+				'PLAYERCOUNT'        => $this->guild->playercount ,
+				'ARMORY_URL'         => $this->guild->guildarmoryurl ,
+				'MIN_ARMORYLEVEL'    => $this->guild->min_armory ,
+				'SHOW_ROSTER'        => $this->guild->showroster,
+				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guild->emblempath),
+				'EMBLEMFILE'         => basename($this->guild->emblempath),
+				'ARMORY'             => $this->guild->guildarmoryurl,
+				'ACHIEV'             => $this->guild->achievementpoints,
+				'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
+			)
+		);
 
 	}
 
 	private function buildNavigation()
 	{
 
-		$this->show_all = ( $this->request->variable('show', $this->request->variable('hidden_show', '')) == $this->user->lang['ALL']) ? true : false;
-
-		$a = $this->guild_id;
-		$b = $this->request->variable('hidden_guild_id', 0);
-		$c = $this->request->variable(URI_GUILD, 0);
-
 		$this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id', $this->guild_id));
-		$guildlist = $this->getGuildinfo();
+		$this->guildlist = $this->getGuildinfo();
+		$this->BuildRosterNavigation();
+	}
 
+	/**
+	 * Build Guild Sidebar
+	 *
+	 * @return array
+	 */
+	private function getGuildinfo()
+	{
+		$this->guild = new Guilds();
+		$guildlist = $this->guild->guildlist(1);
+		if (count($guildlist) > 0)
+		{
+			//loop the guilds
+			foreach ($guildlist as $g)
+			{
+				if ($this->guild_id==0)
+				{
+					//if there is a default guild
+					if ($g['guilddefault'] == 1)
+					{
+						$this->guild_id = $g['id'];
+					}
+					else if ($g['playercount'] > 1)
+					{
+						$this->guild_id = $g['id'];
+					}
+
+					//if guild id field still 0
+					if ($this->guild_id == 0 && $g['id'] > 0)
+					{
+						$this->guild_id = $g['id'];
+					}
+				}
+
+				//populate guild popup
+				if ($g['id'] > 0) // exclude guildless
+				{
+					$this->template->assign_block_vars(
+						'guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
+							'OPTION' =>  $g['name'])
+					);
+				}
+			}
+
+		}
+		else
+		{
+			trigger_error('ERROR_NOGUILD', E_USER_WARNING);
+		}
+
+		$this->guild->guildid = $this->guild_id;
+		$this->guild->Getguild();
+		$this->game_id = $this->guild->game_id;
+
+		return $guildlist;
+	}
+
+	/**
+	 *
+	 */
+	private function BuildRosterNavigation()
+	{
+
+		$this->show_all = ( $this->request->variable('show', $this->request->variable('hidden_show', '')) == $this->user->lang['ALL']) ? true : false;
 		$this->race_id =  $this->request->variable('race_id', 0);
 		$this->level1 =  $this->request->variable('level1', 0);
 		$this->level2 =  $this->request->variable('level2', 200);
@@ -360,129 +453,9 @@ class viewNavigation extends Admin implements iViews
 			}
 		}
 
-		$mode = $this->request->variable('rosterlayout', 0);
-
-		$this->template->assign_vars(
-			array(
-			// Form values
-
-			'S_GUILDDROPDOWN'    => count($guildlist) > 1 ? true : false,
-			'U_WELCOME'           => $this->helper->route(
-				'bbdkp_bbguild_00',
-				array(
-					'guild_id' => $this->guild_id,
-					'page' => 'welcome'
-				)
-			),
-				'U_ROSTER'           => $this->helper->route(
-					'bbdkp_bbguild_00',
-					array(
-					'guild_id' => $this->guild_id,
-					'page' => 'roster'
-					)
-				),
-				/*'U_PLAYER'   		=> $this->helper->route('bbdkp_bbguild_00',
-                array(
-                    'guild_id' => $this->guild_id,
-                    'page' => 'player'
-                )),
-                'U_STATS'   		=> $this->helper->route('bbdkp_bbguild_00',
-                array(
-                    'guild_id' => $this->guild_id,
-                    'page' => 'stats'
-                )),
-                'U_RAIDS'   		=> $this->helper->route('bbdkp_bbguild_00',
-                array(
-                    'guild_id' => $this->guild_id,
-                    'page' => 'raids'
-                )),
-                'U_NEWS'  			=> $this->helper->route('bbdkp_bbguild_00',
-                array(
-                    'guild_id' => $this->guild_id,
-                    'page' => 'news'
-                )),
-                */
-				'FACTION'            => $this->guilds->faction,
-				'FACTION_NAME'       => $this->guilds->factionname,
-				'GAME_ID'            => $this->guilds->game_id,
-				'GUILD_ID'           => $this->guild_id,
-				'GUILD_NAME'         => $this->guilds->name,
-				'REALM'              => $this->guilds->realm,
-				'REGION'             => $this->guilds->region,
-				'PLAYERCOUNT'        => $this->guilds->playercount ,
-				'ARMORY_URL'         => $this->guilds->guildarmoryurl ,
-				'MIN_ARMORYLEVEL'    => $this->guilds->min_armory ,
-				'SHOW_ROSTER'        => $this->guilds->showroster,
-				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guilds->emblempath),
-				'EMBLEMFILE'         => basename($this->guilds->emblempath),
-				'ARMORY'             => $this->guilds->guildarmoryurl,
-				'ACHIEV'             => $this->guilds->achievementpoints,
-				'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
-			)
-		);
-
-		$a=1;
-
 	}
 
-	/**
-	 * Build Guild Sidebar
-	 *
-	 * @return array
-	 */
-	private function getGuildinfo()
-	{
-		$this->guilds = new Guilds();
 
-		$guildlist = $this->guilds->guildlist(1);
-		if (count($guildlist) > 0)
-		{
-			foreach ($guildlist as $g)
-			{
-				//assign guild_id property
-				if ($this->guild_id==0)
-				{
-					//if there is a default guild
-					if ($g['guilddefault'] == 1)
-					{
-						$this->guild_id = $g['id'];
-					}
-					else if ($g['playercount'] > 1)
-					{
-						$this->guild_id = $g['id'];
-					}
-
-					//if guild id field still 0
-					if ($this->guild_id == 0 && $g['id'] > 0)
-					{
-						$this->guild_id = $g['id'];
-					}
-				}
-
-				//populate guild popup
-				if ($g['id'] > 0) // exclude guildless
-				{
-					$this->template->assign_block_vars(
-						'guild_row', array(
-						'VALUE' => $g['id'] ,
-						'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
-						'OPTION' =>  $g['name'])
-					);
-				}
-			}
-
-		}
-		else
-		{
-			trigger_error('ERROR_NOGUILD', E_USER_WARNING);
-		}
-
-		$this->guilds->guildid = $this->guild_id;
-		$this->guilds->Getguild();
-		$this->game_id = $this->guilds->game_id;
-
-		return $guildlist;
-	}
 
 	/**
 	 * Armor listing

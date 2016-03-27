@@ -656,7 +656,7 @@ class log
 			}
 		}
 
-		if($verbose == false) {
+		if ($verbose == false) {
 			$sql_array['ORDER_BY'] = $order;
 			$sql = $db->sql_build_query('SELECT', $sql_array);
 			$result = $db->sql_query_limit($sql, 30);
@@ -705,7 +705,7 @@ class log
 	public function getLogMessage($value, $verbose = false)
 	{
 		global $user;
-		if($verbose) {
+		if ($verbose) {
 			return $user->lang['VLOG_' . self::$valid_action_types[constant("self::$value")]];
 		}
 		else

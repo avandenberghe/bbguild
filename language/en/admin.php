@@ -696,6 +696,7 @@ $lang = array_merge(
 	'ADMIN_ADD_RECRUITMENT_SUCCESS' => 'Recruitment %s was added',
 	'ADMIN_UPDATE_RECRUITMENT_SUCCESS' => 'Recruitment %s was updated',
 	'ADMIN_DELETE_RECRUITMENT_SUCCESS' => 'Recruitment %s was deleted',
+	'ADMIN_UPDATE_DEFAULTGAME_SUCCESS' => 'Default Game is now %s',
 
 
 	// Configuration
@@ -710,7 +711,8 @@ $lang = array_merge(
 	'DEFAULT_REALM'    => 'Default Realm',
 	'DEFAULT_PERMISSIONS' => 'Default Permissions',
 	'DOWNLOAD'   => 'Download',
-	'DEFAULT_GAME' => 'Installed games',
+	'DEFAULT_GAME' => 'Default game',
+	'INSTALLED_GAMES' => 'Installed games',
 	'GAME_ID' => 'Game id',
 	'EVENTS_PER_PAGE' => 'Events per Page',
 	'GAME' => 'Game',

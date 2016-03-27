@@ -59,6 +59,18 @@
                     </dd>
                 </dl>
 
+                <dl>
+                    <dt>
+                        <label for="faction_id">{L_FACTION}:</label></dt>
+                    <dd>
+                        <select id="faction_id" name="faction_id" class="input">
+                            <!-- BEGIN faction_row -->
+                            <option value="{faction_row.VALUE}"{faction_row.SELECTED}>{faction_row.OPTION}</option>
+                            <!-- END faction_row -->
+                        </select>
+                    </dd>
+                </dl>
+
 
                 <dl>
                     <dt><label for="showroster">{L_SHOWONROSTER}:</label></dt>

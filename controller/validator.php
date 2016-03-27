@@ -229,7 +229,7 @@ class validator
 	{
 		global $user;
 
-		if(!$this->isValid()) {
+		if (!$this->isValid()) {
 			$out     ='';
 			foreach($this->getErrors() as $field => $messages)
 			{

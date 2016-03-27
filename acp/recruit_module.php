@@ -95,7 +95,7 @@ class recruit_module  extends Admin
 		$this->apply_installed = false;
 		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
-		if(isset($plugin_versioninfo['apply'])) {
+		if (isset($plugin_versioninfo['apply'])) {
 			$this->apply_installed = true;
 		}
 
@@ -147,7 +147,7 @@ class recruit_module  extends Admin
 			$add = $this->request->is_set_post('add');
 			$update = $this->request->is_set_post('update');
 			$action = $this->request->variable('action', '');
-			if($this->apply_installed) {
+			if ($this->apply_installed) {
 				//if apply is installed then fetch list of templates
 				$result = $this->db->sql_query('SELECT * FROM ' . APPTEMPLATELIST_TABLE);
 				$apply_templates = array();
@@ -158,7 +158,7 @@ class recruit_module  extends Admin
 				$this->db->sql_freeresult($result);
 			}
 
-			if($action=='delete') {
+			if ($action=='delete') {
 				$recruit->id = $this->request->variable('id', 0);
 				$recruit->get($recruit->id);
 				$recruit->delete();
@@ -198,7 +198,7 @@ class recruit_module  extends Admin
 
 			}
 
-			if($this->apply_installed) {
+			if ($this->apply_installed) {
 				foreach($apply_templates as $apply_template_id => $value)
 				{
 					$this->template->assign_block_vars(
@@ -237,7 +237,7 @@ class recruit_module  extends Admin
 				trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 			}
-			else if($update) {
+			else if ($update) {
 				$recruit->update();
 				$success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
 				trigger_error($success_message . $this->link, E_USER_NOTICE);

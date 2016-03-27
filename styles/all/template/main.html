@@ -4,7 +4,13 @@
         <div class="profile-sidebar-outer">
             <div class="profile-sidebar-inner">
                 <div class="profile-sidebar-contents">
+                    <!-- IF S_GUILD_ALLIANCE -->
                     <div class="profile-wrapper-alliance">
+                    <!-- ELSEIF S_GUILD_HORDE -->
+                    <div class="profile-wrapper-horde">
+                    <!-- ELSE -->
+                    <div class="profile-wrapper-other">
+                    <!-- ENDIF -->
                         <div class="profile-info-anchor profile-guild-info-anchor">
                             <div class="guild-tabard">
                                 <img src="{EMBLEM}" alt="{GUILD_NAME}" />

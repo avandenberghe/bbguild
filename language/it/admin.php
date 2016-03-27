@@ -677,11 +677,11 @@ $lang = array_merge(
 	'DEFAULT_REALM'    => 'Reame di Default',
 	'DEFAULT_PERMISSIONS' => 'Permissions di Default',
 	'DOWNLOAD'   => 'Download',
-	'DEFAULT_GAME' => 'Giochi Installati',
+	'DEFAULT_GAME' => 'Giochi predefinita',
+	'INSTALLED_GAMES' => 'Giochi Installati',
 	'GAME_ID' => 'ID gioco',
 	'EVENTS_PER_PAGE' => 'Eventi per Pagina',
 	'GAME' => 'Gioco',
-
 	'GENERAL_SETTINGS' => 'Impostazioni Generali',
 	'GUILDTAG' => 'NomeGilda / NomeAlleanza',
 	'GUILDTAG_NOTE' => 'Usato nel titolo in ogni pagina',

@@ -21,6 +21,8 @@ There will be a number of extensions that enhance bbGuild
  - bbGameWorld Raid progress extension 
  - bbRaidCalendar extension. 
 
+See todo.md for upcoming changes. 
+
 Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
@@ -49,11 +51,22 @@ Find support and more on
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
 ### Changelog 
-- 2.0.0a4 - 13/03/2016
-  - [NEW] - guild news page added, Blizzard news feed data 
-- 2.0.0a2 - 21/02/2016
-  - [NEW] - viewcontroller is now done, with a first frontpage : the guild roster. 
-- 2.0.0a1 - not released
+- 2.0.0a5 27/03/2016
+  - [NEW] Front Page design updated to look like Blizzard Armory
+  - [NEW] WoW emblem generator now makes 200px emblems (should be made configurable)    
+  - [NEW] GW2 : initial support for GW2 api, added GW2 Revenant profession
+  - [NEW] WoW : added Demon hunter class
+  - [CHG] Faction id now added to Guild class. can be set on Guild creation. 
+          For WoW, the front page design depends on the Faction of the Guild. 
+          Horde guilds will have a watermark horde symbol. 
+  - [NEW] Default game setting added. This is needed when populating the Faction drop down in 'new Guild' ACP.
+  - [FIX] Roster member filter now works
+     
+- 2.0.0a4 13/03/2016
+  - [NEW] guild news page added, Blizzard news feed data 
+- 2.0.0a2 21/02/2016
+  - [NEW] viewcontroller is now done, with a first frontpage : the guild roster. 
+- 2.0.0a1 not released
   - [NEW] Conversion to extension
   - [CHG] Functionality reductions : DKP no longer part of core. 
 

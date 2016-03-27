@@ -37,6 +37,26 @@
 <p>{L_ACP_NEWGAME_EXPLAIN} {L_PREINSTALLED}</p>
 
 <fieldset style="background-color: #EEEEEE">
+    <legend>{L_DEFAULT_GAME}</legend>
+    <dl>
+        <dt>
+            {L_DEFAULT_GAME}
+        </dt>
+        <dd>
+            <form id="acp_listgames" method="post" action="{U_ACTION}">
+                <select name="defaultgame" class="input" id="defaultgame">
+                    <!-- BEGIN defaultgame_row -->
+                    <option value="{defaultgame_row.VALUE}"{defaultgame_row.SELECTED}>{defaultgame_row.OPTION}</option>
+                    <!-- END defaultgame_row -->
+                </select>
+                <input type="submit" name="upddefaultgame" value="{L_CONFIRM}" class="button1" />
+            </form>
+        </dd>
+    </dl>
+</fieldset>
+
+
+<fieldset style="background-color: #EEEEEE">
     <legend>{L_ADD_GAME}</legend>
     <!-- IF CANINSTALL == 1 -->
     <form id="acp_listgames" method="post" action="{U_ACTION}">
