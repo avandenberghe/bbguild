@@ -91,7 +91,7 @@
 .profile-info .name {
     color: white;
     float: left;
-    font-size: 56px;
+    font-size: 36px;
     font-weight: bold;
     left: -3px;
     letter-spacing: -0.05em;
@@ -197,13 +197,13 @@ ul.profile-sidebar-menu a .arrow {
 }
 
 .profile-section {
-    background: rgba(0, 0, 0, 0) url("./images/section-bg.png") no-repeat scroll 0 0;
+    /*background: rgba(0, 0, 0, 0) url("./images/section-bg.png") no-repeat scroll 0 0;*/
     min-height: 400px;
     padding: 15px;
 }
 
 .profile-contents {
-    margin-left: 230px;
+    margin-left: 200px;
     min-height: 807px;
     padding-bottom: 40px;
 }
@@ -240,94 +240,6 @@ ul.profile-sidebar-menu a .arrow {
 
 .color-blizz, .color-blizz a {
     color: #ffb100;
-}
-
-/*fixed width left pane*/
-#bbguildleftside
-{
-    display: table;
-    display: table-cell;
-    vertical-align: top;
-}
-
-
-#bbguildmiddle
-{
-    display: table-cell;
-    vertical-align: top;
-    padding-left: 3px;
-}
-
-
-#bbguildrightside
-{
-    display: table-cell;
-    vertical-align: top;
-    width: 180px;
-    padding-left: 3px;
-    float: left;
-}
-
-
-
-
-
-/* the left menu
---------------------------------------------- */
-.portalmenu ul
-{
-    list-style-type: none;
-    margin: 0 0 8px;
-    padding: 0;
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-image: none;
-    background-origin: padding-box;
-    background-position: 0 0;
-    background-repeat: repeat-x;
-    background-size: auto auto;
-    list-style-image: none;
-    list-style-position: outside;
-    margin-bottom: 1px;
-    margin-left: 1px;
-    margin-right: 1px;
-    margin-top: 1px;
-    padding-bottom: 2px;
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-top: 2px;
-    text-align: center;
-}
-
-.portalmenu ul li {
-    background-position: 0 2px;
-    background-repeat: no-repeat;
-    line-height: 14px;
-    padding-left: 20px;
-    text-align: left;
-    background-image: url("./images/menu.png");
-}
-
-.portalmenu a {
-    font-size: 105%;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 0px;
-    padding: 4px 0px 0px 1px;
-    text-decoration: none;
-}
-
-.portalmenu a:hover {
-    color: #D31141;
-}
-
-.bbguildheader {
-    color: #71401f;
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: -0.05em;
-    line-height: 1.1em;
-    white-space: nowrap;
 }
 
 

@@ -92,10 +92,6 @@ class viewwelcome implements iViews
 			array(
 			'EMBLEM'                =>  $this->navigation->guild->emblempath,
 			'GUILD_FACTION'         =>  $this->navigation->guild->factionname,
-			'GUILD_REALM'           =>  $this->navigation->guild->realm,
-			'GUILD_REGION'          =>  $this->navigation->guild->region,
-			'GUILD_NAME'            =>  $this->navigation->guild->name,
-			'S_GUILD_ALLIANCE'      => ( $this->navigation->guild->game_id == 'wow' &&  $this->navigation->guild->faction == 1) ? true: false,
 			'WELCOME_MESSAGE'        => $welcometext,
 			'S_DISPLAY_WELCOME'     => true,
 			)
