@@ -1,7 +1,7 @@
 # ext/bbdkp/bbguild/config/routing.yml
 bbdkp_bbguild_00:
     path: /guild/{page}/{guild_id}
-    defaults: { _controller: bbdkp.bbguild.controller:handleGuild , guild_id: 1, page: welcome }
+    defaults: { _controller: bbdkp.bbguild.controller:handleguild , guild_id: 1, page: welcome }
     requirements:
         guild_id: \d*
         page: news|roster|welcome|player|stats|raids
