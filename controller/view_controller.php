@@ -12,60 +12,60 @@ use bbdkp\bbguild\views\viewnavigation;
 class view_controller
 {
 	/**
- * @var \phpbb\auth\auth
-*/
+ 	* @var \phpbb\auth\auth
+	*/
 	protected $auth;
 	/**
- * @var \phpbb\config\config
-*/
+ 	* @var \phpbb\config\config
+	*/
 	protected $config;
 	/**
- * @var \phpbb\controller\helper
-*/
+ 	* @var \phpbb\controller\helper
+	*/
 	protected $helper;
 	/**
- * @var \phpbb\template\template
-*/
+ 	* @var \phpbb\template\template
+	*/
 	protected $template;
 	/**
- * @var \phpbb\db\driver\driver_interface
-*/
+ 	* @var \phpbb\db\driver\driver_interface
+	*/
 	protected $db;
 	/**
- * @var \phpbb\request\request
-*/
+ 	* @var \phpbb\request\request
+	*/
 	protected $request;
 	/**
- * @var \phpbb\user
-*/
+ 	* @var \phpbb\user
+	*/
 	protected $user;
 	/**
- * @var string
-*/
+ 	* @var string
+	*/
 	protected $phpEx;
 	/**
- * @var \phpbb\pagination
-*/
+ 	* @var \phpbb\pagination
+	*/
 	protected $pagination;
 	/**
- * @var \phpbb\extension\manager
-*/
+ 	* @var \phpbb\extension\manager
+	*/
 	protected $phpbb_extension_manager;
 	/**
- * @var string
-*/
+ 	* @var string
+	*/
 	protected $ext_path;
 	/**
- * @var string
-*/
+ 	* @var string
+	*/
 	protected $ext_path_web;
 	/**
- * @var string
-*/
+ 	* @var string
+	*/
 	protected $ext_path_images;
 	/**
- * @var string
-*/
+ 	* @var string
+	*/
 	protected $root_path;
 
 	/**
@@ -127,7 +127,7 @@ class view_controller
 	* @param  $page
 	* @return \Symfony\Component\HttpFoundation\Response
 	*/
-	public function handleGuild($guild_id, $page)
+	public function handleguild($guild_id, $page)
 	{
 		if (in_array($page, $this->valid_views)) {
 			$Navigation = new viewnavigation(
