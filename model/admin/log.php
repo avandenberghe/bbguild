@@ -525,7 +525,7 @@ class log
 			'log_result'    => 'L_SUCCESS',
 			'log_userid'    => $user->data['user_id']);
 
-		if (sizeof($values) > 0 )
+		if (count($values) > 0 )
 		{
 			// If they set the value, we use theirs, otherwise we use the default
 			foreach ($log_fields as $field)
@@ -568,15 +568,15 @@ class log
 					//$values['log_action'] = json_encode( (array) $values['log_action']);
 
 					// make xml with
-					$str_action="<log>";
+					$str_action= '<log>';
 					foreach ($values['log_action'] as $key => $value)
 					{
-						$str_action .= "<" . $key . ">" . $value . "</" . $key . ">";
+						$str_action .= '<' . $key . '>' . $value . '</' . $key . '>';
 					}
-					$str_action .="</log>";
+					$str_action .= '</log>';
 					$str_action = substr($str_action, 0, strlen($str_action));
 					// Take the newlines and tabs (or spaces > 1) out
-					$str_action = preg_replace("/[[:space:]]{2,}/", '', $str_action);
+					$str_action = preg_replace('/[[:space:]]{2,}/', '', $str_action);
 					$str_action = str_replace("\t", '', $str_action);
 					$str_action = str_replace("\n", '', $str_action);
 					$str_action = preg_replace("#(\\\){1,}#", "\\", $str_action);
@@ -792,7 +792,7 @@ class log
 			$logline = sprintf($this->getLogMessage('HISTORY_TRANSFER', $verbose), $userstring, $log['L_FROM'], $log['L_TO']);
 			break;
 		case 'INDIVADJ_ADDED':
-			$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count(explode(",", $log['L_PLAYERS'])), $log['L_PLAYERS']);
+			$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count(explode(',', $log['L_PLAYERS'])), $log['L_PLAYERS']);
 			break;
 		case 'INDIVADJ_UPDATED':
 			$logline = sprintf($this->getLogMessage('INDIVADJ_UPDATED', $verbose), $userstring, $log['L_ADJUSTMENT_BEFORE'], $log['L_PLAYERS_AFTER']);

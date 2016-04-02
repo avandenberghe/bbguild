@@ -180,13 +180,13 @@ class main_module extends admin
 
 				$this->template->assign_vars(
 					array(
-						'GLYPH' => $this->ext_path . "adm/images/glyphs/view.gif" ,
+						'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
 						'NUMBER_OF_PLAYERS' => $total_players ,
 						'NUMBER_OF_GUILDS' => $total_guildcount ,
 						'BBGUILD_STARTED' => $bbguild_started,
 						'BBGUILD_VERSION'    => BBGUILD_VERSION,
 						'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=panel&amp;versioncheck_force=1'),
-						'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $this->user->lang['NA'],
+						'GAMES_INSTALLED' => count($this->games) > 0 ? implode(', ', $this->games) : $this->user->lang['NA'],
 						'PLUGINS_INSTALLED' => $plugins_installed,
 					)
 				);
@@ -267,16 +267,16 @@ class main_module extends admin
 
 				$this->template->assign_block_vars(
 					'hide_row', array(
-						'VALUE' => "YES" ,
+						'VALUE' => 'YES',
 						'SELECTED' => ($config['bbguild_hide_inactive'] == 1) ? ' selected="selected"' : '' ,
-						'OPTION' => "YES")
+						'OPTION' => 'YES')
 				);
 
 				$this->template->assign_block_vars(
 					'hide_row', array(
-						'VALUE' => "NO" ,
+						'VALUE' => 'NO',
 						'SELECTED' => ($config['bbguild_hide_inactive'] == 0) ? ' selected="selected"' : '' ,
-						'OPTION' => "NO")
+						'OPTION' => 'NO')
 				);
 
 				// Default Region
@@ -474,7 +474,7 @@ class main_module extends admin
 						if ($deletemark)
 						{
 							//if marked array isnt empty
-							if (sizeof($marked) && is_array($marked))
+							if (count($marked) && is_array($marked))
 							{
 
 								if (confirm_box(true))
@@ -484,7 +484,7 @@ class main_module extends admin
 									$log_action = array(
 										'header' => 'L_ACTION_LOG_DELETED' ,
 										'L_ADDED_BY' => $this->user->data['username'] ,
-										'L_LOG_ID' => implode(",", $logs->delete_log($marked)));
+										'L_LOG_ID' => implode(',', $logs->delete_log($marked)));
 
 									$this->log_insert(
 										array(

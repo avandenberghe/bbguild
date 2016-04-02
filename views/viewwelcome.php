@@ -155,36 +155,36 @@ class viewwelcome implements iviews
 		$mon=$interval->format('%m');
 		$day=$interval->format('%d');
 		$year=$interval->format('%y');
-		if ($interval->format('%i%h%d%m%y')=="00000")
+		if ($interval->format('%i%h%d%m%y')== '00000')
 		{
 			//echo $interval->format('%i%h%d%m%y')."<br>";
-			$dateDiff= $sec." Seconds";
+			$dateDiff= $sec. ' Seconds';
 
 		}
 
-		else if ($interval->format('%h%d%m%y')=="0000")
+		else if ($interval->format('%h%d%m%y')== '0000')
 		{
-			$dateDiff= $min." Minutes";
+			$dateDiff= $min. ' Minutes';
 		}
 
-		else if ($interval->format('%d%m%y')=="000")
+		else if ($interval->format('%d%m%y')== '000')
 		{
-			$dateDiff= $hour." Hours";
+			$dateDiff= $hour. ' Hours';
 		}
 
-		else if ($interval->format('%m%y')=="00")
+		else if ($interval->format('%m%y')== '00')
 		{
-			$dateDiff= $day." Days";
+			$dateDiff= $day. ' Days';
 		}
 
-		else if ($interval->format('%y')=="0")
+		else if ($interval->format('%y')== '0')
 		{
-			$dateDiff= $mon." Months";
+			$dateDiff= $mon. ' Months';
 		}
 
 		else
 		{
-			$dateDiff= $year." Years";
+			$dateDiff= $year. ' Years';
 		}
 		return $dateDiff;
 	}

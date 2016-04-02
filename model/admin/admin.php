@@ -169,7 +169,7 @@ class admin
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
 
-			if ($response === false || $response === "" )
+			if ($response === false || $response === '')
 			{
 				trigger_error(curl_error($curl), E_USER_WARNING);
 			}

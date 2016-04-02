@@ -773,7 +773,7 @@ class guilds extends admin
 
 		// check existing guild-realmname
 		$result = $db->sql_query(
-			"SELECT count(*) as evcount from " . GUILD_TABLE . "
+			'SELECT count(*) as evcount from ' . GUILD_TABLE . "
 			WHERE id !=0 AND UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 			AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'"
 		);
@@ -784,7 +784,7 @@ class guilds extends admin
 			trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 		}
 
-		$result = $db->sql_query("SELECT MAX(id) as id FROM " . GUILD_TABLE . ";");
+		$result = $db->sql_query('SELECT MAX(id) as id FROM ' . GUILD_TABLE . ';');
 		$row = $db->sql_fetchrow($result);
 		$this->guildid = (int) $row['id'] + 1;
 
@@ -880,7 +880,7 @@ class guilds extends admin
 		{
 			// check existing guild-realmname
 			$result = $db->sql_query(
-				"SELECT count(*) as evcount from " . GUILD_TABLE . "
+				'SELECT count(*) as evcount from ' . GUILD_TABLE . "
 				WHERE UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 				AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'"
 			);
@@ -968,11 +968,11 @@ class guilds extends admin
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		$imgfile = $this->ext_path . "images/guildemblem/". $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+		$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
 
 		if (file_exists($imgfile))
 		{
-			$fp = fopen($imgfile, "r+");
+			$fp = fopen($imgfile, 'r+');
 			// try to  acquire an exclusive lock
 			if (flock($fp, LOCK_EX))
 			{
@@ -1008,8 +1008,8 @@ class guilds extends admin
 	private function create_emblem($width = 200)
 	{
 		//location to create the file
-		$imgfile = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
-		$outputpath = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
+		$imgfile = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
+		$outputpath = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name). '.png';
 
 		if (file_exists($imgfile) and $width==(imagesx(imagecreatefrompng($imgfile))) and (filemtime($imgfile)+86000) > time())
 		{
@@ -1040,13 +1040,13 @@ class guilds extends admin
 
 			$imgOut = imagecreatetruecolor(215, 230);
 
-			$emblemURL = $this->ext_path  ."images/wowapi/emblems/emblem_".sprintf("%02s", $this->emblem['icon']).".png";
-			$borderURL = $this->ext_path  ."images/wowapi/borders/border_".sprintf("%02s", $this->emblem['border']).".png";
-			$ringURL = $this->ext_path  ."images/wowapi/static/ring-".$ring.".png";
-			$shadowURL = $this->ext_path  ."images/wowapi/static/shadow_00.png";
-			$bgURL = $this->ext_path  ."images/wowapi/static/bg_00.png";
-			$overlayURL = $this->ext_path  ."images/wowapi//static/overlay_00.png";
-			$hooksURL = $this->ext_path  ."images/wowapi/static/hooks.png";
+			$emblemURL = $this->ext_path  . 'images/wowapi/emblems/emblem_' .sprintf('%02s', $this->emblem['icon']). '.png';
+			$borderURL = $this->ext_path  . 'images/wowapi/borders/border_' .sprintf('%02s', $this->emblem['border']). '.png';
+			$ringURL = $this->ext_path  . 'images/wowapi/static/ring-' .$ring. '.png';
+			$shadowURL = $this->ext_path  . 'images/wowapi/static/shadow_00.png';
+			$bgURL = $this->ext_path  . 'images/wowapi/static/bg_00.png';
+			$overlayURL = $this->ext_path  . 'images/wowapi//static/overlay_00.png';
+			$hooksURL = $this->ext_path  . 'images/wowapi/static/hooks.png';
 			//$levelURL = $this->ext_path  ."images/wowapi/static/";
 
 			imagesavealpha($imgOut, true);
@@ -1430,7 +1430,7 @@ class guilds extends admin
 					'ON'    => 'a.id = c.player_guild_id '
 				)
 			),
-			'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $guild_id,
+			'WHERE' => ' a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= ' . $guild_id,
 			'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
 			'ORDER_BY' => ' a.guilddefault desc,  count(c.player_id) desc, a.id asc'
 		);
@@ -1469,7 +1469,7 @@ class guilds extends admin
 		{
 			return false;
 		}
-		if ($this->guildid == "0")
+		if ($this->guildid == '0')
 		{
 			return false;
 		}

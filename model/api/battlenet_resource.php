@@ -179,7 +179,7 @@ abstract class battlenet_resource extends admin
 			$date = date('D, d M Y G:i:s T', time());
 			$string_to_sign = "GET\n".$date."\n".$requestUri."\n";
 			$signature = base64_encode(hash_hmac('sha1', $string_to_sign, $this->privkey, true));
-			$header = array("Host: ".$this->region,"Date: ". $date,"Authorization: BNET ". $this->apikey.":". $signature);
+			$header = array('Host: ' .$this->region, 'Date: ' . $date, 'Authorization: BNET ' . $this->apikey. ':' . $signature);
 			$data = $this->curl($requestUri, $header, false, true);
 			$this->cache->put($cachesignature, $data, $this->cacheTtl);
 		}

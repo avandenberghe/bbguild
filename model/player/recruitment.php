@@ -264,10 +264,10 @@ class Recruitment extends roles
 			3 => $user->lang['HIGH']);
 
 		$this->classreccolor = array(
-			0 => "bullet_white.png",
-			1 => "bullet_yellow.png",
-			2 => "bullet_red.png",
-			3 => "bullet_purple.png");
+			0 => 'bullet_white.png',
+			1 => 'bullet_yellow.png',
+			2 => 'bullet_red.png',
+			3 => 'bullet_purple.png');
 	}
 
 	/**
@@ -397,11 +397,11 @@ class Recruitment extends roles
 
 		$sql_array = array(
 
-			'SELECT'   => " u.id, u.guild_id, u.role_id,
+			'SELECT'   => ' u.id, u.guild_id, u.role_id,
                 u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level, u.applytemplate_id,
                 r.role_color, r.role_icon, r.role_cat_icon, r1.name as role_name,
                 c1.name as class_name, c.colorcode, c.imagename
-                 ",
+                 ',
 
 			'FROM'     => array(
 				BBRECRUIT_TABLE   => 'u',
@@ -450,11 +450,11 @@ class Recruitment extends roles
 	{
 		global $db;
 		$sql_array = array(
-		'SELECT'   => " g.id, g.name, g.emblemurl, rec_status, recruitforum  ",
+		'SELECT'   => ' g.id, g.name, g.emblemurl, rec_status, recruitforum  ',
 			'FROM'     => array(
 				GUILD_TABLE     => 'g',
 				BBRECRUIT_TABLE => 'r'),
-			'WHERE'    => "r.guild_id = g.id ",
+			'WHERE'    => 'r.guild_id = g.id ',
 			'GROUP_BY' => ' g.name ',
 			'ORDER_BY' => ' g.name ');
 		$sql    = $db->sql_build_query('SELECT', $sql_array);

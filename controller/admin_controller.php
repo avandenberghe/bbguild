@@ -139,7 +139,7 @@ class admin_controller
 	public function getFaction($game_id)
 	{
 
-		$sql = "SELECT faction_id, faction_name FROM " . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
+		$sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
 		$result = $this->db->sql_query($sql);
 
 		$data =array();

@@ -276,7 +276,7 @@ class player_module extends admin
 		}
 		else
 		{
-			$sql = "SELECT player_name, player_id FROM " . PLAYER_LIST_TABLE . " WHERE " . $this->db->sql_in_set('player_id', array_keys($players_to_delete));
+			$sql = 'SELECT player_name, player_id FROM ' . PLAYER_LIST_TABLE . ' WHERE ' . $this->db->sql_in_set('player_id', array_keys($players_to_delete));
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
@@ -345,8 +345,8 @@ class player_module extends admin
 		if ($newplayer->player_id > 0)
 		{
 			//record added. now update some stats
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
-			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date("F j, Y, g:i a"));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id));
+			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date('F j, Y, g:i a'));
 
 			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
@@ -354,7 +354,7 @@ class player_module extends admin
 		}
 		else
 		{
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id));
 
 			$failure_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_FAIL'], ucwords($newplayer->player_name));
 			trigger_error($failure_message . $this->link, E_USER_WARNING);
@@ -422,8 +422,8 @@ class player_module extends admin
 		$old_player->Getplayer();
 		$updateplayer->Updateplayer($old_player);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id));
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id));
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_SUCCESS'], $updateplayer->player_name);
 		trigger_error($success_message . $this->link);
 
@@ -441,10 +441,10 @@ class player_module extends admin
 		$deleteplayer->Deleteplayer();
 		$success_message = sprintf($this->user->lang['ADMIN_DELETE_PLAYERS_SUCCESS'], $deleteplayer->player_name);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $deleteplayer->player_guild_id));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $deleteplayer->player_guild_id));
 		$this->link = '<br /><a href="' . append_sid(
 				"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' .
-				URI_GUILD . "=" . $deleteplayer->player_guild_id
+				URI_GUILD . '=' . $deleteplayer->player_guild_id
 			) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 
 		trigger_error($success_message . $this->link, E_USER_WARNING);
@@ -617,9 +617,9 @@ class player_module extends admin
 					'LEVEL'                => ($row['player_level'] > 0) ? $row['player_level'] : '&nbsp;',
 					'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
 					'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
-					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . "images/class_images/" . $row['imagename'] . ".png" : '',
+					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . "images/race_images/" . $race_image . ".png" : '',
+					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . 'images/race_images/' . $race_image . '.png' : '',
 					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
 					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
 					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbguild_date_format'] . ' H:i:s', $row['last_update']),
@@ -638,11 +638,11 @@ class player_module extends admin
 		$pagination_url = append_sid(
 			"{$phpbb_admin_path}index.$phpEx",
 			'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri']['current'] .
-			"&amp;" . URI_GUILD . "=" . $Guild->getGuildid() .
-			"&amp;minlevel=" . $minlevel .
-			"&amp;maxlevel=" . $maxlevel .
-			"&amp;active="   . $selectactive .
-			"&amp;nonactive=" . $selectnonactive
+			'&amp;' . URI_GUILD . '=' . $Guild->getGuildid() .
+			'&amp;minlevel=' . $minlevel .
+			'&amp;maxlevel=' . $maxlevel .
+			'&amp;active=' . $selectactive .
+			'&amp;nonactive=' . $selectnonactive
 		);
 
 		$playerpagination->generate_template_pagination($pagination_url, 'pagination', 'start', $player_count, $config['bbguild_user_llimit'], $start, true);
@@ -662,46 +662,46 @@ class player_module extends admin
 				'L_TITLE'               => $this->user->lang['ACP_MM_LISTPLAYERS'],
 				'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTPLAYERS_EXPLAIN'],
 				'O_NAME'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_USERNAME'            => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_LEVEL'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_CLASS'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_RANK'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_LAST_UPDATE'         => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'O_ID'                  => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
-					"&amp;maxlevel=" . $maxlevel .
-					"&amp;active=" . $selectactive .
-					"&amp;nonactive=" . $selectnonactive
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
 				),
 				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;'),
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
@@ -968,8 +968,8 @@ class player_module extends admin
 			'FROM'     => array(
 				USERS_TABLE => 'u'),
 			// exclude bots and guests, order by name -- ticket  129
-			'WHERE'    => " u.group_id != 6 and u.group_id != 1 ",
-			'ORDER_BY' => " u.username ASC");
+			'WHERE'    => ' u.group_id != 6 and u.group_id != 1 ',
+			'ORDER_BY' => ' u.username ASC');
 		$sql           = $this->db->sql_build_query('SELECT', $sql_array);
 		$result        = $this->db->sql_query($sql);
 		$s_phpbb_user  = '<option value="0"' . (($phpbb_user_id == 0) ? ' selected="selected"' : '') . '>--</option>';

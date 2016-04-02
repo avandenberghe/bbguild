@@ -1099,8 +1099,8 @@ class game_module extends admin
 		}
 		unset($listfactions);
 
-		$femalesize = getimagesize($this->ext_path . "images/race_images/" . $races->image_female . ".png", $info);
-		$malesize = getimagesize($this->ext_path . "images/race_images/" . $races->image_male . ".png", $info);
+		$femalesize = getimagesize($this->ext_path . 'images/race_images/' . $races->image_female . '.png', $info);
+		$malesize = getimagesize($this->ext_path . 'images/race_images/' . $races->image_male . '.png', $info);
 		$femalesizewarning ='';
 		$malesizewarning ='';
 		if ($femalesize[0] > 32 || $femalesize[0] >32)
@@ -1122,9 +1122,9 @@ class game_module extends admin
 				'RACE_IMAGENAME_M'      => $races->image_male,
 				'FIMAGEWARNING'         => $femalesizewarning,
 				'MIMAGEWARNING'         => $malesizewarning,
-				'RACE_IMAGE_M'          => (strlen($races->image_male) > 1) ? $this->ext_path . "images/race_images/" . $races->image_male . ".png" : '',
+				'RACE_IMAGE_M'          => (strlen($races->image_male) > 1) ? $this->ext_path . 'images/race_images/' . $races->image_male . '.png' : '',
 				'RACE_IMAGENAME_F'      => $races->image_female,
-				'RACE_IMAGE_F'          => (strlen($races->image_female) > 1) ? $this->ext_path . "images/race_images/" . $races->image_female . ".png" : '',
+				'RACE_IMAGE_F'          => (strlen($races->image_female) > 1) ? $this->ext_path . 'images/race_images/' . $races->image_female . '.png' : '',
 				'S_RACE_IMAGE_M_EXISTS' => (strlen($races->image_male) > 1) ? true : false,
 				'S_RACE_IMAGE_F_EXISTS' => (strlen($races->image_female) > 1) ? true : false,
 				'S_FACTIONLIST_OPTIONS' => $s_faction_options,
@@ -1176,7 +1176,7 @@ class game_module extends admin
 			$selected = ($armor == $GameClass->armor_type) ? ' selected="selected"' : '';
 			$s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
 		}
-		$size = getimagesize($this->ext_path . "images/class_images/" . $GameClass->imagename . ".png", $info);
+		$size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
 
 		$warning ='';
 		if ($size[0] > 32 || $size[0] >32)
@@ -1198,7 +1198,7 @@ class game_module extends admin
 				'IMAGEWARNING'         => $warning,
 				'CLASS_IMAGENAME'      => $GameClass->imagename,
 				'COLORCODE'            => ($GameClass->colorcode == '') ? '#254689' : $GameClass->colorcode,
-				'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $this->ext_path . "images/class_images/" . $GameClass->imagename . ".png" : '',
+				'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png' : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
 				'S_ADD'                => false,
 				'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addclass'),
@@ -1297,7 +1297,7 @@ class game_module extends admin
 				'ROLE_ID'            => $role->role_id,
 				'ROLE_CAT_ICON'      => $role->role_cat_icon,
 				'ROLE_ICON'          => $role->role_icon,
-				'ROLE_ICON_IMG'      => (strlen($role->role_icon) > 1) ? $this->ext_path . "images/role_icons/" . $role->role_icon . ".png" : '',
+				'ROLE_ICON_IMG'      => (strlen($role->role_icon) > 1) ? $this->ext_path . 'images/role_icons/' . $role->role_icon . '.png' : '',
 				'ROLE_COLOR'         => $role->role_color,
 				'GAME_ID'            => $role->game_id,
 				'GAME_NAME'          => $editgame->getName(),
@@ -1378,8 +1378,8 @@ class game_module extends admin
 					'RACEID' => $race['race_id'],
 					'RACENAME' => $race['race_name'],
 					'FACTIONNAME' => $race['faction_name'],
-					'RACE_IMAGE_M' => (strlen($race['image_male']) > 1) ? $this->ext_path . 'images/race_images/' . $race['image_male'] . ".png" : '',
-					'RACE_IMAGE_F' => (strlen($race['image_female']) > 1) ? $this->ext_path . 'images/race_images/' . $race['image_female'] . ".png" : '',
+					'RACE_IMAGE_M' => (strlen($race['image_male']) > 1) ? $this->ext_path . 'images/race_images/' . $race['image_male'] . '.png' : '',
+					'RACE_IMAGE_F' => (strlen($race['image_female']) > 1) ? $this->ext_path . 'images/race_images/' . $race['image_female'] . '.png' : '',
 					'S_RACE_IMAGE_M_EXISTS' => (strlen($race['image_male']) > 1) ? true : false,
 					'S_RACE_IMAGE_F_EXISTS' => (strlen($race['image_female']) > 1) ? true : false,
 					'U_VIEW_RACE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addrace&amp;r=' . $race['race_id'] . '&amp;' . URI_GAME ."={$listraces->game_id}"),
@@ -1411,12 +1411,12 @@ class game_module extends admin
 					'ROLE_COLOR'     => $role['role_color'],
 					'ROLE_ICON'         => $role['role_icon'],
 					'S_ROLE_ICON_EXISTS'    =>  (strlen($role['role_icon']) > 0) ? true : false,
-					'U_ROLE_ICON'     => (strlen($role['role_icon']) > 0) ? $this->ext_path . "images/role_icons/" . $role['role_icon'] . ".png" : '',
+					'U_ROLE_ICON'     => (strlen($role['role_icon']) > 0) ? $this->ext_path . 'images/role_icons/' . $role['role_icon'] . '.png' : '',
 					'ROLE_CAT_ICON'         => $role['role_cat_icon'],
 					'S_ROLE_CAT_ICON_EXISTS'    =>  (strlen($role['role_cat_icon']) > 0) ? true : false,
-					'U_ROLE_CAT_ICON'     => (strlen($role['role_cat_icon']) > 0) ? $this->ext_path . "images/role_icons/" . $role['role_cat_icon'] . ".png" : '',
-					'U_DELETE'         => $this->u_action. '&amp;action=deleterole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id  ,
-					'U_EDIT'         => $this->u_action. '&amp;action=editrole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id,
+					'U_ROLE_CAT_ICON'     => (strlen($role['role_cat_icon']) > 0) ? $this->ext_path . 'images/role_icons/' . $role['role_cat_icon'] . '.png' : '',
+					'U_DELETE'         => $this->u_action. '&amp;action=deleterole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . '=' . $editgame->game_id  ,
+					'U_EDIT'         => $this->u_action. '&amp;action=editrole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . '=' . $editgame->game_id,
 				)
 			);
 		}
@@ -1429,7 +1429,7 @@ class game_module extends admin
 			3 => array ('class_armor_type', 'class_armor_type, class_id desc'),
 			4 => array ('class_min_level', 'class_min_level, class_id desc' ),
 			5 => array ('class_max_level', 'class_max_level, class_id desc' ));
-		$current_order2 = $this->switch_order($sort_order2, "o1");
+		$current_order2 = $this->switch_order($sort_order2, 'o1');
 		$total_classes = 0;
 
 		$listclasses = new  classes();
@@ -1450,7 +1450,7 @@ class game_module extends admin
 					'CLASSMAX' => $class['class_max_level'],
 					'CLASSHIDE' => $class['class_hide'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen($class['imagename']) > 1) ? true : false,
-					'CLASSIMAGE' => (strlen($class['imagename']) > 1) ? $this->ext_path . "images/class_images/" . $class['imagename'] . ".png" : '',
+					'CLASSIMAGE' => (strlen($class['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $class['imagename'] . '.png' : '',
 					'U_VIEW_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addclass&amp;r=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
 					'U_DELETE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;classdelete=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
 					'U_EDIT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;classedit=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id) )

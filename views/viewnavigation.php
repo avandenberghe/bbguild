@@ -357,7 +357,7 @@ class viewnavigation extends admin implements iviews
 				'ARMORY_URL'         => $this->guild->getGuildarmoryurl() ,
 				'MIN_ARMORYLEVEL'    => $this->guild->getMinArmory() ,
 				'SHOW_ROSTER'        => $this->guild->getShowroster(),
-				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guild->getEmblempath()),
+				'EMBLEM'             => $this->ext_path_images . 'guildemblem/' . basename($this->guild->getEmblempath()),
 				'EMBLEMFILE'         => basename($this->guild->getEmblempath()),
 				'ARMORY'             => $this->guild->getGuildarmoryurl(),
 				'ACHIEV'             => $this->guild->getAchievementpoints(),
@@ -462,7 +462,7 @@ class viewnavigation extends admin implements iviews
 			{
 				// looking for a class
 				$this->query_by_class = true;
-				$t = explode("_", $this->filter);
+				$t = explode('_', $this->filter);
 				$this->class_id = count($t) > 1 ? $t[2]: 0;
 				$this->query_by_armor = false;
 			}

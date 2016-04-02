@@ -311,11 +311,11 @@ class bbguild_module extends admin
 						if ($newplayer->player_id > 0)
 						{
 							// record added.
-							$newplayer->player_comment = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date("F j, Y, g:i a"));
+							$newplayer->player_comment = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date('F j, Y, g:i a'));
 							$newplayer->Armory_getplayer();
 							$newplayer->Updateplayer($newplayer);
 							meta_refresh(1, $this->u_action . '&amp;player_id=' . $newplayer->player_id);
-							$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date("F j, Y, g:i a"));
+							$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date('F j, Y, g:i a'));
 							trigger_error($success_message, E_USER_NOTICE);
 						}
 						else
@@ -581,13 +581,13 @@ class bbguild_module extends admin
 		{
 			if ($row['class_min_level'] <= 1  )
 			{
-				$option = ( !empty($row['class_name']) ) ? $row['class_name'] . "
-				 Level (". $row['class_min_level'] . " - ".$row['class_max_level'].")" : '(None)';
+				$option = ( !empty($row['class_name']) ) ? $row['class_name'] . '
+				 Level (' . $row['class_min_level'] . ' - ' .$row['class_max_level']. ')' : '(None)';
 			}
 			else
 			{
-				$option = ( !empty($row['class_name']) ) ? $row['class_name'] . "
-				 Level ". $row['class_min_level'] . "+" : '(None)';
+				$option = ( !empty($row['class_name']) ) ? $row['class_name'] . '
+				 Level ' . $row['class_min_level'] . '+' : '(None)';
 			}
 
 			if ($player_id > 0)
@@ -777,7 +777,7 @@ class bbguild_module extends admin
 		{
 			$this->template->assign_block_vars(
 				'players_row', array(
-					'U_EDIT'        => append_sid("{$phpbb_root_path}ucp.$phpEx", "i=dkp&amp;mode=characteradd&amp;". URI_NAMEID . '=' . $char['player_id']),
+					'U_EDIT'        => append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=dkp&amp;mode=characteradd&amp;' . URI_NAMEID . '=' . $char['player_id']),
 					'GAME'            => $char['game_id'],
 					'COLORCODE'        => $char['colorcode'],
 					'CLASS'            => $char['class_name'],
@@ -812,8 +812,8 @@ class bbguild_module extends admin
 					PLAYER_LIST_TABLE     => 'l',
 				),
 				'WHERE'     => "l.player_id = m.player_id and l.player_status = 1 and m.player_dkpid = d.dkpsys_id and d.dkpsys_status='Y' and m.player_id = " . $char['player_id'],
-				'GROUP_BY'  => " d.dkpsys_id, d.dkpsys_name " ,
-				'ORDER_BY'    => " d.dkpsys_name ",
+				'GROUP_BY'  => ' d.dkpsys_id, d.dkpsys_name ',
+				'ORDER_BY'    => ' d.dkpsys_name ',
 			);
 
 			$sql2 = $this->db->sql_build_query('SELECT', $sql_array2);
@@ -825,7 +825,7 @@ class bbguild_module extends admin
 						'DKPSYS'        => $row2['dkpsys_name'],
 						'U_VIEW_PLAYER' => append_sid(
 							"{$phpbb_root_path}dkp.$phpEx",
-							"page=player&amp;". URI_NAMEID . '=' . $char['player_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id']
+							'page=player&amp;' . URI_NAMEID . '=' . $char['player_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id']
 						),
 						'EARNED'       => $row2['ep'],
 						'SPENT'        => $row2['gp'],

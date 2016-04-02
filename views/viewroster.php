@@ -84,7 +84,7 @@ class viewroster implements iviews
 			$this->display_grid($players, $classes, $characters, $base_url, $start);
 		}
 
-		if ((sizeof($this->navigation->games) > 1))
+		if ((count($this->navigation->games) > 1))
 		{
 			$this->navigation->template->assign_vars(
 				array(
@@ -146,7 +146,7 @@ class viewroster implements iviews
 			foreach ($classes as $classid => $class)
 			{
 				//$web_root_path 	= $this->navigation->path_helper->get_web_root_path();
-				$classimgurl = $this->navigation->ext_path_images . "roster_classes/" . $class['imagename'] . '.png';
+				$classimgurl = $this->navigation->ext_path_images . 'roster_classes/' . $class['imagename'] . '.png';
 
 				$classcolor  = $class['colorcode'];
 
@@ -178,8 +178,8 @@ class viewroster implements iviews
 								'PHPBBUID'    => $row2['username'],
 								'PORTRAIT'    => $row2['player_portrait_url'],
 								'ACHIEVPTS'   => $row2['player_achiev'],
-								'CLASS_IMAGE' => $this->navigation->ext_path_images . "class_images/" . basename($row2['class_image']),
-								'RACE_IMAGE'  => $this->navigation->ext_path_images . "race_images/" . basename($row2['race_image']),
+								'CLASS_IMAGE' => $this->navigation->ext_path_images . 'class_images/' . basename($row2['class_image']),
+								'RACE_IMAGE'  => $this->navigation->ext_path_images . 'race_images/' . basename($row2['race_image']),
 							)
 						);
 						$classplayers++;
@@ -194,7 +194,7 @@ class viewroster implements iviews
 
 			$rosterpagination = $this->navigation->pagination->generate_template_pagination($base_url, 'pagination', 'start', count($characters[0]), $this->navigation->config['bbguild_user_llimit'], $start, true);
 
-			if (isset($characters[1]) && sizeof($characters[1]) > 0)
+			if (isset($characters[1]) && count($characters[1]) > 0)
 			{
 				$this->navigation->template->assign_vars(
 					array(
@@ -256,8 +256,8 @@ class viewroster implements iviews
 					'PHPBBUID'      => $char['username'],
 					'PORTRAIT'      => $char['player_portrait_url'],
 					'ACHIEVPTS'     => $char['player_achiev'],
-					'CLASS_IMAGE'   => $this->navigation->ext_path_images . "class_images/" . basename($char['class_image']),
-					'RACE_IMAGE'    => $this->navigation->ext_path_images . "race_images/" . basename($char['race_image']),
+					'CLASS_IMAGE'   => $this->navigation->ext_path_images . 'class_images/' . basename($char['class_image']),
+					'RACE_IMAGE'    => $this->navigation->ext_path_images . 'race_images/' . basename($char['race_image']),
 				)
 			);
 		}

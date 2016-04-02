@@ -295,7 +295,7 @@ class recruit_module extends admin
 					'CLASS_NAME'        => $row['class_name'],
 					'COLOR_CODE'        => $row['colorcode'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'CLASS_IMAGE'       => (strlen($row['imagename']) > 1) ? $this->ext_path . "images/class_images/" . $row['imagename'] . ".png" : '',
+					'CLASS_IMAGE'       => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
 					'POSITIONS'         => $row['positions'],
 					'APPLICANTS'        => $row['applicants'],
 					'STATUS'            => $row['status'] == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
