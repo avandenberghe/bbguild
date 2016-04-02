@@ -280,8 +280,7 @@ class Ranks extends guilds
 	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 
-		$result = $db->sql_query($sql);
-		return $result;
+		return $db->sql_query($sql);
 
 	}
 

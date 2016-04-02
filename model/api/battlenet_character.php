@@ -80,11 +80,11 @@ class battlenet_character extends battlenet_resource
 	 * @param  array  $fields
 	 * @return mixed
 	 */
-	public function getCharacter($name = '', $realm = '', $fields = array())
+	public function getCharacter($name = '', $realm = '', array $fields)
 	{
 		global $user;
 
-		if (empty($name))
+		if ($name == '')
 		{
 			trigger_error($user->lang['WOWAPI_NO_CHARACTER']);
 		}
@@ -92,7 +92,7 @@ class battlenet_character extends battlenet_resource
 		/* caution input has to be utf8 */
 		/* RFC 3986 as per http://us.battle.net/wow/en/forum/topic/3050125211 */
 		$name = rawurlencode($name);
-		if (empty($realm))
+		if ($realm == '')
 		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}

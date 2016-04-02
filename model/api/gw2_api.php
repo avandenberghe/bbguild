@@ -476,7 +476,7 @@ class gw2_api
 		if (!$this->_result = $this->_getCachedResult($requestUri))
 		{
 
-			$this->_executeCurl($requestUri, $ttl);
+			$this->_executeCurl($requestUri);
 
 			$this->cache->put($requestUri, $this->_result, $ttl);
 		}
@@ -601,8 +601,8 @@ class gw2_api
 	protected function _saveCache($key, $data, $ttl = null)
 	{
 
-			$ttl = ($ttl ? $ttl : $this->_cacheTtl);
-			$this->cache->put($key, $data, $ttl);
+		$ttl = ($ttl ? $ttl : $this->_cacheTtl);
+		$this->cache->put($key, $data, $ttl);
 
 	}
 

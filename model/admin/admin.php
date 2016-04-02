@@ -200,7 +200,7 @@ class admin
 	 * @param $string
 	 * @return bool check if is json
 	 */
-	function isJSON($string)
+	public function isJSON($string)
 	{
 		return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
 	}
@@ -267,7 +267,7 @@ class admin
 		if ($latest_version_a === false || $force_update)
 		{
 			$data = $this->curl(BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
-			if (empty($data))
+			if (0 === count($data) )
 			{
 				$cache->destroy('latest_bbguild');
 				if ($warn_fail)
@@ -339,13 +339,10 @@ class admin
 
 		foreach ((array) $sort_order as $key => $value)
 		{
+			$uri_element2 = 0;
 			if ($element1 == $key )
 			{
 				$uri_element2 = ( $element2 == 0 ) ? 1 : 0;
-			}
-			else
-			{
-				$uri_element2 = 0;
 			}
 			$current_order['uri'][$key] = $key . '.' . $uri_element2;
 		}
@@ -369,8 +366,7 @@ class admin
 		$stringToRemoveLen = strlen($stringToRemove);
 		$stringLen = strlen($string);
 		$pos = $stringLen - $stringToRemoveLen;
-		$out = substr($string, 0, $pos);
-		return $out;
+		return substr($string, 0, $pos);
 	}
 
 	/**
@@ -386,7 +382,7 @@ class admin
 	 * log_result    varchar(255)    utf8_bin        No
 	 * log_userid    mediumint(8)    UNSIGNED    No    0
 	 *
-	 * @param  array $values
+	 * @param array $values
 	 * @return bool
 	 */
 	public final function log_insert($values = array())

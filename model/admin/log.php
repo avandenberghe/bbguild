@@ -486,7 +486,7 @@ class log
 	 * @param  array $values
 	 * @return boolean
 	 */
-	public static function log_insert($values = array())
+	public static function log_insert(array $values)
 	{
 		global $db, $user;
 		/**
@@ -644,7 +644,7 @@ class log
 		{
 
 			// Check if it's a valid log type
-			if (array_search($search_term, self::$valid_action_types))
+			if (in_array($search_term, self::$valid_action_types))
 			{
 				$sql_array['WHERE'] = " u.user_id=l.log_userid
                     AND ( l.log_type='" . $db->sql_escape('L_ACTION_' . $search_term) . "'
@@ -855,58 +855,49 @@ class log
 			break;
 		case 'DECAYSYNC':
 
+			$origin = '';
 			if (isset($log['L_ORIGIN']))
 			{
 				$origin = $log['L_ORIGIN'];
 			}
-			else
-			{
-				$origin = '';
-			}
+
 			$logline = sprintf($this->getLogMessage('DECAYSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] : 0) . ' ' . $origin;
 			break;
 		case 'DECAYOFF':
+
+			$origin = '';
 			if (isset($log['L_ORIGIN']))
 			{
 				$origin = $log['L_ORIGIN'];
 			}
-			else
-			{
-				$origin = '';
-			}
+
 			$logline = sprintf($this->getLogMessage('DECAYOFF', $verbose), $userstring, $origin);
 			break;
 		case 'ZSYNC':
+			$origin = '';
 			if (isset($log['L_ORIGIN']))
 			{
 				$origin = $log['L_ORIGIN'];
 			}
-			else
-			{
-				$origin = '';
-			}
+
 			$logline = sprintf($this->getLogMessage('ZSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] :0) . ' '. $origin;
 			break;
 		case 'DKPSYNC':
+			$origin = '';
 			if (isset($log['L_ORIGIN']))
 			{
 				$origin = $log['L_ORIGIN'];
 			}
-			else
-			{
-				$origin = '';
-			}
+
 			$logline = sprintf($this->getLogMessage('DKPSYNC', $verbose), $userstring) . ' '. $origin;
 			break;
 		case 'DEFAULT_DKP_CHANGED':
+			$origin = '';
 			if (isset($log['L_ORIGIN']))
 			{
 				$origin = $log['L_ORIGIN'];
 			}
-			else
-			{
-				$origin = '';
-			}
+
 			$logline = sprintf($this->getLogMessage('DEFAULT_DKP_CHANGED', $verbose), $userstring, $origin);
 			break;
 		case 'GUILD_ADDED':

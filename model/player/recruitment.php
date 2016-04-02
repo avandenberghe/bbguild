@@ -435,9 +435,7 @@ class Recruitment extends roles
 		}
 
 		$sql          = $db->sql_build_query('SELECT', $sql_array);
-		$result       = $db->sql_query($sql);
-
-		return $result;
+		return $db->sql_query($sql);
 	}
 
 
@@ -458,8 +456,7 @@ class Recruitment extends roles
 			'GROUP_BY' => ' g.name ',
 			'ORDER_BY' => ' g.name ');
 		$sql    = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		return $result;
+		return $db->sql_query($sql);
 
 	}
 }

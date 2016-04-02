@@ -75,16 +75,16 @@ class battlenet_guild extends battlenet_resource
 	 * @param  array  $fields
 	 * @return mixed
 	 */
-	public function getGuild($name = '', $realm = '', $fields = array())
+	public function getGuild($name = '', $realm = '', array $fields)
 	{
 		global $user;
 
-		if (empty($name))
+		if ($name == '')
 		{
 			trigger_error($user->lang['WOWAPI_NO_GUILD']);
 		}
 
-		if (empty($realm))
+		if ($realm == '')
 		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}

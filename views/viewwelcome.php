@@ -41,11 +41,7 @@ class viewwelcome implements iviews
 		$welcometext = $this->get_welcome_text();
 
 		$data = $this->navigation->guild->get_api_info(array('news'));
-		if (!$data)
-		{
-
-		}
-		else
+		if ($data)
 		{
 			$this->navigation->guild->setGuildnews($data);
 			$newsarr =  $this->navigation->guild->getGuildnews();
@@ -144,7 +140,7 @@ class viewwelcome implements iviews
 	 */
 	private function date_diff($epoch)
 	{
-		$epoch = $epoch / 1000;
+		$epoch /= 1000;
 		$datetime1 = new \DateTime("@$epoch");
 		$datetime2 = new \DateTime();
 		$interval = date_diff($datetime1, $datetime2);

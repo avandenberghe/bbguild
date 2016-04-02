@@ -1029,13 +1029,10 @@ class guilds extends admin
 				imagealphablending($finalimg, true);
 			}
 
+			$ring = 'horde';
 			if ($this->faction == 1)
 			{
 				$ring = 'alliance';
-			}
-			else
-			{
-				$ring = 'horde';
 			}
 
 			$imgOut = imagecreatetruecolor(215, 230);
@@ -1164,7 +1161,7 @@ class guilds extends admin
 	 * @param  $haystack
 	 * @return string
 	 */
-	function mb_str_replace($needle, $replacement, $haystack)
+	private function mb_str_replace($needle, $replacement, $haystack)
 	{
 		$needle_len = mb_strlen($needle);
 		$pos = mb_strpos($haystack, $needle);
@@ -1558,13 +1555,10 @@ class guilds extends admin
 		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
 		$this->faction = isset($data['side']) ? ($data['side'] == 0 ? 1: 2) : ''; // bbguild wants Alliance 1 and Horde 2
 
+		$this->guildarmoryurl = '';
 		if (isset($data['name']))
 		{
 			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
-		}
-		else
-		{
-			$this->guildarmoryurl = '';
 		}
 
 		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';

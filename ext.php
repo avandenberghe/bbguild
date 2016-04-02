@@ -31,7 +31,7 @@ class ext extends base
 	 *								temporary state which is passed as an
 	 *								argument to the next step
 	 */
-	function enable_step($old_state)
+	public function enable_step($old_state)
 	{
 		global $user, $config;
 		$user->add_lang_ext('bbdkp/bbguild', array('admin','common'));

@@ -714,7 +714,7 @@ class bbguild_module extends admin
 				'region_row', array(
 					'VALUE' => $key ,
 					'SELECTED' => ($players->player_region == $key) ? ' selected="selected"' : '' ,
-					'OPTION' => (! empty($regionname)) ? $regionname : '(None)')
+					'OPTION' => (! $regionname == '' ) ? $regionname : '(None)')
 			);
 		}
 

@@ -464,29 +464,32 @@ class guild_module extends admin
 	{
 		$newrank = new Ranks($updateguild->getGuildid());
 		$oldrank = new Ranks($updateguild->getGuildid());
+
 		$rank_id=0;
 		// template
 		$modrank = $this->request->variable('ranks', array(0 => ''), true);
 		foreach ($modrank as $rank_id => $rank_name)
 		{
-			$oldrank->RankId    = $rank_id;
-			$oldrank->RankGuild = $updateguild->getGuildid();
-			$oldrank->Getrank();
+			$old = clone $oldrank;
+			$old->RankId    = $rank_id;
+			$old->RankGuild = $updateguild->getGuildid();
+			$old->Getrank();
 
-			$newrank->RankId     = $rank_id;
-			$newrank->RankGuild  = $oldrank->RankGuild;
-			$newrank->RankName   = $rank_name;
-			$newrank->RankHide   = $this->request->is_set_post(['hide'][$rank_id]);
+			$new= clone $newrank;
+			$new->RankId     = $rank_id;
+			$new->RankGuild  = $old->RankGuild;
+			$new->RankName   = $rank_name;
+			$new->RankHide   = $this->request->is_set_post(['hide'][$rank_id]);
 			$rank_prefix         = $this->request->variable('prefix', array((int) $rank_id => ''), true);
-			$newrank->RankPrefix = $rank_prefix[$rank_id];
+			$new->RankPrefix = $rank_prefix[$rank_id];
 
 			$rank_suffix         = $this->request->variable('suffix', array((int) $rank_id => ''), true);
-			$newrank->RankSuffix = $rank_suffix[$rank_id];
+			$new->RankSuffix = $rank_suffix[$rank_id];
 
 			// compare old with new,
-			if ($oldrank != $newrank)
+			if ($old != $new)
 			{
-				$newrank->Rankupdate($oldrank);
+				$new->Rankupdate($old);
 			}
 		}
 

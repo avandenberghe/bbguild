@@ -529,7 +529,7 @@ class viewnavigation extends admin implements iviews
 				'VALUE' => $fid,
 				'SELECTED' => ($fid == $this->filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
 				'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
-				'OPTION' => (! empty($fname)) ? $fname : $this->user->lang['ALL'] )
+				'OPTION' => (! $fname == '' ) ? $fname : $this->user->lang['ALL'] )
 			);
 		}
 

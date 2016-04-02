@@ -252,7 +252,7 @@ class player_module extends admin
 			return;
 		}
 
-		if (sizeof($players_to_delete) == 0)
+		if (count($players_to_delete) == 0)
 		{
 			return;
 		}
@@ -560,7 +560,7 @@ class player_module extends admin
 		$minlevel = $this->request->variable('minlevel', 0);
 		$maxlevel = $this->request->variable('maxlevel', 200);
 
-		if ($this->request->is_set_post('search') || isset($_GET['active']) || isset($_GET['nonactive']))
+		if (isset($_GET['active']) || isset($_GET['nonactive']) || $this->request->is_set_post('search') )
 		{
 			$selectactive    = $this->request->variable('active', 0);
 			$selectnonactive = $this->request->variable('nonactive', 0);

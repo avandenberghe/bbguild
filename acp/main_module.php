@@ -91,13 +91,10 @@ class main_module extends admin
 				$result = $this->db->sql_query($sql);
 				$total_guildcount = (int) $this->db->sql_fetchfield('guild_count');
 				//start date
+				$bbguild_started = '';
 				if ($config['bbguild_eqdkp_start'] != 0)
 				{
 					$bbguild_started = date($config['bbguild_date_format'], $config['bbguild_eqdkp_start']);
-				}
-				else
-				{
-					$bbguild_started = '';
 				}
 
 				$latest_version_info = parent::get_productversion($this->request->variable('versioncheck_force', false));
@@ -391,7 +388,7 @@ class main_module extends admin
 					$uid = $row['bbcode_uid'];
 				}
 
-				$textarr = generate_text_for_edit($welcometext, $uid, $bitfield, 7);
+				$textarr = generate_text_for_edit($welcometext, $uid, $bitfield);
 				// number of news and items to show on front page
 				$n_news = $config['bbguild_n_news'];
 				$n_items = $config['bbguild_n_items'];
@@ -453,13 +450,10 @@ class main_module extends admin
 				$logs =  log::Instance();
 				$log_id = $this->request->variable(URI_LOG, 0);
 				$search = $this->request->variable('search', 0);
+				$action = 'list';
 				if ($log_id)
 				{
 					$action = 'view';
-				}
-				else
-				{
-					$action = 'list';
 				}
 
 				switch ($action)
@@ -474,7 +468,7 @@ class main_module extends admin
 						if ($deletemark)
 						{
 							//if marked array isnt empty
-							if (count($marked) && is_array($marked))
+							if (is_array($marked) && count($marked))
 							{
 
 								if (confirm_box(true))

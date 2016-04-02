@@ -119,7 +119,7 @@ abstract class battlenet_resource extends admin
 	 * @param  array  $params Parameters
 	 * @return array Request data
 	 */
-	public function consume($method, $params = array())
+	public function consume($method, array $params)
 	{
 		global $user;
 

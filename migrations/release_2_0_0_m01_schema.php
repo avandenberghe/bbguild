@@ -41,8 +41,7 @@ class release_2_0_0_m01_schema extends migration
 	public function effectively_installed()
 	{
 		$this->GetTablenames();
-		$guild_table_exists = $this->db_tools->sql_table_exists($this->guild_table);
-		return $guild_table_exists;
+		return $this->db_tools->sql_table_exists($this->guild_table);
 	}
 
 	/**

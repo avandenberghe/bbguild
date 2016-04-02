@@ -1661,7 +1661,7 @@ class Player extends admin
 
 		if ($mycharsonly ==false)
 		{
-			$sql_array['WHERE'] .= ' AND m.player_level >= ' .  intval($config['bbguild_minrosterlvl']);
+			$sql_array['WHERE'] .= ' AND m.player_level >= ' . (int) $config['bbguild_minrosterlvl'];
 		}
 
 		if ($player_filter != '')

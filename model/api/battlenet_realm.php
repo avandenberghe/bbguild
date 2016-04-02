@@ -49,12 +49,12 @@ class battlenet_realm extends battlenet_resource
 	 * @return mixed
 	 */
 
-	public function getRealmStatus($realms = array())
+	public function getRealmStatus(array $realms)
 	{
 		global $user;
 		$data = array();
 
-		if (empty($realms))
+		if (count($realms) == 0)
 		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}

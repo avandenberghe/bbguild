@@ -269,13 +269,13 @@ class game_module extends admin
 
 				if ($gamereset)
 				{
-					$this->ResetGame($editgame, $this->request);
+					$this->ResetGame($editgame);
 				}
 
 				// save game settings
 				if ($gamesettings)
 				{
-					$editgame = $this->SaveGameSettings($this->request);
+					$editgame = $this->SaveGameSettings();
 					$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
 					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
 					trigger_error($success_message . $this->link, E_USER_NOTICE);
@@ -284,42 +284,42 @@ class game_module extends admin
 
 				if ($gamedelete)
 				{
-					$this->DeleteGame($editgame, $this->request);
+					$this->DeleteGame($editgame);
 				}
 
 				$addrole = $this->request->is_set_post('showrolesadd');
 				if ($addrole)
 				{
-					$this->BuildTemplateRole($editgame, $this->request);
+					$this->BuildTemplateRole($editgame);
 					break;
 				}
 
 				if ($action=='deleterole')
 				{
-					$this->DeleteRole($editgame, $this->request);
+					$this->DeleteRole($editgame);
 					break;
 				}
 				else if ($action=='editrole')
 				{
-					$this->BuildTemplateRole($editgame, $this->request);
+					$this->BuildTemplateRole($editgame);
 					break;
 				}
 
 				$addfaction = $this->request->is_set_post('showfactionadd');
 				if ($addfaction)
 				{
-					$this->BuildTemplateFaction($editgame, $this->request);
+					$this->BuildTemplateFaction($editgame);
 					break;
 				}
 
 				if ($action=='deletefaction')
 				{
-					$this->DeleteFaction($editgame, $this->request);
+					$this->DeleteFaction($editgame);
 					break;
 				}
 				else if ($action=='editfaction')
 				{
-					$this->BuildTemplateFaction($editgame, $this->request);
+					$this->BuildTemplateFaction($editgame);
 					break;
 				}
 
@@ -329,22 +329,14 @@ class game_module extends admin
 
 				if ($raceedit || $addrace)
 				{
-					// Load template for adding/editing
-					if (isset($_GET['id']))
-					{
-						// edit this race
-						$this->BuildTemplateEditRace($editgame, $this->request);
-					}
-					else
-					{
-						$this->BuildTemplateAddRace($editgame, $this->request);
-					}
+					// edit this race
+					$this->BuildTemplateEditRace($editgame);
 					break;
 				}
 
 				if ($racedelete)
 				{
-					$this->DeleteRace($editgame, $this->request);
+					$this->DeleteRace($editgame);
 					break;
 				}
 
@@ -354,22 +346,14 @@ class game_module extends admin
 
 				if ($classedit || $addclass)
 				{
-					// Load template for adding/editing
-					if (isset($_GET['id']))
-					{
-						$this->BuildTemplateEditClass($editgame, $this->request);
-					}
-					else
-					{
-						$this->BuildTemplateAddClass($editgame);
-					}
+					$this->BuildTemplateEditClass($editgame);
 					break;
 				}
 
 				if ($classdelete)
 				{
 					// user pressed delete class
-					$this->DeleteClass($editgame, $this->request);
+					$this->DeleteClass($editgame);
 					break;
 				}
 
@@ -390,11 +374,11 @@ class game_module extends admin
 				$editfaction = $this->request->is_set_post('editrole');
 				if ($addnew)
 				{
-					$this->AddRole($role, $editgame, $this->request);
+					$this->AddRole($role, $editgame);
 				}
 				if ($editfaction)
 				{
-					$this->EditRole($role, $editgame, $this->request);
+					$this->EditRole($role, $editgame);
 				}
 				break;
 
@@ -409,11 +393,11 @@ class game_module extends admin
 				$editfaction = $this->request->is_set_post('factionedit');
 				if ($addnew)
 				{
-					$this->AddFaction($faction, $editgame, $this->request);
+					$this->AddFaction($faction, $editgame);
 				}
 				if ($editfaction)
 				{
-					$this->EditFaction($faction, $editgame, $this->request);
+					$this->EditFaction($faction, $editgame);
 				}
 				break;
 
@@ -431,11 +415,11 @@ class game_module extends admin
 
 				if ($raceadd)
 				{
-					$this->AddRace($this->request);
+					$this->AddRace();
 				}
 				else if ($raceupdate)
 				{
-					$this->RaceUpdate($this->request);
+					$this->RaceUpdate();
 				}
 
 				$this->page_title = 'ACP_LISTGAME';
@@ -457,11 +441,11 @@ class game_module extends admin
 
 				if ($classadd)
 				{
-					$this->AddClass($this->request);
+					$this->AddClass();
 				}
 				else if ($classupdate)
 				{
-					$this->EditClass($this->request);
+					$this->EditClass();
 
 				}
 				$this->page_title = 'ACP_LISTGAME';

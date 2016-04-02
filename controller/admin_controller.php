@@ -153,8 +153,7 @@ class admin_controller
 		$this->db->sql_freeresult($result);
 
 		//transform array to json using phpbb class
-		$jsonresponse = new JsonResponse($data);
-		return $jsonresponse;
+		return new JsonResponse($data);
 
 	}
 
@@ -279,8 +278,7 @@ class admin_controller
 			)
 		);
 
-		$jsonresponse = new JsonResponse($data);
-		return $jsonresponse;
+		return new JsonResponse($data);
 
 	}
 
