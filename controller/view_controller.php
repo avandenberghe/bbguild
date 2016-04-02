@@ -141,7 +141,7 @@ class view_controller
 				$this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
 				$this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id
 			);
-			$viewtype = "\\bbdkp\\bbguild\\views\\view". ucfirst($page);
+			$viewtype = "\\bbdkp\\bbguild\\views\\view". $page;
 			$view = new $viewtype($Navigation);
 			$response = $view->response;
 			return $response;
