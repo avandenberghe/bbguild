@@ -11,7 +11,6 @@ namespace bbdkp\bbguild\migrations;
 
 use phpbb\db\migration\migration;
 
-
 /**
  * Migration stage 1: Initial schema
  */

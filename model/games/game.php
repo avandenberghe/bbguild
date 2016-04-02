@@ -325,7 +325,7 @@ class game
 			$classname = '\bbdkp\bbguild\model\games\library\install_' . $this->game_id;
 			$installgame = new $classname;
 			//call the game installer
-			$installgame->Install(
+			$installgame->install(
 				$this->game_id, $this->name,
 				$installgame->getBossbaseurl(), $installgame->getZonebaseurl()
 			);
@@ -337,7 +337,7 @@ class game
 				{
 					$classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
 					$installworld = new $classname;
-					$installworld->Install($this->game_id);
+					$installworld->install($this->game_id);
 				}
 			}
 
@@ -363,7 +363,7 @@ class game
 						include $this->ext_path .'model/games/library/world_custom.' . $phpEx;
 					}
 					$installworld = new \bbdkp\bbworld\model\games\library\world_custom;
-					$installworld->Install($this->game_id);
+					$installworld->install($this->game_id);
 				}
 			}
 		}
@@ -419,7 +419,7 @@ class game
 		//build name of the namespaced game installer class. do it after uninstalling the gameworld.
 		$installgame = new $gameclassname;
 		//call the game installer
-		$installgame->Uninstall($this->game_id, $this->name);
+		$installgame->uninstall($this->game_id, $this->name);
 	}
 
 	/**

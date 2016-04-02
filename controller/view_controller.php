@@ -9,6 +9,11 @@ namespace bbdkp\bbguild\controller;
 
 use bbdkp\bbguild\views\viewnavigation;
 
+/**
+ * Class view_controller
+ *
+ * @package bbdkp\bbguild\controller
+ */
 class view_controller
 {
 	/**

@@ -762,6 +762,7 @@ class bbguild_module extends admin
 
 	/**
 	 * lists all my characters
+	 * @todo fix
 	 */
 	private function listmychars()
 	{

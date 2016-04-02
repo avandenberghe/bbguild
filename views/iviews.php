@@ -9,6 +9,11 @@
 
 namespace bbdkp\bbguild\views;
 
+/**
+ * Interface iviews
+ *
+ * @package bbdkp\bbguild\views
+ */
 interface iviews
 {
 

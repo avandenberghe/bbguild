@@ -31,18 +31,12 @@ class main_listener implements EventSubscriberInterface
 	protected $config;
 
 	/**
+	 * main_listener constructor.
 	 *
-	 * @param helper $helper Controller helper object
-	 * @param \phpbb\template|template $template Template object
-	 * @param user $user
-	 * @param config $config
-	 */
-
-	/**
-	 * @param helper   $helper
-	 * @param template $template
-	 * @param user     $user
-	 * @param config   $config
+	 * @param \phpbb\controller\helper $helper
+	 * @param \phpbb\template\template $template
+	 * @param \phpbb\user              $user
+	 * @param \phpbb\config\config     $config
 	 */
 	public function __construct(helper $helper,
 		template $template,

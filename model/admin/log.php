@@ -407,7 +407,8 @@ class log
 	 */
 	public static function Instance()
 	{
-		if (!isset(self::$instance)) {
+		if (!isset(self::$instance))
+		{
 			$className = __CLASS__;
 			self::$instance = new $className;
 		}
@@ -595,8 +596,8 @@ class log
 	/**
 	 * delete log from Database
 	 *
-	 * @param  array $marked
-	 * @return multitype:unknown
+	 * @param $marked
+	 * @return array
 	 */
 	public function delete_log($marked)
 	{
@@ -620,12 +621,12 @@ class log
 	/**
 	 * read simple log
 	 *
-	 * @param  string      $order
-	 * @param  bool|string $search
-	 * @param  bool|string $verbose
-	 * @param  string      $search_term
-	 * @param  string      $start
-	 * @return multitype:multitype:string NULL unknown mixed
+	 * @param string $order
+	 * @param bool   $search
+	 * @param bool   $verbose
+	 * @param string $search_term
+	 * @param string $start
+	 * @return array
 	 */
 	public function read_log($order = '', $search = false, $verbose = false, $search_term = '', $start = '')
 	{
@@ -990,8 +991,8 @@ class log
 	/**
 	 * returns log tags from xml
 	 *
-	 * @param  string $haystack
-	 * @return multitype:string
+	 * @param $haystack
+	 * @return array
 	 */
 	private function getxmltag($haystack)
 	{

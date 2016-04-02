@@ -63,17 +63,20 @@ class viewnavigation extends admin implements iviews
 	public $pagination;
 
 	/**
-	* @var extension path
-	*/
+	 * extension path
+	 * @type string
+	 */
 	public $ext_path;
 
 	/**
-	 * @var webroot extension path
-	*/
+	 * webroot extension path
+	 * @type string
+	 */
 	public $ext_path_web;
 
 	/**
-	* @var webroot image extension path
+	 * image extension path
+	* @var string
 	*/
 	public $ext_path_images;
 
@@ -112,11 +115,20 @@ class viewnavigation extends admin implements iviews
 	/**
 	 * filter by class ?
 	 *
-	 * @var unknown
+	 * @var boolean
 	 */
 	private $query_by_class = false;
+
+	/**
+	 * @type array
+	 */
 	private $classname = array();
+
+	/**
+	 * @type array
+	 */
 	private $classarray = array();
+
 	/**
 	 * class id from pulldown
 	 */

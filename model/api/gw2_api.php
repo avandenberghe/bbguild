@@ -185,9 +185,8 @@ class gw2_api
 	 * Set the GW2 API version to be used
 	 *
 	 * Return the current instance for a fluent interface
-	 *
-	 * @param string $versionNumber
-	 * @return \PhpGw2Api\Service
+	 * @param $versionNumber
+	 * @return $this
 	 */
 	public function setVersion($versionNumber)
 	{
@@ -322,9 +321,8 @@ class gw2_api
 	 *
 	 * If true JSON objects will be parsed into an associative array as opposed
 	 * to stdClass
-	 *
-	 * @param boolean $bool
-	 * @return \PhpGw2Api\Service
+	 * @param $bool
+	 * @return $this
 	 */
 	public function returnAssoc($bool)
 	{
@@ -336,8 +334,8 @@ class gw2_api
 	/**
 	 * Specify whether the class should throw curl exceptions
 	 *
-	 * @param boolean $bool
-	 * @return \PhpGw2Api\Service
+	 * @param $bool
+	 * @return $this
 	 */
 	public function throwCurlExceptions($bool)
 	{
@@ -349,10 +347,8 @@ class gw2_api
 	/**
 	 * Set custom cURL options
 	 *
-	 * These will be merged with the defaults
-	 *
 	 * @param array $options
-	 * @return \PhpGw2Api\Service
+	 * @return $this
 	 */
 	public function setCurlOptions(array $options)
 	{
@@ -364,10 +360,8 @@ class gw2_api
 	/**
 	 * Set custom cURL headers
 	 *
-	 * These will be merged with the defaults
-	 *
 	 * @param array $headers
-	 * @return \PhpGw2Api\Service
+	 * @return $this
 	 */
 	public function setCurlHeaders(array $headers)
 	{

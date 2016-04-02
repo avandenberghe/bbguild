@@ -32,12 +32,17 @@ class release_2_0_0_m02_data extends container_aware_migration
 	protected $bbrecruit_table;
 	protected $plugins_table;
 
-
+	/**
+	 * @return array
+	 */
 	static public function depends_on()
 	{
 		return array('\bbdkp\bbguild\migrations\release_2_0_0_m01_schema');
 	}
 
+	/**
+	 * @return array
+	 */
 	public function update_data()
 	{
 		return array(

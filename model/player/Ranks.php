@@ -112,12 +112,14 @@ class Ranks extends guilds
 
 		$cache->destroy('sql', PLAYER_RANKS_TABLE);
 
-		if ($this->RankName == '') {
+		if ($this->RankName == '')
+		{
 			trigger_error($user->lang('ERROR_RANK_NAME_EMPTY'), E_USER_WARNING);
 		}
 
 		//check if guildid is valid
-		if ($this->RankGuild == 0) {
+		if ($this->RankGuild == 0)
+		{
 			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
 
@@ -127,7 +129,8 @@ class Ranks extends guilds
                    	AND guild_id = ' . (int) $this->RankGuild . '
                    	ORDER BY rank_id, rank_hide ASC ';
 		$result = $db->sql_query($sql);
-		if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1) {
+		if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1)
+		{
 			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId,  $this->RankGuild), E_USER_WARNING);
 		}
 
@@ -172,17 +175,20 @@ class Ranks extends guilds
 	{
 		global $user, $db;
 
-		if ($this->countplayers() > 0 ) {
+		if ($this->countplayers() > 0 )
+		{
 			return false;
 		}
 
-		if (! $override) {
+		if (! $override)
+		{
 			// check if rank is used
 			$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_LIST_TABLE . ' WHERE
             		 player_rank_id   = ' . (int) $this->RankId . ' and
             		 player_guild_id =  ' . (int) $this->RankGuild;
 			$result = $db->sql_query($sql);
-			if ((int) $db->sql_fetchfield('rankcount') >= 1) {
+			if ((int) $db->sql_fetchfield('rankcount') >= 1)
+			{
 				trigger_error('Cannot delete rank ' . $this->RankId . '. There are players with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
 			}
 		}
@@ -343,7 +349,7 @@ class Ranks extends guilds
 		// get the new ranks not yet created
 		$diff = array_diff_key($newranks, $oldranks);
 
-		foreach($diff as $key => $count)
+		foreach ($diff as $key => $count)
 		{
 			$newrank = new Ranks($guild_id);
 			$newrank->RankName = 'Rank'.$key;
@@ -357,6 +363,5 @@ class Ranks extends guilds
 		}
 
 	}
-
 
 }

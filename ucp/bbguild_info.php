@@ -11,6 +11,9 @@ namespace bbdkp\bbguild\ucp;
  */
 class bbguild_info
 {
+	/**
+	 * @return array
+	 */
 	function module()
 	{
 		return array(

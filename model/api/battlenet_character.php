@@ -20,14 +20,6 @@ namespace bbdkp\bbguild\model\api;
 use bbdkp\bbguild\model\api\battlenet_resource;
 
 /**
- * @ignore
- */
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
-/**
  * Character resource.
  *
  *   @package bbguild

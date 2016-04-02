@@ -99,7 +99,6 @@ class battle_net
 	{
 		global $user;
 
-
 		// check for correct API call
 		if (!in_array($API, $this->api))
 		{
