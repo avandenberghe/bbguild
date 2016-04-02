@@ -26,7 +26,7 @@ See todo.md for upcoming changes.
 Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
-2.0.0-a4
+2.0.0-a5
 
 ### Installation
 ##### Requirements
