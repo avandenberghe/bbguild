@@ -80,7 +80,7 @@ class battlenet_character extends battlenet_resource
 	 * @param  array  $fields
 	 * @return mixed
 	 */
-	public function getCharacter($name = '', $realm = '', array $fields)
+	public function getCharacter($name = '', $realm = '', $fields = array())
 	{
 		global $user;
 

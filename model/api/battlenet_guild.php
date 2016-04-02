@@ -75,7 +75,7 @@ class battlenet_guild extends battlenet_resource
 	 * @param  array  $fields
 	 * @return mixed
 	 */
-	public function getGuild($name = '', $realm = '', array $fields)
+	public function getGuild($name = '', $realm = '', $fields = array())
 	{
 		global $user;
 
