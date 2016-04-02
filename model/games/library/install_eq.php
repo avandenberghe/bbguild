@@ -8,14 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-/**
- * @ignore
- */
 use bbdkp\bbguild\model\games\library\game_install;
-
-if (! defined('IN_PHPBB')) {
-	exit();
-}
 
 /**
  * Everquest Installer Class

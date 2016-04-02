@@ -13,13 +13,6 @@ namespace bbdkp\bbguild\model\games\library;
 use bbdkp\bbguild\model\games\library\game_install;
 
 /**
- * @ignore
- */
-if (! defined('IN_PHPBB')) {
-	exit();
-}
-
-/**
  * ffxiv Installer Class
  *
  * @package bbdkp\bbguild\model\games\library

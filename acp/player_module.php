@@ -87,7 +87,7 @@ class player_module extends admin
 			 * List players
 			 */
 			case 'listplayers':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players') . '"><h3>Return to Index</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers') . '"><h3>Return to Index</h3></a>';
 				$Guild = new guilds();
 
 				$guildlist = $Guild->guildlist(1);
@@ -345,16 +345,16 @@ class player_module extends admin
 		if ($newplayer->player_id > 0)
 		{
 			//record added. now update some stats
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
 			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date("F j, Y, g:i a"));
 
-			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 		}
 		else
 		{
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
 
 			$failure_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_FAIL'], ucwords($newplayer->player_name));
 			trigger_error($failure_message . $this->link, E_USER_WARNING);
@@ -422,8 +422,8 @@ class player_module extends admin
 		$old_player->Getplayer();
 		$updateplayer->Updateplayer($old_player);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id));
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id));
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_SUCCESS'], $updateplayer->player_name);
 		trigger_error($success_message . $this->link);
 
@@ -441,7 +441,7 @@ class player_module extends admin
 		$deleteplayer->Deleteplayer();
 		$success_message = sprintf($this->user->lang['ADMIN_DELETE_PLAYERS_SUCCESS'], $deleteplayer->player_name);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' . URI_GUILD . "=" . $deleteplayer->player_guild_id));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $deleteplayer->player_guild_id));
 		$this->link = '<br /><a href="' . append_sid(
 				"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' .
 				URI_GUILD . "=" . $deleteplayer->player_guild_id
@@ -658,7 +658,7 @@ class player_module extends admin
 				'START'                 => $start,
 				'PLAYER_NAME'           => $player_filter,
 				'F_PLAYERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=addplayer',
-				'F_PLAYERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=list_players',
+				'F_PLAYERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=listplayers',
 				'L_TITLE'               => $this->user->lang['ACP_MM_LISTPLAYERS'],
 				'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTPLAYERS_EXPLAIN'],
 				'O_NAME'                => append_sid(
@@ -703,7 +703,7 @@ class player_module extends admin
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
-				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;'),
+				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;'),
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
 				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
 				'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,

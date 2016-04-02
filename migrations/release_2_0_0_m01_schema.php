@@ -8,6 +8,7 @@
  */
 
 namespace bbdkp\bbguild\migrations;
+
 use phpbb\db\migration\migration;
 
 
@@ -16,7 +17,7 @@ use phpbb\db\migration\migration;
  */
 class release_2_0_0_m01_schema extends migration
 {
-	protected $bbguild_version = '2.0.0-a5';
+	protected $bbguild_version = '2.0.0-a6';
 	protected $table_prefix;
 	protected $bbgames_table;
 	protected $news_table;
@@ -295,10 +296,7 @@ class release_2_0_0_m01_schema extends migration
 						'bbdkp_copyright'      => array('VCHAR_UNI:150', ''),
 					),
 				),
-
-
 			),
-
 		);
 	}
 

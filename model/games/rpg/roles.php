@@ -8,8 +8,6 @@
  */
 namespace bbdkp\bbguild\model\games\rpg;
 
-use bbdkp\bbguild\model\games\game;
-
 /**
  * Roles
  *

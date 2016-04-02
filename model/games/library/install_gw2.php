@@ -11,13 +11,6 @@ namespace bbdkp\bbguild\model\games\library;
 use bbdkp\bbguild\model\games\library\game_install;
 
 /**
- * @ignore
- */
-if (! defined('IN_PHPBB')) {
-	exit();
-}
-
-/**
  * Guildwars2 Installer Class
  *
  * @package bbdkp\bbguild\model\games\library
@@ -81,7 +74,6 @@ class install_gw2 extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#73B78A',  'imagename' => 'gw2_necromancer');
 		// Revenant
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 9, 'class_faction_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#B1574C',  'imagename' => 'gw2_revenant');
-
 
 		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
 		unset($sql_ary);

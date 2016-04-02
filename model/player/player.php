@@ -340,8 +340,10 @@ class Player extends admin
 	function __construct($player_id = 0, $guildlist = null)
 	{
 		parent::__construct();
-		if (isset($player_id)) {
-			if ($player_id > 0) {
+		if (isset($player_id))
+		{
+			if ($player_id > 0)
+			{
 				$this->player_id = $player_id;
 				$this->Getplayer();
 			}
@@ -352,7 +354,8 @@ class Player extends admin
 		}
 
 		$this->guildplayerlist = array();
-		if ($guildlist == null) {
+		if ($guildlist == null)
+		{
 			$guild = new guilds();
 			$this->guildlist = $guild->guildlist(1);
 		}
@@ -374,7 +377,8 @@ class Player extends admin
 	{
 		global $user;
 
-		if (property_exists($this, $fieldName)) {
+		if (property_exists($this, $fieldName))
+		{
 			return $this->$fieldName;
 		}
 		else
@@ -399,7 +403,8 @@ class Player extends admin
 				// is readonly
 				break;
 			default:
-				if (property_exists($this, $property)) {
+				if (property_exists($this, $property))
+				{
 					$this->$property = $value;
 				}
 				else
@@ -448,7 +453,8 @@ class Player extends admin
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if ($row) {
+		if ($row)
+		{
 			$this->player_id = $row['player_id'] ;
 			$this->player_name = $row['player_name'] ;
 			$this->player_race_id = $row['player_race_id'] ;
@@ -492,9 +498,10 @@ class Player extends admin
 		{
 			// load games class
 			$games = new game();
-			if (isset($games->games)) {
+			if (isset($games->games))
+			{
 				$this->games = $games->games;
-				foreach($this->games as $key => $value)
+				foreach ($this->games as $key => $value)
 				{
 					$this->game_id = $key;
 					break;
@@ -550,7 +557,8 @@ class Player extends admin
 	public function get_player_id($playername, $playerrealm, $guild_id = 0)
 	{
 		global $db;
-		if ($guild_id !=0) {
+		if ($guild_id !=0)
+		{
 			$sql = 'SELECT player_id
                 FROM ' . PLAYER_LIST_TABLE . '
                 WHERE player_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($playername) . $db->any_char) . '
@@ -574,7 +582,8 @@ class Player extends admin
 		}
 
 		$db->sql_freeresult($result);
-		if (isset($membid)) {
+		if (isset($membid))
+		{
 			return $membid;
 		}
 		else
@@ -594,13 +603,15 @@ class Player extends admin
 		global $user, $db;
 		global $config;
 
-		if ($this->player_id == 0) {
+		if ($this->player_id == 0)
+		{
 			return false;
 		}
 
 		// if user chooses other name then check if the new name already exists. if so refuse update
 		// namechange to existing playername is not allowed
-		if ($this->player_name != $old_player->player_name) {
+		if ($this->player_name != $old_player->player_name)
+		{
 			$sql = 'SELECT count(*) as playerexists
 				FROM ' . PLAYER_LIST_TABLE . '
 				WHERE player_id <> ' . $this->player_id . "
@@ -608,7 +619,8 @@ class Player extends admin
 			$result = $db->sql_query($sql);
 			$countm = $db->sql_fetchfield('playerexists');
 			$db->sql_freeresult($result);
-			if ($countm != 0) {
+			if ($countm != 0)
+			{
 				trigger_error(sprintf($user->lang['ADMIN_UPDATE_PLAYER_FAIL'], ucwords($this->player_name)), E_USER_WARNING);
 			}
 		}
@@ -620,7 +632,8 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('rankccount');
 		$db->sql_freeresult($result);
-		if ($countm == 0) {
+		if ($countm == 0)
+		{
 			trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
 		}
 
@@ -629,14 +642,16 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
 		$db->sql_freeresult($result);
-		if ($this->player_level > $maxlevel) {
+		if ($this->player_level > $maxlevel)
+		{
 			$this->player_level = $maxlevel;
 		}
 
 		switch ($this->game_id)
 		{
 			case 'aion':
-				if (trim($this->player_portrait_url) == '') {
+				if (trim($this->player_portrait_url) == '')
+				{
 					$this->generate_portraitlink();
 				}
 				break;
@@ -676,7 +691,8 @@ class Player extends admin
 		$db->sql_query($sql);
 
 		// if status was 1 before then add a line in user comments and set an adjustment
-		if ($this->player_status == 0 && $old_player->player_status == 1) {
+		if ($this->player_status == 0 && $old_player->player_status == 1)
+		{
 			// update the comment including the phpbb userid
 			$query = $db->sql_build_array(
 				'UPDATE', array(
@@ -693,7 +709,8 @@ class Player extends admin
 		}
 
 		// if status was 0 before then add a line in user comments and set an adjustment
-		if ($this->player_status == 1 && $old_player->player_status == 0) {
+		if ($this->player_status == 1 && $old_player->player_status == 0)
+		{
 			// update the comment including the phpbb userid
 			$query = $db->sql_build_array(
 				'UPDATE', array(
@@ -783,19 +800,23 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('playerexists');
 		$db->sql_freeresult($result);
-		if ($countm != 0) {
+		if ($countm != 0)
+		{
 			$error[]= $user->lang['ERROR_PLAYEREXIST'];
 		}
 
-		if ($this->player_rank_id === null) {
+		if ($this->player_rank_id === null)
+		{
 			$error[]= $user->lang['ERROR_INCORRECTRANK'];
 		}
 
-		if ($this->player_status === null ) {
+		if ($this->player_status === null )
+		{
 			$this->player_status = 1;
 		}
 
-		if ($this->player_title === null ) {
+		if ($this->player_title === null )
+		{
 			$this->player_title = ' ';
 		}
 
@@ -807,11 +828,13 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('rankccount');
 		$db->sql_freeresult($result);
-		if ($countm == 0) {
+		if ($countm == 0)
+		{
 			$error[]= $user->lang['ERROR_INCORRECTRANK'];
 		}
 
-		if (count($error) > 0) {
+		if (count($error) > 0)
+		{
 			$log_action = array(
 				'header'      => 'L_ACTION_PLAYER_ADDED' ,
 				'L_NAME'      => ucwords($this->player_name) . implode(',', $error)  ,
@@ -836,12 +859,14 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
 		$db->sql_freeresult($result);
-		if ($this->player_level > $maxlevel) {
+		if ($this->player_level > $maxlevel)
+		{
 			$this->player_level = $maxlevel;
 		}
 
 		// if region/realm is nil then default it from guild
-		if ($this->player_realm =='' or  $this->player_region =='') {
+		if ($this->player_realm =='' or  $this->player_region =='')
+		{
 			$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->player_guild_id;
 			$result = $db->sql_query($sql);
 			$this->player_realm  = $config['bbguild_default_realm'];
@@ -932,7 +957,8 @@ class Player extends admin
 			return -1;
 		}
 
-		if ($this->game_id != 'wow') {
+		if ($this->game_id != 'wow')
+		{
 			$this->player_portrait_url = '';
 			$this->deactivate_reason = '';
 			return -1;
@@ -1068,7 +1094,7 @@ class Player extends admin
 		if (isset($data['guild']))
 		{
 			$found=false;
-			foreach($this->guildlist as $guild)
+			foreach ($this->guildlist as $guild)
 			{
 				if (strtolower($guild['name']) == strtolower($data['guild']['name']))
 				{
@@ -1092,7 +1118,7 @@ class Player extends admin
 
 		if (isset($data['titles']))
 		{
-			foreach($data['titles'] as $key => $title)
+			foreach ($data['titles'] as $key => $title)
 			{
 				if (isset($title['selected']))
 				{
@@ -1206,12 +1232,14 @@ class Player extends admin
 	{
 		global $config, $user, $db;
 		$changed = false;
-		if ($this->player_status == "1") {
+		if ($this->player_status == "1")
+		{
 			$changed = true;
 			$this->player_status = "0";
 		}
 
-		if ($changed) {
+		if ($changed)
+		{
 			$query = $db->sql_build_array(
 				'UPDATE', array(
 					'player_status' => $this->player_status ,
@@ -1337,7 +1365,7 @@ class Player extends admin
 		}
 		$db->sql_freeresult($result);
 
-		foreach($playerdata as $mb)
+		foreach ($playerdata as $mb)
 		{
 			$newplayers[] = $mb['character']['name'] . '-' . $mb['character']['realm'];
 		}
@@ -1348,10 +1376,12 @@ class Player extends admin
 		// start transaction
 		$db->sql_transaction('begin');
 
-		foreach($playerdata as $mb)
+		foreach ($playerdata as $mb)
 		{
-			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_add) && $mb['character']['level'] >= $min_armory ) {
-				if (!isset($mb['character']['realm'])) {
+			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_add) && $mb['character']['level'] >= $min_armory )
+			{
+				if (!isset($mb['character']['realm']))
+				{
 					$realm = 'unknown';
 				}
 				else
@@ -1359,7 +1389,8 @@ class Player extends admin
 					$realm = $mb['character']['realm'];
 				}
 
-				if (isset($mb['character']['realm'])) {
+				if (isset($mb['character']['realm']))
+				{
 					$this->player_realm = $mb['character']['realm'];
 				}
 				$this->game_id ='wow';
@@ -1380,10 +1411,12 @@ class Player extends admin
 				$this->player_outdate = mktime(0, 0, 0, 12, 31, 2030);
 				$this->player_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
 				$this->player_title = '';
-				if (isset($mb['titles'])) {
-					foreach($mb['titles'] as $key => $title)
+				if (isset($mb['titles']))
+				{
+					foreach ($mb['titles'] as $key => $title)
 					{
-						if (isset($title['selected'])) {
+						if (isset($title['selected']))
+						{
 							$this->player_title = $title['name'];
 						}
 					}
@@ -1394,10 +1427,11 @@ class Player extends admin
 
 		// get the players to update
 		$to_update = array_intersect($newplayers, $oldplayers);
-		foreach($playerdata as $mb)
+		foreach ($playerdata as $mb)
 		{
 
-			if (!isset($mb['character']['realm'])) {
+			if (!isset($mb['character']['realm']))
+			{
 				$realm = 'unknown';
 			}
 			else
@@ -1405,7 +1439,8 @@ class Player extends admin
 				$realm = $mb['character']['realm'];
 			}
 
-			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_update)) {
+			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_update))
+			{
 				$player_id =  (int) $player_ids[bin2hex($mb['character']['name'] . '-' . $mb['character']['realm'])];
 				$this->game_id ='wow';
 				$this->player_region = $region;
@@ -1492,11 +1527,13 @@ class Player extends admin
 			'ORDER_BY' => 'm.player_rank_id asc, m.player_level desc, m.player_name asc'
 		);
 
-		if ($assignedonly == true) {
+		if ($assignedonly == true)
+		{
 			$sql_array['WHERE'] .= ' AND m.phpbb_user_id = 0 ';
 		}
 
-		if ($guild_id != 0) {
+		if ($guild_id != 0)
+		{
 			$sql_array['WHERE'] .= ' AND m.player_guild_id = ' . $guild_id;
 		}
 
@@ -1548,7 +1585,8 @@ class Player extends admin
 		$countc = $db->sql_fetchfield('charcount');
 		$db->sql_freeresult($result);
 
-		if ($countc >= $config['bbguild_maxchars']) {
+		if ($countc >= $config['bbguild_maxchars'])
+		{
 			return true;
 		}
 		else
@@ -1577,7 +1615,7 @@ class Player extends admin
 	 * @return array
 	 */
 	public function getplayerlist($start, $mode, $query_by_armor, $query_by_class, $filter,
-	                              $game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1 = 0, $level2 = 200, $mycharsonly = false, $player_filter = '', $all = 1
+	   $game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1 = 0, $level2 = 200, $mycharsonly = false, $player_filter = '', $all = 1
 	)
 	{
 
@@ -1616,15 +1654,18 @@ class Player extends admin
 			AND r.rank_id = m.player_rank_id AND r.rank_hide = 0
 			 ";
 
-		if ($all != 1) {
+		if ($all != 1)
+		{
 			$sql_array['WHERE'] .= " AND m.player_status = '1' ";
 		}
 
-		if ($mycharsonly ==false) {
+		if ($mycharsonly ==false)
+		{
 			$sql_array['WHERE'] .= " AND m.player_level >= ".  intval($config['bbguild_minrosterlvl']);
 		}
 
-		if ($player_filter != '') {
+		if ($player_filter != '')
+		{
 			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($player_filter)) . $db->any_char);
 		}
 
@@ -1632,35 +1673,43 @@ class Player extends admin
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbguild_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
-		if ($game_id != '' ) {
+		if ($game_id != '' )
+		{
 			$sql_array['WHERE'] .= " AND m.game_id =  '" .  $db->sql_escape($game_id) . "'";
 		}
 
-		if ($mycharsonly == true) {
+		if ($mycharsonly == true)
+		{
 			$sql_array['WHERE'] .= ' AND m.phpbb_user_id =  ' . $user->data['user_id'];
 		}
 
-		if ($guild_id > 0) {
+		if ($guild_id > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_guild_id =  " . $guild_id;
 		}
 
-		if ($class_id > 0 && $query_by_class == true) {
+		if ($class_id > 0 && $query_by_class == true)
+		{
 			$sql_array['WHERE'] .= " AND m.player_class_id =  " . $class_id;
 		}
 
-		if ($race_id > 0) {
+		if ($race_id > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_race_id =  " . $race_id;
 		}
 
-		if ($level1 > 0) {
+		if ($level1 > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_level >=  " . $level1;
 		}
 
-		if ($level2 != 200) {
+		if ($level2 != 200)
+		{
 			$sql_array['WHERE'] .= " AND m.player_level <=  " . $level2;
 		}
 
-		if ($filter != '' && $query_by_armor == true) {
+		if ($filter != '' && $query_by_armor == true)
+		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape($filter) . "'";
 		}
 
@@ -1677,16 +1726,19 @@ class Player extends admin
 
 		$current_order = $this->switch_order($sort_order);
 
-		if ($mode == 1) {
+		if ($mode == 1)
+		{
 			$sql_array['ORDER_BY']  = " m.player_class_id, " . $current_order['sql'];
 		}
-		else if ($mode == 0) {
+		else if ($mode == 0)
+		{
 			$sql_array['ORDER_BY']  = $current_order['sql'];
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
-		if ($mode == 0) {
+		if ($mode == 0)
+		{
 			// LISTING MODE
 			$player_count=0;
 
@@ -1701,7 +1753,8 @@ class Player extends admin
 			$result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
 			$dataset = $db->sql_fetchrowset($result);
 		}
-		else if ($mode == 1) {
+		else if ($mode == 1)
+		{
 			// CLASS mode
 			$result = $db->sql_query($sql);
 			$dataset = $db->sql_fetchrowset($result);
@@ -1781,27 +1834,33 @@ class Player extends admin
 		);
 
 		// filters
-		if ($filter != $user->lang['ALL'] && $query_by_armor == true) {
+		if ($filter != $user->lang['ALL'] && $query_by_armor == true)
+		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape($filter) . "'";
 		}
 
-		if ($guild_id > 0) {
+		if ($guild_id > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_guild_id =  " . $guild_id;
 		}
 
-		if ($filter != $user->lang['ALL']  && $classid > 0) {
+		if ($filter != $user->lang['ALL']  && $classid > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_class_id =  " . $classid;
 		}
 
-		if ($race_id > 0) {
+		if ($race_id > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_race_id =  " . $race_id;
 		}
 
-		if ($level1 > 0) {
+		if ($level1 > 0)
+		{
 			$sql_array['WHERE'] .= " AND m.player_level >=  " . $level1;
 		}
 
-		if ($level2 != 200) {
+		if ($level2 != 200)
+		{
 			$sql_array['WHERE'] .= " AND m.player_level <=  " . $level2;
 		}
 

@@ -111,7 +111,7 @@ class game_module extends admin
 		{
 			case 'listgames' :
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
 
 				//game dropdown
 				$newpresetgame = $this->request->is_set_post('addgame1');
@@ -176,7 +176,6 @@ class game_module extends admin
 					trigger_error($success_message.$this->link, E_USER_NOTICE);
 				}
 
-
 				///template load
 				$can_install_count = 0;
 
@@ -233,7 +232,7 @@ class game_module extends admin
 
 				$this->template->assign_vars(
 					array (
-						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') ,
+						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
 						'CANINSTALL' => ($can_install_count == 0) ? false : true,
 						'O_ID' => $current_order['uri'][0] ,
 						'O_GAMEID' => $current_order['uri'][1] ,
@@ -264,7 +263,7 @@ class game_module extends admin
 
 				$this->template->assign_vars(
 					array (
-						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') ,
+						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
 					)
 				);
 
@@ -511,7 +510,7 @@ class game_module extends admin
 			$editgame->get_game();
 			$editgame->delete_game();
 			$editgame->install_game();
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games'));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames'));
 			trigger_error(sprintf($this->user->lang['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
 		}
 		else
@@ -554,7 +553,7 @@ class game_module extends admin
 					'log_type'   => 'L_ACTION_GAME_DELETED',
 					'log_action' => $log_action)
 			);
-			//meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') );
+
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName()), E_USER_WARNING);
 
 		} else

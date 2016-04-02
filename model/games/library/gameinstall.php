@@ -16,10 +16,6 @@ use bbdkp\bbguild\model\games\rpg\faction;
 use bbdkp\bbguild\model\games\rpg\races;
 use bbdkp\bbguild\model\games\rpg\roles;
 
-if (! defined('IN_PHPBB')) {
-	exit();
-}
-
 /**
  * Game interface
  * this abstract class is the framework for all game installers
