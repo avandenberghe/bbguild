@@ -130,9 +130,9 @@ class game
 	/**
 	 * Game class constructor
 	 */
-	function __construct()
+	public function __construct()
 	{
-		global $user, $phpEx, $phpbb_extension_manager;
+		global $user, $phpbb_extension_manager;
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
 
 		$this->preinstalled_games = array (
@@ -324,6 +324,7 @@ class game
 			//build name of the namespaced game installer class
 			$classname = '\bbdkp\bbguild\model\games\library\install_' . $this->game_id;
 			$installgame = new $classname;
+
 			//call the game installer
 			$installgame->install(
 				$this->game_id, $this->name,
@@ -412,7 +413,7 @@ class game
 				{
 					$installworld = new \bbdkp\bbworld\model\games\library\world_custom;
 				}
-				$installworld->Uninstall($this->game_id, $this->getName());
+				$installworld->uninstall($this->game_id, $this->getName());
 			}
 		}
 

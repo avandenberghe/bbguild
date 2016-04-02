@@ -287,7 +287,7 @@ class viewnavigation extends admin implements iviews
 	 * @param $root_path
 	 * @param $guild_id
 	 */
-	function __construct(
+	public function __construct(
 		$page,
 		request $request,
 		user $user,
@@ -343,24 +343,24 @@ class viewnavigation extends admin implements iviews
 						'page' => 'roster'
 					)
 				),
-				'FACTION'            => $this->guild->faction,
-				'FACTION_NAME'       => $this->guild->factionname,
-				'GAME_ID'            => $this->guild->game_id,
+				'FACTION'            => $this->guild->getFaction(),
+				'FACTION_NAME'       => $this->guild->getFactionname(),
+				'GAME_ID'            => $this->guild->getGameId(),
 				'GUILD_ID'           => $this->guild_id,
-				'S_GUILD_ALLIANCE'   => ( $this->guild->game_id == 'wow' &&  $this->guild->faction == 1) ? true: false,
-				'S_GUILD_HORDE'      => ( $this->guild->game_id == 'wow' &&  $this->guild->faction == 2) ? true: false,
-				'S_GUILD_OTHER'      => ( $this->guild->game_id != 'wow') ? true: false,
-				'GUILD_NAME'         => $this->guild->name,
-				'REALM'              => $this->guild->realm,
-				'REGION'             => $this->guild->region,
-				'PLAYERCOUNT'        => $this->guild->playercount ,
-				'ARMORY_URL'         => $this->guild->guildarmoryurl ,
-				'MIN_ARMORYLEVEL'    => $this->guild->min_armory ,
-				'SHOW_ROSTER'        => $this->guild->showroster,
-				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guild->emblempath),
-				'EMBLEMFILE'         => basename($this->guild->emblempath),
-				'ARMORY'             => $this->guild->guildarmoryurl,
-				'ACHIEV'             => $this->guild->achievementpoints,
+				'S_GUILD_ALLIANCE'   => ($this->guild->getGameId() == 'wow' &&  $this->guild->getFaction() == 1) ? true: false,
+				'S_GUILD_HORDE'      => ($this->guild->getGameId() == 'wow' &&  $this->guild->getFaction() == 2) ? true: false,
+				'S_GUILD_OTHER'      => ($this->guild->getGameId() != 'wow') ? true: false,
+				'GUILD_NAME'         => $this->guild->getName(),
+				'REALM'              => $this->guild->getRealm(),
+				'REGION'             => $this->guild->getRegion(),
+				'PLAYERCOUNT'        => $this->guild->getPlayercount() ,
+				'ARMORY_URL'         => $this->guild->getGuildarmoryurl() ,
+				'MIN_ARMORYLEVEL'    => $this->guild->getMinArmory() ,
+				'SHOW_ROSTER'        => $this->guild->getShowroster(),
+				'EMBLEM'             => $this->ext_path_images . "guildemblem/" . basename($this->guild->getEmblempath()),
+				'EMBLEMFILE'         => basename($this->guild->getEmblempath()),
+				'ARMORY'             => $this->guild->getGuildarmoryurl(),
+				'ACHIEV'             => $this->guild->getAchievementpoints(),
 				'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
 			)
 		);
@@ -426,9 +426,9 @@ class viewnavigation extends admin implements iviews
 			trigger_error('ERROR_NOGUILD', E_USER_WARNING);
 		}
 
-		$this->guild->guildid = $this->guild_id;
+		$this->guild->setGuildid($this->guild_id);
 		$this->guild->get_guild();
-		$this->game_id = $this->guild->game_id;
+		$this->game_id = $this->guild->getGameId();
 
 		return $guildlist;
 	}

@@ -15,11 +15,11 @@ use bbdkp\bbguild\model\games\rpg\roles;
 use bbdkp\bbguild\model\player\Recruitment;
 
 /**
- * This class manages guilds
+ * Class recruit_module
  *
- *   @package bbguild
+ * @package bbdkp\bbguild\acp
  */
-class recruit_module  extends admin
+class recruit_module extends admin
 {
 	/**
 	 * url action
@@ -112,16 +112,16 @@ class recruit_module  extends admin
 					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
 			);
 		}
-		$Guild->guildid= $guild_id;
+		$Guild->setGuildid($guild_id);
 		$Guild->get_guild();
 
 		$this->template->assign_vars(
 			array(
 				'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
-				'GUILD_EMBLEM'          => $Guild->emblempath,
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
-				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
-				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
 				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=editrecruit'),
 				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
 			)
@@ -143,7 +143,7 @@ class recruit_module  extends admin
 			case 'addrecruit':
 
 				$recruit = new Recruitment();
-				$recruit->setGuildId($Guild->guildid);
+				$recruit->setGuildId($Guild->getGuildid());
 				$recruit->setLastUpdate($this->time);
 				$add = $this->request->is_set_post('add');
 				$update = $this->request->is_set_post('update');
@@ -196,7 +196,7 @@ class recruit_module  extends admin
 							'RECSTATUS'             => 'checked="checked"',
 							'S_ADD'                 => true,
 							'NUMPOSITIONS'          => '1',
-							'RECRUIT_LEVEL'         => $Guild->min_armory,
+							'RECRUIT_LEVEL'         => $Guild->getMinArmory(),
 						)
 					);
 
@@ -323,7 +323,7 @@ class recruit_module  extends admin
 	 * @param $Guild
 	 * @param $recruit
 	 */
-	private function build_dropdowns($Guild, Recruitment $recruit)
+	private function build_dropdowns(guilds $Guild, Recruitment $recruit)
 	{
 		global $config;
 
@@ -335,7 +335,7 @@ class recruit_module  extends admin
 			'FROM'     => array(
 				CLASS_TABLE => 'c',
 				BB_LANGUAGE => 'l'),
-			'WHERE'    => " l.game_id = c.game_id  AND c.game_id = '" . $Guild->game_id . "'
+			'WHERE'    => " l.game_id = c.game_id  AND c.game_id = '" . $Guild->getGameId() . "'
 					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class' ",
 			'ORDER_BY' => 'l.name asc'
 		);
@@ -353,8 +353,8 @@ class recruit_module  extends admin
 		$this->db->sql_freeresult($result);
 		// get roles
 		$Roles           = new roles();
-		$Roles->game_id  = $Guild->game_id;
-		$Roles->guild_id = $Guild->guildid;
+		$Roles->game_id  = $Guild->getGameId();
+		$Roles->guild_id = $Guild->getGuildid();
 		$listroles       = $Roles->list_roles();
 		foreach ($listroles as $roleid => $Role)
 		{

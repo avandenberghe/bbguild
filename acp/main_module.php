@@ -46,7 +46,7 @@ class main_module extends admin
 	 * @param $id
 	 * @param $mode
 	 */
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 		global $db, $user, $template, $request, $phpbb_admin_path, $cache;
 		global $config, $phpEx, $phpbb_container, $auth;

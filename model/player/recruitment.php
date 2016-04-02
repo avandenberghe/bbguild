@@ -280,9 +280,9 @@ class Recruitment extends roles
 	{
 		global $config, $db;
 		$sql_array = array(
-			'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applytemplate_id,
+			'SELECT'   => ' u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applytemplate_id,
                 u.applicants, u.status, u.last_update, u.note, u.level,
-                r.role_color, r.role_icon, role_cat_icon, l.name as role_name ",
+                r.role_color, r.role_icon, role_cat_icon, l.name as role_name ',
 			'FROM'     => array(
 				BBRECRUIT_TABLE   => 'u',
 				GUILD_TABLE       => 'g',

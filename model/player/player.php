@@ -337,7 +337,7 @@ class Player extends admin
 	 * @param int   $player_id
 	 * @param array $guildlist
 	 */
-	function __construct($player_id = 0, $guildlist = null)
+	public function __construct($player_id = 0, $guildlist = null)
 	{
 		parent::__construct();
 		if (isset($player_id))

@@ -11,8 +11,6 @@ namespace bbdkp\bbguild\model\player;
 
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\player\Player;
-use bbdkp\bbguild\model\player\Ranks;
 use bbdkp\bbguild\model\api\battle_net;
 
 /**
@@ -69,7 +67,7 @@ class guilds extends admin
 	 *
 	 * @var string
 	 */
-	private $name = '';
+	protected $name = '';
 	/**
 	 * guiled realm
 	 *
@@ -152,6 +150,7 @@ class guilds extends admin
 	 * @var int 1-25
 	 */
 	protected $level = 0;
+
 	/**
 	 * guild emblem image path
 	 */
@@ -200,27 +199,27 @@ class guilds extends admin
 	 *
 	 * @var boolean
 	 */
-	public $armory_enabled;
+	protected $armory_enabled;
 
 	/**
 	 * rank to which raidtracker should add new attendees
 	 *
 	 * @var int
 	 */
-	public $raidtrackerrank;
+	protected $raidtrackerrank;
 
 	/**
 	 * rank to which apply should add new recruits
 	 *
 	 * @var int
 	 */
-	public $applyrank;
+	protected $applyrank;
 	/**
 	 * search result Battle.NET
 	 *
 	 * @var string
 	 */
-	public $armoryresult;
+	protected $armoryresult;
 
 	/**
 	 * default recruitment forum. this is the forum linked to in the recruitment block
@@ -228,26 +227,514 @@ class guilds extends admin
 	 *
 	 * @var int
 	 */
-	public $recruitforum;
+	protected $recruitforum;
 
 	/**
 	 * guildnews array from battle.NET
 	 *
 	 * @var array
 	 */
-	public $guildnews;
+	protected $guildnews;
 
 	/**
 	 * @type string
 	 */
-	public $factionname;
+	protected $factionname;
+
+
+	/**
+	 * @return int
+	 */
+	public function getStartdate()
+	{
+		return $this->startdate;
+	}
+
+	/**
+	 * @param int $startdate
+	 */
+	public function setStartdate($startdate)
+	{
+		$this->startdate = $startdate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowroster()
+	{
+		return $this->showroster;
+	}
+
+	/**
+	 * @param int $showroster
+	 */
+	public function setShowroster($showroster)
+	{
+		$this->showroster = $showroster;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRecstatus()
+	{
+		return $this->recstatus;
+	}
+
+	/**
+	 * @param int $recstatus
+	 */
+	public function setRecstatus($recstatus)
+	{
+		$this->recstatus = $recstatus;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRegion()
+	{
+		return $this->region;
+	}
+
+	/**
+	 * @param string $region
+	 */
+	public function setRegion($region)
+	{
+		$this->region = $region;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAchievementpoints()
+	{
+		return $this->achievementpoints;
+	}
+
+	/**
+	 * @param int $achievementpoints
+	 */
+	public function setAchievementpoints($achievementpoints)
+	{
+		$this->achievementpoints = $achievementpoints;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAchievements()
+	{
+		return $this->achievements;
+	}
+
+	/**
+	 * @param int $achievements
+	 */
+	public function setAchievements($achievements)
+	{
+		$this->achievements = $achievements;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAionlegionid()
+	{
+		return $this->aionlegionid;
+	}
+
+	/**
+	 * @param int $aionlegionid
+	 */
+	public function setAionlegionid($aionlegionid)
+	{
+		$this->aionlegionid = $aionlegionid;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAionserverid()
+	{
+		return $this->aionserverid;
+	}
+
+	/**
+	 * @param int $aionserverid
+	 */
+	public function setAionserverid($aionserverid)
+	{
+		$this->aionserverid = $aionserverid;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getApplyrank()
+	{
+		return $this->applyrank;
+	}
+
+	/**
+	 * @param int $applyrank
+	 */
+	public function setApplyrank($applyrank)
+	{
+		$this->applyrank = $applyrank;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isArmoryEnabled()
+	{
+		return $this->armory_enabled;
+	}
+
+	/**
+	 * @param boolean $armory_enabled
+	 */
+	public function setArmoryEnabled($armory_enabled)
+	{
+		$this->armory_enabled = $armory_enabled;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getArmoryresult()
+	{
+		return $this->armoryresult;
+	}
+
+	/**
+	 * @param string $armoryresult
+	 */
+	public function setArmoryresult($armoryresult)
+	{
+		$this->armoryresult = $armoryresult;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBattlegroup()
+	{
+		return $this->battlegroup;
+	}
+
+	/**
+	 * @param string $battlegroup
+	 */
+	public function setBattlegroup($battlegroup)
+	{
+		$this->battlegroup = $battlegroup;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getEmblem()
+	{
+		return $this->emblem;
+	}
+
+	/**
+	 * @param array $emblem
+	 */
+	public function setEmblem($emblem)
+	{
+		$this->emblem = $emblem;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmblempath()
+	{
+		return $this->emblempath;
+	}
+
+	/**
+	 * @param string $emblempath
+	 */
+	public function setEmblempath($emblempath)
+	{
+		$this->emblempath = $emblempath;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFaction()
+	{
+		return $this->faction;
+	}
+
+	/**
+	 * @param int $faction
+	 */
+	public function setFaction($faction)
+	{
+		$this->faction = $faction;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFactionname()
+	{
+		return $this->factionname;
+	}
+
+	/**
+	 * @param string $factionname
+	 */
+	public function setFactionname($factionname)
+	{
+		$this->factionname = $factionname;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGameId()
+	{
+		return $this->game_id;
+	}
+
+	/**
+	 * @param int $game_id
+	 */
+	public function setGameId($game_id)
+	{
+		$this->game_id = $game_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGuildarmoryurl()
+	{
+		return $this->guildarmoryurl;
+	}
+
+	/**
+	 * @param string $guildarmoryurl
+	 */
+	public function setGuildarmoryurl($guildarmoryurl)
+	{
+		$this->guildarmoryurl = $guildarmoryurl;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGuilddefault()
+	{
+		return $this->guilddefault;
+	}
+
+	/**
+	 * @param int $guilddefault
+	 */
+	public function setGuilddefault($guilddefault)
+	{
+		$this->guilddefault = $guilddefault;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGuildid()
+	{
+		return $this->guildid;
+	}
+
+	/**
+	 * @param int $guildid
+	 */
+	public function setGuildid($guildid)
+	{
+		$this->guildid = $guildid;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLevel()
+	{
+		return $this->level;
+	}
+
+	/**
+	 * @param int $level
+	 */
+	public function setLevel($level)
+	{
+		$this->level = $level;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMinArmory()
+	{
+		return $this->min_armory;
+	}
+
+	/**
+	 * @param int $min_armory
+	 */
+	public function setMinArmory($min_armory)
+	{
+		$this->min_armory = $min_armory;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayercount()
+	{
+		return $this->playercount;
+	}
+
+	/**
+	 * @param int $playercount
+	 */
+	public function setPlayercount($playercount)
+	{
+		$this->playercount = $playercount;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPlayerdata()
+	{
+		return $this->playerdata;
+	}
+
+	/**
+	 * @param array $playerdata
+	 */
+	public function setPlayerdata($playerdata)
+	{
+		$this->playerdata = $playerdata;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPossibleRecstatus()
+	{
+		return $this->possible_recstatus;
+	}
+
+	/**
+	 * @param array $possible_recstatus
+	 */
+	public function setPossibleRecstatus($possible_recstatus)
+	{
+		$this->possible_recstatus = $possible_recstatus;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRaidtrackerrank()
+	{
+		return $this->raidtrackerrank;
+	}
+
+	/**
+	 * @param int $raidtrackerrank
+	 */
+	public function setRaidtrackerrank($raidtrackerrank)
+	{
+		$this->raidtrackerrank = $raidtrackerrank;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRealm()
+	{
+		return $this->realm;
+	}
+
+	/**
+	 * @param string $realm
+	 */
+	public function setRealm($realm)
+	{
+		$this->realm = $realm;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRecruitforum()
+	{
+		return $this->recruitforum;
+	}
+
+	/**
+	 * @param int $recruitforum
+	 */
+	public function setRecruitforum($recruitforum)
+	{
+		$this->recruitforum = $recruitforum;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGuildnews()
+	{
+		return $this->guildnews;
+	}
+
+	/**
+	 * @param $guildnews
+	 */
+	public function setGuildnews($guildnews)
+	{
+		if ($this->armoryresult == 'KO')
+		{
+			$this->guildnews = array();
+		}
+		else
+		{
+			$this->guildnews = isset($guildnews) ? $guildnews: array();
+		}
+	}
 
 	/**
 	 * guild class constructor
 	 *
 	 * @param int $guild_id
 	 */
-	function __construct($guild_id = 0)
+	public function __construct($guild_id = 0)
 	{
 		global $user;
 		parent::__construct();
@@ -261,54 +748,6 @@ class guilds extends admin
 			0 => $user->lang['CLOSED'] ,
 			1 => $user->lang['OPEN']);
 
-	}
-
-	/**
-	 * guild class property setter
-	 *
-	 * @param  string $fieldName
-	 * @return null
-	 */
-	public function __get($fieldName)
-	{
-		global $user;
-
-		if (property_exists($this, $fieldName))
-		{
-			return $this->$fieldName;
-		}
-		else
-		{
-			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
-		}
-
-		return null;
-	}
-
-	/**
-	 * guild class property setter
-	 *
-	 * @param string $property
-	 * @param string $value
-	 */
-	public function __set($property, $value)
-	{
-		global $user;
-		switch ($property)
-		{
-			case 'playercount':
-				$this->count_players();
-				break;
-			default:
-				if (property_exists($this, $property))
-				{
-					$this->$property = $value;
-				}
-				else
-				{
-					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
-				}
-		}
 	}
 
 	/**
@@ -563,11 +1002,10 @@ class guilds extends admin
 	 *
 	 * @author    Thomas Andersen <acoon@acoon.dk>
 	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
-	 * @param     bool $showlevel
-	 * @param     int  $width
-	 * @return    string
+	 * @param int $width
+	 * @return string
 	 */
-	private function create_emblem($showlevel = true, $width = 200)
+	private function create_emblem($width = 200)
 	{
 		//location to create the file
 		$imgfile = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
@@ -1150,28 +1588,12 @@ class guilds extends admin
 		{
 			// update ranks table
 			$rank = new Ranks($this->guildid);
-			$rank->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region);
+			$rank->WoWRankFix($this->playerdata, $this->guildid);
 			//update player table
 			$mb = new Player();
 			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
 		}
 
 	}
-
-	/**
-	 * get news from Battle.NET
-	 *
-	 * @param $data
-	 */
-	public function get_guildnews($data)
-	{
-		if ($this->armoryresult == 'KO')
-		{
-			return;
-		}
-
-		$this->guildnews = isset($data['news']) ? $data['news']: array();
-	}
-
 
 }

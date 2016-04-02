@@ -14,7 +14,7 @@ class bbguild_info
 	/**
 	 * @return array
 	 */
-	function module()
+	public function module()
 	{
 		return array(
 			'filename'    => '\bbdkp\bbguild\ucp\bbguild_module',

@@ -63,7 +63,7 @@ class game_module extends admin
 	 * @param  int $mode id of the submenu
 	 * @access public
 	 */
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 
 		global $user, $template, $phpbb_admin_path, $phpEx, $config;

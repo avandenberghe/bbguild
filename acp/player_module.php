@@ -98,9 +98,9 @@ class player_module extends admin
 
 				if (count((array) $guildlist) == 1 )
 				{
-					$Guild->guildid = $guildlist[0]['id'];
-					$Guild->name = $guildlist[0]['name'];
-					if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+					$Guild->setGuildid($guildlist[0]['id']);
+					$Guild->setName($guildlist[0]['name']);
+					if ($Guild->getGuildid() == 0 && $Guild->getName() == 'Guildless' )
 					{
 						trigger_error('ERROR_NOGUILD', E_USER_WARNING);
 					}
@@ -108,7 +108,7 @@ class player_module extends admin
 
 				foreach ($guildlist as $g)
 				{
-					$Guild->guildid = $g['id'];
+					$Guild->setGuildid($g['id']);
 					break;
 				}
 
@@ -130,14 +130,14 @@ class player_module extends admin
 				if ($getguild_dropdown)
 				{
 					// user selected dropdown - get guildid
-					$Guild->guildid = $this->request->variable('player_guild_id', 0);
+					$Guild->setGuildid($this->request->variable('player_guild_id', 0));
 				}
 
 				$sortlink = isset($_GET[URI_GUILD])  ? true : false;
 				if ($sortlink)
 				{
 					// user selected dropdown - get guildid
-					$Guild->guildid = $this->request->variable(URI_GUILD, 0);
+					$Guild->setGuildid($this->request->variable(URI_GUILD, 0));
 				}
 
 				$charapicall = $this->request->is_set_post('charapicall');
@@ -335,7 +335,7 @@ class player_module extends admin
 		$Guild->get_guild();
 
 		//only call armory if it is enabled.
-		if ($newplayer->player_rank_id < 90 && $Guild->armory_enabled == 1 )
+		if ($newplayer->player_rank_id < 90 && $Guild->isArmoryEnabled() == 1 )
 		{
 			$newplayer->Armory_getplayer();
 		}
@@ -348,7 +348,7 @@ class player_module extends admin
 			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id));
 			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date("F j, Y, g:i a"));
 
-			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . "=" . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 		}
@@ -410,7 +410,7 @@ class player_module extends admin
 		$Guild = new guilds($updateplayer->player_guild_id);
 		$Guild->get_guild();
 
-		if ($updateplayer->player_rank_id < 90 && $Guild->armory_enabled == 1 )
+		if ($updateplayer->player_rank_id < 90 && $Guild->isArmoryEnabled() == 1 )
 		{
 			$updateplayer->Armory_getplayer();
 		}
@@ -473,7 +473,7 @@ class player_module extends admin
 	private function CallCharacterAPI()
 	{
 		$Guild = new guilds();
-		$Guild->guildid = $this->request->variable('hidden_guildid', 0);
+		$Guild->setGuildid($this->request->variable('hidden_guildid', 0));
 		$Guild->get_guild();
 
 		$minlevel = $this->request->variable('hidden_minlevel', 0);
@@ -550,7 +550,7 @@ class player_module extends admin
 			$this->template->assign_block_vars(
 				'guild_row', array(
 					'VALUE'    => $g['id'],
-					'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '',
+					'SELECTED' => ($g['id'] == $Guild->getGuildid()) ? ' selected="selected"' : '',
 					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
 			);
 		}
@@ -638,7 +638,7 @@ class player_module extends admin
 		$pagination_url = append_sid(
 			"{$phpbb_admin_path}index.$phpEx",
 			'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri']['current'] .
-			"&amp;" . URI_GUILD . "=" . $Guild->guildid .
+			"&amp;" . URI_GUILD . "=" . $Guild->getGuildid() .
 			"&amp;minlevel=" . $minlevel .
 			"&amp;maxlevel=" . $maxlevel .
 			"&amp;active="   . $selectactive .
@@ -651,8 +651,8 @@ class player_module extends admin
 			array(
 				'F_SELECTACTIVE'        => $selectactive,
 				'F_SELECTNONACTIVE'     => $selectnonactive,
-				'GUILDID'               => $Guild->guildid,
-				'GUILDNAME'             => $Guild->name,
+				'GUILDID'               => $Guild->getGuildid(),
+				'GUILDNAME'             => $Guild->getName(),
 				'MINLEVEL'              => $minlevel,
 				'MAXLEVEL'              => $maxlevel,
 				'START'                 => $start,
@@ -662,54 +662,54 @@ class player_module extends admin
 				'L_TITLE'               => $this->user->lang['ACP_MM_LISTPLAYERS'],
 				'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTPLAYERS_EXPLAIN'],
 				'O_NAME'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_USERNAME'            => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_LEVEL'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_CLASS'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_RANK'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_LAST_UPDATE'         => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'O_ID'                  => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->getGuildid() . "&amp;minlevel=" . $minlevel .
 					"&amp;maxlevel=" . $maxlevel .
 					"&amp;active=" . $selectactive .
 					"&amp;nonactive=" . $selectnonactive
 				),
 				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;'),
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
-				'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'S_WOW'                 => ($Guild->getGameId() == 'wow') ? true : false,
 				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
-				'GUILD_EMBLEM'          => $Guild->emblempath,
-				'GUILD_NAME'            => $Guild->name,
+				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
+				'GUILD_NAME'            => $Guild->getName(),
 			)
 		);
 		$this->page_title = 'ACP_BBGUILD_PLAYER_LIST';
@@ -738,8 +738,8 @@ class player_module extends admin
 
 		if ($S_ADD)
 		{
-			$editplayer->game_id          = $Guild->game_id;
-			$editplayer->player_rank_id   = $Guild->raidtrackerrank;
+			$editplayer->game_id          = $Guild->getGameId();
+			$editplayer->player_rank_id   = $Guild->getRaidtrackerrank();
 			$editplayer->player_status    = 1;
 			$editplayer->player_gender_id = 0;
 		}
@@ -854,12 +854,12 @@ class player_module extends admin
 		{
 			if ($row['class_min_level'] <= 1)
 			{
-				$option = (!empty($row['class_name'])) ? $row['class_name'] . "
-						 Level (" . $row['class_min_level'] . " - " . $row['class_max_level'] . ")" : '(None)';
+				$option = (!empty($row['class_name'])) ? $row['class_name'] . '
+						 Level (' . $row['class_min_level'] . ' - ' . $row['class_max_level'] . ')' : '(None)';
 			} else
 			{
-				$option = (!empty($row['class_name'])) ? $row['class_name'] . "
-						 Level " . $row['class_min_level'] . "+" : '(None)';
+				$option = (!empty($row['class_name'])) ? $row['class_name'] . '
+						 Level ' . $row['class_min_level'] . '+' : '(None)';
 			}
 			if ($editplayer->player_id <> 0)
 			{
@@ -883,7 +883,7 @@ class player_module extends admin
 
 		// get roles
 		$Roles = new roles();
-		$Roles->game_id = $Guild->game_id;
+		$Roles->game_id = $Guild->getGameId();
 		$Roles->guild_id = $editplayer->player_guild_id;
 		$listroles = $Roles->list_roles();
 		foreach ($listroles as $roleid => $Role)

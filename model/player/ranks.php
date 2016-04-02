@@ -308,7 +308,7 @@ class Ranks extends guilds
 	 * @param array $playerdata
 	 * @param int   $guild_id
 	 */
-	public function WoWArmoryUpdate($playerdata, $guild_id)
+	public function WoWRankFix($playerdata, $guild_id)
 	{
 		global  $db;
 

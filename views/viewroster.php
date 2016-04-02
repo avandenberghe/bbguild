@@ -26,7 +26,7 @@ class viewroster implements iviews
 	 *
 	 * @param \bbdkp\bbguild\views\viewnavigation $navigation
 	 */
-	function __construct(viewnavigation $navigation)
+	public function __construct(viewnavigation $navigation)
 	{
 		$this->navigation = $navigation;
 		$this->buildpage();

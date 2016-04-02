@@ -17,7 +17,7 @@ class main_info
 	/**
 	 * phpbb module function
 	 */
-	function module()
+	public function module()
 	{
 		return array(
 			'filename'    => '\bbdkp\bbguild\acp\main_module',

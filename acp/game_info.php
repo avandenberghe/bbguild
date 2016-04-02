@@ -17,7 +17,7 @@ class game_info
 	/**
 	 * phpbb module function
 	 */
-	function module()
+	public function module()
 	{
 		return array(
 			'filename'    => '\bbdkp\bbguild\acp\game_module',

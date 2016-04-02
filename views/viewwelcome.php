@@ -24,7 +24,7 @@ class viewwelcome implements iviews
 	 *
 	 * @param \bbdkp\bbguild\views\viewnavigation $navigation
 	 */
-	function __construct(viewnavigation $navigation)
+	public function __construct(viewnavigation $navigation)
 	{
 		$this->navigation = $navigation;
 		$this->buildpage();
@@ -38,60 +38,67 @@ class viewwelcome implements iviews
 		global $user, $template;
 		$this->tpl = 'main.html';
 
-		$data = $this->navigation->guild->get_api_info(array('news'));
-		$this->navigation->guild->get_guildnews($data);
-		$newsarr =  $this->navigation->guild->guildnews;
 		$welcometext = $this->get_welcome_text();
 
-		if (isset($newsarr))
+		$data = $this->navigation->guild->get_api_info(array('news'));
+		if (!$data)
 		{
-			$i=0;
-			foreach ($newsarr as $id => $news)
+
+		}
+		else
+		{
+			$this->navigation->guild->setGuildnews($data);
+			$newsarr =  $this->navigation->guild->getGuildnews();
+			if (isset($newsarr))
 			{
-				$i++;
-				switch ($news['type'])
+				$i=0;
+				foreach ($newsarr as $id => $news)
 				{
-				case 'itemCraft' :
-				case 'itemLoot' :
-					$template->assign_block_vars(
-						'activityfeed', array(
-						'TYPE'      => 'ITEM',
-						'ID'        => $id,
-						'VERB'      => $user->lang('LOOTED'),
-						'CHARACTER' => $news['character'],
-						'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-						'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
-						'CONTEXT'   => $news['context'],
-						//trade-skill, quest-reward, raid-finder, vendor, dungeon-heroic, raid-normal , dungeon-normal
-						)
-					);
-					break;
-				case 'playerAchievement':
-					$template->assign_block_vars(
-						'activityfeed', array(
-						'TYPE'        => 'ACHI',
-						'ID'          => $id,
-						'VERB'        => $user->lang('ACHIEVED'),
-						'CHARACTER'   => $news['character'],
-						'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-						'ACHIEVEMENT' => $news['achievement']['id'],
-						'TITLE'       => $news['achievement']['title'],
-						'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
-						)
-					);
-					break;
-				}
-				if ($i > 25)
-				{
-					break;
+					$i++;
+					switch ($news['type'])
+					{
+					case 'itemCraft' :
+					case 'itemLoot' :
+						$template->assign_block_vars(
+							'activityfeed', array(
+							'TYPE'      => 'ITEM',
+							'ID'        => $id,
+							'VERB'      => $user->lang('LOOTED'),
+							'CHARACTER' => $news['character'],
+							'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+							'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
+							'CONTEXT'   => $news['context'],
+							//trade-skill, quest-reward, raid-finder, vendor, dungeon-heroic, raid-normal , dungeon-normal
+							)
+						);
+						break;
+					case 'playerAchievement':
+						$template->assign_block_vars(
+							'activityfeed', array(
+							'TYPE'        => 'ACHI',
+							'ID'          => $id,
+							'VERB'        => $user->lang('ACHIEVED'),
+							'CHARACTER'   => $news['character'],
+							'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+							'ACHIEVEMENT' => $news['achievement']['id'],
+							'TITLE'       => $news['achievement']['title'],
+							'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
+							)
+						);
+						break;
+					}
+					if ($i > 25)
+					{
+						break;
+					}
 				}
 			}
 		}
 
 		$template->assign_vars(
 			array(
-			'EMBLEM'                =>  $this->navigation->guild->emblempath,
-			'GUILD_FACTION'         =>  $this->navigation->guild->factionname,
+			'EMBLEM'                =>  $this->navigation->guild->getEmblempath(),
+			'GUILD_FACTION'         =>  $this->navigation->guild->getFactionname(),
 			'WELCOME_MESSAGE'        => $welcometext,
 			'S_DISPLAY_WELCOME'     => true,
 			)
@@ -105,7 +112,7 @@ class viewwelcome implements iviews
 	}
 
 	/**
-	 * Message odf
+	 * Message of the day
 	*
 	 * @return mixed
 	 */
