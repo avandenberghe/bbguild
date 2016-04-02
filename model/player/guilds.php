@@ -1297,7 +1297,7 @@ class guilds extends admin
 
 		if ($player_filter != '')
 		{
-			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($player_filter)) . $db->any_char);
+			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape(mb_strtolower($player_filter)) . $db->get_any_char());
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);

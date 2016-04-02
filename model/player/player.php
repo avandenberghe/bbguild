@@ -561,16 +561,16 @@ class Player extends admin
 		{
 			$sql = 'SELECT player_id
                 FROM ' . PLAYER_LIST_TABLE . '
-                WHERE player_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($playername) . $db->any_char) . '
-                AND player_realm ' . $db->sql_like_expression($db->any_char . $db->sql_escape($playerrealm) . $db->any_char) . '
+                WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
+                AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char()) . '
                 AND player_guild_id = ' . (int) $db->sql_escape($guild_id);
 		}
 		else
 		{
 			$sql = 'SELECT player_id
                 FROM ' . PLAYER_LIST_TABLE . '
-                WHERE player_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($playername) . $db->any_char) . '
-                AND player_realm ' . $db->sql_like_expression($db->any_char . $db->sql_escape($playerrealm) . $db->any_char);
+                WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
+                AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char());
 		}
 
 		$result = $db->sql_query($sql);
@@ -1584,15 +1584,7 @@ class Player extends admin
 		$result = $db->sql_query($sql);
 		$countc = $db->sql_fetchfield('charcount');
 		$db->sql_freeresult($result);
-
-		if ($countc >= $config['bbguild_maxchars'])
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ($countc >= (int) $config['bbguild_maxchars']);
 	}
 
 	/**
@@ -1666,7 +1658,7 @@ class Player extends admin
 
 		if ($player_filter != '')
 		{
-			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($player_filter)) . $db->any_char);
+			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape(mb_strtolower($player_filter)) . $db->get_any_char());
 		}
 
 		$sql_array['WHERE'] .= " AND m.player_rank_id != 99
