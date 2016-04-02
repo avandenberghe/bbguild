@@ -43,20 +43,20 @@ class recruit_module  extends admin
 	public  $url_id;
 
 	/**
- * @var \phpbb\request\request
-**/
+	 * @var \phpbb\request\request
+	 **/
 	protected $request;
 	/**
- * @var \phpbb\template\template
-**/
+	 * @var \phpbb\template\template
+	 **/
 	protected $template;
 	/**
- * @var \phpbb\user
-**/
+	 * @var \phpbb\user
+	 **/
 	protected $user;
 	/**
- * @var \phpbb\db\driver\driver_interface
-*/
+	 * @var \phpbb\db\driver\driver_interface
+	 */
 	protected $db;
 
 	public $id;
@@ -107,9 +107,9 @@ class recruit_module  extends admin
 		{
 			$this->template->assign_block_vars(
 				'guild_row', array(
-				'VALUE'    => $g['id'],
-				'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
-				'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
+					'VALUE'    => $g['id'],
+					'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
 			);
 		}
 		$Guild->guildid= $guild_id;
@@ -117,152 +117,152 @@ class recruit_module  extends admin
 
 		$this->template->assign_vars(
 			array(
-			'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
-			'GUILD_EMBLEM'          => $Guild->emblempath,
-			'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
-			'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
-			'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
-			'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=editrecruit'),
-			'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
+				'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
+				'GUILD_EMBLEM'          => $Guild->emblempath,
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
+				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=editrecruit'),
+				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
 			)
 		);
 
 		switch ($mode)
 		{
 			/***************************************
-             * List recruitments
-             ***************************************/
-		case 'listrecruit':
+			 * List recruitments
+			 ***************************************/
+			case 'listrecruit':
 
-			$this->build_templatelist_recruits($guild_id);
-			break;
+				$this->build_templatelist_recruits($guild_id);
+				break;
 
 			/*************************************
-             *  Add recruit
-             *************************************/
-		case 'addrecruit':
+			 *  Add recruit
+			 *************************************/
+			case 'addrecruit':
 
-			$recruit = new Recruitment();
-			$recruit->setGuildId($Guild->guildid);
-			$recruit->setLastUpdate($this->time);
-			$add = $this->request->is_set_post('add');
-			$update = $this->request->is_set_post('update');
-			$action = $this->request->variable('action', '');
-			if ($this->apply_installed)
-			{
-				//if apply is installed then fetch list of templates
-				$result = $this->db->sql_query('SELECT * FROM ' . APPTEMPLATELIST_TABLE);
-				$apply_templates = array();
-				while ( $row = $this->db->sql_fetchrow($result) )
+				$recruit = new Recruitment();
+				$recruit->setGuildId($Guild->guildid);
+				$recruit->setLastUpdate($this->time);
+				$add = $this->request->is_set_post('add');
+				$update = $this->request->is_set_post('update');
+				$action = $this->request->variable('action', '');
+				if ($this->apply_installed)
 				{
-					$apply_templates[$row['template_id']] = $row['template_name'];
+					//if apply is installed then fetch list of templates
+					$result = $this->db->sql_query('SELECT * FROM ' . APPTEMPLATELIST_TABLE);
+					$apply_templates = array();
+					while ( $row = $this->db->sql_fetchrow($result) )
+					{
+						$apply_templates[$row['template_id']] = $row['template_name'];
+					}
+					$this->db->sql_freeresult($result);
 				}
-				$this->db->sql_freeresult($result);
-			}
 
-			if ($action=='delete')
-			{
-				$recruit->id = $this->request->variable('id', 0);
-				$recruit->get($recruit->id);
-				$recruit->delete_role();
-
-				$success_message = sprintf($this->user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
-				trigger_error($success_message . $this->link, E_USER_WARNING);
-
-			}
-			else if ($action=='edit')
-			{
-				$recruit->id = $this->request->variable('id', 0);
-				$recruit->get($recruit->id);
-
-				$this->template->assign_vars(
-					array(
-						'S_UPDATE'              => true,
-						'RECRUIT_ID'            => $recruit->id,
-						'RECSTATUS'             => $recruit->getStatus() == '1' ? 'checked="checked"' : '',
-						'RECRUIT_STATUS'        => $recruit->getStatus() == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
-						'NUMPOSITIONS'          => $recruit->getPositions(),
-						'APPLICANTS'            => $recruit->getApplicants(),
-						'RECRUIT_LEVEL'         => $recruit->getLevel(),
-						'NOTE'                  => $recruit->getNote(),
-						)
-				);
-			}
-			else
-			{
-				//add
-				$this->template->assign_vars(
-					array(
-					'RECSTATUS'             => 'checked="checked"',
-					'S_ADD'                 => true,
-					'NUMPOSITIONS'          => '1',
-					'RECRUIT_LEVEL'         => $Guild->min_armory,
-						)
-				);
-
-			}
-
-			if ($this->apply_installed)
-			{
-				foreach ($apply_templates as $apply_template_id => $value)
+				if ($action=='delete')
 				{
-					$this->template->assign_block_vars(
-						'applytemplates_row', array(
-						'VALUE'    => $apply_template_id,
-						'SELECTED' => ($apply_template_id ==  $recruit->getApplytemplateid()) ? ' selected="selected"' : '',
-						'OPTION'   => $value
-							)
+					$recruit->id = $this->request->variable('id', 0);
+					$recruit->get($recruit->id);
+					$recruit->delete_role();
+
+					$success_message = sprintf($this->user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
+					trigger_error($success_message . $this->link, E_USER_WARNING);
+
+				}
+				else if ($action=='edit')
+				{
+					$recruit->id = $this->request->variable('id', 0);
+					$recruit->get($recruit->id);
+
+					$this->template->assign_vars(
+						array(
+							'S_UPDATE'              => true,
+							'RECRUIT_ID'            => $recruit->id,
+							'RECSTATUS'             => $recruit->getStatus() == '1' ? 'checked="checked"' : '',
+							'RECRUIT_STATUS'        => $recruit->getStatus() == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
+							'NUMPOSITIONS'          => $recruit->getPositions(),
+							'APPLICANTS'            => $recruit->getApplicants(),
+							'RECRUIT_LEVEL'         => $recruit->getLevel(),
+							'NOTE'                  => $recruit->getNote(),
+						)
+					);
+				}
+				else
+				{
+					//add
+					$this->template->assign_vars(
+						array(
+							'RECSTATUS'             => 'checked="checked"',
+							'S_ADD'                 => true,
+							'NUMPOSITIONS'          => '1',
+							'RECRUIT_LEVEL'         => $Guild->min_armory,
+						)
 					);
 
 				}
-			}
 
-			if ($add || $update)
-			{
-
-				if (!check_form_key('bbdkp/bbguild'))
+				if ($this->apply_installed)
 				{
-					trigger_error('FORM_INVALID');
+					foreach ($apply_templates as $apply_template_id => $value)
+					{
+						$this->template->assign_block_vars(
+							'applytemplates_row', array(
+								'VALUE'    => $apply_template_id,
+								'SELECTED' => ($apply_template_id ==  $recruit->getApplytemplateid()) ? ' selected="selected"' : '',
+								'OPTION'   => $value
+							)
+						);
+
+					}
 				}
 
-				$recruit->id = $this->request->variable('hidden_recruit_id', 0);
-				$recruit->role_id = $this->request->variable('role', 0);
-				$recruit->setClassId($this->request->variable('class_id', 0));
-				$recruit->setPositions($this->request->variable('numpositions', 0));
-				$recruit->setApplicants($this->request->variable('applicants', 0));
-				$recruit->setStatus($this->request->variable('recruitstatus', '') == 'on' ? 1 : 0);
-				$recruit->setLevel($this->request->variable('recruit_level', 0));
-				$recruit->setNote(utf8_normalize_nfc($this->request->variable('note', '', true)));
-				$recruit->setApplytemplateid($this->request->variable('applytemplateid', 1));
+				if ($add || $update)
+				{
 
-			}
+					if (!check_form_key('bbdkp/bbguild'))
+					{
+						trigger_error('FORM_INVALID');
+					}
 
-			if ($add)
-			{
-				$recruit->make_role();
+					$recruit->id = $this->request->variable('hidden_recruit_id', 0);
+					$recruit->role_id = $this->request->variable('role', 0);
+					$recruit->setClassId($this->request->variable('class_id', 0));
+					$recruit->setPositions($this->request->variable('numpositions', 0));
+					$recruit->setApplicants($this->request->variable('applicants', 0));
+					$recruit->setStatus($this->request->variable('recruitstatus', '') == 'on' ? 1 : 0);
+					$recruit->setLevel($this->request->variable('recruit_level', 0));
+					$recruit->setNote(utf8_normalize_nfc($this->request->variable('note', '', true)));
+					$recruit->setApplytemplateid($this->request->variable('applytemplateid', 1));
 
-				$success_message = sprintf($this->user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
-				trigger_error($success_message . $this->link, E_USER_NOTICE);
+				}
 
-			}
-			else if ($update)
-			{
-				$recruit->update_role();
-				$success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
-				trigger_error($success_message . $this->link, E_USER_NOTICE);
+				if ($add)
+				{
+					$recruit->make_role();
 
-			}
-			else
-			{
-				$this->build_dropdowns($Guild, $recruit);
-			}
-			$this->page_title = $this->user->lang['ACP_ADDRECRUITS'];
-			break;
+					$success_message = sprintf($this->user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
+					trigger_error($success_message . $this->link, E_USER_NOTICE);
 
-		default:
-			$this->page_title = 'ACP_BBGUILD_MAINPAGE';
-			$success_message = 'Error';
-			trigger_error($success_message . $this->link, E_USER_WARNING);
+				}
+				else if ($update)
+				{
+					$recruit->update_role();
+					$success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
+					trigger_error($success_message . $this->link, E_USER_NOTICE);
+
+				}
+				else
+				{
+					$this->build_dropdowns($Guild, $recruit);
+				}
+				$this->page_title = $this->user->lang['ACP_ADDRECRUITS'];
+				break;
+
+			default:
+				$this->page_title = 'ACP_BBGUILD_MAINPAGE';
+				$success_message = 'Error';
+				trigger_error($success_message . $this->link, E_USER_WARNING);
 		}
 	}
 
@@ -313,7 +313,7 @@ class recruit_module  extends admin
 		// if apply is installed insert an extra column in recruitment listing to indicate the template to be used for that recruitment.
 		$this->template->assign_vars(
 			array(
-			'RECRUIT_FOOTCOUNT'     => sprintf($this->user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
+				'RECRUIT_FOOTCOUNT'     => sprintf($this->user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
 			)
 		);
 		$this->page_title = 'ACP_LISTRECRUITS';
@@ -345,9 +345,9 @@ class recruit_module  extends admin
 		{
 			$this->template->assign_block_vars(
 				'class_row', array(
-				'VALUE'    => $row['class_id'],
-				'SELECTED' => ($recruit->getClassId() == $row['class_id']) ? ' selected="selected"' : '',
-				'OPTION'   => $row['class_name'])
+					'VALUE'    => $row['class_id'],
+					'SELECTED' => ($recruit->getClassId() == $row['class_id']) ? ' selected="selected"' : '',
+					'OPTION'   => $row['class_name'])
 			);
 		}
 		$this->db->sql_freeresult($result);
@@ -360,9 +360,9 @@ class recruit_module  extends admin
 		{
 			$this->template->assign_block_vars(
 				'role_row', array(
-				'VALUE'    => $Role['role_id'],
-				'SELECTED' => ($recruit->role_id == $Role['role_id']) ? ' selected="selected"' : '',
-				'OPTION'   => $Role['rolename'])
+					'VALUE'    => $Role['role_id'],
+					'SELECTED' => ($recruit->role_id == $Role['role_id']) ? ' selected="selected"' : '',
+					'OPTION'   => $Role['rolename'])
 			);
 		}
 	}

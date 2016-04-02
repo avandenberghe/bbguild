@@ -86,7 +86,7 @@ class player_module extends admin
 			/**
 			 * List players
 			 */
-			case 'list_players':
+			case 'listplayers':
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players') . '"><h3>Return to Index</h3></a>';
 				$Guild = new guilds();
 
