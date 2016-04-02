@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\controller\games
  */
-class install_tera extends GameInstall
+class install_tera extends game_install
 {
 
 	protected $bossbaseurl = 'http://teracodex.com/npc/%s';
@@ -31,7 +31,7 @@ class install_tera extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global $db;
 		// factions
@@ -46,7 +46,7 @@ class install_tera extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global $db;
 		// classes
@@ -85,7 +85,7 @@ class install_tera extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global $db;
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '".$this->game_id."'");

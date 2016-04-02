@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_lineage2 extends GameInstall
+class install_lineage2 extends game_install
 {
 	protected $bossbaseurl = 'http://www.lineage2-online.com/database/en/monsters/%s.php';
 	protected $zonebaseurl = 'http://www.lineage2-online.com/database/en/quests/%s.php';
@@ -30,7 +30,7 @@ class install_lineage2 extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global $db;
 
@@ -46,7 +46,7 @@ class install_lineage2 extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global $db;
 
@@ -459,7 +459,7 @@ class install_lineage2 extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global $db;
 

@@ -28,7 +28,7 @@ namespace bbdkp\bbguild\model\api;
  * @link        https://github.com/jamesmcfadden/PhpGw2Api
  * @see         https://forum-en.guildwars2.com/forum/community/api/API-Documentation
  */
-class gw2api
+class gw2_api
 {
 	const   BASE_URI            = 'https://api.guildwars2.com',
 		EVENT_URI           = '/events.json',
@@ -169,6 +169,11 @@ class gw2api
 
 	/**
 	 * Handle dependencies
+	 * gw2_api constructor.
+	 * gw2_api constructor.
+	 *
+	 * @param \phpbb\cache\service $cache
+	 * @param int                  $cacheTtl
 	 */
 	public function __construct(\phpbb\cache\service $cache, $cacheTtl = 3600)
 	{
@@ -569,6 +574,7 @@ class gw2api
 	 * Allows a consistent handle to be used in regular and pipeline
 	 * requests
 	 *
+	 * @param       $url
 	 * @param array $options
 	 * @return resource
 	 */

@@ -9,10 +9,15 @@
 
 namespace bbdkp\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\admin\log;
 
-class main_module extends Admin
+/**
+ * Class main_module
+ *
+ * @package bbdkp\bbguild\acp
+ */
+class main_module extends admin
 {
 	public $u_action;
 	private $link;

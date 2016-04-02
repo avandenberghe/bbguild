@@ -14,14 +14,14 @@
 
 namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\admin\Admin;
+use bbdkp\bbguild\model\admin\admin;
 
 /**
  * Resource skeleton
  *
  *   @package bbguild
  */
-abstract class Resource extends admin
+abstract class battlenet_resource extends admin
 {
 
 	/**
@@ -180,7 +180,7 @@ abstract class Resource extends admin
 			$string_to_sign = "GET\n".$date."\n".$requestUri."\n";
 			$signature = base64_encode(hash_hmac('sha1', $string_to_sign, $this->privkey, true));
 			$header = array("Host: ".$this->region,"Date: ". $date,"Authorization: BNET ". $this->apikey.":". $signature);
-			$data = $this->Curl($requestUri, $header, false, true);
+			$data = $this->curl($requestUri, $header, false, true);
 			$this->cache->put($cachesignature, $data, $this->cacheTtl);
 		}
 

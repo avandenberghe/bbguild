@@ -9,10 +9,10 @@
 
 namespace bbdkp\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\Admin;
-use bbdkp\bbguild\model\games\Game;
-use bbdkp\bbguild\model\games\rpg\Faction;
-use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\admin\admin;
+use bbdkp\bbguild\model\games\game;
+use bbdkp\bbguild\model\games\rpg\faction;
+use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\player\Ranks;
 
 /**
@@ -20,7 +20,7 @@ use bbdkp\bbguild\model\player\Ranks;
  *
  * @package bbguild
  */
-class guild_module extends Admin
+class guild_module extends admin
 {
 	/**
 	 * url action
@@ -106,7 +106,7 @@ class guild_module extends Admin
 				$this->BuildTemplateListGuilds();
 				break;
 			case 'addguild':
-				$addguild = new Guilds();
+				$addguild = new guilds();
 				$addguild->region = $config['bbguild_default_region'];
 
 				if ($this->request->is_set_post('newguild'))
@@ -126,14 +126,13 @@ class guild_module extends Admin
 					);
 				}
 
-
 				$addguild->game_id = $config['bbguild_default_game'];
 
-				$thisgame          = new Game;
+				$thisgame          = new game;
 				$thisgame->game_id = $addguild->game_id;
-				$thisgame->Get();
+				$thisgame->get_game();
 
-				$this->factions = new Faction($thisgame->game_id);
+				$this->factions = new faction($thisgame->game_id);
 
 				// reset armory_enabled to false if no API key
 				if ($thisgame->getApikey() == '' && $thisgame->game_id == 'wow')
@@ -160,7 +159,7 @@ class guild_module extends Admin
 					trigger_error('ERROR_NOGAMES', E_USER_WARNING);
 				}
 
-				$listfactions = $this->factions->getfactions();
+				$listfactions = $this->factions->get_factions();
 				if (isset($listfactions))
 				{
 					foreach ($listfactions as $key => $faction)
@@ -175,7 +174,6 @@ class guild_module extends Admin
 						);
 					}
 				}
-
 
 				switch ($thisgame->game_id)
 				{
@@ -199,7 +197,7 @@ class guild_module extends Admin
 				break;
 			case 'editguild':
 				$this->url_id = $this->request->variable(URI_GUILD, 0);
-				$updateguild  = new Guilds($this->url_id);
+				$updateguild  = new guilds($this->url_id);
 				if ($this->request->is_set_post('playeradd'))
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=addplayer&amp;'.URI_GUILD."=".$this->url_id));
@@ -296,9 +294,9 @@ class guild_module extends Admin
 
 
 	/**
-	 * @param Guilds $addguild
+	 * @param guilds $addguild
 	 */
-	private function AddGuild(Guilds $addguild)
+	private function AddGuild(guilds $addguild)
 	{
 		if (!check_form_key('bbdkp/bbguild'))
 		{
@@ -314,7 +312,7 @@ class guild_module extends Admin
 		$addguild->armory_enabled = $this->request->variable('armory_enabled', 0);
 		$addguild->recstatus      = $this->request->variable('switchon_recruitment', 0);
 		$addguild->recruitforum   = $this->request->variable('recruitforum', 0);
-		$result = $addguild->MakeGuild();
+		$result = $addguild->make_guild();
 
 		switch ($result)
 		{
@@ -343,7 +341,7 @@ class guild_module extends Admin
 	 *
 	 * @param $updateguild
 	 */
-	private function UpdateDefaultGuild(Guilds $updateguild)
+	private function UpdateDefaultGuild(guilds $updateguild)
 	{
 		$id = $this->request->variable('defaultguild', 0);
 		$updateguild->update_guilddefault($id);
@@ -358,12 +356,12 @@ class guild_module extends Admin
 	 * @param $updateArmory
 	 * @return void
 	 */
-	private function UpdateGuild(Guilds $updateguild, $updateArmory)
+	private function UpdateGuild(guilds $updateguild, $updateArmory)
 	{
 		$updateguild->guildid = $this->url_id;
-		$updateguild->Getguild();
-		$old_guild = new Guilds($this->url_id);
-		$old_guild->Getguild();
+		$updateguild->get_guild();
+		$old_guild = new guilds($this->url_id);
+		$old_guild->get_guild();
 
 		$updateguild->game_id        = $this->request->variable('game_id', '');
 		$updateguild->name           = $this->request->variable('guild_name', '', true);
@@ -388,7 +386,7 @@ class guild_module extends Admin
 			$GuildAPIParameters = array('members');
 		}
 
-		if ($updateguild->Guildupdate($old_guild, $GuildAPIParameters))
+		if ($updateguild->update_guild($old_guild, $GuildAPIParameters))
 		{
 			$success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
 			trigger_error($success_message.$this->link, E_USER_NOTICE);
@@ -407,13 +405,13 @@ class guild_module extends Admin
 	 *
 	 * @param $updateguild
 	 */
-	private function DeleteGuild(Guilds $updateguild)
+	private function DeleteGuild(guilds $updateguild)
 	{
 		if (confirm_box(true))
 		{
-			$deleteguild = new Guilds($this->request->variable('guildid', 0));
-			$deleteguild->Getguild();
-			$deleteguild->Guildelete();
+			$deleteguild = new guilds($this->request->variable('guildid', 0));
+			$deleteguild->get_guild();
+			$deleteguild->delete_guild();
 			$success_message = sprintf($this->user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
 			trigger_error($success_message.$this->link, E_USER_NOTICE);
 		}
@@ -441,7 +439,7 @@ class guild_module extends Admin
 	 *
 	 * @param $updateguild
 	 */
-	private function AddRank(Guilds $updateguild)
+	private function AddRank(guilds $updateguild)
 	{
 		$newrank            = new Ranks($updateguild->guildid);
 		$newrank->RankName  = $this->request->variable('nrankname', '', true);
@@ -464,7 +462,7 @@ class guild_module extends Admin
 	 *
 	 * @return int|string
 	 */
-	private function UpdateRank(Guilds $updateguild)
+	private function UpdateRank(guilds $updateguild)
 	{
 		$newrank = new Ranks($updateguild->guildid);
 		$oldrank = new Ranks($updateguild->guildid);
@@ -519,7 +517,7 @@ class guild_module extends Admin
 			// delete the rank only if there are no players left
 			$rank_id    = $this->request->variable('ranktodelete', 999);
 			$guildid    = $this->request->variable(URI_GUILD, 0);
-			$old_guild  = new Guilds($guildid);
+			$old_guild  = new guilds($guildid);
 			$deleterank = new Ranks($guildid, $rank_id);
 
 			$s_hidden_fields = build_hidden_fields(
@@ -574,12 +572,12 @@ class guild_module extends Admin
 			trigger_error('ERROR_NOGAMES', E_USER_WARNING);
 		}
 
-		$game          = new Game;
+		$game          = new game;
 		$game->game_id = $updateguild->game_id;
-		$game->Get();
+		$game->get_game();
 
-		$this->factions = new Faction($game->game_id);
-		$listfactions = $this->factions->getfactions();
+		$this->factions = new faction($game->game_id);
+		$listfactions = $this->factions->get_factions();
 		if (isset($listfactions))
 		{
 			foreach ($listfactions as $key => $faction)
@@ -594,7 +592,6 @@ class guild_module extends Admin
 				);
 			}
 		}
-
 
 		$this->template->assign_vars(
 			array(
@@ -676,9 +673,9 @@ class guild_module extends Admin
 
 		$this->db->sql_freeresult($result);
 
-		$game          = new Game;
+		$game          = new game;
 		$game->game_id = $updateguild->game_id;
-		$game->Get();
+		$game->get_game();
 
 		$this->template->assign_vars(
 			array(
@@ -722,7 +719,7 @@ class guild_module extends Admin
 			trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
 		}
 
-		$updateguild = new Guilds();
+		$updateguild = new guilds();
 		$guildlist   = $updateguild->guildlist(1);
 		foreach ($guildlist as $g)
 		{
@@ -787,7 +784,7 @@ class guild_module extends Admin
 		while ($row = $this->db->sql_fetchrow($guild_result))
 		{
 			$guild_count++;
-			$listguild = new Guilds($row['id']);
+			$listguild = new guilds($row['id']);
 			$this->template->assign_block_vars(
 				'guild_row',
 				array(

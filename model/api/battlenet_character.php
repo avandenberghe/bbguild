@@ -17,7 +17,7 @@
 
 namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\Resource;
+use bbdkp\bbguild\model\api\battlenet_resource;
 
 /**
  * @ignore
@@ -32,7 +32,7 @@ if (!defined('IN_PHPBB'))
  *
  *   @package bbguild
  */
-class Character extends Resource
+class battlenet_character extends battlenet_resource
 {
 
 	/**

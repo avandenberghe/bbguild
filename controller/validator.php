@@ -13,22 +13,15 @@
 namespace sajaki\bbguild\controller\admin;
 
 /**
- * @ignore
- */
-if (! defined('IN_PHPBB')) {
-	exit();
-}
-
-/**
  * validator class
  */
 class validator
 {
 	/**
-	  * error rules
-	*
-	  * @var array
-	  */
+	 * error rules
+	 *
+	 * @var array
+	 */
 	protected $_rules = array();
 
 	/**
@@ -105,15 +98,18 @@ class validator
 			foreach ($rules as $rule => $parameter)
 			{
 				// If rule does not require parameter
-				if (is_int($rule)) {
+				if (is_int($rule))
+				{
 					$rule = $parameter;
 					$parameter = null;
 				}
 
-				if (!$this->check($value, $rule, $parameter)) {
+				if (!$this->check($value, $rule, $parameter))
+				{
 					$valid = false;
 
-					if (stripos($this->_messages[$rule], '%s') !== false) {
+					if (stripos($this->_messages[$rule], '%s') !== false)
+					{
 						$this->_errors[$field][] = sprintf($this->_messages[$rule], $parameter);
 					}
 					else
@@ -149,31 +145,31 @@ class validator
 	{
 		switch ($rule)
 		{
-		case 'required' :
-			return!(trim($value) == '');
+			case 'required' :
+				return!(trim($value) == '');
 
-		case 'maxlength' :
-			return (strlen($value) <= $parameter);
+			case 'maxlength' :
+				return (strlen($value) <= $parameter);
 
-		case 'minlength' :
-			return (strlen($value) >= $parameter);
+			case 'minlength' :
+				return (strlen($value) >= $parameter);
 
-		case 'numeric' :
-			return is_numeric($value);
+			case 'numeric' :
+				return is_numeric($value);
 
-		case 'int' :
-			return is_int($value);
+			case 'int' :
+				return is_int($value);
 
-		case 'min' :
-			return $value >= $parameter ? true : false;
+			case 'min' :
+				return $value >= $parameter ? true : false;
 
-		case 'max' :
-			return $value <= $parameter ? true : false;
+			case 'max' :
+				return $value <= $parameter ? true : false;
 
-		case 'url':
-			// Regex taken from symfony
-			return preg_match(
-				'~^
+			case 'url':
+				// Regex taken from symfony
+				return preg_match(
+					'~^
                   (https?)://                           # protocol
                   (
                 ([a-z0-9-]+\.)+[a-z]{2,6}               # a domain name
@@ -183,22 +179,22 @@ class validator
                   (:[0-9]+)?                                # a port (optional)
                   (/?|/\S+)                                 # a /, nothing or a / with something
                 $~ix', $value
-			);
+				);
 
-		case 'email':
-			return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
+			case 'email':
+				return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
 
-		case 'hexcode':
-			//Checks if a field is a valid hexadecimal color code (#FFFFFF)
-			return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
-		case 'regex':
-			return preg_match($parameter, $value);
+			case 'hexcode':
+				//Checks if a field is a valid hexadecimal color code (#FFFFFF)
+				return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
+			case 'regex':
+				return preg_match($parameter, $value);
 
-		case 'pass':
-			return true;
+			case 'pass':
+				return true;
 
-		default :
-			return false;
+			default :
+				return false;
 		}
 	}
 
@@ -208,17 +204,17 @@ class validator
 	protected function setDefaultMessages()
 	{
 		$this->_messages = array(
-				'require' => 'Field is required.',
-				'maxlength' => 'Too long (%s characters max).',
-				'minlength' => 'Too short (%s characters min).',
-				'numeric' => 'Value must be numeric.',
-				'int' => 'Value must be an integer.',
-				'max' => 'Value must be at most %s',
-				'min' => 'Value must be at least %s',
-				'url' => 'Value must be a valid URL.',
-				'email' => 'Value must be a valid email.',
-				'hexcode' => 'Value must be a hexcode',
-				'regex' => 'Invalid value.',
+			'require' => 'Field is required.',
+			'maxlength' => 'Too long (%s characters max).',
+			'minlength' => 'Too short (%s characters min).',
+			'numeric' => 'Value must be numeric.',
+			'int' => 'Value must be an integer.',
+			'max' => 'Value must be at most %s',
+			'min' => 'Value must be at least %s',
+			'url' => 'Value must be a valid URL.',
+			'email' => 'Value must be a valid email.',
+			'hexcode' => 'Value must be a hexcode',
+			'regex' => 'Invalid value.',
 		);
 	}
 
@@ -229,11 +225,13 @@ class validator
 	{
 		global $user;
 
-		if (!$this->isValid()) {
+		if (!$this->isValid())
+		{
 			$out     ='';
-			foreach($this->getErrors() as $field => $messages)
+			foreach ($this->getErrors() as $field => $messages)
 			{
-				if (count($messages) == 1) {
+				if (count($messages) == 1)
+				{
 					$out .= "<li><strong>$field</strong>: $messages[0]</li>";
 				}
 				else

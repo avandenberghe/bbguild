@@ -524,7 +524,8 @@ class log
 			'log_result'    => 'L_SUCCESS',
 			'log_userid'    => $user->data['user_id']);
 
-		if (sizeof($values) > 0 ) {
+		if (sizeof($values) > 0 )
+		{
 			// If they set the value, we use theirs, otherwise we use the default
 			foreach ($log_fields as $field)
 			{
@@ -534,9 +535,11 @@ class log
 				{
 				case 'log_type':
 					$log_type = str_replace('L_ACTION_', '', $values['log_type']);
-					if (!in_array($log_type,  (array) self::$valid_action_types)) {
+					if (!in_array($log_type,  (array) self::$valid_action_types))
+					{
 						$log_type = str_replace('L_ERROR_', '', $values['log_type']);
-						if (!in_array($log_type,  (array) self::$valid_action_types)) {
+						if (!in_array($log_type,  (array) self::$valid_action_types))
+						{
 							//wrong logging type, can't log
 							return false;
 						}
@@ -549,8 +552,10 @@ class log
 					foreach ($values['log_action'] as $key => $value)
 					{
 						//check tags but skip the header
-						if ($key != 'header') {
-							if (!in_array($key, (array) self::$valid_tags)) {
+						if ($key != 'header')
+						{
+							if (!in_array($key, (array) self::$valid_tags))
+							{
 								//wrong logging type
 								$key = 'L_WRONG_KEY';
 							}
@@ -634,20 +639,24 @@ class log
 		'WHERE' => 'u.user_id=l.log_userid');
 
 		// If they're looking for something specific, we have to figure out what that is
-		if ($search) {
+		if ($search)
+		{
 
 			// Check if it's a valid log type
-			if (array_search($search_term, self::$valid_action_types)) {
+			if (array_search($search_term, self::$valid_action_types))
+			{
 				$sql_array['WHERE'] = " u.user_id=l.log_userid
                     AND ( l.log_type='" . $db->sql_escape('L_ACTION_' . $search_term) . "'
                           OR  l.log_type='" . $db->sql_escape('L_ERROR_' . $search_term) . "')";
 			}
 			// Check it's an IP
-			else if (preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $search_term)) {
+			else if (preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $search_term))
+			{
 				$sql_array['WHERE'] = "  u.user_id=l.log_userid AND l.log_ipaddress='" . $db->sql_escape($search_term) . "'";
 			}
 			// Still going? It's a username
-			else if ($search_term != '') {
+			else if ($search_term != '')
+			{
 				$sql_array['WHERE'] = " u.user_id=l.log_userid AND u.user_id='" . $db->sql_escape($search_term) . "'";
 			}
 			else
@@ -656,7 +665,8 @@ class log
 			}
 		}
 
-		if ($verbose == false) {
+		if ($verbose == false)
+		{
 			$sql_array['ORDER_BY'] = $order;
 			$sql = $db->sql_build_query('SELECT', $sql_array);
 			$result = $db->sql_query_limit($sql, 30);
@@ -705,7 +715,8 @@ class log
 	public function getLogMessage($value, $verbose = false)
 	{
 		global $user;
-		if ($verbose) {
+		if ($verbose)
+		{
 			return $user->lang['VLOG_' . self::$valid_action_types[constant("self::$value")]];
 		}
 		else
@@ -843,7 +854,8 @@ class log
 			break;
 		case 'DECAYSYNC':
 
-			if (isset($log['L_ORIGIN']) ) {
+			if (isset($log['L_ORIGIN']))
+			{
 				$origin = $log['L_ORIGIN'];
 			}
 			else
@@ -853,7 +865,8 @@ class log
 			$logline = sprintf($this->getLogMessage('DECAYSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] : 0) . ' ' . $origin;
 			break;
 		case 'DECAYOFF':
-			if (isset($log['L_ORIGIN']) ) {
+			if (isset($log['L_ORIGIN']))
+			{
 				$origin = $log['L_ORIGIN'];
 			}
 			else
@@ -863,7 +876,8 @@ class log
 			$logline = sprintf($this->getLogMessage('DECAYOFF', $verbose), $userstring, $origin);
 			break;
 		case 'ZSYNC':
-			if (isset($log['L_ORIGIN']) ) {
+			if (isset($log['L_ORIGIN']))
+			{
 				$origin = $log['L_ORIGIN'];
 			}
 			else
@@ -873,7 +887,8 @@ class log
 			$logline = sprintf($this->getLogMessage('ZSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] :0) . ' '. $origin;
 			break;
 		case 'DKPSYNC':
-			if (isset($log['L_ORIGIN']) ) {
+			if (isset($log['L_ORIGIN']))
+			{
 				$origin = $log['L_ORIGIN'];
 			}
 			else
@@ -883,7 +898,8 @@ class log
 			$logline = sprintf($this->getLogMessage('DKPSYNC', $verbose), $userstring) . ' '. $origin;
 			break;
 		case 'DEFAULT_DKP_CHANGED':
-			if (isset($log['L_ORIGIN']) ) {
+			if (isset($log['L_ORIGIN']))
+			{
 				$origin = $log['L_ORIGIN'];
 			}
 			else
@@ -983,7 +999,8 @@ class log
 		$array_temp = (array) @simplexml_load_string($haystack);
 		foreach ($array_temp as $tag => $value)
 		{
-			if (in_array($tag, self::$valid_tags)) {
+			if (in_array($tag, self::$valid_tags))
+			{
 				$found[$tag] = $value;
 			}
 		}

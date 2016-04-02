@@ -14,14 +14,14 @@
 
 namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\Resource;
+use bbdkp\bbguild\model\api\battlenet_resource;
 
 /**
  * Realm resource.
  *
  *   @package bbguild
  */
-class Realm extends Resource
+class battlenet_realm extends battlenet_resource
 {
 	/**
 	 * allowed realm api methods

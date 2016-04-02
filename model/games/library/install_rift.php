@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_rift extends GameInstall
+class install_rift extends game_install
 {
 	protected $bossbaseurl = 'http://rift.zam.com/en/npc.html?riftnpc=%s';
 	protected $zonebaseurl = 'ttp://rift.zam.com/en/zone/%s';
@@ -30,7 +30,7 @@ class install_rift extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global $db;
 		// factions
@@ -48,7 +48,7 @@ class install_rift extends GameInstall
 	*
 	 * @note : only the core classes are created
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global $db;
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '".$this->game_id."'");
@@ -155,7 +155,7 @@ class install_rift extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global $db;
 		// races

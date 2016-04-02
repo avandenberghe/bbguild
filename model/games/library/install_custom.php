@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_custom extends GameInstall
+class install_custom extends game_install
 {
 	protected $bossbaseurl = '';
 	protected $zonebaseurl = '';
@@ -30,7 +30,7 @@ class install_custom extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 
 	}
@@ -38,7 +38,7 @@ class install_custom extends GameInstall
 	/**
 	 * Installs game classes
 	 */
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 
 	}
@@ -46,7 +46,7 @@ class install_custom extends GameInstall
 	/**
 	 * Installs races
 	 */
-	protected function InstallRaces()
+	protected function install_races()
 	{
 
 	}

@@ -10,7 +10,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -24,7 +24,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_ffxiv extends GameInstall
+class install_ffxiv extends game_install
 {
 	protected $bossbaseurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/enemy/%s/';
 	protected $zonebaseurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/?category2=enemy&area=%s';
@@ -32,7 +32,7 @@ class install_ffxiv extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global  $db;
 
@@ -50,7 +50,7 @@ class install_ffxiv extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global  $db;
 
@@ -141,7 +141,7 @@ class install_ffxiv extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global  $db;
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '" .$this->game_id . "'");

@@ -24,14 +24,14 @@
 
 namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\Resource;
+use bbdkp\bbguild\model\api\battlenet_resource;
 
 /**
  * Guild resource.
  *
  * @package bbdkp\bbguild\model\api
  */
-class Guild extends Resource
+class battlenet_guild extends battlenet_resource
 {
 
 	/**
@@ -79,22 +79,26 @@ class Guild extends Resource
 	{
 		global $user;
 
-		if (empty($name)) {
+		if (empty($name))
+		{
 			trigger_error($user->lang['WOWAPI_NO_GUILD']);
 		}
 
-		if (empty($realm)) {
+		if (empty($realm))
+		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}
 
 		$realm = str_replace(' ', '%20', $realm);
 		$name = str_replace(' ', '%20', $name);
 
-		if (is_array($fields) && count($fields) > 0) {
+		if (is_array($fields) && count($fields) > 0)
+		{
 			$field_str = 'fields=' . implode(',', $fields);
 			//check if correct keys were requested
 			$keys = $this->getFields();
-			if (count(array_intersect($fields, $keys)) == 0 ) {
+			if (count(array_intersect($fields, $keys)) == 0 )
+			{
 				trigger_error(sprintf($user->lang['WOWAPI_INVALID_FIELD'], $field_str));
 			}
 

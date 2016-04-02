@@ -8,7 +8,8 @@
 /*
 * connect to phpBB
 */
-if (!defined('IN_PHPBB') ) {
+if (!defined('IN_PHPBB') )
+{
 	exit;
 }
 global $table_prefix;

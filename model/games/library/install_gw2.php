@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_gw2 extends GameInstall
+class install_gw2 extends game_install
 {
 	protected $bossbaseurl = '';
 	protected $zonebaseurl = '';
@@ -30,13 +30,13 @@ class install_gw2 extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 
 		global  $cache, $db;
 
 		//https://wiki.guildwars2.com/wiki/API:1/guild_details
-		$gw2api = new \bbdkp\bbguild\model\api\gw2api($cache);
+		$gw2api = new \bbdkp\bbguild\model\api\gw2_api($cache);
 
 		$guild = $gw2api->getGuildDetails(array('guild_id' => '75FD83CF-0C45-4834-BC4C-097F93A487AF',
 				  'guild_name' => 'Veterans Of Lions Arch'),3600);
@@ -53,7 +53,7 @@ class install_gw2 extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global  $db;
 
@@ -142,7 +142,7 @@ class install_gw2 extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global  $db;
 
@@ -199,9 +199,8 @@ class install_gw2 extends GameInstall
 	 * installs GW2 game roles.
 	 * these are special
 	 */
-	protected function InstallRoles()
+	protected function install_roles()
 	{
-
 		global $db;
 
 		$db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");

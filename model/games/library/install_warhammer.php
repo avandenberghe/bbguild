@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\controller\games
  */
-class install_warhammer extends GameInstall
+class install_warhammer extends game_install
 {
 	protected $bossbaseurl = ' ';
 	protected $zonebaseurl = ' ';
@@ -30,7 +30,7 @@ class install_warhammer extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global  $db;
 		// factions
@@ -45,7 +45,7 @@ class install_warhammer extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global  $db;
 
@@ -173,7 +173,7 @@ class install_warhammer extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 
 		global  $db;

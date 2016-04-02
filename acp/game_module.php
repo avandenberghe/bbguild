@@ -8,19 +8,19 @@
  */
 namespace bbdkp\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\Admin;
-use bbdkp\bbguild\model\games\Game;
-use bbdkp\bbguild\model\games\rpg\Classes;
-use bbdkp\bbguild\model\games\rpg\Faction;
-use bbdkp\bbguild\model\games\rpg\Races;
-use bbdkp\bbguild\model\games\rpg\Roles;
+use bbdkp\bbguild\model\admin\admin;
+use bbdkp\bbguild\model\games\game;
+use bbdkp\bbguild\model\games\rpg\classes;
+use bbdkp\bbguild\model\games\rpg\faction;
+use bbdkp\bbguild\model\games\rpg\races;
+use bbdkp\bbguild\model\games\rpg\roles;
 
 /**
  * This class manages Game settings
  *
  * @package bbdkp\bbguild\acp
  */
-class game_module extends Admin
+class game_module extends admin
 {
 	/**
 	 * link in trigger window
@@ -90,7 +90,7 @@ class game_module extends Admin
 		}
 
 		//list installed games
-		$listgames = new Game;
+		$listgames = new game;
 		$sort_order = array(
 			0 => array(    'id' , 'id desc') ,
 			1 => array('game_id' , 'game_id desc') ,
@@ -99,7 +99,7 @@ class game_module extends Admin
 		$current_order = $this->switch_order($sort_order);
 
 		$sort_index = explode('.', $current_order['uri']['current']);
-		$this->gamelist = $listgames->listgames($current_order['sql']);
+		$this->gamelist = $listgames->list_games($current_order['sql']);
 
 		$installed = array();
 		foreach ($this->gamelist as $game)
@@ -111,7 +111,7 @@ class game_module extends Admin
 		{
 			case 'listgames' :
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
 
 				//game dropdown
 				$newpresetgame = $this->request->is_set_post('addgame1');
@@ -123,10 +123,10 @@ class game_module extends Admin
 					// ask for permission
 					if (confirm_box(true))
 					{
-						$editgame = new Game;
+						$editgame = new game;
 						$editgame->game_id = $this->request->variable('hidden_game_id', '');
 						$editgame->setName($this->request->variable('hidden_game_name', '', true));
-						$editgame->install();
+						$editgame->install_game();
 						//
 						// Logging
 						//
@@ -233,7 +233,7 @@ class game_module extends Admin
 
 				$this->template->assign_vars(
 					array (
-						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
+						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') ,
 						'CANINSTALL' => ($can_install_count == 0) ? false : true,
 						'O_ID' => $current_order['uri'][0] ,
 						'O_GAMEID' => $current_order['uri'][1] ,
@@ -251,9 +251,9 @@ class game_module extends Admin
 
 				$action = $this->request->variable('action', '');
 
-				$editgame = new Game;
+				$editgame = new game;
 				$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
-				$editgame->Get();
+				$editgame->get_game();
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' .
 					$this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
@@ -264,7 +264,7 @@ class game_module extends Admin
 
 				$this->template->assign_vars(
 					array (
-						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
+						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') ,
 					)
 				);
 
@@ -381,11 +381,11 @@ class game_module extends Admin
 
 			case 'addrole' :
 
-				$role = new Roles();
+				$role = new roles();
 				$role->game_id = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
-				$editgame = new Game;
+				$editgame = new game;
 				$editgame->game_id = $role->game_id;
-				$editgame->Get();
+				$editgame->get_game();
 
 				$addnew = $this->request->is_set_post('addrole');
 				$editfaction = $this->request->is_set_post('editrole');
@@ -401,10 +401,10 @@ class game_module extends Admin
 
 			case 'addfaction' :
 
-				$faction = new Faction($this->request->variable('game_id', $this->request->variable('hidden_game_id', '')));
-				$editgame = new Game;
+				$faction = new faction($this->request->variable('game_id', $this->request->variable('hidden_game_id', '')));
+				$editgame = new game;
 				$editgame->game_id = $faction->game_id;
-				$editgame->Get();
+				$editgame->get_game();
 
 				$addnew = $this->request->is_set_post('factionadd');
 				$editfaction = $this->request->is_set_post('factionedit');
@@ -474,13 +474,13 @@ class game_module extends Admin
 	/**
 	 * Save Game Settings
 	 *
-	 * @return Game
+	 * @return game
 	 */
 	private function SaveGameSettings()
 	{
-		$editgame = new Game;
+		$editgame = new game;
 		$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
-		$editgame->Get();
+		$editgame->get_game();
 
 		$editgame->setImagename($this->request->variable('imagename', ''));
 		$editgame->setArmoryEnabled($this->request->variable('enable_armory', 0));
@@ -488,9 +488,9 @@ class game_module extends Admin
 		$editgame->setZonebaseurl($this->request->variable('zonebaseurl', ''));
 		$editgame->setName($this->request->variable('game_name', ' ', true));
 		$editgame->setApikey($this->request->variable('apikey', ''));
-		$editgame->setApilocale($this->request->variable('apilocale', ''));
-		$editgame->setPrivkey($this->request->variable('privkey', ''));
-		$editgame->update();
+		$editgame->set_apilocale($this->request->variable('apilocale', ''));
+		$editgame->set_privkey($this->request->variable('privkey', ''));
+		$editgame->update_game();
 
 		return $editgame;
 	}
@@ -498,20 +498,20 @@ class game_module extends Admin
 	/**
 	 * Reset Game
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function ResetGame(Game $editgame)
+	private function ResetGame(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
 		if (confirm_box(true))
 		{
-			$editgame          = new Game;
+			$editgame          = new game;
 			$editgame->game_id = $this->request->variable('hidden_game_id', '');
-			$editgame->get();
-			$editgame->Delete();
-			$editgame->install();
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames'));
+			$editgame->get_game();
+			$editgame->delete_game();
+			$editgame->install_game();
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games'));
 			trigger_error(sprintf($this->user->lang['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
 		}
 		else
@@ -532,17 +532,17 @@ class game_module extends Admin
 	/**
 	 * Delete Game from bbGuild
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function DeleteGame(Game $editgame)
+	private function DeleteGame(game $editgame)
 	{
 
 		if (confirm_box(true))
 		{
-			$deletegame          = new Game;
+			$deletegame          = new game;
 			$deletegame->game_id = $this->request->variable('hidden_game_id', '');
-			$deletegame->Get();
-			$deletegame->Delete();
+			$deletegame->get_game();
+			$deletegame->delete_game();
 
 			$log_action = array(
 				'header' => 'L_ACTION_GAME_DELETED',
@@ -554,7 +554,7 @@ class game_module extends Admin
 					'log_type'   => 'L_ACTION_GAME_DELETED',
 					'log_action' => $log_action)
 			);
-			//meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') );
+			//meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=list_games') );
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName()), E_USER_WARNING);
 
 		} else
@@ -576,10 +576,10 @@ class game_module extends Admin
 	/**
 	 * Add Role
 	 *
-	 * @param Roles $role
-	 * @param Game  $editgame
+	 * @param roles $role
+	 * @param game  $editgame
 	 */
-	private function AddRole(Roles $role, Game $editgame)
+	private function AddRole(roles $role, game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
@@ -592,7 +592,7 @@ class game_module extends Admin
 		$role->role_color = $this->request->variable('role_color', '');
 		$role->role_icon = $this->request->variable('role_icon', '');
 		$role->role_cat_icon = $this->request->variable('role_cat_icon', '');
-		$role->Make();
+		$role->make_role();
 
 		$log_action = array(
 			'header'    => 'L_ACTION_ROLE_ADDED',
@@ -612,19 +612,19 @@ class game_module extends Admin
 	}
 
 	/**
-	 * @param Roles $role
-	 * @param Game  $editgame
+	 * @param roles $role
+	 * @param game  $editgame
 	 */
-	private function EditRole(Roles $role, Game $editgame)
+	private function EditRole(roles $role, game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$oldrole             = new Roles();
+		$oldrole             = new roles();
 		$oldrole->game_id    = $editgame->game_id;
 		$oldrole->role_id    = $this->request->variable('hidden_role_id', 0);
 		$oldrole->get();
 
-		$newrole               = new Roles();
+		$newrole               = new roles();
 		$newrole->game_id      = $editgame->game_id;
 		$newrole->role_id   = $this->request->variable('hidden_role_id', 0);
 		$newrole->get(); // in order to get the pk
@@ -634,7 +634,7 @@ class game_module extends Admin
 		$newrole->role_icon = $this->request->variable('role_icon', '');
 		$newrole->role_cat_icon = $this->request->variable('role_cat_icon', '');
 
-		$newrole->Update($oldrole);
+		$newrole->update_role($oldrole);
 
 		$log_action = array(
 			'header'    => 'L_ACTION_ROLE_UPDATED',
@@ -655,19 +655,19 @@ class game_module extends Admin
 	}
 
 	/**
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function DeleteRole(Game $editgame)
+	private function DeleteRole(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
 		if (confirm_box(true))
 		{
-			$deleterole               = new Roles();
+			$deleterole               = new roles();
 			$deleterole->game_id      =  $this->request->variable('hidden_game_id', '');
 			$deleterole->role_id    = $this->request->variable('hidden_role_id', 0);
 			$deleterole->get(); // in order to get the pk
-			$deleterole->Delete();
+			$deleterole->delete_role();
 
 			$log_action = array(
 				'header'    => 'L_ACTION_FACTION_DELETED',
@@ -688,7 +688,7 @@ class game_module extends Admin
 		}
 		else
 		{
-			$deleterole               = new Roles();
+			$deleterole               = new roles();
 			$deleterole->game_id      = $editgame->game_id;
 			$deleterole->role_id      = $this->request->variable('role_id', 0);
 			$deleterole->get(); // in order to get the pk
@@ -709,10 +709,10 @@ class game_module extends Admin
 	/**
 	 * Add Faction
 	 *
-	 * @param Faction $faction
-	 * @param Game    $editgame
+	 * @param faction $faction
+	 * @param game    $editgame
 	 */
-	private function AddFaction(Faction $faction, Game $editgame)
+	private function AddFaction(faction $faction, game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
@@ -721,7 +721,7 @@ class game_module extends Admin
 			trigger_error('FORM_INVALID');
 		}
 		$faction->faction_name = $this->request->variable('factionname', '', true);
-		$faction->Make();
+		$faction->make_faction();
 
 		$log_action = array(
 			'header'    => 'L_ACTION_FACTION_ADDED',
@@ -740,37 +740,37 @@ class game_module extends Admin
 	}
 
 	/**
-	 * @param Faction $faction
-	 * @param Game    $editgame
+	 * @param faction $faction
+	 * @param game    $editgame
 	 */
-	private function EditFaction(Faction $faction, Game $editgame)
+	private function EditFaction(faction $faction, game $editgame)
 	{
-		$oldfaction             = new Faction($editgame->game_id);
+		$oldfaction             = new faction($editgame->game_id);
 		$oldfaction->faction_id = $this->request->variable('hidden_faction_id', 0);
 		$oldfaction->get();
 
-		$newfaction               = new Faction($editgame->game_id);
+		$newfaction               = new faction($editgame->game_id);
 		$newfaction->faction_name = $this->request->variable('factionname', '', true);
 		$newfaction->faction_id   = $this->request->variable('hidden_faction_id', 0);
-		$newfaction->update();
+		$newfaction->update_faction();
 
 		trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_FACTION_SUCCESS'], $newfaction->faction_name), E_USER_WARNING);
 
 	}
 
 	/**
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function DeleteFaction(Game $editgame)
+	private function DeleteFaction(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
 		if (confirm_box(true))
 		{
-			$faction             = new Faction($this->request->variable('hidden_game_id', ''));
+			$faction             = new faction($this->request->variable('hidden_game_id', ''));
 			$faction->faction_id = $this->request->variable('hidden_faction_id', 0);
 			$faction->get();
-			$faction->Delete();
+			$faction->delete_faction();
 
 			$log_action = array(
 				'header'    => 'L_ACTION_FACTION_DELETED',
@@ -789,7 +789,7 @@ class game_module extends Admin
 		}
 		else
 		{
-			$faction             = new Faction($editgame->game_id);
+			$faction             = new faction($editgame->game_id);
 			$faction->faction_id = $this->request->variable('id', 0);
 			$faction->get();
 
@@ -812,7 +812,7 @@ class game_module extends Admin
 	private function AddClass()
 	{
 		global $phpbb_admin_path, $phpEx;
-		$newclass             = new Classes();
+		$newclass             = new classes();
 		$newclass->game_id    = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
 		$newclass->classname  = $this->request->variable('class_name', '', true);
 		$newclass->class_id   = $this->request->variable('class_id', 0);
@@ -825,7 +825,7 @@ class game_module extends Admin
 		$newclass->dps        = '';
 		$newclass->heal       = '';
 		$newclass->tank       = '';
-		$newclass->Make();
+		$newclass->make_class();
 		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_ADD_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
 	}
@@ -836,17 +836,17 @@ class game_module extends Admin
 	private function EditClass()
 	{
 		global $phpbb_admin_path, $phpEx;
-		$oldclass           = new Classes();
+		$oldclass           = new classes();
 		$oldclass->game_id  = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
 		$oldclass->class_id = $this->request->variable('class_id0', 0);
 		$oldclass->c_index  = $this->request->variable('c_index', 0);
-		$oldclass->Get();
+		$oldclass->get_class();
 
-		$newclass           = new Classes();
+		$newclass           = new classes();
 		$newclass->game_id  = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
 		$newclass->class_id = $this->request->variable('class_id0', 0);
 		$newclass->c_index  = $this->request->variable('c_index', 0);
-		$newclass->Get();
+		$newclass->get_class();
 		$newclass->class_id   = $this->request->variable('class_id', 0);
 		$newclass->classname  = $this->request->variable('class_name', '', true);
 		$newclass->min_level  = $this->request->variable('class_level_min', 0);
@@ -858,7 +858,7 @@ class game_module extends Admin
 		$newclass->dps        = '';
 		$newclass->heal       = '';
 		$newclass->tank       = '';
-		$newclass->Update($oldclass);
+		$newclass->update_class($oldclass);
 		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
 	}
@@ -866,27 +866,27 @@ class game_module extends Admin
 	/**
 	 * Delete Class
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function DeleteClass(Game $editgame)
+	private function DeleteClass(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
 		if (confirm_box(true))
 		{
-			$deleteclass           = new Classes();
+			$deleteclass           = new classes();
 			$deleteclass->class_id = $this->request->variable('hidden_class_id', 0);
 			$deleteclass->game_id  = $this->request->variable('hidden_game_id', '');
-			$deleteclass->get();
-			$deleteclass->Delete();
+			$deleteclass->get_class();
+			$deleteclass->delete_class();
 			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleteclass->game_id}"));
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $deleteclass->classname) . $this->link, E_USER_WARNING);
 		} else
 		{
-			$deleteclass           = new Classes();
+			$deleteclass           = new classes();
 			$deleteclass->class_id = $this->request->variable('id', 0);
 			$deleteclass->game_id  = $editgame->game_id;
-			$deleteclass->get();
+			$deleteclass->get_class();
 
 			$s_hidden_fields = build_hidden_fields(
 				array(
@@ -907,19 +907,19 @@ class game_module extends Admin
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$oldrace          = new Races();
+		$oldrace          = new races();
 		$oldrace->game_id = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
 		$oldrace->race_id = $this->request->variable('race_id', 0);
-		$oldrace->Get();
-		$race          = new Races();
+		$oldrace->get_race();
+		$race          = new races();
 		$race->game_id = $oldrace->game_id;
 		$race->race_id = $oldrace->race_id;
-		$race->Get();
+		$race->get_race();
 		$race->race_name       = $this->request->variable('racename', '', true);
 		$race->race_faction_id = $this->request->variable('faction', 0);
 		$race->image_male      = $this->request->variable('image_male', '', true);
 		$race->image_female    = $this->request->variable('image_female', '', true);
-		$race->Update($oldrace);
+		$race->update_race($oldrace);
 		//
 		// Logging
 		//
@@ -944,14 +944,14 @@ class game_module extends Admin
 	private function AddRace()
 	{
 		global $phpbb_admin_path, $phpEx;
-		$race                  = new Races();
+		$race                  = new races();
 		$race->game_id         = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
 		$race->race_id         = $this->request->variable('race_id', $this->request->variable('hidden_race_id', ''));
 		$race->race_name       = $this->request->variable('racename', '', true);
 		$race->race_faction_id = $this->request->variable('faction', 0);
 		$race->image_male      = $this->request->variable('image_male', '', true);
 		$race->image_female    = $this->request->variable('image_female', '', true);
-		$race->Make();
+		$race->make_race();
 
 		$log_action = array(
 			'header' => 'L_ACTION_RACE_ADDED',
@@ -971,20 +971,20 @@ class game_module extends Admin
 	/**
 	 * Delete Race
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function DeleteRace(Game $editgame)
+	private function DeleteRace(game $editgame)
 	{
 
 		global $phpbb_admin_path, $phpEx;
 
 		if (confirm_box(true))
 		{
-			$deleterace          = new Races();
+			$deleterace          = new races();
 			$deleterace->race_id = $this->request->variable('hidden_raceid', 0);
 			$deleterace->game_id = $this->request->variable('hidden_gameid', '');
-			$deleterace->get();
-			$deleterace->Delete();
+			$deleterace->get_race();
+			$deleterace->delete_race();
 
 			$log_action = array(
 				'header' => 'L_ACTION_RACE_DELETED',
@@ -1004,10 +1004,10 @@ class game_module extends Admin
 		}
 		else
 		{
-			$deleterace          = new Races;
+			$deleterace          = new races;
 			$deleterace->race_id = $this->request->variable('id', 0);
 			$deleterace->game_id = $this->request->variable('game_id', '');
-			$deleterace->get();
+			$deleterace->get_race();
 
 			$s_hidden_fields = build_hidden_fields(
 				array(
@@ -1026,17 +1026,17 @@ class game_module extends Admin
 	/**
 	 * load template add race
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateAddRace(Game $editgame)
+	private function BuildTemplateAddRace(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$listraces          = new Races();
+		$listraces          = new races();
 		$listraces->game_id = $editgame->game_id;
 
-		$listfactions          = new Faction($editgame->game_id);
-		$fa = $listfactions->getfactions();
+		$listfactions          = new faction($editgame->game_id);
+		$fa = $listfactions->get_factions();
 		if (count($fa) == 0)
 		{
 			trigger_error('ERROR_NOFACTION', E_USER_WARNING);
@@ -1067,16 +1067,16 @@ class game_module extends Admin
 	/**
 	 * Load Template Edit Race
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateEditRace(Game $editgame)
+	private function BuildTemplateEditRace(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$races = new Races();
+		$races = new races();
 		$races->race_id = $this->request->variable('id', 0);
 		$races->game_id = $editgame->game_id;
-		$races->get();
+		$races->get_race();
 		if (!empty($this))
 		{
 			foreach ($this->gamelist as $key => $gamename)
@@ -1090,8 +1090,8 @@ class game_module extends Admin
 			}
 		}
 		// faction dropdown
-		$listfactions          = new Faction($editgame->game_id);
-		$fa                    = $listfactions->getfactions();
+		$listfactions          = new faction($editgame->game_id);
+		$fa                    = $listfactions->get_factions();
 		$s_faction_options = '';
 		foreach ($fa as $faction_id => $faction)
 		{
@@ -1145,16 +1145,16 @@ class game_module extends Admin
 	/**
 	 * Load Template Edit Classes
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateEditClass(Game $editgame)
+	private function BuildTemplateEditClass(game $editgame)
 	{
 		global  $phpbb_admin_path, $phpEx;
 
-		$GameClass           = new Classes;
+		$GameClass           = new classes;
 		$GameClass->class_id = $this->request->variable('id', 0);
 		$GameClass->game_id  = $editgame->game_id;
-		$GameClass->Get();
+		$GameClass->get_class();
 
 		// list installed games
 		if (!empty($this))
@@ -1214,13 +1214,13 @@ class game_module extends Admin
 	/**
 	 * Load Template Add Classes
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateAddClass(Game $editgame)
+	private function BuildTemplateAddClass(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$listclasses          = new Classes;
+		$listclasses          = new classes;
 		$listclasses->game_id = $editgame->game_id;
 		$s_armor_options = '';
 		foreach ($listclasses->armortypes as $armor => $armorname)
@@ -1246,15 +1246,15 @@ class game_module extends Admin
 
 
 	/**
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateFaction(Game $editgame)
+	private function BuildTemplateFaction(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$faction = new Faction($editgame->game_id);
+		$faction = new faction($editgame->game_id);
 		$faction->faction_id = $this->request->variable('id', 0);
-		$faction->Get();
+		$faction->get();
 
 		// send parameters to template
 		$this->template->assign_vars(
@@ -1275,19 +1275,19 @@ class game_module extends Admin
 
 
 	/**
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function BuildTemplateRole(Game $editgame)
+	private function BuildTemplateRole(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$role = new Roles();
+		$role = new roles();
 		$role->game_id = $editgame->game_id;
 		$add=true;
 		if ($this->request->is_set_post('role_id')  ||  isset($_GET['role_id']) )
 		{
 			$role->role_id = $this->request->variable('role_id', 0);
-			$role->Get();
+			$role->get();
 			$add=false;
 		}
 
@@ -1315,9 +1315,9 @@ class game_module extends Admin
 	/**
 	 * lists game parameters
 	 *
-	 * @param Game $editgame
+	 * @param game $editgame
 	 */
-	private function showgame(Game $editgame)
+	private function showgame(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
 
@@ -1334,8 +1334,8 @@ class game_module extends Admin
 		}
 
 		// list the factions
-		$listfactions = new Faction($editgame->game_id);
-		$fa = $listfactions->getfactions();
+		$listfactions = new faction($editgame->game_id);
+		$fa = $listfactions->get_factions();
 		$total_factions = 0;
 		foreach ($fa as $faction_id => $faction)
 		{
@@ -1367,9 +1367,9 @@ class game_module extends Admin
 		$current_order = $this->switch_order($sort_order);
 		$total_races = 0;
 
-		$listraces = new Races();
+		$listraces = new races();
 		$listraces->game_id = $editgame->game_id;
-		$ra = $listraces->listraces($current_order['sql']);
+		$ra = $listraces->list_races($current_order['sql']);
 		foreach ($ra as $race_id => $race)
 		{
 			$total_races ++;
@@ -1398,10 +1398,10 @@ class game_module extends Admin
 			2 => array ('rolename', 'rolename desc' ));
 
 		$current_order3 = $this->switch_order($sort_order);
-		$listroles = new Roles();
+		$listroles = new roles();
 		$listroles->game_id = $editgame->game_id;
 		$total_roles=0;
-		$roles = $listroles->listroles($current_order3['sql']);
+		$roles = $listroles->list_roles($current_order3['sql']);
 		foreach ($roles as $role_id => $role)
 		{
 			$total_roles++;
@@ -1433,9 +1433,9 @@ class game_module extends Admin
 		$current_order2 = $this->switch_order($sort_order2, "o1");
 		$total_classes = 0;
 
-		$listclasses = new  Classes();
+		$listclasses = new  classes();
 		$listclasses->game_id = $editgame->game_id;
-		$cl = $listclasses->listclasses($current_order2['sql'], 1);
+		$cl = $listclasses->list_classes($current_order2['sql'], 1);
 		foreach ($cl as $c_index => $class)
 		{
 			$total_classes ++;
@@ -1476,8 +1476,8 @@ class game_module extends Admin
 				'ZONEBASEURL' => $editgame->getZonebaseurl(),
 				'ISWOW'     => $editgame->game_id == 'wow' ? 1: 0,
 				'APIKEY'    => $editgame->getApikey(),
-				'PRIVKEY'    => $editgame->getPrivkey(),
-				'LOCALE'  => $editgame->getApilocale(),
+				'PRIVKEY'    => $editgame->get_privkey(),
+				'LOCALE'  => $editgame->get_apilocale(),
 				'GAME_ID'   => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order['uri'][0],

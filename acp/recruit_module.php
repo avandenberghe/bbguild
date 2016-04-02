@@ -9,8 +9,8 @@
 
 namespace bbdkp\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\Admin;
-use bbdkp\bbguild\model\player\Guilds;
+use bbdkp\bbguild\model\admin\admin;
+use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\games\rpg\roles;
 use bbdkp\bbguild\model\player\Recruitment;
 
@@ -19,7 +19,7 @@ use bbdkp\bbguild\model\player\Recruitment;
  *
  *   @package bbguild
  */
-class recruit_module  extends Admin
+class recruit_module  extends admin
 {
 	/**
 	 * url action
@@ -95,12 +95,13 @@ class recruit_module  extends Admin
 		$this->apply_installed = false;
 		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
-		if (isset($plugin_versioninfo['apply'])) {
+		if (isset($plugin_versioninfo['apply']))
+		{
 			$this->apply_installed = true;
 		}
 
 		$guild_id = $this->request->variable(URI_GUILD, 1);
-		$Guild = new Guilds();
+		$Guild = new guilds();
 		$guildlist   = $Guild->guildlist(1);
 		foreach ($guildlist as $g)
 		{
@@ -112,7 +113,7 @@ class recruit_module  extends Admin
 			);
 		}
 		$Guild->guildid= $guild_id;
-		$Guild->Getguild();
+		$Guild->get_guild();
 
 		$this->template->assign_vars(
 			array(
@@ -133,7 +134,7 @@ class recruit_module  extends Admin
              ***************************************/
 		case 'listrecruit':
 
-			$this->BuildTemplateListRecruits($guild_id);
+			$this->build_templatelist_recruits($guild_id);
 			break;
 
 			/*************************************
@@ -147,7 +148,8 @@ class recruit_module  extends Admin
 			$add = $this->request->is_set_post('add');
 			$update = $this->request->is_set_post('update');
 			$action = $this->request->variable('action', '');
-			if ($this->apply_installed) {
+			if ($this->apply_installed)
+			{
 				//if apply is installed then fetch list of templates
 				$result = $this->db->sql_query('SELECT * FROM ' . APPTEMPLATELIST_TABLE);
 				$apply_templates = array();
@@ -158,16 +160,18 @@ class recruit_module  extends Admin
 				$this->db->sql_freeresult($result);
 			}
 
-			if ($action=='delete') {
+			if ($action=='delete')
+			{
 				$recruit->id = $this->request->variable('id', 0);
 				$recruit->get($recruit->id);
-				$recruit->delete();
+				$recruit->delete_role();
 
 				$success_message = sprintf($this->user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
 				trigger_error($success_message . $this->link, E_USER_WARNING);
 
 			}
-			else if ($action=='edit') {
+			else if ($action=='edit')
+			{
 				$recruit->id = $this->request->variable('id', 0);
 				$recruit->get($recruit->id);
 
@@ -198,8 +202,9 @@ class recruit_module  extends Admin
 
 			}
 
-			if ($this->apply_installed) {
-				foreach($apply_templates as $apply_template_id => $value)
+			if ($this->apply_installed)
+			{
+				foreach ($apply_templates as $apply_template_id => $value)
 				{
 					$this->template->assign_block_vars(
 						'applytemplates_row', array(
@@ -212,9 +217,11 @@ class recruit_module  extends Admin
 				}
 			}
 
-			if ($add || $update) {
+			if ($add || $update)
+			{
 
-				if (!check_form_key('bbdkp/bbguild')) {
+				if (!check_form_key('bbdkp/bbguild'))
+				{
 					trigger_error('FORM_INVALID');
 				}
 
@@ -230,22 +237,24 @@ class recruit_module  extends Admin
 
 			}
 
-			if ($add) {
-				$recruit->Make();
+			if ($add)
+			{
+				$recruit->make_role();
 
 				$success_message = sprintf($this->user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
 				trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 			}
-			else if ($update) {
-				$recruit->update();
+			else if ($update)
+			{
+				$recruit->update_role();
 				$success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
 				trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 			}
 			else
 			{
-				$this->BuildDropDowns($Guild, $recruit);
+				$this->build_dropdowns($Guild, $recruit);
 			}
 			$this->page_title = $this->user->lang['ACP_ADDRECRUITS'];
 			break;
@@ -262,16 +271,17 @@ class recruit_module  extends Admin
 	 *
 	 * @param $guild_id
 	 */
-	private function BuildTemplateListRecruits($guild_id)
+	private function build_templatelist_recruits($guild_id)
 	{
 		global $phpbb_admin_path, $phpEx;
-		if (count($this->games) == 0) {
+		if (count($this->games) == 0)
+		{
 			trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
 		}
 
 		$recruits = new Recruitment();
 		$recruits->setGuildId($guild_id);
-		$result   = $recruits->ListRecruitments(1);
+		$result   = $recruits->list_recruitments(1);
 		$recruit_count= 0;
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -313,7 +323,7 @@ class recruit_module  extends Admin
 	 * @param $Guild
 	 * @param $recruit
 	 */
-	private function BuildDropDowns($Guild, Recruitment $recruit)
+	private function build_dropdowns($Guild, Recruitment $recruit)
 	{
 		global $config;
 
@@ -342,10 +352,10 @@ class recruit_module  extends Admin
 		}
 		$this->db->sql_freeresult($result);
 		// get roles
-		$Roles           = new Roles();
+		$Roles           = new roles();
 		$Roles->game_id  = $Guild->game_id;
 		$Roles->guild_id = $Guild->guildid;
-		$listroles       = $Roles->listroles();
+		$listroles       = $Roles->list_roles();
 		foreach ($listroles as $roleid => $Role)
 		{
 			$this->template->assign_block_vars(

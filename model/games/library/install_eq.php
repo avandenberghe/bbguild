@@ -11,7 +11,7 @@ namespace bbdkp\bbguild\model\games\library;
 /**
  * @ignore
  */
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 if (! defined('IN_PHPBB')) {
 	exit();
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\controller\games
  */
-class install_eq extends GameInstall
+class install_eq extends game_install
 {
 	// credit shadowfox  http://www.avathar.be/bbdkp/viewtopic.php?f=33&t=2676
 	protected $bossbaseurl = 'http://everquest.allakhazam.com/db/npc.html?id=%s';
@@ -31,7 +31,7 @@ class install_eq extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global  $db;
 		// Everquest factions
@@ -48,7 +48,7 @@ class install_eq extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global  $db;
 
@@ -102,7 +102,7 @@ class install_eq extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global  $db;
 

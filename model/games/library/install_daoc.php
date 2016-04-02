@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\GameInstall;
+use bbdkp\bbguild\model\games\library\game_install;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB')) {
  *
  * @package bbdkp\bbguild\model\games\library
  */
-class install_daoc extends GameInstall
+class install_daoc extends game_install
 {
 	protected $bossbaseurl = 'http://camelot.allakhazam.com/db/search.html?cmob=%s';
 	protected $zonebaseurl = 'http://camelot.allakhazam.com/db/%s';
@@ -30,7 +30,7 @@ class install_daoc extends GameInstall
 	/**
 	 * Installs factions
 	 */
-	protected function Installfactions()
+	protected function install_factions()
 	{
 		global $db;
 
@@ -49,7 +49,7 @@ class install_daoc extends GameInstall
 	/**
 	 * Installs game classes
 	*/
-	protected function InstallClasses()
+	protected function install_classes()
 	{
 		global $db;
 
@@ -212,7 +212,7 @@ class install_daoc extends GameInstall
 	/**
 	 * Installs races
 	*/
-	protected function InstallRaces()
+	protected function install_races()
 	{
 		global $db;
 

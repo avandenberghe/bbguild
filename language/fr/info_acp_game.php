@@ -18,7 +18,8 @@ if (!defined('IN_PHPBB')) {
 }
 
 // Create the lang array if it does not already exist
-if (empty($lang) || !is_array($lang)) {
+if (empty($lang) || !is_array($lang))
+{
 	$lang = array();
 }
 
