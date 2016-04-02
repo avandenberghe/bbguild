@@ -815,7 +815,7 @@ class guilds extends admin
 
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
 
-		$newrank = new Ranks($this->guildid);
+		$newrank = new ranks($this->guildid);
 		// add guildleader rank
 		$newrank->RankName = $user->lang['GUILDLEADER'];
 		$newrank->RankId = 0;
@@ -1581,10 +1581,10 @@ class guilds extends admin
 		if (in_array('members', $params))
 		{
 			// update ranks table
-			$rank = new Ranks($this->guildid);
+			$rank = new ranks($this->guildid);
 			$rank->WoWRankFix($this->playerdata, $this->guildid);
 			//update player table
-			$mb = new Player();
+			$mb = new player();
 			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
 		}
 

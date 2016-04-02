@@ -13,7 +13,7 @@ use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\games\game;
 use bbdkp\bbguild\model\games\rpg\faction;
 use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\player\Ranks;
+use bbdkp\bbguild\model\player\ranks;
 
 /**
  * This class manages guilds
@@ -439,7 +439,7 @@ class guild_module extends admin
 	 */
 	private function AddRank(guilds $updateguild)
 	{
-		$newrank            = new Ranks($updateguild->getGuildid());
+		$newrank            = new ranks($updateguild->getGuildid());
 		$newrank->RankName  = $this->request->variable('nrankname', '', true);
 		$newrank->RankId    = $this->request->variable('nrankid', 0);
 		$newrank->RankGuild = $updateguild->getGuildid();
@@ -462,8 +462,8 @@ class guild_module extends admin
 	 */
 	private function UpdateRank(guilds $updateguild)
 	{
-		$newrank = new Ranks($updateguild->getGuildid());
-		$oldrank = new Ranks($updateguild->getGuildid());
+		$newrank = new ranks($updateguild->getGuildid());
+		$oldrank = new ranks($updateguild->getGuildid());
 
 		$rank_id=0;
 		// template
@@ -510,7 +510,7 @@ class guild_module extends admin
 		{
 			$guildid    = $this->request->variable('hidden_guildid', 0);
 			$rank_id    = $this->request->variable('hidden_rank_id', 999);
-			$deleterank = new Ranks($guildid, $rank_id);
+			$deleterank = new ranks($guildid, $rank_id);
 			$deleterank->Rankdelete(false);
 		}
 		else
@@ -519,7 +519,7 @@ class guild_module extends admin
 			$rank_id    = $this->request->variable('ranktodelete', 999);
 			$guildid    = $this->request->variable(URI_GUILD, 0);
 			$old_guild  = new guilds($guildid);
-			$deleterank = new Ranks($guildid, $rank_id);
+			$deleterank = new ranks($guildid, $rank_id);
 
 			$s_hidden_fields = build_hidden_fields(
 				array(
@@ -651,7 +651,7 @@ class guild_module extends admin
 	{
 		global $phpEx,  $phpbb_admin_path;
 		// everything from rank 90 is readonly
-		$listranks          = new Ranks($updateguild->getGuildid());
+		$listranks          = new ranks($updateguild->getGuildid());
 		$listranks->game_id = $updateguild->getGameId();
 		$result = $listranks->listranks();
 		while ($row = $this->db->sql_fetchrow($result))

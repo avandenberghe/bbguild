@@ -58,7 +58,7 @@ use bbdkp\bbguild\model\api\battle_net;
  * @property array $guildplayerlist
  * @property array $guildlist
  */
-class Player extends admin
+class player extends admin
 {
 
 	/**
@@ -595,10 +595,10 @@ class Player extends admin
 	/**
 	 * update player
 	 *
-	 * @param  Player $old_player
+	 * @param  player $old_player
 	 * @return bool
 	 */
-	public function Updateplayer(Player $old_player)
+	public function Updateplayer(player $old_player)
 	{
 		global $user, $db;
 		global $config;

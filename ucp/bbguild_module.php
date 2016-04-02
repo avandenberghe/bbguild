@@ -11,8 +11,8 @@ namespace bbdkp\bbguild\ucp;
 
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\player\Ranks;
-use bbdkp\bbguild\model\player\Player;
+use bbdkp\bbguild\model\player\ranks;
+use bbdkp\bbguild\model\player\player;
 use bbdkp\bbguild\model\games\rpg\roles;
 
 /**
@@ -132,7 +132,7 @@ class bbguild_module extends admin
 				 */
 				$this->link = '';
 				$submit = $this->request->is_set_post('submit');
-				$player = new Player();
+				$player = new player();
 				if ($submit)
 				{
 					if (!check_form_key('bbdkp/bbguild'))
@@ -241,7 +241,7 @@ class bbguild_module extends admin
 
 						if (confirm_box(true))
 						{
-							$deleteplayer = new Player();
+							$deleteplayer = new player();
 							$deleteplayer->player_id = $this->request->variable('del_player_id', 0);
 							$deleteplayer->Getplayer();
 							$deleteplayer->Deleteplayer();
@@ -251,7 +251,7 @@ class bbguild_module extends admin
 						}
 						else
 						{
-							$deleteplayer = new Player();
+							$deleteplayer = new player();
 							$deleteplayer->player_id = $this->request->variable('player_id', 0);
 							$deleteplayer->Getplayer();
 
@@ -275,7 +275,7 @@ class bbguild_module extends admin
 							trigger_error('FORM_INVALID');
 						}
 
-						$newplayer = new Player();
+						$newplayer = new player();
 						if ($newplayer->has_reached_maxbbguildaccounts())
 						{
 							trigger_error(sprintf($this->user->lang['MAX_CHARS_EXCEEDED'], $this->config['bbguild_maxchars']), E_USER_WARNING);
@@ -369,11 +369,11 @@ class bbguild_module extends admin
 
 	/**
 	 * @param $player_id
-	 * @return Player
+	 * @return player
 	 */
 	private function UpdateMyCharacter($player_id)
 	{
-		$updateplayer = new Player();
+		$updateplayer = new player();
 		$updateplayer->player_id = $player_id;
 		$updateplayer->Getplayer();
 		// get player name
@@ -401,7 +401,7 @@ class bbguild_module extends admin
 		//override armory status
 		$updateplayer->player_status = $this->request->variable('activated', 0) > 0 ? 1 : 0;
 
-		$oldplayer = new Player();
+		$oldplayer = new player();
 		$oldplayer->player_id = $updateplayer->player_id;
 		$oldplayer->Getplayer();
 		$updateplayer->Updateplayer($oldplayer);
@@ -419,7 +419,7 @@ class bbguild_module extends admin
 	private function fill_addplayer($player_id, $guildlist)
 	{
 		global $phpbb_root_path;
-		$players = new Player();
+		$players = new player();
 
 		// Attach the language file
 		$this->user->add_lang('mods/common');
@@ -501,7 +501,7 @@ class bbguild_module extends admin
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks = new Ranks($players->player_guild_id);
+		$Ranks = new ranks($players->player_guild_id);
 
 		$result = $Ranks->listranks();
 
@@ -768,7 +768,7 @@ class bbguild_module extends admin
 	{
 
 		global $phpbb_root_path, $phpEx;
-		$players = new Player();
+		$players = new player();
 
 		$mycharacters = $players->getplayerlist(0, 0, false, false, '', '', 0, 0, 0, 0, 200, true, '', 1);
 

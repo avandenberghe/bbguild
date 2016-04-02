@@ -12,7 +12,7 @@ namespace bbdkp\bbguild\acp;
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\games\rpg\roles;
-use bbdkp\bbguild\model\player\Recruitment;
+use bbdkp\bbguild\model\player\recruitment;
 
 /**
  * Class recruit_module
@@ -142,7 +142,7 @@ class recruit_module extends admin
 			 *************************************/
 			case 'addrecruit':
 
-				$recruit = new Recruitment();
+				$recruit = new recruitment();
 				$recruit->setGuildId($Guild->getGuildid());
 				$recruit->setLastUpdate($this->time);
 				$add = $this->request->is_set_post('add');
@@ -279,7 +279,7 @@ class recruit_module extends admin
 			trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
 		}
 
-		$recruits = new Recruitment();
+		$recruits = new recruitment();
 		$recruits->setGuildId($guild_id);
 		$result   = $recruits->list_recruitments(1);
 		$recruit_count= 0;
@@ -323,7 +323,7 @@ class recruit_module extends admin
 	 * @param $Guild
 	 * @param $recruit
 	 */
-	private function build_dropdowns(guilds $Guild, Recruitment $recruit)
+	private function build_dropdowns(guilds $Guild, recruitment $recruit)
 	{
 		global $config;
 

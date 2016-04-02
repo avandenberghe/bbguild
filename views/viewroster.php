@@ -8,7 +8,7 @@
  */
 namespace bbdkp\bbguild\views;
 
-use bbdkp\bbguild\model\player\Player;
+use bbdkp\bbguild\model\player\player;
 
 /**
  * Class viewroster
@@ -40,7 +40,7 @@ class viewroster implements iviews
 		$this->tpl = 'main.html';
 		$classes = array();
 
-		$players = new Player;
+		$players = new player;
 		$players->game_id = $this->navigation->getGameId();
 
 		$start = $this->navigation->request->variable('start', 0);
@@ -126,7 +126,7 @@ class viewroster implements iviews
 	 * @param $base_url
 	 * @param $start
 	 */
-	private function display_grid(Player $players, $classes, $characters, $base_url, $start)
+	private function display_grid(player $players, $classes, $characters, $base_url, $start)
 	{
 		$classgroup = $players->get_classes(
 			$this->navigation->getFilter(), $this->navigation->getQueryByArmor(),

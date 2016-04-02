@@ -11,10 +11,10 @@
 namespace bbdkp\bbguild\acp;
 
 use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\Player;
+use bbdkp\bbguild\model\player\player;
 use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\games\rpg\roles;
-use bbdkp\bbguild\model\player\Ranks;
+use bbdkp\bbguild\model\player\ranks;
 
 /**
  * This class manages player general info
@@ -216,7 +216,7 @@ class player_module extends admin
 					}
 					else
 					{
-						$deleteplayer = new Player();
+						$deleteplayer = new player();
 						$deleteplayer->player_id = $this->request->variable('player_id', 0);
 						$deleteplayer->Getplayer();
 						$s_hidden_fields = build_hidden_fields(
@@ -264,7 +264,7 @@ class player_module extends admin
 			$player_names = $this->request->variable('players', array(0 => ''), true);
 			foreach ($players_to_delete as $playerid => $value)
 			{
-				$delplayer = new Player();
+				$delplayer = new player();
 				$delplayer->player_id = $playerid;
 				$delplayer->Getplayer();
 				$delplayer->Deleteplayer();
@@ -302,7 +302,7 @@ class player_module extends admin
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$newplayer = new Player();
+		$newplayer = new player();
 		$newplayer->game_id = $this->request->variable('game_id', '');
 		$newplayer->player_name = $this->request->variable('player_name', '', true);
 		$newplayer->player_title = $this->request->variable('player_title', '', true);
@@ -368,7 +368,7 @@ class player_module extends admin
 	{
 		global $phpbb_admin_path, $phpEx;
 
-		$updateplayer = new Player();
+		$updateplayer = new player();
 		$updateplayer->player_id = $this->request->variable('hidden_player_id', 0);
 
 		if ($updateplayer->player_id == 0)
@@ -417,7 +417,7 @@ class player_module extends admin
 
 		$updateplayer->player_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
 
-		$old_player = new Player();
+		$old_player = new player();
 		$old_player->player_id = $updateplayer->player_id;
 		$old_player->Getplayer();
 		$updateplayer->Updateplayer($old_player);
@@ -435,7 +435,7 @@ class player_module extends admin
 	private function DeletePlayer()
 	{
 		global $phpbb_admin_path, $phpEx;
-		$deleteplayer = new Player();
+		$deleteplayer = new player();
 		$deleteplayer->player_id = $this->request->variable('del_player_id', 0);
 		$deleteplayer->Getplayer();
 		$deleteplayer->Deleteplayer();
@@ -460,7 +460,7 @@ class player_module extends admin
 		{
 			trigger_error('FORM_INVALID');
 		}
-		$activateplayer = new Player();
+		$activateplayer = new player();
 		$activate_players = $this->request->variable('activate_id', array(0));
 		$player_window = $this->request->variable('hidden_player', array(0));
 		$activateplayer->Activateplayers($activate_players, $player_window);
@@ -493,7 +493,7 @@ class player_module extends admin
 			{
 				break;
 			}
-			$player = new Player($row['player_id']);
+			$player = new player($row['player_id']);
 
 			$last_update = $player->last_update;
 
@@ -507,7 +507,7 @@ class player_module extends admin
 				{
 					$log .= ', ';
 				}
-				$old_player = new Player($row['player_id']);
+				$old_player = new player($row['player_id']);
 
 				if (isset($player))
 				{
@@ -726,7 +726,7 @@ class player_module extends admin
 		global $config, $phpbb_admin_path, $phpEx;
 
 		$player_id  = $this->request->variable('hidden_player_id', $this->request->variable(URI_NAMEID, 0));
-		$editplayer = new Player($player_id);
+		$editplayer = new player($player_id);
 		$S_ADD = ($player_id > 0) ? false : true;
 		if ($S_ADD)
 		{
@@ -783,7 +783,7 @@ class player_module extends admin
 		}
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks  = new Ranks($editplayer->player_guild_id);
+		$Ranks  = new ranks($editplayer->player_guild_id);
 		$result = $Ranks->listranks();
 		while ($row = $this->db->sql_fetchrow($result))
 		{

@@ -7,7 +7,7 @@
 
 namespace bbdkp\bbguild\controller;
 
-use bbdkp\bbguild\model\player\Player;
+use bbdkp\bbguild\model\player\player;
 use phpbb\cache\service;
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -196,7 +196,7 @@ class admin_controller
 	 */
 	public function getPlayerList($guild_id)
 	{
-		$players = new Player();
+		$players = new player();
 		$players->listallplayers($guild_id);
 
 		$data =array();

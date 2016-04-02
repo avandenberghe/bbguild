@@ -18,7 +18,7 @@ use bbdkp\bbguild\model\player\guilds;
  *
  *   @package bbguild
  */
-class Ranks extends guilds
+class ranks extends guilds
 {
 	/**
 	 * Name of rank
@@ -221,10 +221,10 @@ class Ranks extends guilds
 	/**
 	 * updates a rank
 	 *
-	 * @param  Ranks $old_rank
+	 * @param  ranks $old_rank
 	 * @return boolean
 	 */
-	public function Rankupdate(Ranks $old_rank)
+	public function Rankupdate(ranks $old_rank)
 	{
 
 		global $user, $db;
@@ -350,7 +350,7 @@ class Ranks extends guilds
 
 		foreach ($diff as $key => $count)
 		{
-			$newrank = new Ranks($guild_id);
+			$newrank = new ranks($guild_id);
 			$newrank->RankName = 'Rank'.$key;
 			$newrank->RankId = $key;
 			$newrank->RankGuild = $guild_id;

@@ -18,7 +18,7 @@ use bbdkp\bbguild\model\games\rpg\roles;
  *
  *   @package bbguild
  */
-class Recruitment extends roles
+class recruitment extends roles
 {
 
 	/**
