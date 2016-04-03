@@ -464,11 +464,13 @@ class guild_module extends admin
 			$new->RankId     = $rank_id;
 			$new->RankGuild  = $old->RankGuild;
 			$new->RankName   = $rank_name;
-			$new->RankHide   = $this->request->is_set_post(['hide'][$rank_id]);
-			$rank_prefix         = $this->request->variable('prefix', array((int) $rank_id => ''), true);
+			$RankHide   = $this->request->variable('hide', array((int) $rank_id => ''));
+			$new->RankHide = count($RankHide) > 0 ? (isset($RankHide[$rank_id]) ? 1 : 0) : 0;
+
+			$rank_prefix     = $this->request->variable('prefix', array((int) $rank_id => ''), true);
 			$new->RankPrefix = $rank_prefix[$rank_id];
 
-			$rank_suffix         = $this->request->variable('suffix', array((int) $rank_id => ''), true);
+			$rank_suffix     = $this->request->variable('suffix', array((int) $rank_id => ''), true);
 			$new->RankSuffix = $rank_suffix[$rank_id];
 
 			// compare old with new,
