@@ -31,7 +31,6 @@ $lang = array_merge(
 	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
 	'ACP_BBGUILD_PANEL'                => 'Adminpanel',
 	'ACP_BBGUILD_CONFIG'        => 'bbguild Settings',
-	'ACP_BBGUILD_INDEX'            => 'Portal Settings',
 	'ACP_BBGUILD_LOGS'            => 'View Logs',
 	)
 );

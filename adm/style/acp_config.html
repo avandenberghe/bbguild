@@ -1,19 +1,14 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
-
 <h1>{L_GENERAL_SETTINGS}</h1>
 <p>{L_ACP_BBGUILD_CONFIG_EXPLAIN}</p>
-
 <form method="post" action="{U_ADDCONFIG}" id="addconfig" >
-
     <fieldset>
         <legend>{L_MENU_GENERAL}</legend>
-
         <dl>
             <dt><label for="realm">{L_DEFAULT_REALM}:</label></dt>
             <dd><input type="text" name="realm" id="realm" size="20" maxlength="50" value="{REALM}" class="input" /></dd>
         </dl>
-
         <dl>
             <dt><label for="region">{L_DEFAULT_REGION}:</label></dt>
             <dd>
@@ -24,7 +19,6 @@
                 </select>
             </dd>
         </dl>
-
         <dl>
             <dt><label>{L_BBGUILD_STARTED}:</label></dt>
             <dd><input type="text" name="bbguild_start_dd" id="bbguild_start_dd" size="2" maxlength="2" value="{EQDKP_START_DD}" class="input" />
@@ -32,12 +26,10 @@
                 <input type="text" name="bbguild_start_yy" id="bbguild_start_yy" size="4" maxlength="4" value="{EQDKP_START_YY}" class="input" />
             </dd>
         </dl>
-
         <dl>
             <dt><label for="date_format">{L_DATE_FORMAT}:</label></dt>
             <dd><input type="text" name="date_format" id="date_format" size="20" maxlength="30" value="{DATE_FORMAT}" class="input" /></dd>
         </dl>
-
         <dl>
             <dt><label for="language">{L_DEFAULT_LANGUAGE}:</label><br />{L_DEFAULT_LANGUAGE_EXPLAIN}</dt>
             <dd>
@@ -45,38 +37,24 @@
             </dd>
         </dl>
     </fieldset>
-
-    <fieldset>
-        <legend>{L_MENU_NEWS}</legend>
-
-        <dl>
-            <dt><label for="bbguild_user_nlimit">{L_NEWS_PER_PAGE}:</label></dt>
-            <dd><input type="text" name="bbguild_user_nlimit" id="bbguild_user_nlimit" size="20" maxlength="30" value="{USER_NLIMIT}" class="input" />{FV_DEFAULT_NLIMIT}</dd>
-        </dl>
-    </fieldset>
-
-
     <fieldset>
         <legend>{L_PLAYERS}</legend>
-
         <dl>
             <dt><label for="bbguild_user_llimit">{L_LISTPLAYERS_PER_PAGE}:</label></dt>
             <dd><input type="text" name="bbguild_user_llimit" id="bbguild_user_llimit" size="20" maxlength="30" value="{USER_LLIMIT}" class="input" />{FV_DEFAULT_LLIMIT}</dd>
         </dl>
-
         <dl>
-            <dt><label for="maxchars">{L_MAX_NUMBER_CHARS}:</label><br /><span>{L_MAX_NUMBER_CHARS_EXPLAIN}</span></dt>
-            <dd><input type="text" name="maxchars" id="maxchars" size="5" maxlength="2" value="{MAXCHARS}" class="input" /></dd>
+            <dt><label for="bbguild_maxchars">{L_MAX_NUMBER_CHARS}:</label><br /><span>{L_MAX_NUMBER_CHARS_EXPLAIN}</span></dt>
+            <dd><input type="text" name="bbguild_maxchars" id="bbguild_maxchars" size="5" maxlength="2" value="{MAXCHARS}" class="input" /></dd>
         </dl>
-
         <dl>
             <dt><label for="bbguild_minrosterlvl">{L_MINLEVELROSTER}:</label><br /><span>{L_MINLEVELROSTER_EXPLAIN}</span></dt>
             <dd><input type="text" name="bbguild_minrosterlvl" id="bbguild_minrosterlvl" size="5" maxlength="2" value="{MINLEVEL}" class="input" /></dd>
         </dl>
         <dl>
-            <dt><label for="rosterlayout">{L_ARM_LAYOUTDO}:</label></dt>
+            <dt><label for="bbguild_roster_layout">{L_ARM_LAYOUTDO}:</label></dt>
             <dd>
-                <select name="rosterlayout" id="rosterlayout" class="input">
+                <select name="bbguild_roster_layout" id="bbguild_roster_layout" class="input">
                     <!-- BEGIN rosterlayout_row -->
                     <option value="{rosterlayout_row.VALUE}"{rosterlayout_row.SELECTED}>{rosterlayout_row.OPTION}</option>
                     <!-- END rosterlayout_row -->
@@ -84,27 +62,61 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="showachievement">{L_ARM_SHOWACH}</label></dt>
+            <dt><label for="bbguild_show_achiev">{L_ARM_SHOWACH}</label></dt>
             <dd>
-                <input type="checkbox" name="showachievement" id="showachievement" value="1" <!-- IF F_SHOWACHIEV == 1 --> checked="checked"<!-- ENDIF -->/>
+                <input type="checkbox" name="bbguild_show_achiev" id="bbguild_show_achiev" value="1" <!-- IF F_SHOWACHIEV == 1 --> checked="checked"<!-- ENDIF -->/>
             </dd>
         </dl>
         <dl>
-            <dt><label for="hide_inactive">{L_HIDE_INACTIVE}:</label><br />{L_HIDE_INACTIVE_NOTE}</dt>
+            <dt><label for="bbguild_hide_inactive">{L_HIDE_INACTIVE}:</label><br />{L_HIDE_INACTIVE_NOTE}</dt>
             <dd>
-                <input type="radio" id="hide_inactive" name="hide_inactive" value="1"{HIDE_INACTIVE_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
-                <input type="radio" name="hide_inactive" value="0"{HIDE_INACTIVE_NO_CHECKED} /> {L_NO}
+                <input type="radio" id="bbguild_hide_inactive" name="bbguild_hide_inactive" value="1"{HIDE_INACTIVE_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+                <input type="radio" name="bbguild_hide_inactive" value="0"{HIDE_INACTIVE_NO_CHECKED} /> {L_NO}
             </dd>
         </dl>
-
     </fieldset>
-
+    <fieldset>
+        <legend>{L_BLOCK_MOTD_SETTING}</legend>
+        <dl>
+            <dt>
+                <label>{L_SHOW_MOTD}:</label>
+            </dt>
+            <dd>
+                <input type="radio" name="show_motd_block" value="1" {SHOW_WELCOME_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+                <input type="radio" name="show_motd_block" value="0" {SHOW_WELCOME_NO_CHECKED} /> {L_NO}
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>{L_BLOCK_MOTD}:</label><br />{L_BLOCK_MOTD_EXPLAIN}</dt>
+            <dd>
+                <textarea name="message_of_the_day" rows="3" cols="60" style=" font-size: 100%; width: 99%" class="input">{WELCOME_MESSAGE}</textarea>
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{L_NEWSBLOCKSETTING}</legend>
+        <dl>
+            <dt><label for="bbguild_user_nlimit">{L_NEWSNUMBER}</label></dt>
+            <dd>
+                <input type="text" name="bbguild_user_nlimit" id="bbguild_user_nlimit" size="20" maxlength="30" value="{USER_NLIMIT}" class="input" />{FV_DEFAULT_NLIMIT}
+            </dd>
+        </dl>
+    </fieldset>
+    <!-- IF S_BP_SHOW -->
+    <fieldset>
+        <legend>{L_BOSSBLOCKSETTING}</legend>
+        <dl>
+            <dt><label for="show_bosspblock">{L_SHOWBOSSBLOCK}</label><br />{L_SHOWBOSSBLOCKNOTE}</dt>
+            <dd>
+                <input type="radio" name="show_bosspblock"  id="show_bosspblock"  value="1"{SHOW_BOSS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_bosspblock" value="0"{SHOW_BOSS_NO_CHECKED} /> {L_NO}
+            </dd>
+        </dl>
+    </fieldset>
+    <!-- ENDIF -->
     <fieldset>
         <legend>{L_ACP_SUBMIT_CHANGES}</legend>
         {S_FORM_TOKEN}
         <input type="submit" name="updateconfig" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     </fieldset>
-
 </form>
-
 <!-- INCLUDE overall_footer.html -->

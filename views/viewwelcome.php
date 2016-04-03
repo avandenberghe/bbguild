@@ -38,7 +38,7 @@ class viewwelcome implements iviews
 		global $user, $template;
 		$this->tpl = 'main.html';
 
-		$welcometext = $this->get_welcome_text();
+		$welcometext = $this->get_message_of_the_day();
 
 		$data = $this->navigation->guild->get_api_info(array('news'));
 		if ($data)
@@ -112,17 +112,17 @@ class viewwelcome implements iviews
 	*
 	 * @return mixed
 	 */
-	private function get_welcome_text()
+	private function get_message_of_the_day()
 	{
 		global $db;
 
 		$text='';
-		$sql = 'SELECT welcome_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . WELCOME_MSG_TABLE;
+		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . MOTD_TABLE;
 		$db->sql_query($sql);
 		$result = $db->sql_query($sql);
 		while ( $row = $db->sql_fetchrow($result) )
 		{
-			$text = $row['welcome_msg'];
+			$text = $row['motd_msg'];
 			$bbcode_uid = $row['bbcode_uid'];
 			$bbcode_bitfield = $row['bbcode_bitfield'];
 			$bbcode_options = $row['bbcode_options'];

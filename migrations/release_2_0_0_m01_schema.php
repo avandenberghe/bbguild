@@ -28,7 +28,7 @@ class release_2_0_0_m01_schema extends migration
 	protected $faction_table;
 	protected $guild_table;
 	protected $bb_language;
-	protected $welcome_msg_table;
+	protected $motd_table;
 	protected $bbrecruit_table;
 	protected $bb_gamerole_table;
 	protected $plugins_table;
@@ -170,7 +170,7 @@ class release_2_0_0_m01_schema extends migration
 				),
 
 				/*8*/
-				$this->player_list_table    => array(
+				$this->player_list_table => array(
 					'COLUMNS'    => array(
 						'player_id'        => array('UINT', null, 'auto_increment'),
 						'game_id'             => array('VCHAR:10', ''),
@@ -202,18 +202,18 @@ class release_2_0_0_m01_schema extends migration
 				),
 
 				/*18*/
-				$this->welcome_msg_table    => array(
+				$this->motd_table        => array(
 					'COLUMNS'    => array(
-						'welcome_id'            => array('INT:8', null, 'auto_increment'),
-						'welcome_title'         => array('VCHAR_UNI', ''),
-						'welcome_msg'           => array('TEXT_UNI', ''),
-						'welcome_timestamp'     => array('TIMESTAMP', 0),
+						'motd_id'            => array('INT:8', null, 'auto_increment'),
+						'motd_title'         => array('VCHAR_UNI', ''),
+						'motd_msg'           => array('TEXT_UNI', ''),
+						'motd_timestamp'     => array('TIMESTAMP', 0),
 						'bbcode_bitfield'     => array('VCHAR:255', ''),
 						'bbcode_uid'         => array('VCHAR:8', ''),
 						'user_id'             => array('INT:8', 0),
 						'bbcode_options'        => array('UINT', 7),
 					),
-					'PRIMARY_KEY'    => 'welcome_id'
+					'PRIMARY_KEY'    => 'motd_id'
 				),
 
 				/*19*/
@@ -318,7 +318,7 @@ class release_2_0_0_m01_schema extends migration
 				$this->guild_table,
 				$this->player_ranks_table,
 				$this->player_list_table,
-				$this->welcome_msg_table,
+				$this->motd_table,
 				$this->bbgames_table,
 				$this->bb_gamerole_table,
 				$this->bbrecruit_table,
@@ -333,20 +333,20 @@ class release_2_0_0_m01_schema extends migration
 	 */
 	public function GetTablenames()
 	{
-		$this->bbgames_table = $this->table_prefix  . 'bb_games';
-		$this->news_table = $this->table_prefix  . 'bb_news';
-		$this->bblogs_table = $this->table_prefix  . 'bb_logs';
+		$this->bbgames_table      = $this->table_prefix  . 'bb_games';
+		$this->news_table         = $this->table_prefix  . 'bb_news';
+		$this->bblogs_table       = $this->table_prefix  . 'bb_logs';
 		$this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
-		$this->player_list_table = $this->table_prefix  . 'bb_players';
-		$this->class_table = $this->table_prefix  . 'bb_classes';
-		$this->race_table = $this->table_prefix  . 'bb_races';
-		$this->faction_table = $this->table_prefix  . 'bb_factions';
-		$this->guild_table = $this->table_prefix  . 'bb_guild';
-		$this->bb_language = $this->table_prefix  . 'bb_language';
-		$this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
-		$this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
-		$this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
-		$this->plugins_table = $this->table_prefix  . 'bb_plugins';
+		$this->player_list_table  = $this->table_prefix  . 'bb_players';
+		$this->class_table        = $this->table_prefix  . 'bb_classes';
+		$this->race_table         = $this->table_prefix  . 'bb_races';
+		$this->faction_table      = $this->table_prefix  . 'bb_factions';
+		$this->guild_table        = $this->table_prefix  . 'bb_guild';
+		$this->bb_language        = $this->table_prefix  . 'bb_language';
+		$this->motd_table         = $this->table_prefix  . 'bb_motd';
+		$this->bbrecruit_table    = $this->table_prefix  . 'bb_recruit';
+		$this->bb_gamerole_table  = $this->table_prefix  . 'bb_gameroles';
+		$this->plugins_table      = $this->table_prefix  . 'bb_plugins';
 	}
 
 }

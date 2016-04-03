@@ -73,7 +73,7 @@ class release_2_0_0_m03_config extends migration
 			array('config.add', array('bbguild_portal_rtlen', 15)),
 			array('config.add', array('bbguild_portal_rtno', 5)),
 			array('config.add', array('bbguild_portal_showedits', 1)),
-			array('config.add', array('bbguild_portal_welcomemsg', 1)),
+			array('config.add', array('bbguild_motd', 1)),
 			array('config.add', array('bbguild_portal_whoisonline', 1)),
 
 		);

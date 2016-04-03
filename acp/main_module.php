@@ -190,7 +190,7 @@ class main_module extends admin
 				break;
 
 			/**
-			 * DKP CONFIG
+			 * CONFIG
 			 */
 			case 'config':
 
@@ -200,41 +200,42 @@ class main_module extends admin
 					{
 						trigger_error($this->user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
+
+					$config->set('bbguild_default_realm', $this->request->variable('realm', '', true), true);
+					$config->set('bbguild_default_region', $this->request->variable('region', '', true), true);
 					$day = $this->request->variable('bbguild_start_dd', 0);
 					$month = $this->request->variable('bbguild_start_mm', 0);
 					$year = $this->request->variable('bbguild_start_yy', 0);
 					$bbguild_start = mktime(0, 0, 0, $month, $day, $year);
-					$settings = array(
-						'bbguild_default_realm' => $this->request->variable('realm', '', true),
-						'bbguild_default_region' => $this->request->variable('region', '', true),
-						'bbguild_eqdkp_start' => $bbguild_start,
-						'bbguild_date_format' => $this->request->variable('date_format', ''),
-						'bbguild_lang' => $this->request->variable('language', 'en'),
-						'bbguild_user_nlimit' => $this->request->variable('bbguild_user_nlimit', 0),
-						'bbguild_user_llimit' => $this->request->variable('bbguild_user_llimit', 0),
-						'bbguild_maxchars' => $this->request->variable('maxchars', 2),
-						'bbguild_roster_layout' => $this->request->variable('rosterlayout', 0),
-						'bbguild_show_achiev' => $this->request->variable('showachievement', 0),
-						'bbguild_minrosterlvl' => $this->request->variable('bbguild_minrosterlvl', 0),
-						'bbguild_hide_inactive' => $this->request->variable('hide_inactive', 0),
-					);
+					$config->set('bbguild_eqdkp_start', $bbguild_start, true);
+					$config->set('bbguild_date_format', $this->request->variable('date_format', ''), true);
+					$config->set('bbguild_lang', $this->request->variable('language', 'en'), true);
+					$config->set('bbguild_user_nlimit', $this->request->variable('bbguild_user_nlimit', 0), true);
+					$config->set('bbguild_user_llimit', $this->request->variable('bbguild_user_llimit', 0), true);
+					$config->set('bbguild_maxchars', $this->request->variable('bbguild_maxchars', 2), true);
+					$config->set('bbguild_minrosterlvl', $this->request->variable('bbguild_minrosterlvl', 0), true);
+					$config->set('bbguild_roster_layout', $this->request->variable('bbguild_roster_layout', 0), true);
+					$config->set('bbguild_show_achiev', $this->request->variable('bbguild_show_achiev', 0), true);
+					$config->set('bbguild_hide_inactive', $this->request->variable('bbguild_hide_inactive', 0), true);
+					$config->set('bbguild_motd', $this->request->variable('show_motd_block', 0), true);
+					$welcometext = $this->request->variable('message_of_the_day', '', true);
+					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+					$allow_bbcode = $allow_urls = $allow_smilies = true;
+					generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
-					// reg id
-					$config->set('bbguild_regid', 1, true);
+					$sql = 'UPDATE ' . MOTD_TABLE . " SET
+							motd_msg = '" . (string) $this->db->sql_escape($welcometext) . "' ,
+							motd_timestamp = " . (int) time() . " ,
+							bbcode_bitfield = 	'" . (string) $bitfield . "' ,
+							bbcode_uid = 		'" . (string) $uid . "'
+							WHERE motd_id = 1";
+					$this->db->sql_query($sql);
 
-					$config->set('bbguild_default_realm', $settings['bbguild_default_realm'], true);
-					$config->set('bbguild_default_region', $settings['bbguild_default_region'], true);
-					$config->set('bbguild_eqdkp_start', $settings['bbguild_eqdkp_start'], true);
-					$config->set('bbguild_date_format', $settings['bbguild_date_format'], true);
-					$config->set('bbguild_lang', $settings['bbguild_lang'], true);
-					$config->set('bbguild_user_nlimit', $settings['bbguild_user_nlimit'], true);
-					//roster
-					$config->set('bbguild_user_llimit', $settings['bbguild_user_llimit'], true);
-					$config->set('bbguild_maxchars', $settings['bbguild_maxchars'], true);
-					$config->set('bbguild_minrosterlvl', $settings['bbguild_minrosterlvl'], true);
-					$config->set('bbguild_roster_layout', $settings['bbguild_roster_layout'], true);
-					$config->set('bbguild_show_achiev', $settings['bbguild_show_achiev'], true);
-					$config->set('bbguild_hide_inactive', $settings['bbguild_hide_inactive'], true);
+					if (isset($config['bbguild_gameworld_version']))
+					{
+						$config->set('bbguild_portal_bossprogress', $this->request->variable('show_bosspblock', 0), true);
+					}
+
 					// Purge config cache
 					$cache->destroy('config');
 
@@ -243,7 +244,7 @@ class main_module extends admin
 					//
 					$log_action = array(
 						'header' => 'L_ACTION_SETTINGS_CHANGED'     ,
-						'L_SETTINGS' => json_encode($settings),
+						'L_SETTINGS' => $user->lang['ACTION_SETTINGS_CHANGED'],
 					);
 
 					$this->log_insert(
@@ -251,7 +252,6 @@ class main_module extends admin
 							'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
 							'log_action' => $log_action)
 					);
-
 					trigger_error($this->user->lang['ACTION_SETTINGS_CHANGED']. $this->link, E_USER_NOTICE);
 				}
 
@@ -302,88 +302,13 @@ class main_module extends admin
 					);
 				}
 
-				$this->template->assign_vars(
-					array(
-						'REALM' => $config['bbguild_default_realm'] ,
-						'EQDKP_START_DD' => date('d', $config['bbguild_eqdkp_start']) ,
-						'EQDKP_START_MM' => date('m', $config['bbguild_eqdkp_start']) ,
-						'EQDKP_START_YY' => date('Y', $config['bbguild_eqdkp_start']) ,
-						'DATE_FORMAT'   => $config['bbguild_date_format'] ,
-						'S_LANG_OPTIONS' => $s_lang_options,
-						'USER_NLIMIT' => $config['bbguild_user_nlimit'] ,
-						'USER_LLIMIT' => $config['bbguild_user_llimit'] ,
-						'MAXCHARS' => $config['bbguild_maxchars'] ,
-						'MINLEVEL' => $config['bbguild_minrosterlvl'],
-						'HIDE_INACTIVE_YES_CHECKED' => ($config['bbguild_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
-						'HIDE_INACTIVE_NO_CHECKED' => ($config['bbguild_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
-						'F_SHOWACHIEV' => $config['bbguild_show_achiev'] ,
-						'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=config&amp;action=addconfig'),
-						'PHPBBVER' => $config['version'],
-						'BBDKPVER' => BBGUILD_VERSION,
-					)
-				);
-
-				add_form_key('acp_dkp');
-				$this->page_title = 'ACP_BBGUILD_CONFIG';
-
-				break;
-
-			/**
-			 * PORTAL CONFIG
-			 */
-			case 'index':
-				$submit = $this->request->is_set_post('update');
-				if ($submit)
-				{
-					if (! check_form_key('acp_portal'))
-					{
-						trigger_error($this->user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
-					}
-					if (isset($config['bbguild_gameworld_version']))
-					{
-						$config->set('bbguild_portal_bossprogress', $this->request->variable('show_bosspblock', 0), true);
-					}
-					$config->set('bbguild_news_forumid', $this->request->variable('news_id', 0), true);
-					$config->set('bbguild_n_news', $this->request->variable('n_news', 0), true);
-					$config->set('bbguild_n_items', $this->request->variable('n_items', 0), true);
-					$config->set('bbguild_recruitment', $this->request->variable('bbguild_recruitment', 0), true);
-					$config->set('bbguild_portal_loot', $this->request->variable('show_lootblock', 0), true);
-					$config->set('bbguild_portal_recruitment', $this->request->variable('show_recrblock', 0), true);
-					$config->set('bbguild_portal_links', $this->request->variable('show_linkblock', 0), true);
-					$config->set('bbguild_portal_menu', $this->request->variable('show_menublock', 0), true);
-					$config->set('bbguild_portal_welcomemsg', $this->request->variable('show_welcomeblock', 0), true);
-					$config->set('bbguild_portal_recent', $this->request->variable('show_recenttopics', 0), true);
-					$config->set('bbguild_portal_rtlen', $this->request->variable('n_rclength', 0), true);
-					$config->set('bbguild_portal_rtno', $this->request->variable('n_rcno', 0), true);
-					$config->set('bbguild_portal_newplayers', $this->request->variable('show_newplayers', 0), true);
-					$config->set('bbguild_portal_maxnewplayers', $this->request->variable('num_newplayers', 0), true);
-					$config->set('bbguild_portal_whoisonline', $this->request->variable('show_onlineblock', 0), true);
-					$config->set('bbguild_portal_onlineblockposition', $this->request->variable('onlineblockposition', 0), true);
-
-					$cache->destroy('config');
-					$welcometext = $this->request->variable('welcome_message', '', true);
-
-					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-					$allow_bbcode = $allow_urls = $allow_smilies = true;
-					generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
-
-					$sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET
-							welcome_msg = '" . (string) $this->db->sql_escape($welcometext) . "' ,
-							welcome_timestamp = " . (int) time() . " ,
-							bbcode_bitfield = 	'" . (string) $bitfield . "' ,
-							bbcode_uid = 		'" . (string) $uid . "'
-							WHERE welcome_id = 1";
-					$this->db->sql_query($sql);
-					trigger_error($this->user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $this->link, E_USER_NOTICE);
-				}
-
 				// get welcome msg
-				$sql = 'SELECT welcome_msg, bbcode_bitfield, bbcode_uid FROM ' . WELCOME_MSG_TABLE;
+				$sql = 'SELECT motd_msg, bbcode_bitfield, bbcode_uid FROM ' . MOTD_TABLE;
 				$this->db->sql_query($sql);
 				$result = $this->db->sql_query($sql);
 				while ($row = $this->db->sql_fetchrow($result))
 				{
-					$welcometext = $row['welcome_msg'];
+					$welcometext = $row['motd_msg'];
 					$bitfield = $row['bbcode_bitfield'];
 					$uid = $row['bbcode_uid'];
 				}
@@ -393,7 +318,28 @@ class main_module extends admin
 				$n_news = $config['bbguild_n_news'];
 				$n_items = $config['bbguild_n_items'];
 
-				add_form_key('acp_portal');
+				$this->template->assign_vars(
+					array(
+						'REALM' => $config['bbguild_default_realm'] ,
+						'EQDKP_START_DD' => date('d', $config['bbguild_eqdkp_start']) ,
+						'EQDKP_START_MM' => date('m', $config['bbguild_eqdkp_start']) ,
+						'EQDKP_START_YY' => date('Y', $config['bbguild_eqdkp_start']) ,
+						'DATE_FORMAT'   => $config['bbguild_date_format'] ,
+						'S_LANG_OPTIONS' => $s_lang_options,
+						'USER_LLIMIT' => $config['bbguild_user_llimit'] ,
+						'MAXCHARS' => $config['bbguild_maxchars'] ,
+						'MINLEVEL' => $config['bbguild_minrosterlvl'],
+						'F_SHOWACHIEV' => $config['bbguild_show_achiev'] ,
+						'HIDE_INACTIVE_YES_CHECKED' => ($config['bbguild_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
+						'HIDE_INACTIVE_NO_CHECKED' => ($config['bbguild_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
+						'SHOW_WELCOME_YES_CHECKED' => ($config['bbguild_motd'] == '1') ? 'checked="checked"' : '' ,
+						'SHOW_WELCOME_NO_CHECKED' => ($config['bbguild_motd'] == '0') ? 'checked="checked"' : '' ,
+						'WELCOME_MESSAGE' => $textarr['text'] ,
+						'USER_NLIMIT' => $config['bbguild_user_nlimit'] ,
+						'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=config&amp;action=addconfig'),
+					)
+				);
+
 				if (isset($config['bbguild_gameworld_version']))
 				{
 					$this->template->assign_vars(
@@ -408,36 +354,8 @@ class main_module extends admin
 					$this->template->assign_var('S_BP_SHOW', false);
 				}
 
-				$this->template->assign_vars(
-					array(
-						'WELCOME_MESSAGE' => $textarr['text'] ,
-						'N_NEWS' => $n_news,
-						'FORUM_NEWS_OPTIONS' => make_forum_select($config['bbguild_news_forumid'], false, false, true) ,
-						'SHOW_WELCOME_YES_CHECKED' => ($config['bbguild_portal_welcomemsg'] == '1') ? 'checked="checked"' : '' ,
-						'SHOW_WELCOME_NO_CHECKED' => ($config['bbguild_portal_welcomemsg'] == '0') ? 'checked="checked"' : '' ,
-						'SHOW_ONLINE_YES_CHECKED' => ($config['bbguild_portal_whoisonline'] == '1') ? 'checked="checked"' : '' ,
-						'SHOW_ONLINE_NO_CHECKED' => ($config['bbguild_portal_whoisonline'] == '0') ? 'checked="checked"' : '' ,
-						'SHOW_ONLINE_BOTTOM_CHECKED' => ($config['bbguild_portal_onlineblockposition'] == '1') ? 'checked="checked"' : '' ,
-						'SHOW_ONLINE_SIDE_CHECKED' => ($config['bbguild_portal_onlineblockposition'] == '0') ? 'checked="checked"' : '' ,
-						'SHOW_REC_YES_CHECKED' => ($config['bbguild_portal_recruitment'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_REC_NO_CHECKED' => ($config['bbguild_portal_recruitment'] == '0') ? ' checked="checked"' : '' ,
-						'SHOW_LOOT_YES_CHECKED' => ($config['bbguild_portal_loot'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_LOOT_NO_CHECKED' => ($config['bbguild_portal_loot'] == '0') ? ' checked="checked"' : '' ,
-						'N_ITEMS' => $n_items ,
-						'N_RTNO'     => $config['bbguild_portal_rtno'],
-						'N_RTLENGTH'     => $config['bbguild_portal_rtlen'],
-						'SHOW_RT_YES_CHECKED' => ($config['bbguild_portal_recent'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_RT_NO_CHECKED' => ($config['bbguild_portal_recent'] == '0') ? ' checked="checked"' : '' ,
-						'SHOW_LINK_YES_CHECKED' => ($config['bbguild_portal_links'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_LINK_NO_CHECKED' => ($config['bbguild_portal_links'] == '0') ? ' checked="checked"' : '' ,
-						'SHOW_MENU_YES_CHECKED' => ($config['bbguild_portal_menu'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_MENU_NO_CHECKED' => ($config['bbguild_portal_menu'] == '0') ? ' checked="checked"' : '',
-						'SHOW_NEWM_YES_CHECKED' => ($config['bbguild_portal_newplayers'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_NEWM_NO_CHECKED' => ($config['bbguild_portal_newplayers'] == '0') ? ' checked="checked"' : '' ,
-						'N_NUMNEWM' => $config['bbguild_portal_maxnewplayers'],
-					)
-				);
-				$this->page_title = $this->user->lang['ACP_INDEXPAGE'];
+				add_form_key('acp_dkp');
+				$this->page_title = 'ACP_BBGUILD_CONFIG';
 
 				break;
 
@@ -524,21 +442,21 @@ class main_module extends admin
 						foreach ($listlogs as $key => $log)
 						{
 							$this->template->assign_block_vars(
-								'logs_row', array(
-									'ID'        => $log['log_id'],
-									'DATE'         => $log['datestamp'],
-									'TYPE'         => $log['log_type'],
-									'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start) ,
-									'VERBOSE'    => $verbose,
-									'IMGPATH'    => $this->ext_path . 'adm/images/glyphs/view.gif',
-									'USER'         => $log['username'],
-									'ACTION'     => $log['log_line'],
-									'IP'         => $log['log_ipaddress'],
-									'RESULT'     => $log['log_result'],
-									'C_RESULT'     => $log['cssresult'] ,
-									'ENCODED_TYPE' => urlencode($log['log_type']) ,
-									'ENCODED_USER' => urlencode($log['username']) ,
-									'ENCODED_IP' => urlencode($log['log_ipaddress']))
+							'logs_row', array(
+								'ID'            => $log['log_id'],
+								'DATE'          => $log['datestamp'],
+								'TYPE'          => $log['log_type'],
+								'U_VIEW_LOG'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start) ,
+								'VERBOSE'       => $verbose,
+								'IMGPATH'       => $this->ext_path . 'adm/images/glyphs/view.gif',
+								'USER'          => $log['username'],
+								'ACTION'        => $log['log_line'],
+								'IP'            => $log['log_ipaddress'],
+								'RESULT'        => $log['log_result'],
+								'C_RESULT'      => $log['cssresult'] ,
+								'ENCODED_TYPE'  => urlencode($log['log_type']) ,
+								'ENCODED_USER'  => urlencode($log['username']) ,
+								'ENCODED_IP'    => urlencode($log['log_ipaddress']))
 							);
 						}
 						$logcount = $logs->getTotalLogs();
@@ -550,20 +468,20 @@ class main_module extends admin
 
 						$this->template->assign_vars(
 							array(
-								'S_LIST'     => true ,
-								'L_TITLE'     => $this->user->lang['ACP_BBGUILD_LOGS'] ,
-								'L_EXPLAIN' => $this->user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
-								'O_DATE'     => $current_order['uri'][0] ,
-								'O_TYPE'     => $current_order['uri'][1] ,
-								'O_USER'     => $current_order['uri'][2] ,
-								'O_IP'         => $current_order['uri'][3] ,
-								'O_RESULT'     => $current_order['uri'][4] ,
-								'U_LOGS'     => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
+								'S_LIST'        => true ,
+								'L_TITLE'       => $this->user->lang['ACP_BBGUILD_LOGS'] ,
+								'L_EXPLAIN'     => $this->user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
+								'O_DATE'        => $current_order['uri'][0] ,
+								'O_TYPE'        => $current_order['uri'][1] ,
+								'O_USER'        => $current_order['uri'][2] ,
+								'O_IP'          => $current_order['uri'][3] ,
+								'O_RESULT'      => $current_order['uri'][4] ,
+								'U_LOGS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
 								'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\main_module&amp;mode=logs'),
 								'CURRENT_ORDER' => $current_order['uri']['current'] ,
-								'START' => $start ,
+								'START'         => $start ,
 								'VIEWLOGS_FOOTCOUNT' => sprintf($this->user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
-								'PAGE_NUMBER'        => $pagination->on_page($logcount, USER_LLIMIT, $start)
+								'PAGE_NUMBER'   => $pagination->on_page($logcount, USER_LLIMIT, $start)
 							)
 						);
 						break;

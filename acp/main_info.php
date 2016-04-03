@@ -32,10 +32,6 @@ class main_info
 					'title' => 'ACP_BBGUILD_CONFIG',
 					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
 					'cat' => array('ACP_BBGUILD_MAINPAGE')),
-				'index'     => array(
-					'title' => 'ACP_BBGUILD_INDEX',
-					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
-					'cat' => array('ACP_BBGUILD_MAINPAGE')),
 				'logs'    => array(
 					'title' => 'ACP_BBGUILD_LOGS',
 					'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',

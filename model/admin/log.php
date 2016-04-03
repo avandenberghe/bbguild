@@ -687,7 +687,7 @@ class log
 			$log_type = str_replace('L_ERROR_', '', $log_type);
 			$logline = $this->get_logmessage($log_type, $row['log_action'], $row['log_userid'], $row['username'], $row['user_colour'], $verbose);
 			$outlog[] = array(
-			'log_id'         => $row['log_id'],
+			'log_id'        => $row['log_id'],
 			'datestamp'     => date('d.m.y - H:i:s', $row['log_date']),
 			'log_line'         => $logline,
 			'log_type'        => $log_type,

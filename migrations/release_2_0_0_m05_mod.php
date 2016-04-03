@@ -49,7 +49,7 @@ class release_2_0_0_m05_mod extends migration
 				'ACP_BBGUILD_MAINPAGE',
 				array(
 					'module_basename' => '\bbdkp\bbguild\acp\main_module',
-					'modes'           => array('panel', 'config', 'logs', 'index') ,
+					'modes'           => array('panel', 'config', 'logs') ,
 				)
 			)),
 			array('module.add', array(

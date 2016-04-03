@@ -20,7 +20,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 	protected $player_ranks_table;
 	protected $bb_gamerole_table;
 	protected $bb_language;
-	protected $welcome_msg_table;
+	protected $motd_table;
 
 	protected $bbgames_table;
 	protected $news_table;
@@ -60,16 +60,16 @@ class release_2_0_0_m02_data extends container_aware_migration
 	{
 		$user = $this->container->get('user');
 		$user->add_lang_ext('bbdkp/bbguild', 'admin');
-		$welcome_message = $this->encode_message($user->lang['WELCOME_DEFAULT']);
+		$welcome_message = $this->encode_message($user->lang['MOTD']);
 
-		$this->bbgames_table = $this->table_prefix  . 'bb_games';
-		$this->news_table = $this->table_prefix  . 'bb_news';
-		$this->bblogs_table = $this->table_prefix  . 'bb_logs';
+		$this->bbgames_table      = $this->table_prefix  . 'bb_games';
+		$this->news_table         = $this->table_prefix  . 'bb_news';
+		$this->bblogs_table       = $this->table_prefix  . 'bb_logs';
 		$this->player_ranks_table = $this->table_prefix  . 'bb_ranks';
-		$this->guild_table = $this->table_prefix  . 'bb_guild';
-		$this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
-		$this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
-		$this->bb_language = $this->table_prefix  . 'bb_language';
+		$this->guild_table        = $this->table_prefix  . 'bb_guild';
+		$this->motd_table         = $this->table_prefix  . 'bb_motd';
+		$this->bb_gamerole_table  = $this->table_prefix  . 'bb_gameroles';
+		$this->bb_language        = $this->table_prefix  . 'bb_language';
 
 		$guildless = array(
 			array(
@@ -118,18 +118,18 @@ class release_2_0_0_m02_data extends container_aware_migration
 
 		$welcome = array(
 			array(
-				'welcome_title' => 'Welcome to our guild',
-				'welcome_timestamp' => (int) time(),
-				'welcome_msg' => $welcome_message['text'],
+				'motd_title' => 'Welcome to our guild',
+				'motd_timestamp' => (int) time(),
+				'motd_msg' => $welcome_message['text'],
 				'bbcode_uid' => $welcome_message['uid'],
 				'bbcode_bitfield' => $welcome_message['bitfield'],
 				'user_id' => $user->data['user_id']
 			)
 		);
 
-		if ($this->db_tools->sql_table_exists($this->welcome_msg_table))
+		if ($this->db_tools->sql_table_exists($this->motd_table))
 		{
-			$this->db->sql_multi_insert($this->welcome_msg_table, $welcome);
+			$this->db->sql_multi_insert($this->motd_table, $welcome);
 		}
 
 		/*standard game roles */
