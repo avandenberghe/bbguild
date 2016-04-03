@@ -1,7 +1,6 @@
 <?php
 /**
  * Game ACP file
- *
  * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -327,10 +326,17 @@ class game_module extends admin
 				$raceedit = (isset($_GET['raceedit'])) ? true : false;
 				$racedelete = (isset($_GET['racedelete'])) ? true : false;
 
-				if ($raceedit || $addrace)
+				if ($raceedit)
 				{
 					// edit this race
 					$this->BuildTemplateEditRace($editgame);
+					break;
+				}
+
+				if ($addrace)
+				{
+					// add new race
+					$this->BuildTemplateAddRace($editgame);
 					break;
 				}
 
