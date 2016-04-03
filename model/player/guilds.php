@@ -255,7 +255,7 @@ class guilds extends admin
 	 */
 	public function setStartdate($startdate)
 	{
-		$this->startdate = $startdate;
+		$this->startdate = (int) $startdate;
 	}
 
 	/**
@@ -271,7 +271,7 @@ class guilds extends admin
 	 */
 	public function setShowroster($showroster)
 	{
-		$this->showroster = $showroster;
+		$this->showroster = (int) $showroster;
 	}
 
 	/**
@@ -279,7 +279,7 @@ class guilds extends admin
 	 */
 	public function getRecstatus()
 	{
-		return $this->recstatus;
+		return  $this->recstatus;
 	}
 
 	/**
@@ -287,7 +287,7 @@ class guilds extends admin
 	 */
 	public function setRecstatus($recstatus)
 	{
-		$this->recstatus = $recstatus;
+		$this->recstatus = (int) $recstatus;
 	}
 
 	/**
@@ -335,7 +335,7 @@ class guilds extends admin
 	 */
 	public function setAchievements($achievements)
 	{
-		$this->achievements = $achievements;
+		$this->achievements = (int) $achievements;
 	}
 
 	/**
@@ -351,7 +351,7 @@ class guilds extends admin
 	 */
 	public function setAionlegionid($aionlegionid)
 	{
-		$this->aionlegionid = $aionlegionid;
+		$this->aionlegionid = (int) $aionlegionid;
 	}
 
 	/**
@@ -367,7 +367,7 @@ class guilds extends admin
 	 */
 	public function setAionserverid($aionserverid)
 	{
-		$this->aionserverid = $aionserverid;
+		$this->aionserverid = (int) $aionserverid;
 	}
 
 	/**
@@ -383,7 +383,7 @@ class guilds extends admin
 	 */
 	public function setApplyrank($applyrank)
 	{
-		$this->applyrank = $applyrank;
+		$this->applyrank = (int) $applyrank;
 	}
 
 	/**
@@ -399,7 +399,7 @@ class guilds extends admin
 	 */
 	public function setArmoryEnabled($armory_enabled)
 	{
-		$this->armory_enabled = $armory_enabled;
+		$this->armory_enabled = (int) $armory_enabled;
 	}
 
 	/**
@@ -415,7 +415,7 @@ class guilds extends admin
 	 */
 	public function setArmoryresult($armoryresult)
 	{
-		$this->armoryresult = $armoryresult;
+		$this->armoryresult = (string) $armoryresult;
 	}
 
 	/**
@@ -431,7 +431,7 @@ class guilds extends admin
 	 */
 	public function setBattlegroup($battlegroup)
 	{
-		$this->battlegroup = $battlegroup;
+		$this->battlegroup = (string) $battlegroup;
 	}
 
 	/**
@@ -447,7 +447,7 @@ class guilds extends admin
 	 */
 	public function setEmblem($emblem)
 	{
-		$this->emblem = $emblem;
+		$this->emblem = (string) $emblem;
 	}
 
 	/**
@@ -463,7 +463,7 @@ class guilds extends admin
 	 */
 	public function setEmblempath($emblempath)
 	{
-		$this->emblempath = $emblempath;
+		$this->emblempath = (string) $emblempath;
 	}
 
 	/**
@@ -479,7 +479,7 @@ class guilds extends admin
 	 */
 	public function setFaction($faction)
 	{
-		$this->faction = $faction;
+		$this->faction = (int) $faction;
 	}
 
 	/**
@@ -495,7 +495,7 @@ class guilds extends admin
 	 */
 	public function setFactionname($factionname)
 	{
-		$this->factionname = $factionname;
+		$this->factionname = (string) $factionname;
 	}
 
 	/**
@@ -511,7 +511,7 @@ class guilds extends admin
 	 */
 	public function setGameId($game_id)
 	{
-		$this->game_id = $game_id;
+		$this->game_id = (string) $game_id;
 	}
 
 	/**
@@ -527,7 +527,7 @@ class guilds extends admin
 	 */
 	public function setGuildarmoryurl($guildarmoryurl)
 	{
-		$this->guildarmoryurl = $guildarmoryurl;
+		$this->guildarmoryurl = (string) $guildarmoryurl;
 	}
 
 	/**
@@ -543,7 +543,7 @@ class guilds extends admin
 	 */
 	public function setGuilddefault($guilddefault)
 	{
-		$this->guilddefault = $guilddefault;
+		$this->guilddefault = (int) $guilddefault;
 	}
 
 	/**
@@ -559,7 +559,7 @@ class guilds extends admin
 	 */
 	public function setGuildid($guildid)
 	{
-		$this->guildid = $guildid;
+		$this->guildid = (int) $guildid;
 	}
 
 	/**
@@ -575,7 +575,7 @@ class guilds extends admin
 	 */
 	public function setLevel($level)
 	{
-		$this->level = $level;
+		$this->level = (int) $level;
 	}
 
 	/**
@@ -591,7 +591,7 @@ class guilds extends admin
 	 */
 	public function setMinArmory($min_armory)
 	{
-		$this->min_armory = $min_armory;
+		$this->min_armory = (int) $min_armory;
 	}
 
 	/**
@@ -623,7 +623,7 @@ class guilds extends admin
 	 */
 	public function setPlayercount($playercount)
 	{
-		$this->playercount = $playercount;
+		$this->playercount = (int) $playercount;
 	}
 
 	/**
@@ -671,7 +671,7 @@ class guilds extends admin
 	 */
 	public function setRaidtrackerrank($raidtrackerrank)
 	{
-		$this->raidtrackerrank = $raidtrackerrank;
+		$this->raidtrackerrank = (int) $raidtrackerrank;
 	}
 
 	/**
@@ -687,7 +687,7 @@ class guilds extends admin
 	 */
 	public function setRealm($realm)
 	{
-		$this->realm = $realm;
+		$this->realm = (string) $realm;
 	}
 
 	/**
@@ -725,7 +725,7 @@ class guilds extends admin
 		}
 		else
 		{
-			$this->guildnews = isset($guildnews) ? $guildnews: array();
+			$this->guildnews = (array) $guildnews;
 		}
 	}
 
@@ -784,32 +784,32 @@ class guilds extends admin
 			trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 		}
 
-		$result = $db->sql_query('SELECT MAX(id) as id FROM ' . GUILD_TABLE . ';');
+		$result = $db->sql_query('SELECT MAX(id) as id FROM ' . GUILD_TABLE);
 		$row = $db->sql_fetchrow($result);
 		$this->guildid = (int) $row['id'] + 1;
-
-		//@todo complete this
-		$this->aionlegionid = 0;
-		$this->aionserverid = 0;
-
 		$query = $db->sql_build_array(
 			'INSERT', array(
-				'game_id' => $this->game_id,
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
-				'region' => $this->region,
-				'roster' => $this->showroster ,
+				'region' => $this->region ,
+				'battlegroup' => $this->battlegroup,
+				'roster' => $this->showroster,
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid,
+				'level' => $this->level,
+				'players' => $this->playercount,
+				'achievementpoints' => $this->achievementpoints,
+				'guildarmoryurl' => $this->guildarmoryurl,
+				'emblemurl' => $this->emblempath,
+				'game_id' => $this->game_id,
 				'min_armory' => $this->min_armory,
+				'rec_status' => $this->recstatus,
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
-				'rec_status' => $this->recstatus,
+				'armoryresult' => $this->armoryresult,
 				'recruitforum' => $this->recruitforum,
-				'players' => 0,
-				'armoryresult' => 'NA',
-				'faction' => $this->faction,
+				'faction' => $this->faction
 			)
 		);
 
@@ -839,37 +839,15 @@ class guilds extends admin
 				'log_action' => $log_action)
 		);
 
-		if ($this->game_id != 'wow')
-		{
-			return 0;
-		}
-		else
-		{
-			$data =  $this->get_api_info(array());
-
-			if ($this->armoryresult == 'OK')
-			{
-				$this->update_guild_battleNet($data, array());
-
-				return 1;
-			}
-			else
-			{
-				return 2;
-			}
-
-		}
-
 	}
 
 	/**
 	 * updates a guild to database
 	 *
 	 * @param  guilds $old_guild
-	 * @param  $params
 	 * @return bool
 	 */
-	public function update_guild(guilds $old_guild, $params)
+	public function update_guild(guilds $old_guild)
 	{
 		global $user, $cache, $db;
 
@@ -894,31 +872,31 @@ class guilds extends admin
 
 		$query = $db->sql_build_array(
 			'UPDATE', array(
-				'game_id' => $this->game_id,
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
 				'region' => $this->region ,
-				'roster' => $this->showroster ,
+				'battlegroup' => $this->battlegroup,
+				'roster' => $this->showroster,
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid,
+				'level' => $this->level,
+				'players' => $this->playercount,
+				'achievementpoints' => $this->achievementpoints,
+				'guildarmoryurl' => $this->guildarmoryurl,
+				'emblemurl' => $this->emblempath,
+				'game_id' => $this->game_id,
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
-				'players' => $this->playercount,
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
-				'emblemurl' => $this->emblempath,
+				'armoryresult' => $this->armoryresult,
 				'recruitforum' => $this->recruitforum,
-				'faction' => $this->faction,
+				'faction' => $this->faction
 			)
 		);
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-
-		$data = $this->get_api_info($params);
-
-		$this->update_guild_battleNet($data, $params);
-
 		return true;
 	}
 
@@ -1011,7 +989,7 @@ class guilds extends admin
 		$imgfile = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
 		$outputpath = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name). '.png';
 
-		if (file_exists($imgfile) and $width==(imagesx(imagecreatefrompng($imgfile))) and (filemtime($imgfile)+86000) > time())
+		if (file_exists($imgfile) and $width== imagesx(imagecreatefrompng($imgfile)) and (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
 			imagesavealpha($finalimg, true);
@@ -1453,7 +1431,7 @@ class guilds extends admin
 
 
 	/**
-	 * get api info
+	 * get api info of the game
 	 *
 	 * @param  $params
 	 * @return bool
@@ -1462,19 +1440,12 @@ class guilds extends admin
 	{
 		global $user, $cache;
 		$data= 0;
-		if ($this->game_id != 'wow')
-		{
-			return false;
-		}
-		if ($this->guildid == '0')
-		{
-			return false;
-		}
 		$game          = new game;
 		$game->game_id = $this->game_id;
 		$game->get_game();
+
 		// are both game and guild armory-enabled and does player have Wow Mashery Account api key and locale ?
-		if ($game->getArmoryEnabled() == 1
+		if ($game->getArmoryEnabled() == true
 			&& $this->armory_enabled == 1
 			&& trim($game->getApikey()) != ''
 			&& trim($game->get_apilocale()) != ''
@@ -1502,6 +1473,7 @@ class guilds extends admin
 				);
 				return false;
 			}
+
 			//if we get error code
 			if (isset($data['code']))
 			{
@@ -1509,6 +1481,7 @@ class guilds extends admin
 				{
 					// even if we have active API account, it may be that Blizzard account is inactive
 					$this->armoryresult = 'KO';
+					$this->armory_enabled = false;
 					$log_action         = array(
 						'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
 						'L_UPDATED_BY' => $user->data['username'],
@@ -1529,19 +1502,18 @@ class guilds extends admin
 		else
 		{
 			$this->armoryresult = 'KO';
+			return false;
 		}
-
 		return $data;
 	}
-
 
 	/**
 	 * fetch Guild API information
 	 *
-	 * @param $data
-	 * @param $params
+	 * @param array $data
+	 * @param       $params
 	 */
-	private function update_guild_battleNet($data, $params)
+	public function update_guild_battleNet(array $data, $params)
 	{
 		global $db;
 
@@ -1553,7 +1525,14 @@ class guilds extends admin
 		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
 		$this->level = isset($data['level']) ? $data['level']: 0;
 		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-		$this->faction = isset($data['side']) ? ($data['side'] == 0 ? 1: 2) : ''; // bbguild wants Alliance 1 and Horde 2
+
+		if ($data['side'] == 0)
+		{
+			$this->faction = isset($data['side']) ? (1) : '';
+		} else
+		{
+			$this->faction = isset($data['side']) ? (2) : '';
+		} // bbguild wants Alliance 1 and Horde 2
 
 		$this->guildarmoryurl = '';
 		if (isset($data['name']))
@@ -1578,7 +1557,7 @@ class guilds extends admin
 		);
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-		if (in_array('members', $params))
+		if (in_array('members', $params, true))
 		{
 			// update ranks table
 			$rank = new ranks($this->guildid);

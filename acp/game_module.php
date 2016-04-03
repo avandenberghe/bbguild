@@ -466,13 +466,23 @@ class game_module extends admin
 		$editgame->get_game();
 
 		$editgame->setImagename($this->request->variable('imagename', ''));
-		$editgame->setArmoryEnabled($this->request->variable('enable_armory', 0));
+
 		$editgame->setBossbaseurl($this->request->variable('bossbaseurl', ''));
 		$editgame->setZonebaseurl($this->request->variable('zonebaseurl', ''));
 		$editgame->setName($this->request->variable('game_name', ' ', true));
 		$editgame->setApikey($this->request->variable('apikey', ''));
 		$editgame->set_apilocale($this->request->variable('apilocale', ''));
 		$editgame->set_privkey($this->request->variable('privkey', ''));
+
+		if ($editgame->get_apilocale()== '' || $editgame->getApikey() == '' )
+		{
+			$editgame->setArmoryEnabled(0);
+		}
+		else
+		{
+			$editgame->setArmoryEnabled($this->request->variable('enable_armory', 0));
+		}
+
 		$editgame->update_game();
 
 		return $editgame;
@@ -1312,6 +1322,21 @@ class game_module extends admin
 					'VALUE'      => $key,
 					'OPTION'     => $game,
 					'SELECTED'   => $editgame->game_id == $key ? ' selected="selected"' : '' ,
+				)
+			);
+		}
+
+		//list the locales for WoW
+		//en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU
+		$locales = array('en_GB', 'en_US', 'de_DE', 'es_ES', 'fr_FR', 'it_IT', 'pt_PT', 'pt_BR', 'ru_RU');
+		foreach ($locales as $key => $locale)
+		{
+			$this->template->assign_block_vars(
+				'apilocale_row',
+				array(
+					'VALUE'    => $locale,
+					'SELECTED' => ($editgame->get_apilocale() == $locale) ? ' selected="selected"' : '',
+					'OPTION'   => $locale,
 				)
 			);
 		}

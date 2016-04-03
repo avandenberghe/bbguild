@@ -67,7 +67,13 @@
 
         <dl>
             <dt><label for="apilocale">{L_WOWAPILOCALE}:</label><br /><span>{L_WOWAPILOCALE_EXPLAIN} </span></dt>
-            <dd><input name="apilocale" type="text" id="apilocale" size="60" maxlength="100" value="{LOCALE}"/></dd>
+            <dd>
+                <select id="apilocale" name="apilocale" class="input">
+                    <!-- BEGIN apilocale_row -->
+                    <option value="{apilocale_row.VALUE}"{apilocale_row.SELECTED}>{apilocale_row.OPTION}</option>
+                    <!-- END apilocale_row -->
+                </select>
+            </dd>
         </dl>
         <!-- ENDIF -->
         

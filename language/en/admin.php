@@ -583,8 +583,8 @@ $lang = array_merge(
 	'ERROR_ARMORY_DOWN' => 'Error: Could not connect to Battle.NET API',
 	'GUILD_EMBLEM_NF' => 'Guild emblem not found',
 	'IMAGESIZE_WARNING' => 'Warning, width/height sould be max 32/32px, you have %s/%s',
-	'ERROR_ARMORY_NOTFOUND' => 'Guild not found on Battle.NET',
-	'ERROR_BATTLENET_ACCOUNT_INACTIVE' => 'Error:  Battle.NET Account inactive',
+	'ERROR_ARMORY_NOTFOUND' => 'Armory not enabled or Guild not found on Battle.NET',
+	'ERROR_BATTLENET_ACCOUNT_INACTIVE' => 'Error: Battle.NET Account inactive',
 
 	//Curl errors
 	'ERR_UNKNOWN' => 'Unknown error occurred.',
@@ -611,11 +611,11 @@ $lang = array_merge(
 	'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 	'WARNING_NORECRUITMENTS'   =>  'No Recruitments found.',
 	'WOWAPIKEY' => 'API key',
-	'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key (https://dev.battle.net/apps/mykeys)',
-	'WOWPRIVKEY' => 'Secret key',
-	'WOWPRIVKEY_EXPLAIN' => 'your Secret Mashery key',
+	'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key (<a href="https://dev.battle.net/apps/mykeys">https://dev.battle.net/apps/mykeys</a>)',
+	'WOWPRIVKEY' => 'Secret Mashery key',
+	'WOWPRIVKEY_EXPLAIN' => '(<i>the secret key is not currently needed by bbGuild</i>)',
 	'WOWAPILOCALE' => 'Locale',
-	'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
+	'WOWAPILOCALE_EXPLAIN' => 'Battle.NET API resources provide localized strings using the locale query string parameter. The available Locales supported vary from region to region and align with those supported on the community sites.',
 	'WOWAPI_LOCALE_NOTALLOWED' => 'illegal Locale %s : choose one of depending on your WoW Region : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 	'WOWAPI_KEY_MISSING' => 'Please request a Mashery Account at https://dev.battle.net/ and get an API key.',
 

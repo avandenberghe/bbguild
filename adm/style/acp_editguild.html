@@ -66,6 +66,37 @@
                             </dd>
                         </dl>
 
+                        <!-- IF S_WOW && F_ENABLGAMEEARMORY -->
+                        <dl>
+                            <dt><label>{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
+                            <dd>
+                                <input type="radio" name="armory_enabled" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF -->/> {L_ON}&nbsp;&nbsp;
+                                <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF -->/> {L_OFF}
+                            </dd>
+                        </dl>
+                        <!-- ENDIF -->
+                        <!-- IF F_ENABLEARMORY -->
+                        <dl>
+                            <dt><label>{L_ARMORYSTATUS}:</label></dt>
+                            <dd>{ARMORYSTATUS}</dd>
+                        </dl>
+                        <dl>
+                            <dt><label>{L_ARMORY_URL}:</label></dt>
+                            <dd><a href="{ARMORY_URL}">{ARMORY_URL}</a></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
+                            <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{MIN_ARMORYLEVEL}" /></dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 35%;"><label>{L_ARMORY_GUILD}</label><br />
+                            </dt>
+                            <dd>
+                                <input type="submit" id="armory" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
+                            </dd>
+                        </dl>
+                        <!-- ENDIF -->
+
                         <dl>
                             <dt><label>{L_PLAYERCOUNT}:</label></dt>
                             <dd>{PLAYERCOUNT}</dd>
@@ -97,38 +128,7 @@
                         </dl>
 
                         <hr/>
-                        <!-- IF S_WOW && F_ENABLGAMEEARMORY -->
-                        <dl>
-                            <dt><label>{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
-                            <dd>
-                                <input type="radio" name="armory_enabled" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF -->/> {L_ON}&nbsp;&nbsp;
-                                <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF -->/> {L_OFF}
-                            </dd>
-                        </dl>
-                        <!-- ENDIF -->
-                        <!-- IF F_ENABLEARMORY -->
 
-
-                        <dl>
-                            <dt><label>{L_ARMORYSTATUS}:</label></dt>
-                            <dd>{ARMORYSTATUS}</dd>
-                        </dl>
-                        <dl>
-                            <dt><label>{L_ARMORY_URL}:</label></dt>
-                            <dd><a href="{ARMORY_URL}">{ARMORY_URL}</a></dd>
-                        </dl>
-                        <dl>
-                            <dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
-                            <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{MIN_ARMORYLEVEL}" /></dd>
-                        </dl>
-                        <dl>
-                            <dt style="width: 35%;"><label>{L_ARMORY_GUILD}</label><br />
-                            </dt>
-                            <dd>
-                                <input type="submit" id="armory" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
-                            </dd>
-                        </dl>
-                        <!-- ENDIF -->
                     </div>
                 </fieldset>
                 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">

@@ -499,7 +499,7 @@ class game
 		$sql .= ' GROUP BY g.id, g.game_id, g.game_name';
 		$sql .= ' ORDER BY g.game_id';
 		// cache for 1 days
-		$result = $db->sql_query($sql, 86400);
+		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$this->games[$row['game_id']] = $row['game_name'];
