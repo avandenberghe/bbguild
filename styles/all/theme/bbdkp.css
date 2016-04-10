@@ -91,6 +91,13 @@
     top: 20px;
 }
 
+/* other pages tabard */
+.profile-sidebar-tabard {
+    height: 250px;
+    position: relative;
+    width: 230px;
+}
+
 .profile-sidebar-tabard .guild-tabard {
     left: 7px;
     overflow: hidden;
@@ -98,9 +105,18 @@
 }
 
 .guild-tabard {
-    height: 150px;
+    height: 200px;
     position: absolute;
-    width: 150px;
+    width: 200px;
+}
+
+.profile-sidebar-tabard .tabard-overlay {
+    background: rgba(0, 0, 0, 0) url("./images/bg_overlay_01.png") no-repeat scroll 0 0;
+    height: 289px;
+    left: -22px;
+    position: absolute;
+    top: 1px;
+    width: 269px;
 }
 
 .profile-info {

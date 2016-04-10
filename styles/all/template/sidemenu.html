@@ -3,7 +3,12 @@
     <div class="profile-sidebar-inner">
         <div class="profile-sidebar-contents">
             <!-- IF S_DISPLAY_ROSTERGRID or S_DISPLAY_ROSTERLISTING or S_DISPLAY_WOWACHIEVEMENTS -->
-            <div class="profile-sidebar-tabard">test test</div>
+            <div class="profile-sidebar-tabard">
+                <div class="guild-tabard">
+                    <img src="{EMBLEM}" alt="{GUILD_NAME}" />
+                    <div class="tabard-overlay"></div>
+                </div>
+            </div>
             <!-- ENDIF -->
             <!-- IF S_DISPLAY_WELCOME -->
             <!-- IF S_GUILD_ALLIANCE -->
@@ -15,7 +20,9 @@
             <!-- ENDIF -->
                 <div class="profile-info-anchor profile-guild-info-anchor">
                     <div class="guild-tabard">
+                        <div class="tabard-overlay">
                         <img src="{EMBLEM}" alt="{GUILD_NAME}" />
+                        </div>
                     </div>
                     <div class="profile-info profile-guild-info">
                         <div class="name">
