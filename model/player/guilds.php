@@ -1013,13 +1013,13 @@ class guilds extends admin
 	 * @param int $width
 	 * @return string
 	 */
-	private function create_emblem($width = 200)
+	private function create_emblem($width = 175)
 	{
 		//location to create the file
 		$imgfile = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
 		$outputpath = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name). '.png';
 
-		if (file_exists($imgfile) and $width== imagesx(imagecreatefrompng($imgfile)) and (filemtime($imgfile)+86000) > time())
+		if (file_exists($imgfile) and $width == imagesx(imagecreatefrompng($imgfile)) and (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
 			imagesavealpha($finalimg, true);
@@ -1579,7 +1579,8 @@ class guilds extends admin
 		}
 
 		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(false)  : '';
+
+		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem()  : '';
 		if(isset($data['members']))
 		{
 			$this->playercount = count($data['members']);

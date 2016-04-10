@@ -330,11 +330,7 @@ class guild_module extends admin
 		//if wow battlenet connection is on then fetch info from Wow API.
 		if ($addguild->isArmoryEnabled())
 		{
-			$data =  $addguild->get_api_info(array());
-			if ($addguild->armoryresult == 'OK')
-			{
-				$addguild->update_guild_battleNet($data, array());
-			}
+			$this->BattleNetUpdate($addguild);
 		}
 
 		$success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->getName());
