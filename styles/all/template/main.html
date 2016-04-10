@@ -1,62 +1,15 @@
 <!-- INCLUDE overall_header.html -->
-<div id="bbguildwrap">
+<!-- IF S_DISPLAY_ROSTERGRID -->
+<div id="bbguildwraphigh">
+<!-- ELSE IF S_DISPLAY_ROSTERLISTING -->
+<div id="bbguildwraphigh">
+<!-- ELSE IF S_DISPLAY_WELCOME -->
+<div id="bbguildwraplow">
+<!-- ELSE IF S_DISPLAY_WOWACHIEVEMENTS -->
+<div id="bbguildwraphigh">
+<!-- ENDIF -->
     <div class="profile-sidebar-anchor">
-        <div class="profile-sidebar-outer">
-            <div class="profile-sidebar-inner">
-                <div class="profile-sidebar-contents">
-                    <!-- IF S_GUILD_ALLIANCE -->
-                    <div class="profile-wrapper-alliance">
-                    <!-- ELSEIF S_GUILD_HORDE -->
-                    <div class="profile-wrapper-horde">
-                    <!-- ELSE -->
-                    <div class="profile-wrapper-other">
-                    <!-- ENDIF -->
-                        <div class="profile-info-anchor profile-guild-info-anchor">
-                            <div class="guild-tabard">
-                                <img src="{EMBLEM}" alt="{GUILD_NAME}" />
-                            </div>
-                            <div class="profile-info profile-guild-info">
-                                <div class="name">
-                                    <a href="{ARMORY}">{GUILD_NAME}</a>
-                                </div>
-                                <div class="under-name">
-                                    <span class="faction">{FACTION_NAME}</span> {L_GUILD}<span class="comma">,</span>
-                                    <span id="profile-info-realm" class="realm">{REGION}-{REALM}</span><span class="comma">.</span>
-                                    <span class="members">{PLAYERCOUNT} {L_MEMBERS}</span>
-                                </div>
-                                <div class="achievements">
-                                    <a href="{ARMORY}">{ACHIEV}</a>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="profile-guild-menu">
-                        <ul id="profile-sidebar-menu" class="profile-sidebar-menu">
-                            <li><a href="{U_WELCOME}"><span class="arrow"><span class="icon">{L_MENU_WELCOME}</span></span></a></li>
-                            <li><a href="{U_ROSTER}"><span class="arrow"><span class="icon">{L_MENU_ROSTER}</span></span></a></li>
-                            <!--
-                            <li><a href="{U_PLAYER}"><span class="arrow"><span class="icon">{L_MENU_PLAYER}</span></span></a></li>
-                            <li><a href="{U_STATS}"><span class="arrow"><span class="icon">{L_MENU_STATS}</span></span></a></li>
-                            <li><a href="{U_RAIDS}"><span class="arrow"><span class="icon">{L_MENU_RAIDS}</span></span></a></li>
-                            <li><a href="{U_NEWS}"><span class="arrow"><span class="icon">{L_MENU_NEWS}</span></span></a></li>
-                            -->
-                        </ul>
-                    </div>
-                    <div class="profile-guild-chooser">
-                        <form method="post" action="{F_NAVURL}" id="setguild">
-                            <select name="guild_id" id="guild_id" class="input" onchange="this.form.submit();">
-                                <!-- BEGIN guild_row -->
-                                <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-                                <!-- END guild_row -->
-                            </select>
-                            <input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
-                            <input type="hidden" name="hidden_show" value="{SHOWALL}" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- INCLUDE sidemenu.html -->
     </div>
     <div class="profile-contents">
         <!-- IF S_ERROR -->
@@ -70,6 +23,9 @@
         <!-- ENDIF -->
         <!-- IF S_DISPLAY_WELCOME -->
         <!-- INCLUDE view/welcome.html -->
+        <!-- ENDIF -->
+        <!-- IF S_DISPLAY_WOWACHIEVEMENTS -->
+        <!-- INCLUDE view/achievements.html -->
         <!-- ENDIF -->
     </div>
     <span class="clear"></span>

@@ -1,8 +1,12 @@
 /* Custom CSS for bbGuild */
 
-/* the bbguild page
+/* sidebar page
 --------------------------------------------- */
-#bbguildwrap
+.summary {
+    padding-top: 200px;
+}
+
+#bbguildwraplow
 {
     width: 100%;
     color: #c09a67;
@@ -13,6 +17,31 @@
     background: rgba(0, 0, 0, 0) url("./images/bg-alliance.jpg") no-repeat scroll left top;
 }
 
+#bbguildwraphigh
+{
+    width: 100%;
+    color: #c09a67;
+    margin: 0 auto;
+    position: relative;
+    min-height: 600px;
+    clear: both;
+}
+
+.roster {
+     padding-top: 50px;
+     margin-left: 5px;
+     min-height: 807px;
+     padding-bottom: 40px;
+}
+
+.category, .subheader-3 {
+    color: #7e3406;
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: -0.05em;
+}
+
+/* profile sidebar */
 .profile-sidebar-anchor {
     float: left;
     height: 0;
@@ -60,6 +89,12 @@
 .profile-guild-info-anchor .guild-tabard {
     left: 720px;
     top: 20px;
+}
+
+.profile-sidebar-tabard .guild-tabard {
+    left: 7px;
+    overflow: hidden;
+    top: 0;
 }
 
 .guild-tabard {
@@ -208,17 +243,7 @@ ul.profile-sidebar-menu a .arrow {
     padding-bottom: 40px;
 }
 
-
-.summary, .roster {
-    padding-top: 224px;
-}
-
-.category, .subheader-3 {
-    color: #7e3406;
-    font-size: 22px;
-    font-weight: normal;
-    letter-spacing: -0.05em;
-}
+/* welcome page */
 
 .profile-box-simple {
     border-top: 2px solid #4a240f;
@@ -279,3 +304,11 @@ ul#bbguild-activity-feed li dl dt {
         display: none;
     }
 }
+
+
+/* achievement page
+--------------------------------------------- */
+.profile-section-header {
+    padding: 11px 15px 0;
+}
+
