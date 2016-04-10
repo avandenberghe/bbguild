@@ -123,16 +123,11 @@ class ranks extends guilds
 			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
 
-		$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_RANKS_TABLE . '
-                   	WHERE rank_id != 99
-                   	AND rank_id = ' . (int) $this->RankId . '
+		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . '
+                   	WHERE rank_id = ' . (int) $this->RankId . '
                    	AND guild_id = ' . (int) $this->RankGuild . '
                    	ORDER BY rank_id, rank_hide ASC ';
-		$result = $db->sql_query($sql);
-		if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1)
-		{
-			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId,  $this->RankGuild), E_USER_WARNING);
-		}
+		$db->sql_query($sql);
 
 		// build insert array
 		$query = $db->sql_build_array(
@@ -146,8 +141,8 @@ class ranks extends guilds
 		);
 		// insert new rank
 		$db->sql_query('INSERT INTO ' . PLAYER_RANKS_TABLE . $query);
-		// log the action
 
+		// log the action
 		$log_action = array(
 		'header' => 'L_ACTION_RANK_ADDED',
 		'id' => (int) $this->RankId,
@@ -162,7 +157,6 @@ class ranks extends guilds
 		);
 
 		unset($bbguild);
-
 	}
 
 	/**

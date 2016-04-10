@@ -320,8 +320,14 @@ class guild_module extends admin
 		$addguild->setEmblempath($this->ext_path. 'images/guildemblem/' .$this->request->variable('guild_emblem', '', true));
 		$addguild->setAionlegionid(0);
 		$addguild->setAionserverid(0);
+		$addguild->setAchievementpoints(0);
+		$addguild->setBattlegroup('');
+		$addguild->setLevel(25);
+		$addguild->setStartdate(time());
+		$addguild->setArmoryresult('KO');
 		$addguild->make_guild();
 
+		//if wow battlenet connection is on then fetch info from Wow API.
 		if ($addguild->isArmoryEnabled())
 		{
 			$data =  $addguild->get_api_info(array());
