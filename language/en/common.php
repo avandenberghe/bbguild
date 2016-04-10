@@ -80,6 +80,7 @@ $lang = array_merge(
 	'MENU_RAIDS' => 'Raids',
 	'MENU_STATS' => 'Statistics',
 	'MENU_PLAYER' => 'Player',
+	'MENU_ACHIEVEMENTS' => 'Achievements',
 
 	/*
     'MENU_BOSS' => 'Bossprogress',

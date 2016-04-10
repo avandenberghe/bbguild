@@ -343,6 +343,13 @@ class viewnavigation extends admin implements iviews
 						'page' => 'roster'
 					)
 				),
+				'U_ACHIEVEMENTS'           => $this->helper->route(
+					'bbdkp_bbguild_00',
+					array(
+						'guild_id' => $this->guild_id,
+						'page' => 'achievements'
+					)
+				),
 				'FACTION'            => $this->guild->getFaction(),
 				'FACTION_NAME'       => $this->guild->getFactionname(),
 				'GAME_ID'            => $this->guild->getGameId(),

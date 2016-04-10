@@ -122,7 +122,7 @@ class view_controller
 		$this->root_path  = $root_path;
 	}
 
-	private $valid_views = array('roster', 'welcome');
+	private $valid_views = array('roster', 'welcome', 'achievements');
 	//private $valid_views = array('news', 'roster', 'standings', 'welcome', 'stats', 'player', 'raids');
 
 	/**

@@ -47,6 +47,7 @@ use bbdkp\bbguild\model\games\game;
  * @property string $armoryresult
  * @property int $recruitforum
  * @property array $guildnews
+ * @property array $guildachievements
  */
 class guilds extends admin
 {
@@ -241,6 +242,12 @@ class guilds extends admin
 	 */
 	protected $factionname;
 
+	/**
+	 * guildachi array from battle.NET
+	 *
+	 * @type array
+	 */
+	protected $guildachievements;
 
 	/**
 	 * @return int
@@ -727,6 +734,29 @@ class guilds extends admin
 		{
 			$this->guildnews = (array) $guildnews;
 		}
+	}
+
+	/**
+	 * @param $guildachievements
+	 */
+	public function setGuildAchievements($guildachievements)
+	{
+		if ($this->armoryresult == 'KO')
+		{
+			$this->guildachievements = array();
+		}
+		else
+		{
+			$this->guildachievements = (array) $guildachievements;
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGuildAchievements()
+	{
+		return $this->guildachievements;
 	}
 
 	/**
