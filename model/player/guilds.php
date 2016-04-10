@@ -1516,7 +1516,7 @@ class guilds extends admin
 	}
 
 	/**
-	 * fetch Guild API information
+	 * fetch Battlenet Guild api endpoint and update the guild object
 	 *
 	 * @param array $data
 	 * @param       $params
@@ -1550,7 +1550,10 @@ class guilds extends admin
 
 		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
 		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(false)  : '';
-		$this->playerdata = isset($data['members']) ? $data['members']: '';
+		if(isset($data['members']))
+		{
+			$this->playercount = count($data['members']);
+		}
 
 		$query = $db->sql_build_array(
 			'UPDATE', array(
@@ -1560,6 +1563,7 @@ class guilds extends admin
 				'emblemurl'         => $this->emblempath,
 				'battlegroup'       => $this->battlegroup,
 				'armoryresult'      => $this->armoryresult,
+				'players'           => $this->playercount,
 				'faction'           => $this->faction,
 			)
 		);
