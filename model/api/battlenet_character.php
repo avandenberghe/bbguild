@@ -60,6 +60,8 @@ class battlenet_character extends battlenet_resource
 		'titles',
 	);
 
+	protected $endpoint='character';
+
 	/**
 	 * return the private fields
 	 *
@@ -120,7 +122,7 @@ class battlenet_character extends battlenet_resource
 		}
 		else
 		{
-			$data = $this->consume($realm. '/'. $name);
+			$data = $this->consume($realm. '/'. $name, $fields);
 		}
 
 		return $data;

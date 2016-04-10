@@ -42,6 +42,8 @@ class battlenet_realm extends battlenet_resource
 		return $this->consume('status');
 	}
 
+	protected $endpoint='realm';
+
 	/**
 	 * Get status results for specified realm(s).
 	 *

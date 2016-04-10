@@ -12,7 +12,7 @@ namespace bbdkp\bbguild\model\player;
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\games\game;
 use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\api\battle_net;
+use bbdkp\bbguild\model\api\battlenet;
 
 /**
  * manages player creation
@@ -970,7 +970,7 @@ class player extends admin
 		 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
 		 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 		 */
-		$api = new battle_net('character', $this->player_region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
+		$api = new battlenet('character', $this->player_region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
 		$params = array('guild', 'titles', 'talents' );
 
 		$data = $api->character->getCharacter($this->player_name, $this->player_realm, $params);

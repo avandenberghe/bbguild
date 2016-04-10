@@ -92,6 +92,11 @@ abstract class battlenet_resource extends admin
 	public $cache;
 
 	/**
+	 * @type string
+	 */
+	protected $endpoint;
+
+	/**
 	 * realm api constructor
 	 *
 	 * @param string $region Server region
@@ -144,14 +149,8 @@ abstract class battlenet_resource extends admin
 		//get base url
 		$requestUri = $this->api_url[$this->region];
 
-		//append method
-		$classname = get_class($this);
-		if (preg_match('@\\\\([\w]+)$@', $classname, $matches))
-		{
-			$classname = strtolower($matches[1]);
-		}
 
-		$requestUri .= $classname . '/'. $method;
+		$requestUri .= $this->endpoint . '/'. $method;
 
 		//append locale
 		$requestUri .= '?locale=' . $this->locale;

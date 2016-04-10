@@ -261,7 +261,7 @@ class guild_module extends admin
 
 						if ($updatearmory)
 						{
-							$this->UpdateGuild($updateguild, true);
+							$this->BattleNetUpdate($updateguild, array('members'));
 						}
 
 						if ($delete)
@@ -369,11 +369,7 @@ class guild_module extends admin
 
 		if ($updateguild->isArmoryEnabled())
 		{
-			$data =  $updateguild->get_api_info(array());
-			if ($updateguild->getArmoryresult() == 'OK')
-			{
-				$updateguild->update_guild_battleNet($data, array());
-			}
+			$this->BattleNetUpdate($updateguild);
 		}
 
 		if ($updateguild->update_guild($old_guild))
@@ -388,6 +384,17 @@ class guild_module extends admin
 		}
 
 	}
+
+	private function BattleNetUpdate(guilds $updateguild, $parameters = array())
+	{
+		$data =  $updateguild->get_api_info($parameters);
+		if ($updateguild->getArmoryresult() == 'OK')
+		{
+			$updateguild->update_guild_battleNet($data, $parameters);
+		}
+
+	}
+
 
 	/**
 	 * delete a guild

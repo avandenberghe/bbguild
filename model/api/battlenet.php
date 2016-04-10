@@ -14,16 +14,12 @@
 
 namespace bbdkp\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\battlenet_realm;
-use bbdkp\bbguild\model\api\battlenet_guild;
-use bbdkp\bbguild\model\api\battlenet_character;
-
 /**
  * Battle.net WoW API PHP SDK
  *
  * @package bbguild
  */
-class battle_net
+class battlenet
 {
 
 	public $cache;
@@ -119,20 +115,20 @@ class battle_net
 		switch ($this->api)
 		{
 		case 'realm':
-			$this->Realm = new battlenet_realm($this->cache,$region, $this->cacheTtl);
+			$this->Realm = new \bbdkp\bbguild\model\api\battlenet_realm($this->cache,$region, $this->cacheTtl);
 			$this->Realm->apikey = $apikey;
 			$this->Realm->locale = $locale;
 			$this->Realm->privkey = $privkey;
 
 			break;
 		case 'guild':
-			$this->guild          = new battlenet_guild($this->cache,$region, $this->cacheTtl);
+			$this->guild          = new \bbdkp\bbguild\model\api\battlenet_guild($this->cache,$region, $this->cacheTtl);
 			$this->guild->apikey  = $apikey;
 			$this->guild->locale  = $locale;
 			$this->guild->privkey = $privkey;
 			break;
 		case 'character':
-			$this->character          = new battlenet_character($this->cache,$region, $this->cacheTtl);
+			$this->character          = new \bbdkp\bbguild\model\api\battlenet_character($this->cache,$region, $this->cacheTtl);
 			$this->character->apikey  = $apikey;
 			$this->character->locale  = $locale;
 			$this->character->privkey = $privkey;

@@ -57,6 +57,8 @@ class battlenet_guild extends battlenet_resource
 		'news'
 	);
 
+	protected $endpoint='guild';
+
 	/**
 	  * return the private fields
 	  *
@@ -110,7 +112,7 @@ class battlenet_guild extends battlenet_resource
 		}
 		else
 		{
-			$data = $this->consume($realm. '/'. $name);
+			$data = $this->consume($realm. '/'. $name, $fields);
 		}
 
 		return $data;

@@ -10,8 +10,8 @@
 namespace bbdkp\bbguild\model\player;
 
 use bbdkp\bbguild\model\admin\admin;
+use bbdkp\bbguild\model\api\battlenet;
 use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\api\battle_net;
 
 /**
  * Manages Guild creation
@@ -1452,7 +1452,7 @@ class guilds extends admin
 		)
 		{
 			//available extra fields : 'members', 'achievements','news'
-			$api  = new battle_net('guild', $this->region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
+			$api  = new battlenet('guild', $this->region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
 			$data = $api->guild->getGuild($this->name, $this->realm, $params);
 			$data = $data['response'];
 			unset($api);
@@ -1497,6 +1497,14 @@ class guilds extends admin
 					return false;
 				}
 			}
+
+			if (isset($data['status']))
+			{
+				$this->armoryresult = 'KO';
+				return false;
+			}
+
+
 			$this->armoryresult = 'OK';
 		}
 		else
