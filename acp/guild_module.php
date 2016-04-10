@@ -370,7 +370,7 @@ class guild_module extends admin
 		if ($updateguild->isArmoryEnabled())
 		{
 			$data =  $updateguild->get_api_info(array());
-			if ($updateguild->armoryresult == 'OK')
+			if ($updateguild->getArmoryresult() == 'OK')
 			{
 				$updateguild->update_guild_battleNet($data, array());
 			}
