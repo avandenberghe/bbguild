@@ -40,56 +40,67 @@ class viewwelcome implements iviews
 
 		$welcometext = $this->get_message_of_the_day();
 
-		$data = $this->navigation->guild->get_api_info(array('news'));
-		if ($data)
+		if ($this->navigation->guild->isArmoryEnabled())
 		{
-			$this->navigation->guild->setGuildnews($data);
-			$newsarr =  $this->navigation->guild->getGuildnews();
-			if (isset($newsarr))
+			$data = $this->navigation->guild->get_api_info(array('news'));
+			if ($data)
 			{
-				$i=0;
-				foreach ($newsarr as $id => $news)
+				$this->navigation->guild->setGuildnews($data);
+				$newsarr =  $this->navigation->guild->getGuildnews();
+				if (isset($newsarr['news']))
 				{
-					$i++;
-					switch ($news['type'])
+					$i=0;
+					foreach ($newsarr['news'] as $id => $news)
 					{
-					case 'itemCraft' :
-					case 'itemLoot' :
-						$template->assign_block_vars(
-							'activityfeed', array(
-							'TYPE'      => 'ITEM',
-							'ID'        => $id,
-							'VERB'      => $user->lang('LOOTED'),
-							'CHARACTER' => $news['character'],
-							'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-							'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
-							'CONTEXT'   => $news['context'],
-							//trade-skill, quest-reward, raid-finder, vendor, dungeon-heroic, raid-normal , dungeon-normal
-							)
-						);
-						break;
-					case 'playerAchievement':
-						$template->assign_block_vars(
-							'activityfeed', array(
-							'TYPE'        => 'ACHI',
-							'ID'          => $id,
-							'VERB'        => $user->lang('ACHIEVED'),
-							'CHARACTER'   => $news['character'],
-							'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-							'ACHIEVEMENT' => $news['achievement']['id'],
-							'TITLE'       => $news['achievement']['title'],
-							'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
-							)
-						);
-						break;
-					}
-					if ($i > 25)
-					{
-						break;
+						$i++;
+						switch ($news['type'])
+						{
+						case 'itemCraft' :
+						case 'itemLoot' :
+							$template->assign_block_vars(
+								'activityfeed', array(
+								'TYPE'      => 'ITEM',
+								'ID'        => $id,
+								'VERB'      => $user->lang('LOOTED'),
+								'CHARACTER' => $news['character'],
+								'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+								'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
+								'CONTEXT'   => $news['context'],
+								//trade-skill, quest-reward, raid-finder, vendor, dungeon-heroic, raid-normal , dungeon-normal
+								)
+							);
+							break;
+						case 'playerAchievement':
+							$template->assign_block_vars(
+								'activityfeed', array(
+								'TYPE'        => 'ACHI',
+								'ID'          => $id,
+								'VERB'        => $user->lang('ACHIEVED'),
+								'CHARACTER'   => $news['character'],
+								'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+								'ACHIEVEMENT' => $news['achievement']['id'],
+								'TITLE'       => $news['achievement']['title'],
+								'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
+								)
+							);
+							break;
+
+
+						default:
+							$a=$news['type'];
+							break;
+
+						}
+						if ($i > 25)
+						{
+							break;
+						}
 					}
 				}
 			}
+
 		}
+
 
 		$template->assign_vars(
 			array(
