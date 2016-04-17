@@ -39,6 +39,7 @@
     font-size: 22px;
     font-weight: normal;
     letter-spacing: -0.05em;
+    border-bottom: 0px !important;
 }
 
 /* profile sidebar */
@@ -326,5 +327,160 @@ ul#bbguild-activity-feed li dl dt {
 --------------------------------------------- */
 .profile-section-header {
     padding: 11px 15px 0;
+}
+
+.profile-section {
+    /*background-image: url("./images/section-bg-tabs.png");*/
+}
+.achievements-total {
+    clear: both;
+    margin-bottom: 30px;
+}
+
+.achievements-total .profile-box-full {
+    padding-bottom: 5px;
+}
+.profile-box-full {
+    background: rgba(0, 0, 0, 0) url("./images/profilebox-borderfade.png") no-repeat scroll 0 0;
+    margin-top: 6px;
+    padding: 20px 30px;
+}
+
+.achievements-total-completed {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px 15px 15px;
+}
+
+#cat-summary .desc {
+    display: block;
+}
+
+.achievements-total .desc {
+    font-weight: normal;
+    padding-bottom: 4px;
+}
+
+.achievements-total-completed .desc {
+    color: #fef092;
+    font-weight: bold;
+    padding-bottom: 6px;
+}
+
+.achievements-total-completed .profile-progress, .achievements-total-completed .profile-progress .bar {
+    height: 26px;
+}
+.achievements-total-completed .profile-progress {
+    margin-bottom: 0;
+}
+.achievements-total .profile-progress, .achievements-total .profile-progress .bar {
+    height: 23px;
+}
+.achievements-total .profile-progress {
+    margin: 0 auto 20px;
+}
+.profile-progress {
+    background: rgba(255, 255, 255, 0.1) none repeat scroll 0 0;
+    clear: both;
+    height: 22px;
+    margin: 0;
+    text-align: center;
+}
+.profile-progress {
+    clear: both;
+    height: 22px;
+    margin: 0;
+    text-align: center;
+}
+.profile-progress {
+    background-color: #542b19;
+    color: white;
+    height: 22px;
+    margin: 5px auto 10px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+.border-4 {
+    border-radius: 4px;
+}
+/*----------*/
+.achievements-total-completed .profile-progress, .achievements-total-completed .profile-progress .bar {
+    height: 26px;
+}
+.achievements-total .profile-progress, .achievements-total .profile-progress .bar {
+    height: 23px;
+}
+.profile-progress .bar {
+    height: 26px;
+    position: absolute;
+}
+.profile-progress .bar {
+    background: rgba(0, 0, 0, 0) url("./images/bg-progressbar-fill.gif") repeat-x scroll left -40px;
+    display: block;
+    height: 22px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+/*----------*/
+.profile-progress .bar-contents {
+    text-shadow: 1px 1px 1px black;
+}
+.achievements-total-completed .bar-contents {
+    line-height: 25px;
+}
+.achievements-total .bar-contents {
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 23px;
+}
+.profile-progress .bar-contents {
+    line-height: 25px;
+}
+.profile-progress .bar-contents {
+    font-size: 12px;
+    left: 0;
+    line-height: 22px;
+    position: relative;
+    text-shadow: 1px 1px 1px #000;
+    top: 0;
+    z-index: 5;
+}
+
+/*----------------*/
+#cat-summary .entry {
+    color: #c09a67;
+    float: left;
+    padding-left: 0;
+    width: 33.3333%;
+}
+
+#cat-summary .entry-inner {
+    margin-right: 15px;
+    padding: 5px;
+}
+
+#cat-summary .desc {
+    display: block;
+}
+.achievements-total .desc {
+    font-weight: normal;
+    padding-bottom: 4px;
+}
+
+.achievements-categories-total .active-category {
+    cursor: pointer;
+}
+
+ul#bbguild-achievement-feed {
+    list-style-type: none;
+}
+
+.achievements-recent li {
+    border-bottom: 1px solid #331509;
 }
 
