@@ -619,7 +619,7 @@ class game
 		$sql .= ' FROM ' . BBGAMES_TABLE . '  g';
 		$sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
 		$sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
-		$sql .= ' GROUP BY g.id, g.game_id, g.game_name';
+		$sql .= ' GROUP BY g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' ORDER BY g.game_id';
 		// cache for 1 days
 		$result = $db->sql_query($sql);

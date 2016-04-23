@@ -1433,7 +1433,7 @@ class guilds extends admin
 				)
 			),
 			'WHERE' => ' a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= ' . $guild_id,
-			'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
+			'GROUP_BY' => ' a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region ',
 			'ORDER_BY' => ' a.guilddefault desc,  count(c.player_id) desc, a.id asc'
 		);
 
