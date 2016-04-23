@@ -42,7 +42,7 @@ class viewwelcome implements iviews
 
 		if ($this->navigation->guild->isArmoryEnabled())
 		{
-			$data = $this->navigation->guild->get_api_info(array('news'));
+			$data = $this->navigation->guild->Call_Guild_API(array('news'));
 			if ($data)
 			{
 				$this->navigation->guild->setGuildnews($data);

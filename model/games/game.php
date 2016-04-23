@@ -20,13 +20,13 @@ use bbdkp\bbguild\model\games\library\install_custom;
  */
 class game
 {
+
 	/**
 	 * primary key in games table
 	 *
 	 * @var int
 	 */
 	private $id;
-
 
 	/**
 	 * the game_id (unique key)
@@ -48,6 +48,13 @@ class game
 	 * @var boolean
 	 */
 	protected $status;
+
+	/**
+	 * game region
+	 *
+	 * @var string
+	 */
+	protected $region;
 
 	/**
 	 * date at which this game was installed
@@ -111,7 +118,7 @@ class game
 	 *
 	 * @var array
 	 */
-	public $preinstalled_games;
+	protected $preinstalled_games;
 
 	/**
 	 * installed games
@@ -128,35 +135,25 @@ class game
 	private $ext_path;
 
 	/**
-	 * Game class constructor
+	 * possible regions
+	 *
+	 * @var array
 	 */
-	public function __construct()
-	{
-		global $user, $phpbb_extension_manager;
-		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
+	protected $regions;
 
-		$this->preinstalled_games = array (
-			'aion'     => $user->lang['AION'],
-			'daoc'     => $user->lang['DAOC'],
-			'eq'     => $user->lang['EQ'],
-			'eq2'     => $user->lang['EQ2'],
-			'FFXI'     => $user->lang['FFXI'],
-			'gw2'     => $user->lang['GW2'],
-			'lineage2' => $user->lang['LINEAGE2'],
-			'lotro' => $user->lang['LOTRO'],
-			'rift'     => $user->lang['RIFT'],
-			'swtor' => $user->lang['SWTOR'],
-			'tera'     => $user->lang['TERA'],
-			'vanguard' => $user->lang['VANGUARD'],
-			'warhammer' => $user->lang['WARHAMMER'],
-			'wow'     => $user->lang['WOW'],
-			'ffxiv'    => $user->lang['FFXIV'],
-		);
+	/**
+	 * list of possible locale strings
+	 *
+	 * @var array
+	 */
+	protected $apilocales;
 
-		//fill the games array
-		$this->games = $this->gamesarray();
-	}
-
+	/**
+	 * list of possible realms
+	 *
+	 * @var string
+	 */
+	protected $realmlist;
 
 	/**
 	 * @param boolean $basebossurl
@@ -305,6 +302,129 @@ class game
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getRegion()
+	{
+		return $this->region;
+	}
+
+	/**
+	 * @param string $region
+	 */
+	public function setRegion($region)
+	{
+		$this->region = $region;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getRegions()
+	{
+		return $this->regions;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getInstallDate()
+	{
+		return $this->install_date;
+	}
+
+	/**
+	 * @param int $install_date
+	 */
+	public function setInstallDate($install_date)
+	{
+		$this->install_date = $install_date;
+	}
+
+	/**
+	 * @return array with locales for this region
+	 */
+	public function getApilocales($region)
+	{
+		return $this->apilocales[$region];
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getPreinstalledGames()
+	{
+		return $this->preinstalled_games;
+	}
+
+	/**
+	 * @param array $preinstalled_games
+	 */
+	public function setPreinstalledGames($preinstalled_games)
+	{
+		$this->preinstalled_games = $preinstalled_games;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getRealmlist()
+	{
+		return $this->realmlist;
+	}
+
+
+	/**
+	 * Game class constructor
+	 */
+	public function __construct()
+	{
+		global $user, $phpbb_extension_manager;
+		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
+
+		$this->preinstalled_games = array (
+			'aion'     => $user->lang['AION'],
+			'daoc'     => $user->lang['DAOC'],
+			'eq'     => $user->lang['EQ'],
+			'eq2'     => $user->lang['EQ2'],
+			'FFXI'     => $user->lang['FFXI'],
+			'gw2'     => $user->lang['GW2'],
+			'lineage2' => $user->lang['LINEAGE2'],
+			'lotro' => $user->lang['LOTRO'],
+			'rift'     => $user->lang['RIFT'],
+			'swtor' => $user->lang['SWTOR'],
+			'tera'     => $user->lang['TERA'],
+			'vanguard' => $user->lang['VANGUARD'],
+			'warhammer' => $user->lang['WARHAMMER'],
+			'wow'     => $user->lang['WOW'],
+			'ffxiv'    => $user->lang['FFXIV'],
+		);
+
+		$this->regions = array(
+			'eu' => $user->lang['REGIONEU'],
+			'kr' => $user->lang['REGIONKR'],
+			'sea' => $user->lang['REGIONSEA'],
+			'tw' => $user->lang['REGIONTW'],
+			'us' => $user->lang['REGIONUS'],
+		);
+
+		//available locale strings - used for wow only
+		$this->apilocales = array(
+			'eu' => array('en_GB', 'de_DE', 'es_ES', 'fr_FR', 'it_IT', 'pl_PL', 'pt_PT', 'ru_RU'),
+			'kr' => array('ko_KR') ,
+			'sea' => array('en_US'),
+			'tw' => array('zh_TW'),
+			'us' => array('en_US', 'pt_BR', 'es_MX')
+		);
+
+
+		//fill the games array
+		$this->games = $this->gamesarray();
+	}
+
+
+	/**
 	 * adds a Game to database
 	 */
 	public function install_game()
@@ -328,7 +448,9 @@ class game
 			//call the game installer
 			$installgame->install(
 				$this->game_id, $this->name,
-				$installgame->getBossbaseurl(), $installgame->getZonebaseurl()
+				$installgame->getBossbaseurl(),
+				$installgame->getZonebaseurl(),
+				$this->getRegion()
 			);
 
 			//is gameworld installed ?
@@ -352,7 +474,7 @@ class game
 			}
 			$installgame = new install_custom;
 			//call the game installer
-			$installgame->install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl());
+			$installgame->install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl(), $this->getRegion() );
 
 			//is gameworld installed ?
 			if (isset($config['bbguild_gameworld_version']))
@@ -431,7 +553,7 @@ class game
 	{
 		global $db;
 		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled,
- 				bossbaseurl, zonebaseurl, apikey, apilocale, privkey
+ 				bossbaseurl, zonebaseurl, apikey, apilocale, privkey, region
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -448,9 +570,9 @@ class game
 			$this->apikey = $row['apikey'];
 			$this->apilocale = $row['apilocale'];
 			$this->privkey = $row['privkey'];
+			$this->region = $row['region'];
 		}
 		$db->sql_freeresult($result);
-
 	}
 
 	/**
@@ -473,6 +595,7 @@ class game
 			'apikey'         => $this->apikey,
 			'apilocale'      => $this->apilocale,
 			'privkey'        => $this->privkey,
+			'region'         => $this->region,
 			)
 		);
 
@@ -492,7 +615,7 @@ class game
 	{
 		global $db;
 
-		$sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl ';
+		$sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' FROM ' . BBGAMES_TABLE . '  g';
 		$sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
 		$sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
@@ -518,7 +641,7 @@ class game
 	{
 		global $db;
 		$gamelist = array();
-		$sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl FROM ' . BBGAMES_TABLE . ' ORDER BY ' . $order;
+		$sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl, region FROM ' . BBGAMES_TABLE . ' ORDER BY ' . $order;
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -530,6 +653,7 @@ class game
 				'imagename' => $row['imagename'],
 				'bossbaseurl'   => $row['bossbaseurl'],
 				'zonebaseurl'   => $row['zonebaseurl'],
+				'region'        => $row['region'],
 			);
 		}
 		$db->sql_freeresult($result);

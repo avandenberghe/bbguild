@@ -945,7 +945,6 @@ class guilds extends admin
 
 		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
 		$db->sql_query($sql);
-
 	}
 
 	/**
@@ -1002,7 +1001,6 @@ class guilds extends admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action)
 		);
-
 	}
 
 	/**
@@ -1358,7 +1356,6 @@ class guilds extends admin
 		}
 		$db->sql_freeresult($result);
 		return $classes;
-
 	}
 
 	/**
@@ -1461,12 +1458,12 @@ class guilds extends admin
 
 
 	/**
-	 * get api info of the game
+	 * call guild endpoint
 	 *
 	 * @param  $params
 	 * @return bool
 	 */
-	public function get_api_info($params)
+	public function Call_Guild_API($params)
 	{
 		global $user, $cache;
 		$data= 0;
@@ -1474,23 +1471,52 @@ class guilds extends admin
 		$game->game_id = $this->game_id;
 		$game->get_game();
 
-		// are both game and guild armory-enabled and does player have Wow Mashery Account api key and locale ?
-		if ($game->getArmoryEnabled() == true
-			&& $this->armory_enabled == 1
-			&& trim($game->getApikey()) != ''
-			&& trim($game->get_apilocale()) != ''
-		)
+		if ( (!$game->getArmoryEnabled()) || trim($game->getApikey()) == '' || trim($game->get_apilocale()) == '')
 		{
-			//available extra fields : 'members', 'achievements','news'
-			$api  = new battlenet('guild', $this->region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
-			$data = $api->guild->getGuild($this->name, $this->realm, $params);
-			$data = $data['response'];
-			unset($api);
-			if (!isset($data))
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		//is this guild armory-enabled ?
+		if ($this->armory_enabled == 0)
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		//available extra fields for guild endpoint : 'members', 'achievements','news'
+		$api  = new battlenet('guild', $this->region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
+		$data = $api->guild->getGuild($this->name, $this->realm, $params);
+		$data = $data['response'];
+		unset($api);
+		if (!isset($data))
+		{
+			$this->armoryresult = 'KO';
+			$log_action         = array(
+				'header'       => 'L_ERROR_ARMORY_DOWN',
+				'L_UPDATED_BY' => $user->data['username'],
+				'L_GUILD'      => $this->name . '-' . $this->realm,
+			);
+			$this->log_insert(
+				array(
+					'log_type'   => $log_action['header'],
+					'log_action' => $log_action,
+					'log_result' => 'L_ERROR'
+				)
+			);
+			return false;
+		}
+
+		//if we get error code
+		if (isset($data['code']))
+		{
+			if ($data['code'] == '403')
 			{
+				// even if we have active API account, it may be that Blizzard account is inactive
 				$this->armoryresult = 'KO';
+				$this->armory_enabled = false;
 				$log_action         = array(
-					'header'       => 'L_ERROR_ARMORY_DOWN',
+					'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
 					'L_UPDATED_BY' => $user->data['username'],
 					'L_GUILD'      => $this->name . '-' . $this->realm,
 				);
@@ -1503,45 +1529,16 @@ class guilds extends admin
 				);
 				return false;
 			}
-
-			//if we get error code
-			if (isset($data['code']))
-			{
-				if ($data['code'] == '403')
-				{
-					// even if we have active API account, it may be that Blizzard account is inactive
-					$this->armoryresult = 'KO';
-					$this->armory_enabled = false;
-					$log_action         = array(
-						'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
-						'L_UPDATED_BY' => $user->data['username'],
-						'L_GUILD'      => $this->name . '-' . $this->realm,
-					);
-					$this->log_insert(
-						array(
-							'log_type'   => $log_action['header'],
-							'log_action' => $log_action,
-							'log_result' => 'L_ERROR'
-						)
-					);
-					return false;
-				}
-			}
-
-			if (isset($data['status']))
-			{
-				$this->armoryresult = 'KO';
-				return false;
-			}
-
-
-			$this->armoryresult = 'OK';
 		}
-		else
+
+		if (isset($data['status']))
 		{
 			$this->armoryresult = 'KO';
 			return false;
 		}
+
+		$this->armoryresult = 'OK';
+
 		return $data;
 	}
 

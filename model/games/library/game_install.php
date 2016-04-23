@@ -49,14 +49,15 @@ abstract class game_install
 
 	/**
 	 * Install a game
-	 * can be implemented, this is the default install
+	 * cannot be overridden, this is the default install
 	 *
 	 * @param $game_id
 	 * @param $gamename
 	 * @param $bossbaseurl
 	 * @param $zonebaseurl
+	 * @param $region
 	 */
-	public final function install($game_id, $gamename, $bossbaseurl, $zonebaseurl)
+	public final function install($game_id, $gamename, $bossbaseurl, $zonebaseurl, $region)
 	{
 		global $cache, $db;
 		$this->game_id = $game_id;
@@ -78,7 +79,8 @@ abstract class game_install
 		'armory_enabled' => ($this->game_id == 'wow' ? 1 : 0),
 				'bossbaseurl' => $this->bossbaseurl,
 				'zonebaseurl' => $this->zonebaseurl ,
-		'status' => 1
+		'status' => 1,
+		'region' => $region
 		);
 
 		$sql = 'INSERT INTO ' . BBGAMES_TABLE . ' ' . $db->sql_build_array('INSERT', $data);

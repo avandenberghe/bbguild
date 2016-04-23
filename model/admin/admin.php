@@ -29,12 +29,6 @@ class admin
 	 * @var integer
 	 */
 	public $time = 0;
-	/**
-	 * game ragions
-	 *
-	 * @var array
-	 */
-	public $regions;
 
 	/**
 	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
@@ -74,18 +68,6 @@ class admin
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
 		$user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
 		include_once $this->ext_path . 'model/admin/constants.' . $phpEx;
-
-		$this->regions = array(
-			'cn' => $user->lang['REGIONCN'],
-			'eu' => $user->lang['REGIONEU'],
-			'kr' => $user->lang['REGIONKR'],
-			'sea' => $user->lang['REGIONSEA'],
-			'tw' => $user->lang['REGIONTW'],
-			'us' => $user->lang['REGIONUS'],
-		);
-
-		//sort alphabetically
-		asort($this->regions);
 
 		$this->languagecodes = array(
 			'de' => $user->lang['LANG_DE'],

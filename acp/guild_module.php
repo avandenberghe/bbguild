@@ -109,30 +109,15 @@ class guild_module extends admin
 			case 'addguild':
 				$addguild = new guilds();
 				$addguild->setGameId($config['bbguild_default_game']);
-				$addguild->setRegion($config['bbguild_default_region']);
 
 				if ($this->request->is_set_post('newguild'))
 				{
 					$this->AddGuild($addguild);
 				}
 
-				foreach ($this->regions as $key => $regionname)
-				{
-					$this->template->assign_block_vars(
-						'region_row',
-						array(
-							'VALUE'    => $key,
-							'SELECTED' => ($addguild->getRegion() == $key) ? ' selected="selected"' : '',
-							'OPTION'   => (! empty($regionname)) ? $regionname : '(None)',
-						)
-					);
-				}
-
 				$thisgame          = new game;
 				$thisgame->game_id = $addguild->getGameId();
 				$thisgame->get_game();
-
-				$this->factions = new faction($thisgame->game_id);
 
 				// reset armory_enabled to false if no API key
 				if ($thisgame->game_id == 'wow' && $thisgame->getApikey() == '')
@@ -140,24 +125,31 @@ class guild_module extends admin
 					$addguild->setArmoryEnabled(false);
 				}
 
-				if (isset($this->games))
+				foreach ($this->games as $key => $gamename)
 				{
-					foreach ($this->games as $key => $gamename)
-					{
-						$this->template->assign_block_vars(
-							'game_row',
-							array(
-								'VALUE'    => $key,
-								'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
-								'OPTION'   => (! empty($gamename)) ? $gamename : '(None)',
-							)
-						);
-					}
+					$this->template->assign_block_vars(
+						'game_row',
+						array(
+							'VALUE'    => $key,
+							'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
+							'OPTION'   => (! empty($gamename)) ? $gamename : '(None)',
+						)
+					);
 				}
-				else
+
+				foreach ($thisgame->getRegions() as $key => $regionname)
 				{
-					trigger_error('ERROR_NOGAMES', E_USER_WARNING);
+					$this->template->assign_block_vars(
+						'region_row',
+						array(
+							'VALUE'    => $key,
+							'SELECTED' => ($thisgame->getRegion() == $key) ? ' selected="selected"' : '',
+							'OPTION'   => (! empty($regionname)) ? $regionname : '(None)',
+						)
+					);
 				}
+
+				$this->factions = new faction($thisgame->game_id);
 
 				$listfactions = $this->factions->get_factions();
 				if (isset($listfactions))
@@ -383,7 +375,7 @@ class guild_module extends admin
 
 	private function BattleNetUpdate(guilds $updateguild, $parameters = array())
 	{
-		$data =  $updateguild->get_api_info($parameters);
+		$data =  $updateguild->Call_Guild_API($parameters);
 		if ($updateguild->getArmoryresult() == 'OK')
 		{
 			$updateguild->update_guild_battleNet($data, $parameters);
@@ -560,7 +552,7 @@ class guild_module extends admin
 			trigger_error('ERROR_NOGAMES', E_USER_WARNING);
 		}
 
-		foreach ($this->regions as $key => $regionname)
+		foreach ($game->getRegions() as $key => $regionname)
 		{
 			$this->template->assign_block_vars(
 				'region_row',

@@ -1,5 +1,4 @@
 <!-- INCLUDE overall_header.html -->
-
 <style>
 
     fieldset dt
@@ -36,6 +35,7 @@
 <br />
 <p>{L_ACP_NEWGAME_EXPLAIN} {L_PREINSTALLED}</p>
 
+<!-- IF S_INSTALLED-->
 <fieldset style="background-color: #EEEEEE">
     <legend>{L_DEFAULT_GAME}</legend>
     <dl>
@@ -54,7 +54,7 @@
         </dd>
     </dl>
 </fieldset>
-
+<!-- ENDIF -->
 
 <fieldset style="background-color: #EEEEEE">
     <legend>{L_ADD_GAME}</legend>
@@ -73,6 +73,20 @@
                 {S_FORM_TOKEN}
             </dd>
         </dl>
+
+        <dl>
+            <dt>
+                <label for="region_id">{L_REGION}:</label></dt>
+            <dd>
+                <select id="region_id" name="region_id" class="input">
+                    <!-- BEGIN region_row -->
+                    <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
+                    <!-- END region_row -->
+                </select>
+            </dd>
+        </dl>
+
+
     </form>
     <!-- ENDIF -->
     <form id="acp_listgames" method="post" action="{U_ACTION}">

@@ -32,6 +32,8 @@ class release_2_0_0_m01_schema extends migration
 	protected $bbrecruit_table;
 	protected $bb_gamerole_table;
 	protected $plugins_table;
+	protected $achievement_table;
+	protected $achievement_track_table;
 
 	static public function depends_on()
 	{
@@ -219,11 +221,12 @@ class release_2_0_0_m01_schema extends migration
 				/*19*/
 				$this->bbgames_table    => array(
 					'COLUMNS'    => array(
-						'id'              => array('UINT', null, 'auto_increment'),
-						'game_id'          => array('VCHAR:10', ''),
+						'id'             => array('UINT', null, 'auto_increment'),
+						'game_id'        => array('VCHAR:10', ''),
 						'game_name'      => array('VCHAR_UNI:255', ''),
-						'status'            => array('VCHAR:30', ''),
-						'imagename'         => array('VCHAR:20', ''),
+						'region'         => array('VCHAR:3', ''),
+						'status'         => array('VCHAR:30', ''),
+						'imagename'      => array('VCHAR:20', ''),
 						'armory_enabled' => array('UINT', 0),
 						'bossbaseurl'    => array('VCHAR:255', ''),
 						'zonebaseurl'    => array('VCHAR:255', ''),
@@ -294,6 +297,35 @@ class release_2_0_0_m01_schema extends migration
 						'bbdkp_copyright'      => array('VCHAR_UNI:150', ''),
 					),
 				),
+
+				$this->achievement_table    => array(
+					'COLUMNS'    => array(
+						'id'              => array('UINT', 0),
+						'game_id'         => array('VCHAR:10', ''),
+						'title'           => array('VCHAR_UNI:255', ''),
+						'points'          => array('UINT', 0),
+						'description'     => array('VCHAR_UNI:255', ''),
+						'reward'          => array('VCHAR_UNI:255', ''),
+						'rewarditems'     => array('VCHAR:3000', ''),
+						'icon'            => array('VCHAR_UNI:255', ''),
+						'criteria'        => array('VCHAR:3000', ''),
+						'factionid'       => array('BOOL', 0),
+					),
+				),
+
+				$this->achievement_track_table    => array(
+					'COLUMNS'    => array(
+						'guild_id'              => array('UINT', 0),
+						'player_id'             => array('UINT', 0),
+						'achievement_id'        => array('UINT', 0),
+						'achievements_completed' => array('TIMESTAMP', 0),
+						'criteria'               => array('VCHAR:3000', ''),
+						'criteria_quantity'      => array('VCHAR_UNI:255', ''),
+						'criteria_timestamp'     => array('TIMESTAMP', 0),
+					),
+				),
+
+
 			),
 		);
 	}
@@ -324,6 +356,8 @@ class release_2_0_0_m01_schema extends migration
 				$this->bbrecruit_table,
 				$this->bblogs_table,
 				$this->plugins_table,
+				$this->achievement_table,
+				$this->achievement_track_table
 			),
 		);
 	}
@@ -347,6 +381,10 @@ class release_2_0_0_m01_schema extends migration
 		$this->bbrecruit_table    = $this->table_prefix  . 'bb_recruit';
 		$this->bb_gamerole_table  = $this->table_prefix  . 'bb_gameroles';
 		$this->plugins_table      = $this->table_prefix  . 'bb_plugins';
+		$this->achievement_table  = $this->table_prefix  . 'bb_achievement';
+		$this->achievement_track_table = $this->table_prefix  . 'bb_achievement_track';
+
+
 	}
 
 }

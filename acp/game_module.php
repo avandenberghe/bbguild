@@ -125,6 +125,7 @@ class game_module extends admin
 						$editgame = new game;
 						$editgame->game_id = $this->request->variable('hidden_game_id', '');
 						$editgame->setName($this->request->variable('hidden_game_name', '', true));
+						$editgame->setRegion($this->request->variable('hidden_region_id', ''));
 						$editgame->install_game();
 						//
 						// Logging
@@ -148,12 +149,14 @@ class game_module extends admin
 						$listgames->game_id = $this->request->variable('ngame_id', '');
 						if ($newpresetgame)
 						{
-							$listgames->setName($listgames->preinstalled_games[$listgames->game_id]);
+							$listgames->setName($listgames->getPreinstalledGames()[$listgames->game_id]);
 						}
 						else if ($newcustomgame)
 						{
 							$listgames->setName($this->request->variable('ngame_name', '', true));
 						}
+
+						$listgames->setRegion($this->request->variable('region_id', ''));
 
 						$s_hidden_fields = build_hidden_fields(
 							array (
@@ -161,6 +164,7 @@ class game_module extends admin
 								'addgame2' => $newcustomgame,
 								'hidden_game_id' => $listgames->game_id,
 								'hidden_game_name' => $listgames->getName(),
+								'hidden_region_id' => $listgames->getRegion(),
 							)
 						);
 						confirm_box(false, sprintf($this->user->lang['CONFIRM_INSTALL_GAME'], $listgames->getName()), $s_hidden_fields);
@@ -182,12 +186,12 @@ class game_module extends admin
 				$not_installed = array();
 				if (count($installed) > 0)
 				{
-					$not_installed = array_diff($listgames->preinstalled_games, $installed);
+					$not_installed = array_diff($listgames->getPreinstalledGames(), $installed);
 				}
 				else
 				{
 					// brand new install
-					$not_installed = $listgames->preinstalled_games;
+					$not_installed = $listgames->getPreinstalledGames();
 				}
 
 				//set default games pulldown
@@ -215,6 +219,19 @@ class game_module extends admin
 					);
 				}
 
+				//show region list
+				foreach ($listgames->getRegions() as $key => $regionname)
+				{
+					$this->template->assign_block_vars(
+						'region_row',
+						array(
+							'VALUE'    => $key,
+							'SELECTED' => ($listgames->getRegion() == $key) ? ' selected="selected"' : '',
+							'OPTION'   => (! empty($regionname)) ? $regionname : '(None)',
+						)
+					);
+				}
+
 				//list installed games
 				foreach ($this->gamelist as $game_id => $game)
 				{
@@ -231,6 +248,7 @@ class game_module extends admin
 
 				$this->template->assign_vars(
 					array (
+						'S_INSTALLED' => count($installed) > 0 ? true: false,
 						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
 						'CANINSTALL' => ($can_install_count == 0) ? false : true,
 						'O_ID' => $current_order['uri'][0] ,
@@ -479,6 +497,7 @@ class game_module extends admin
 		$editgame->setApikey($this->request->variable('apikey', ''));
 		$editgame->set_apilocale($this->request->variable('apilocale', ''));
 		$editgame->set_privkey($this->request->variable('privkey', ''));
+		$editgame->setRegion($this->request->variable('region_id', ' '));
 
 		if ($editgame->get_apilocale()== '' || $editgame->getApikey() == '' )
 		{
@@ -1332,10 +1351,20 @@ class game_module extends admin
 			);
 		}
 
+		foreach ($editgame->getRegions() as $key => $regionname)
+		{
+			$this->template->assign_block_vars(
+				'region_row',
+				array(
+					'VALUE'    => $key,
+					'SELECTED' => ($editgame->getRegion() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
+				)
+			);
+		}
+
 		//list the locales for WoW
-		//en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU
-		$locales = array('en_GB', 'en_US', 'de_DE', 'es_ES', 'fr_FR', 'it_IT', 'pt_PT', 'pt_BR', 'ru_RU');
-		foreach ($locales as $key => $locale)
+		foreach ($editgame->getApilocales($editgame->getRegion()) as $key => $locale)
 		{
 			$this->template->assign_block_vars(
 				'apilocale_row',

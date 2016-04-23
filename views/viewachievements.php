@@ -40,47 +40,55 @@ class viewachievements implements iviews
 
 		if ($this->navigation->guild->isArmoryEnabled())
 		{
-			$data = $this->navigation->guild->get_api_info(array('achievements'));
+			$data = $this->navigation->guild->Call_Guild_API(array('achievements'));
 			if ($data)
 			{
-				$this->navigation->guild->setGuildAchievements($data);
+				$this->navigation->guild->setGuildAchievements($data['achievements']);
 				$achievements =  $this->navigation->guild->getGuildAchievements();
-				if (isset($achievements['achievements']))
+
+
+				for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++)
 				{
-					$i=0;
-					/*
-					foreach ($achievements['achievements'] as $id => $achievement)
-					{
-						$i++;
-						switch ($achievement['type'])
-						{
-						case 'itemCraft' :
-						case 'itemLoot' :
-							$template->assign_block_vars(
-								'activityfeed', array(
-								'TYPE'      => 'ITEM',
-								'ID'        => $id,
-								'VERB'      => $user->lang('LOOTED'),
-								'CHARACTER' => $achievement['character'],
-								'TIMESTAMP' => (!empty($achievement['timestamp'])) ? $this->date_diff($achievement['timestamp']) . '&nbsp;' : '&nbsp;',
-								'ITEM'      => isset($achievement['itemId']) ? $achievement['itemId'] : '',
-								'CONTEXT'   => $achievement['context'],
-								)
-							);
-							break;
-
-						default:
-							$a=$achievement['type'];
-							break;
-
-						}
-						if ($i > 25)
-						{
-							break;
-						}
-					}
-					*/
+					// Build the new array to return
+					$achievement[$i]['id']=$achievements['achievementsCompleted'][$i];
+					$achievement[$i]['timestamp']=$achievements['achievementsCompletedTimestamp'][$i];
+					$achievement[$i]['url'] =  $this->navigation->guild->getGuildarmoryurl() ."achievement#".$achievements['achievementsCompleted'][$i];
 				}
+
+				$i=0;
+				/*
+				foreach ($achievements['achievements'] as $id => $achievement)
+				{
+					$i++;
+					switch ($achievement['type'])
+					{
+					case 'itemCraft' :
+					case 'itemLoot' :
+						$template->assign_block_vars(
+							'activityfeed', array(
+							'TYPE'      => 'ITEM',
+							'ID'        => $id,
+							'VERB'      => $user->lang('LOOTED'),
+							'CHARACTER' => $achievement['character'],
+							'TIMESTAMP' => (!empty($achievement['timestamp'])) ? $this->date_diff($achievement['timestamp']) . '&nbsp;' : '&nbsp;',
+							'ITEM'      => isset($achievement['itemId']) ? $achievement['itemId'] : '',
+							'CONTEXT'   => $achievement['context'],
+							)
+						);
+						break;
+
+					default:
+						$a=$achievement['type'];
+						break;
+
+					}
+					if ($i > 25)
+					{
+						break;
+					}
+				}
+				*/
+
 			}
 
 		}

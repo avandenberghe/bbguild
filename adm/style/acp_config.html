@@ -4,20 +4,7 @@
 <form method="post" action="{U_ADDCONFIG}" id="addconfig" >
     <fieldset>
         <legend>{L_MENU_GENERAL}</legend>
-        <dl>
-            <dt><label for="realm">{L_DEFAULT_REALM}:</label></dt>
-            <dd><input type="text" name="realm" id="realm" size="20" maxlength="50" value="{REALM}" class="input" /></dd>
-        </dl>
-        <dl>
-            <dt><label for="region">{L_DEFAULT_REGION}:</label></dt>
-            <dd>
-                <select id="region" name="region" class="input">
-                    <!-- BEGIN region_row -->
-                    <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
-                    <!-- END region_row -->
-                </select>
-            </dd>
-        </dl>
+
         <dl>
             <dt><label>{L_BBGUILD_STARTED}:</label></dt>
             <dd><input type="text" name="bbguild_start_dd" id="bbguild_start_dd" size="2" maxlength="2" value="{EQDKP_START_DD}" class="input" />

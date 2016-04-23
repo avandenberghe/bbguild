@@ -201,8 +201,6 @@ class main_module extends admin
 						trigger_error($this->user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
 
-					$config->set('bbguild_default_realm', $this->request->variable('realm', '', true), true);
-					$config->set('bbguild_default_region', $this->request->variable('region', '', true), true);
 					$day = $this->request->variable('bbguild_start_dd', 0);
 					$month = $this->request->variable('bbguild_start_mm', 0);
 					$year = $this->request->variable('bbguild_start_yy', 0);
@@ -276,17 +274,6 @@ class main_module extends admin
 						'OPTION' => 'NO')
 				);
 
-				// Default Region
-				foreach ($this->regions as $regionid => $regionvalue)
-				{
-					$this->template->assign_block_vars(
-						'region_row', array(
-							'VALUE' => $regionid ,
-							'SELECTED' => ($regionid == $config['bbguild_default_region']) ? ' selected="selected"' : '' ,
-							'OPTION' => $regionvalue)
-					);
-				}
-
 				//roster layout
 				$rosterlayoutlist = array(
 					0 => $this->user->lang['ARM_STAND'] ,
@@ -320,7 +307,6 @@ class main_module extends admin
 
 				$this->template->assign_vars(
 					array(
-						'REALM' => $config['bbguild_default_realm'] ,
 						'EQDKP_START_DD' => date('d', $config['bbguild_eqdkp_start']) ,
 						'EQDKP_START_MM' => date('m', $config['bbguild_eqdkp_start']) ,
 						'EQDKP_START_YY' => date('Y', $config['bbguild_eqdkp_start']) ,

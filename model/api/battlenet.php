@@ -54,6 +54,11 @@ class battlenet
 	 */
 	public $guild;
 
+	/**
+	 * achievement api instance
+	 * @var battlenet_achievement
+	 */
+	public $achievement;
 
 	/**
 	 * Character object instance
@@ -134,6 +139,12 @@ class battlenet
 			$this->character->privkey = $privkey;
 			break;
 
+		case 'achievement':
+			$this->achievement          = new \bbdkp\bbguild\model\api\battlenet_achievement($this->cache,$region, $this->cacheTtl);
+			$this->achievement->apikey  = $apikey;
+			$this->achievement->locale  = $locale;
+			$this->achievement->privkey = $privkey;
+			break;
 		}
 
 	}

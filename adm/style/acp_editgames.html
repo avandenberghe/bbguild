@@ -29,7 +29,6 @@
 
     </fieldset>
 
-
     <fieldset>
         <legend>{L_ACP_GAMESETTINGS}</legend>
         <dl>
@@ -43,6 +42,18 @@
             <dt><label for="imagename">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
             <dd><input class="medium" type="text" name="imagename" id="imagename" value="{GAMEIMAGE}" /><br />
                 <!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEPATH}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>
+                <label for="region_id">{L_REGION}:</label></dt>
+            <dd>
+                <select id="region_id" name="region_id" class="input">
+                    <!-- BEGIN region_row -->
+                    <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
+                    <!-- END region_row -->
+                </select>
             </dd>
         </dl>
 
@@ -75,6 +86,7 @@
                 </select>
             </dd>
         </dl>
+
         <!-- ENDIF -->
         
         <dl>
