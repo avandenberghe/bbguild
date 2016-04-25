@@ -46,7 +46,7 @@ $lang = array_merge(
 	$lang, array(
 	'BBDKPDISABLED' => 'bbGuild is currently disabled.',
 	'FOOTERBBDKP' => 'bbGuild',
-
+	'REQUIREDPHP54' => 'PHP >= 5.4.39 is required. '
 	//---- Portal blocks -----
 	'PORTAL' => 'Portal',
 	'USER_MENU'            => 'User menu',
