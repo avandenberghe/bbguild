@@ -31,6 +31,8 @@ Further development requests, support questions are welcome at our [Support Foru
 ### Installation
 ##### Requirements
 1.	phpbb > 3.1.*
+2.      PHP >= 5.4
+3.      PHP Curl extension
 2.	ftp and acp access to your phpbb forum.  
 
 ##### Install
@@ -50,10 +52,10 @@ Find support and more on
 *	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
-### Changelog 
-- 2.0.0a6 2/04/2016
-  - [fix] back-end fixes 
+### milestone
+  - [new] Achievement page
 
+### Changelog
 - 2.0.0a5 27/03/2016
   - [NEW] Front Page design updated to look like Blizzard Armory
   - [NEW] WoW emblem generator now makes 200px emblems (should be made configurable)    
@@ -84,4 +86,3 @@ You can see all the awesome people contributing to this project [here](https://g
 
 ### Paypal donation
 [![Foo](https://www.paypal.com/en_US/BE/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=sajaki9%40gmail%2ecom&lc=BE&item_name=bbDKP%20Guild%20management&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
-
