@@ -41,6 +41,12 @@ class ext extends base
 		{
 			trigger_error($user->lang['REQUIREDPHPBB'] );
 		}
+		
+		if (version_compare(phpversion(), '5.4.39', '<')) 
+		{
+    			// php version isn't high enough
+    			trigger_error($user->lang['REQUIREDPHP54'] );
+		}
 
 		return parent::enable_step($old_state);
 	}
