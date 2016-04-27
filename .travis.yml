@@ -30,7 +30,7 @@ env:
 
 branches:
   only:
-    - develop2
+    - alpha2
 
 install:
   - composer install --dev --no-interaction --prefer-source
