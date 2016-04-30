@@ -202,6 +202,7 @@ $lang = array_merge(
 	'ACP_MM_ADDPLAYER' => 'Add Player',
 	'ACP_MM_EDITPLAYER' => 'Edit Player',
 	'ACP_MM_LISTPLAYERS' => 'List Players',
+	'ACP_LISTACHIEV' => 'List Achievements',
 	'ACP_ADDGUILD' => 'Add Guild',
 	'ACP_EDITGUILD' => 'Edit Guild',
 	'ACP_LISTGUILDS' => 'List Guilds',
@@ -618,7 +619,7 @@ $lang = array_merge(
 	'WOWAPILOCALE_EXPLAIN' => 'Battle.NET API resources provide localized strings using the locale query string parameter. The available Locales supported vary from region to region and align with those supported on the community sites.',
 	'WOWAPI_LOCALE_NOTALLOWED' => 'illegal Locale %s : choose one of depending on your WoW Region : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 	'WOWAPI_KEY_MISSING' => 'Please request a Mashery Account at https://dev.battle.net/ and get an API key.',
-
+	'WOWAPI' => 'WoW Armory',
 
 	// Submission Success Messages
 	'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
