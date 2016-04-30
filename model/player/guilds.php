@@ -1577,8 +1577,8 @@ class guilds extends admin
 
 		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
 
-		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem()  : '';
-		if(isset($data['members']))
+		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(): '';
+		if (isset($data['members']))
 		{
 			$this->playercount = count($data['members']);
 		}
@@ -1599,6 +1599,7 @@ class guilds extends admin
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 		if (in_array('members', $params, true))
 		{
+			$this->playerdata = $data['members'];
 			// update ranks table
 			$rank = new ranks($this->guildid);
 			$rank->WoWRankFix($this->playerdata, $this->guildid);

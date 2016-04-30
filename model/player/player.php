@@ -878,10 +878,6 @@ class player extends admin
 			}
 		}
 
-		$game = new game;
-		$game->game_id = $this->game_id;
-		$game->get_game();
-
 		switch ($this->game_id)
 		{
 			case 'aion':

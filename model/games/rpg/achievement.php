@@ -29,6 +29,20 @@ class achievement
 	public $game_id;
 
 	/**
+	 * guild if its a guild achievement
+	 *
+	 * @var string
+	 */
+	public $guild_id;
+
+	/**
+	 * player_id if its an individual achievement
+	 *
+	 * @var string
+	 */
+	public $player_id;
+
+	/**
 	 * achievement id
 	 *
 	 * @var int
@@ -309,6 +323,44 @@ class achievement
 	}
 
 	/**
+	 * get tracked achievements from local database
+	 * guild_id'              => array('UINT', 0),
+	 * player_id'             => array('UINT', 0),
+	 * achievement_id'        => array('UINT', 0),
+	 * achievements_completed' => array('TIMESTAMP', 0),
+	 * criteria'               => array('VCHAR:3000', ''),
+	 * criteria_quantity'      => array('VCHAR_UNI:255', ''),
+	 * criteria_timestamp'     => array('TIMESTAMP', 0),
+	 *
+	 * @param $guild_id
+	 * @param $player_id
+	 * @return array
+	 */
+	public function get_tracked_achievements($guild_id, $player_id)
+	{
+		global $db;
+		$sql = 'SELECT achievement_id, player_id, guild_id, achievements_completed, criteria,
+					criteria_quantity, criteria_timestamp
+    			FROM ' . ACHIEVEMENT_TRACK_TABLE . '
+    			WHERE id = ' . (int) $this->id . " and game_id = '" . $this->game_id . "'";
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$this->title = $row['titletitle'];
+			$this->points    = $row['points'];
+			$this->description    = $row['description'];
+			$this->reward    = $row['reward'];
+			$this->rewardItems    = $row['rewarditems'];
+			$this->icon    = $row['icon'];
+			$this->criteria    = $row['criteria'];
+			$this->factionId    = $row['factionid'];
+			$achievementlist[] = json_decode($this, true);
+		}
+		$db->sql_freeresult($result);
+		return $achievementlist;
+	}
+
+	/**
 	 * call achievement endpoint
 	 *
 	 * @param game $game
@@ -349,7 +401,7 @@ class achievement
 	}
 
 	/**
-	 * fetch Battlenet achievement api endpoint and update the object
+	 * fetch Battlenet achievement api endpoint and insert
 	 *
 	 * @param array $data
 	 * @param       $params
@@ -358,57 +410,40 @@ class achievement
 	{
 		global $db;
 
-		$this->points = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
-		$this->level = isset($data['level']) ? $data['level']: 0;
-		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-
-		if ($data['side'] == 0)
-		{
-			$this->faction = isset($data['side']) ? (1) : '';
-		} else
-		{
-			$this->faction = isset($data['side']) ? (2) : '';
-		} // bbguild wants Alliance 1 and Horde 2
-
-		$this->guildarmoryurl = '';
-		if (isset($data['name']))
-		{
-			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
-		}
-
-		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-
-		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem()  : '';
-		if(isset($data['members']))
-		{
-			$this->playercount = count($data['members']);
-		}
+		$this->id = isset($data['id']) ? $data['id'] : 0;
+		$this->title = isset($data['title']) ? $data['title']: '';
+		$this->points = isset($data['points']) ? $data['points']: 0;
+		$this->description = isset($data['description']) ? $data['description']: '';
+		$this->reward = isset($data['reward']) ? $data['reward']: '';
+		$this->factionId = isset($data['factionId']) ? $data['factionId']: '';
 
 		$query = $db->sql_build_array(
-			'UPDATE', array(
-				'achievementpoints' => $this->achievementpoints,
-				'level'             => $this->level,
-				'guildarmoryurl'    => $this->guildarmoryurl,
-				'emblemurl'         => $this->emblempath,
-				'battlegroup'       => $this->battlegroup,
-				'armoryresult'      => $this->armoryresult,
-				'players'           => $this->playercount,
-				'faction'           => $this->faction,
+			'INSERT', array(
+				'guild_id'          => $this->guild_id,
+				'player_id'         => $this->player_id,
+				'achievement_id'    => $this->id,
+				//'achievements_completed'  => $this->a,
+				'criteria'           => $this->criteria,
+				'criteria_quantity'  => $this->armoryresult,
+				'criteria_timestamp' => $this->playercount,
 			)
 		);
-
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-		if (in_array('members', $params, true))
-		{
-			// update ranks table
-			$rank = new ranks($this->guildid);
-			$rank->WoWRankFix($this->playerdata, $this->guildid);
-			//update player table
-			$mb = new player();
-			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
-		}
 
+		$query = $db->sql_build_array(
+			'INSERT', array(
+				'id'        => $this->id,
+				'game_id'   => $this->game_id,
+				'title'     => $this->title,
+				'points'    => $this->points,
+				'description' => $this->description,
+				'reward'    => $this->reward,
+				'rewarditems' => $this->rewardItems,
+				'icon'        => $this->icon,
+				'criteria'    => $this->criteria,
+				'factionid'   => $this->factionId,
+			)
+		);
 	}
-
 
 }

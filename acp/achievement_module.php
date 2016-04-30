@@ -1,27 +1,25 @@
 <?php
 /**
- * player acp file
+ * achievement acp file
  *
  * @package   bbguild v2.0
  * @copyright 2016 bbDKP <https://github.com/bbDKP>
- * @author    Ippehe, Malfate, Sajaki
+ * @author    Sajaki
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace bbdkp\bbguild\acp;
 
 use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\player;
 use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\games\rpg\roles;
-use bbdkp\bbguild\model\player\ranks;
+use bbdkp\bbguild\model\games\rpg\achievement;
 
 /**
  * This class manages player general info
  *
  * @package bbdkp\bbguild\acp
  */
-class player_module extends admin
+class achievement_module extends admin
 {
 	/**
 	 * trigger link
@@ -52,10 +50,7 @@ class player_module extends admin
 	public $mode;
 	public $auth;
 
-	/**
-	 * @type guilds
-	 */
-	protected $guild;
+	public $achievement;
 
 	/**
 	 * @param $id
@@ -74,8 +69,8 @@ class player_module extends admin
 		$this->db=$db;
 		$this->phpbb_container = $phpbb_container;
 		$this->auth=$auth;
-
 		parent::__construct();
+
 
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
@@ -89,13 +84,14 @@ class player_module extends admin
 		switch ($mode)
 		{
 			/**
-			 * List players
+			 * List achievement for this guild
 			 */
-			case 'listplayers':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers') . '"><h3>Return to Index</h3></a>';
-				$this->guild = new guilds();
+			case 'listachievements':
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\achievement_module&amp;mode=listachievements') . '"><h3>Return to Index</h3></a>';
+				$Guild = new guilds();
 
-				$guildlist = $this->guild->guildlist(1);
+
+				$guildlist = $Guild->guildlist(1);
 				if (count((array) $guildlist) == 0  )
 				{
 					trigger_error('ERROR_NOGUILD', E_USER_WARNING);
@@ -103,9 +99,9 @@ class player_module extends admin
 
 				if (count((array) $guildlist) == 1 )
 				{
-					$this->guild->setGuildid($guildlist[0]['id']);
-					$this->guild->setName($guildlist[0]['name']);
-					if ($this->guild->getGuildid() == 0 && $this->guild->getName() == 'Guildless' )
+					$Guild->setGuildid($guildlist[0]['id']);
+					$Guild->setName($guildlist[0]['name']);
+					if ($Guild->getGuildid() == 0 && $Guild->getName() == 'Guildless' )
 					{
 						trigger_error('ERROR_NOGUILD', E_USER_WARNING);
 					}
@@ -113,21 +109,15 @@ class player_module extends admin
 
 				foreach ($guildlist as $g)
 				{
-					$this->guild->setGuildid($g['id']);
+					$Guild->setGuildid($g['id']);
 					break;
-				}
-
-				$activate = $this->request->is_set_post('deactivate');
-				if ($activate)
-				{
-					$this->ActivateList();
 				}
 
 				// batch delete
 				$del_batch = $this->request->is_set_post('delete');
 				if ($del_batch)
 				{
-					$this->player_batch_delete();
+					$this->achievement_batch_delete();
 				}
 
 				// guild dropdown query
@@ -135,60 +125,39 @@ class player_module extends admin
 				if ($getguild_dropdown)
 				{
 					// user selected dropdown - get guildid
-					$this->guild->setGuildid($this->request->variable('player_guild_id', 0));
+					$Guild->setGuildid($this->request->variable('player_guild_id', 0));
 				}
+
 
 				$sortlink = isset($_GET[URI_GUILD])  ? true : false;
 				if ($sortlink)
 				{
 					// user selected dropdown - get guildid
-					$this->guild->setGuildid($this->request->variable(URI_GUILD, 0));
+					$Guild->setGuildid($this->request->variable(URI_GUILD, 0));
 				}
 
-				$charapicall = $this->request->is_set_post('charapicall');
-				if ($charapicall)
-				{
-					if (confirm_box(true))
-					{
-						list($i, $log) = $this->CallCharacterAPI();
-						trigger_error(sprintf($this->user->lang['CHARAPIDONE'], $i, $log), E_USER_NOTICE);
-					}
-					else
-					{
-						$s_hidden_fields = build_hidden_fields(
-							array(
-								'charapicall' => true ,
-								'hidden_guildid' => $this->request->variable('player_guild_id', 0),
-								'hidden_minlevel' => $this->request->variable('hidden_minlevel', $this->request->variable('minlevel', 0)),
-								'hidden_maxlevel' => $this->request->variable('maxlevel', $this->request->variable('hidden_maxlevel', 200)),
-								'hidden_active' => $this->request->variable('active', $this->request->variable('hidden_active', 0)),
-								'hidden_nonactive' => $this->request->variable('nonactive', $this->request->variable('hidden_nonactive', 0)),
-								'hidden_player_name' => $this->request->variable('player_name', $this->request->variable('hidden_player_name', '', true), true)
-							)
-						);
-						confirm_box(false, $this->user->lang['WARNING_BATTLENET'], $s_hidden_fields);
+				$Guild->get_guild();
 
-					}
-				}
+				$this->achievement = new achievement($Guild->getGameId(),0);
 
-				// add player button redirect
-				$showadd = $this->request->is_set_post('playeradd');
+				// add achievement button redirect
+				$showadd = $this->request->is_set_post('achievementadd');
 				if ($showadd)
 				{
-					$a = $this->request->variable('player_guild_id', $this->request->variable('hidden_guildid', 0));
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;guild_id=' . $a));
+					$a = $this->request->variable('achievement_guild_id', $this->request->variable('hidden_guildid', 0));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\achievement_module&amp;mode=addachievement&amp;guild_id=' . $a));
 					break;
 				}
 
 				// pageloading
-				$this->BuildTemplateListPlayers($mode);
+				$this->BuildTemplateListAchievements($mode, $Guild);
 				break;
 
 			/***************************************/
-			// add player
+			// add achievement
 			/***************************************/
-			case 'addplayer' :
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players') . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+			case 'addachievement' :
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\achievement_module&amp;mode=listachievements') . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 
 				$add = $this->request->is_set_post('add');
 				$update = $this->request->is_set_post('update');
@@ -239,16 +208,186 @@ class player_module extends admin
 				break;
 
 			default:
-				$this->page_title = 'ACP_BBGUILD_PLAYER_ADD';
+				$this->page_title = 'ACP_LISTACHIEV';
 				$success_message = $this->user->lang['L_ERROR'];
 				trigger_error($success_message . $this->link, E_USER_WARNING);
 		}
 	}
 
+
+	/**
+	 * List achievements
+	 *
+	 * @param $mode
+	 * @param guilds $Guild
+	 */
+	private function BuildTemplateListAchievements($mode, guilds $Guild)
+	{
+		global  $config, $phpbb_admin_path, $phpEx;
+
+		// fill popup and set selected to default selection
+
+		$guildlist = $Guild->guildlist(0);
+		foreach ($guildlist as $g)
+		{
+			$this->template->assign_block_vars(
+				'guild_row', array(
+					'VALUE'    => $g['id'],
+					'SELECTED' => ($g['id'] == $Guild->getGuildid()) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
+			);
+		}
+
+		$previous_data = '';
+		//get window
+		$start    = $this->request->variable('start', 0, false);
+
+		$sort_order = array(
+			0 => array('achievement_id', 'achievement_id desc'),
+			1 => array('title', 'title desc'),
+			2 => array('description', 'description desc'),
+			3 => array('points', 'points desc'),
+		);
+
+		$current_order   = $this->switch_order($sort_order);
+		$sort_index      = explode('.', $current_order['uri']['current']);
+		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+		$show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
+
+		$result       = $Guild->list_players($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
+		$player_count = 0;
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$player_count += 1;
+		}
+		if (!($result))
+		{
+			trigger_error($this->user->lang['ERROR_PLAYERNOTFOUND'], E_USER_WARNING);
+		}
+		$this->db->sql_freeresult($result);
+		$players_result = $Guild->list_players($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
+		$lines          = 0;
+		while ($row = $this->db->sql_fetchrow($players_result))
+		{
+			$phpbb_user_id = (int) $row['phpbb_user_id'];
+			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
+			$lines += 1;
+			$this->template->assign_block_vars(
+				'players_row', array(
+					'S_READONLY'           => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false,
+					'STATUS'               => ($row['player_status'] == 1) ? 'checked="checked" ' : '',
+					'ID'                   => $row['player_id'],
+					'COUNT'                => $player_count,
+					'NAME'                 => $row['rank_prefix'] . $row['player_name'] . $row['rank_suffix'],
+					'USERNAME'             => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
+					'RANK'                 => $row['rank_name'],
+					'LEVEL'                => ($row['player_level'] > 0) ? $row['player_level'] : '&nbsp;',
+					'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
+					'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
+					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
+					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
+					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . 'images/race_images/' . $race_image . '.png' : '',
+					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
+					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
+					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbguild_date_format'] . ' H:i:s', $row['last_update']),
+					'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
+					'U_VIEW_PLAYER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;' . URI_NAMEID . '=' . $row['player_id']),
+					'U_DELETE_PLAYER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['player_id']))
+			);
+			$previous_data = $row[$previous_source];
+		}
+		$this->db->sql_freeresult($players_result);
+
+		$footcount_text   = sprintf($this->user->lang['LISTPLAYERS_FOOTCOUNT'], $player_count);
+
+		$playerpagination = $this->phpbb_container->get('pagination');
+
+		$pagination_url = append_sid(
+			"{$phpbb_admin_path}index.$phpEx",
+			'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri']['current'] .
+			'&amp;' . URI_GUILD . '=' . $Guild->getGuildid() .
+			'&amp;minlevel=' . $minlevel .
+			'&amp;maxlevel=' . $maxlevel .
+			'&amp;active=' . $selectactive .
+			'&amp;nonactive=' . $selectnonactive
+		);
+
+		$playerpagination->generate_template_pagination($pagination_url, 'pagination', 'start', $player_count, $config['bbguild_user_llimit'], $start, true);
+
+		$this->template->assign_vars(
+			array(
+				'F_SELECTACTIVE'        => $selectactive,
+				'F_SELECTNONACTIVE'     => $selectnonactive,
+				'GUILDID'               => $Guild->getGuildid(),
+				'GUILDNAME'             => $Guild->getName(),
+				'MINLEVEL'              => $minlevel,
+				'MAXLEVEL'              => $maxlevel,
+				'START'                 => $start,
+				'PLAYER_NAME'           => $player_filter,
+				'F_PLAYERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=addplayer',
+				'F_PLAYERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=listplayers',
+				'L_TITLE'               => $this->user->lang['ACP_LISTACHIEV'],
+				'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTPLAYERS_EXPLAIN'],
+				'O_NAME'                => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_USERNAME'            => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_LEVEL'               => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_CLASS'               => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_RANK'                => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_LAST_UPDATE'         => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'O_ID'                  => append_sid(
+					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid() . '&amp;minlevel=' . $minlevel .
+					'&amp;maxlevel=' . $maxlevel .
+					'&amp;active=' . $selectactive .
+					'&amp;nonactive=' . $selectnonactive
+				),
+				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;'),
+				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'S_WOW'                 => ($Guild->getGameId() == 'wow') ? true : false,
+				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
+				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
+				'GUILD_NAME'            => $Guild->getName(),
+			)
+		);
+		$this->page_title = 'ACP_BBGUILD_PLAYER_LIST';
+
+	}
+
 	/**
 	 * function to batch delete players, called from listing
 	 */
-	private function player_batch_delete()
+	private function achievement_batch_delete()
 	{
 		$players_to_delete = $this->request->variable('delete_id', array(0));
 
@@ -315,10 +454,7 @@ class player_module extends admin
 		$newplayer->player_rank_id = $this->request->variable('player_rank_id', 99);
 		$newplayer->player_level = $this->request->variable('player_level', 1);
 		$newplayer->player_realm = $this->request->variable('realm', '');
-
-		/* @todo */
 		$newplayer->player_region = $this->request->variable('region_id', '');
-
 		if (!in_array($newplayer->player_region, $newplayer->regionlist))
 		{
 			$newplayer->player_region = '';
@@ -339,11 +475,11 @@ class player_module extends admin
 		$newplayer->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
 		$newplayer->player_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
 
-		$this->guild = new guilds($newplayer->player_guild_id);
-		$this->guild->get_guild();
+		$Guild = new guilds($newplayer->player_guild_id);
+		$Guild->get_guild();
 
 		//only call armory if it is enabled.
-		if ($newplayer->player_rank_id < 90 && $this->guild->isArmoryEnabled() == 1 )
+		if ($newplayer->player_rank_id < 90 && $Guild->isArmoryEnabled() == 1 )
 		{
 			$newplayer->Armory_getplayer();
 		}
@@ -370,77 +506,6 @@ class player_module extends admin
 	}
 
 	/**
-	 * Update bbguild player
-	 */
-	private function UpdatePlayer()
-	{
-		global $phpbb_admin_path, $phpEx;
-
-		$updateplayer = new player();
-		$updateplayer->player_id = $this->request->variable('hidden_player_id', 0);
-
-		if ($updateplayer->player_id == 0)
-		{
-			$updateplayer->player_id = $this->request->variable(URI_NAMEID, 0);
-		}
-		$updateplayer->Getplayer();
-
-		$updateplayer->game_id = $this->request->variable('game_id', '');
-		$updateplayer->player_class_id = $this->request->variable('player_class_id', 0);
-		$updateplayer->player_race_id = $this->request->variable('player_race_id', 0);
-		$updateplayer->player_role = $this->request->variable('player_role', 0);
-		$updateplayer->player_realm = $this->request->variable('realm', '');
-
-		/* @todo */
-
-		$updateplayer->player_region = $this->request->variable('region_id', '');
-
-		if (!in_array($updateplayer->player_region, $updateplayer->regionlist))
-		{
-			$updateplayer->player_region = '';
-		}
-
-		$updateplayer->player_name = $this->request->variable('player_name', '', true);
-		$updateplayer->player_gender_id = $this->request->variable('gender', 0);
-		$updateplayer->player_title = $this->request->variable('player_title', '', true);
-		$updateplayer->player_guild_id = $this->request->variable('player_guild_id', 0);
-		$updateplayer->player_rank_id = $this->request->variable('player_rank_id', 99);
-		$updateplayer->player_level = $this->request->variable('player_level', 0);
-		$updateplayer->player_joindate = mktime(0, 0, 0, $this->request->variable('player_joindate_mo', 0), $this->request->variable('player_joindate_d', 0), $this->request->variable('player_joindate_y', 0));
-		$updateplayer->player_outdate = mktime(0, 0, 0, 12, 31, 2030);
-
-		if ($this->request->variable('player_outdate_mo', 0) + $this->request->variable('player_outdate_d', 0) != 0)
-		{
-			$updateplayer->player_outdate = mktime(0, 0, 0, $this->request->variable('player_outdate_mo', 0), $this->request->variable('player_outdate_d', 0), $this->request->variable('player_outdate_y', 0));
-		}
-
-		$updateplayer->player_achiev = $this->request->variable('player_achiev', 0);
-		$updateplayer->player_comment = $this->request->variable('player_comment', '', true);
-		$updateplayer->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
-
-		$this->guild = new guilds($updateplayer->player_guild_id);
-		$this->guild->get_guild();
-
-		if ($updateplayer->player_rank_id < 90 && $this->guild->isArmoryEnabled() == 1 )
-		{
-			$updateplayer->Armory_getplayer();
-		}
-
-		$updateplayer->player_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
-
-		$old_player = new player();
-		$old_player->player_id = $updateplayer->player_id;
-		$old_player->Getplayer();
-		$updateplayer->Updateplayer($old_player);
-
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id));
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
-		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_SUCCESS'], $updateplayer->player_name);
-		trigger_error($success_message . $this->link);
-
-	}
-
-	/**
 	 * Delete bbguild player
 	 */
 	private function DeletePlayer()
@@ -463,29 +528,13 @@ class player_module extends admin
 	}
 
 	/**
-	 * Activates/deactivates the selected players
-	 */
-	private function ActivateList()
-	{
-		if (!check_form_key('bbdkp/bbguild'))
-		{
-			trigger_error('FORM_INVALID');
-		}
-		$activateplayer = new player();
-		$activate_players = $this->request->variable('activate_id', array(0));
-		$player_window = $this->request->variable('hidden_player', array(0));
-		$activateplayer->Activateplayers($activate_players, $player_window);
-		unset($activateplayer);
-	}
-
-	/**
 	 * Call the Character API
 	 */
 	private function CallCharacterAPI()
 	{
-		$this->guild = new guilds();
-		$this->guild->setGuildid($this->request->variable('hidden_guildid', 0));
-		$this->guild->get_guild();
+		$Guild = new guilds();
+		$Guild->setGuildid($this->request->variable('hidden_guildid', 0));
+		$Guild->get_guild();
 
 		$minlevel = $this->request->variable('hidden_minlevel', 0);
 		$maxlevel = $this->request->variable('hidden_maxlevel', 200);
@@ -493,7 +542,7 @@ class player_module extends admin
 		$selectnonactive = $this->request->variable('hidden_nonactive', 0);
 		$player_filter = $this->request->variable('hidden_player_name', '', true);
 
-		$players_result = $this->guild->list_players('player_id', 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter, true);
+		$players_result = $Guild->list_players('player_id', 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter, true);
 
 		$log = '';
 		$i = 0;
@@ -543,189 +592,6 @@ class player_module extends admin
 
 	}
 
-	/**
-	 * List Players
-	 *
-	 * @param $mode
-	 * @param guilds $Guild
-	 */
-	private function BuildTemplateListPlayers($mode)
-	{
-		global  $config, $phpbb_admin_path, $phpEx;
-
-		// fill popup and set selected to default selection
-		$this->guild->get_guild();
-		$guildlist = $this->guild->guildlist(0);
-		foreach ($guildlist as $g)
-		{
-			$this->template->assign_block_vars(
-				'guild_row', array(
-					'VALUE'    => $g['id'],
-					'SELECTED' => ($g['id'] == $this->guild->getGuildid()) ? ' selected="selected"' : '',
-					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
-			);
-		}
-		$previous_data = '';
-		//get window
-		$start    = $this->request->variable('start', 0, false);
-		$minlevel = $this->request->variable('minlevel', 0);
-		$maxlevel = $this->request->variable('maxlevel', 200);
-
-		if (isset($_GET['active']) || isset($_GET['nonactive']) || $this->request->is_set_post('search') )
-		{
-			$selectactive    = $this->request->variable('active', 0);
-			$selectnonactive = $this->request->variable('nonactive', 0);
-		}
-		else
-		{
-			// set standard
-			$selectactive    = 1;
-			$selectnonactive = 1;
-		}
-		$player_filter = $this->request->variable('player_name', '', true);
-		$sort_order = array(
-			0 => array('player_name', 'player_name desc'),
-			1 => array('username', 'username desc'),
-			2 => array('player_level', 'player_level desc'),
-			3 => array('player_class', 'player_class desc'),
-			4 => array('rank_name', 'rank_name desc'),
-			5 => array('last_update', 'last_update desc'),
-			7 => array('player_id', 'player_id desc')
-		);
-		$current_order   = $this->switch_order($sort_order);
-		$sort_index      = explode('.', $current_order['uri']['current']);
-		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-		$show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
-
-		$result       = $this->guild->list_players($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
-		$player_count = 0;
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$player_count += 1;
-		}
-		if (!($result))
-		{
-			trigger_error($this->user->lang['ERROR_PLAYERNOTFOUND'], E_USER_WARNING);
-		}
-		$this->db->sql_freeresult($result);
-		$players_result = $this->guild->list_players($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
-		$lines          = 0;
-		while ($row = $this->db->sql_fetchrow($players_result))
-		{
-			$phpbb_user_id = (int) $row['phpbb_user_id'];
-			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-			$lines += 1;
-			$this->template->assign_block_vars(
-				'players_row', array(
-					'S_READONLY'           => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false,
-					'STATUS'               => ($row['player_status'] == 1) ? 'checked="checked" ' : '',
-					'ID'                   => $row['player_id'],
-					'COUNT'                => $player_count,
-					'NAME'                 => $row['rank_prefix'] . $row['player_name'] . $row['rank_suffix'],
-					'USERNAME'             => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
-					'RANK'                 => $row['rank_name'],
-					'LEVEL'                => ($row['player_level'] > 0) ? $row['player_level'] : '&nbsp;',
-					'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
-					'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
-					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
-					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . 'images/race_images/' . $race_image . '.png' : '',
-					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
-					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
-					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbguild_date_format'] . ' H:i:s', $row['last_update']),
-					'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
-					'U_VIEW_PLAYER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;' . URI_NAMEID . '=' . $row['player_id']),
-					'U_DELETE_PLAYER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['player_id']))
-			);
-			$previous_data = $row[$previous_source];
-		}
-		$this->db->sql_freeresult($players_result);
-
-		$footcount_text   = sprintf($this->user->lang['LISTPLAYERS_FOOTCOUNT'], $player_count);
-
-		$playerpagination = $this->phpbb_container->get('pagination');
-
-		$pagination_url = append_sid(
-			"{$phpbb_admin_path}index.$phpEx",
-			'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri']['current'] .
-			'&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() .
-			'&amp;minlevel=' . $minlevel .
-			'&amp;maxlevel=' . $maxlevel .
-			'&amp;active=' . $selectactive .
-			'&amp;nonactive=' . $selectnonactive
-		);
-
-		$playerpagination->generate_template_pagination($pagination_url, 'pagination', 'start', $player_count, $config['bbguild_user_llimit'], $start, true);
-
-		$this->template->assign_vars(
-			array(
-				'F_SELECTACTIVE'        => $selectactive,
-				'F_SELECTNONACTIVE'     => $selectnonactive,
-				'GUILDID'               => $this->guild->getGuildid(),
-				'GUILDNAME'             => $this->guild->getName(),
-				'MINLEVEL'              => $minlevel,
-				'MAXLEVEL'              => $maxlevel,
-				'START'                 => $start,
-				'PLAYER_NAME'           => $player_filter,
-				'F_PLAYERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=addplayer',
-				'F_PLAYERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module') . '&amp;mode=listplayers',
-				'L_TITLE'               => $this->user->lang['ACP_MM_LISTPLAYERS'],
-				'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTPLAYERS_EXPLAIN'],
-				'O_NAME'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_USERNAME'            => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_LEVEL'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_CLASS'               => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_RANK'                => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_LAST_UPDATE'         => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'O_ID'                  => append_sid(
-					"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_GUILD . '=' . $this->guild->getGuildid() . '&amp;minlevel=' . $minlevel .
-					'&amp;maxlevel=' . $maxlevel .
-					'&amp;active=' . $selectactive .
-					'&amp;nonactive=' . $selectnonactive
-				),
-				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;'),
-				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $this->guild->getGuildid()),
-				'S_WOW'                 => ($this->guild->getGameId() == 'wow') ? true : false,
-				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
-				'GUILD_EMBLEM'          => $this->guild->getEmblempath(),
-				'GUILD_NAME'            => $this->guild->getName(),
-			)
-		);
-		$this->page_title = 'ACP_BBGUILD_PLAYER_LIST';
-
-	}
 
 	/**
 	 * Build addplayer template
@@ -744,16 +610,25 @@ class player_module extends admin
 			// set defaults
 			$editplayer->player_guild_id = $this->request->variable(URI_GUILD, 0);
 		}
-		$this->guild     = new guilds($editplayer->player_guild_id);
+		$Guild     = new guilds($editplayer->player_guild_id);
+		$guildlist = $Guild->guildlist();
 
 		if ($S_ADD)
 		{
-			$editplayer->game_id          = $this->guild->getGameId();
-			$editplayer->player_region    = $this->guild->getRegion();
-			$editplayer->player_realm     = $this->guild->getRealm();
-			$editplayer->player_rank_id   = $this->guild->getRaidtrackerrank();
+			$editplayer->game_id          = $Guild->getGameId();
+			$editplayer->player_rank_id   = $Guild->getRaidtrackerrank();
 			$editplayer->player_status    = 1;
 			$editplayer->player_gender_id = 0;
+		}
+		foreach ($guildlist as $g)
+		{
+			//populate guild popup
+			$this->template->assign_block_vars(
+				'guild_row', array(
+					'VALUE'    => $g['id'],
+					'SELECTED' => ($g['id'] == $editplayer->player_guild_id) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
+			);
 		}
 
 		// Game dropdown
@@ -774,18 +649,15 @@ class player_module extends admin
 			trigger_error('ERROR_NOGAMES', E_USER_WARNING);
 		}
 
-		$guildlist = $this->guild->guildlist();
-		foreach ($guildlist as $g)
+		foreach ($this->regions as $key => $regionname)
 		{
-			//populate guild popup
 			$this->template->assign_block_vars(
-				'guild_row', array(
-					'VALUE'    => $g['id'],
-					'SELECTED' => ($g['id'] == $editplayer->player_guild_id) ? ' selected="selected"' : '',
-					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
+				'region_row', array(
+					'VALUE'    => $key,
+					'SELECTED' => ($editplayer->player_region == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($regionname)) ? $regionname : '(None)')
 			);
 		}
-
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
 		$Ranks  = new ranks($editplayer->player_guild_id);
@@ -888,7 +760,7 @@ class player_module extends admin
 
 		// get roles
 		$Roles = new roles();
-		$Roles->game_id = $this->guild->getGameId();
+		$Roles->game_id = $Guild->getGameId();
 		$Roles->guild_id = $editplayer->player_guild_id;
 		$listroles = $Roles->list_roles();
 		foreach ($listroles as $roleid => $Role)
@@ -996,7 +868,6 @@ class player_module extends admin
 				'PLAYER_ID'                => $editplayer->player_id,
 				'PLAYER_LEVEL'             => $editplayer->player_level,
 				'REALM'                    => $editplayer->player_realm,
-				'REGION'                   => strtoupper($editplayer->player_region),
 				'DEACTIVATE_REASON'        => $editplayer->deactivate_reason == '' ? '' : $this->user->lang[$editplayer->deactivate_reason],
 				'STATUS_LOCK'              => $editplayer->deactivate_reason == '' ? false : true,
 				'PLAYER_ACHIEV'            => $editplayer->player_achiev,
