@@ -125,8 +125,7 @@ class ranks extends guilds
 
 		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . '
                    	WHERE rank_id = ' . (int) $this->RankId . '
-                   	AND guild_id = ' . (int) $this->RankGuild . '
-                   	ORDER BY rank_id, rank_hide ASC ';
+                   	AND guild_id = ' . (int) $this->RankGuild;
 		$db->sql_query($sql);
 
 		// build insert array
