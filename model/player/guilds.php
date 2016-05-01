@@ -1406,7 +1406,7 @@ class guilds extends admin
 	{
 		global $db;
 		$sql = 'select max(rank_id) AS rank_id from ' . PLAYER_RANKS_TABLE . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
-		$result = $db->sql_query_limit($sql, 1);
+		$result = $db->sql_query($sql);
 		$defaultrank_id = (int) $db->sql_fetchfield('rank_id', false, $result);
 		$db->sql_freeresult($result);
 		return $defaultrank_id;
