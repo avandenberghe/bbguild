@@ -31,9 +31,10 @@ Further development requests, support questions are welcome at our [Support Foru
 ### Installation
 ##### Requirements
 1.	phpbb > 3.1.*
-2.      PHP >= 5.4
-3.      PHP Curl extension
-2.	ftp and acp access to your phpbb forum.  
+2.  PHP >= 5.4
+3.  PHP Client URL Library (php_curl.dll)
+4.  PHP GD library (php_gd2.dll)
+5.	ftp and acp access to your phpbb forum.
 
 ##### Install
 1. Download the latest release.
