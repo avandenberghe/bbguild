@@ -1531,6 +1531,13 @@ class guilds extends admin
 			}
 		}
 
+
+		if (!is_array($data))
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
 		if (isset($data['status']))
 		{
 			$this->armoryresult = 'KO';

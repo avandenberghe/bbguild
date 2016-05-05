@@ -34,7 +34,7 @@ abstract class battlenet_resource extends admin
 		'us' => 'https://us.api.battle.net/wow/',
 		'kr' => 'https://kr.api.battle.net/wow/',
 		'tw' => 'https://tw.api.battle.net/wow/',
-		'sea' => 'https://sea.api.battle.net/wow/'
+		'sea' => 'https://us.api.battle.net/wow/'
 	);
 
 	/**
