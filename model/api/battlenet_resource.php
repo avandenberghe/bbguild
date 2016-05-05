@@ -148,8 +148,6 @@ abstract class battlenet_resource extends admin
 
 		//get base url
 		$requestUri = $this->api_url[$this->region];
-
-
 		$requestUri .= $this->endpoint . '/'. $method;
 
 		//append locale

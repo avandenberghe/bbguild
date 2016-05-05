@@ -46,7 +46,6 @@ class viewachievements implements iviews
 				$this->navigation->guild->setGuildAchievements($data['achievements']);
 				$achievements =  $this->navigation->guild->getGuildAchievements();
 
-
 				for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++)
 				{
 					// Build the new array to return

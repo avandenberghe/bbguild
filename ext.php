@@ -39,13 +39,13 @@ class ext extends base
 
 		if (phpbb_version_compare($config['version'], '3.1.*', '<'))
 		{
-			trigger_error($user->lang['REQUIREDPHPBB'] );
+			trigger_error($user->lang['REQUIREDPHPBB']);
 		}
-		
-		if (version_compare(phpversion(), '5.4.39', '<')) 
+
+		if (version_compare(phpversion(), '5.4.39', '<'))
 		{
-    			// php version isn't high enough
-    			trigger_error($user->lang['REQUIREDPHP54'] );
+			// php version isn't high enough
+			trigger_error($user->lang['REQUIREDPHP54']);
 		}
 
 		return parent::enable_step($old_state);

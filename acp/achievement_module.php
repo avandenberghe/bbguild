@@ -71,7 +71,6 @@ class achievement_module extends admin
 		$this->auth=$auth;
 		parent::__construct();
 
-
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
 		$this->tpl_name   = 'acp_' . $mode;
@@ -89,7 +88,6 @@ class achievement_module extends admin
 			case 'listachievements':
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\achievement_module&amp;mode=listachievements') . '"><h3>Return to Index</h3></a>';
 				$Guild = new guilds();
-
 
 				$guildlist = $Guild->guildlist(1);
 				if (count((array) $guildlist) == 0  )
@@ -127,7 +125,6 @@ class achievement_module extends admin
 					// user selected dropdown - get guildid
 					$Guild->setGuildid($this->request->variable('player_guild_id', 0));
 				}
-
 
 				$sortlink = isset($_GET[URI_GUILD])  ? true : false;
 				if ($sortlink)

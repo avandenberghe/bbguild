@@ -85,7 +85,6 @@ class viewwelcome implements iviews
 							);
 							break;
 
-
 						default:
 							$a=$news['type'];
 							break;
@@ -100,7 +99,6 @@ class viewwelcome implements iviews
 			}
 
 		}
-
 
 		$template->assign_vars(
 			array(

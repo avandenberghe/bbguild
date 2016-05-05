@@ -418,11 +418,9 @@ class game
 			'us' => array('en_US', 'pt_BR', 'es_MX')
 		);
 
-
 		//fill the games array
 		$this->games = $this->gamesarray();
 	}
-
 
 	/**
 	 * adds a Game to database
