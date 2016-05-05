@@ -39,25 +39,25 @@ class ext extends base
 
 		if (phpbb_version_compare($config['version'], '3.1.*', '<'))
 		{
-			trigger_error($user->lang['REQUIREDPHPBB']);
+			trigger_error($user->lang['REQUIREDPHPBB'], E_USER_WARNING);
 		}
 
 		if (version_compare(phpversion(), '5.4.39', '<'))
 		{
 			// 5.4 required because of function array dereferencing, e.g. foo()[0].
-			trigger_error($user->lang['REQUIREDPHP54']);
+			trigger_error($user->lang['REQUIREDPHP54'], E_USER_WARNING);
 		}
 
 		if ( ! @extension_loaded('GD'))
 		{
 			// GD required for emblem generator
-			trigger_error($user->lang['GDREQUIRED']);
+			trigger_error($user->lang['GDREQUIRED'], E_USER_WARNING);
 		}
 
 		if ( ! @extension_loaded('curl'))
 		{
 			// CURL required for callbacks
-			trigger_error($user->lang['CURLREQUIRED']);
+			trigger_error($user->lang['CURLREQUIRED'], E_USER_WARNING);
 		}
 
 		return parent::enable_step($old_state);
