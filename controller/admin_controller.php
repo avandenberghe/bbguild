@@ -200,7 +200,7 @@ class admin_controller
 		$players->listallplayers($guild_id);
 
 		$data =array();
-		foreach ((array) $players->guildplayerlist as $player)
+		foreach ((array) $players->getGuildplayerlist() as $player)
 		{
 			$data =array(
 			'player_id' => $player['player_id'],

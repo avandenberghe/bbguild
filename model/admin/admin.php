@@ -39,13 +39,6 @@ class admin
 	public $languagecodes;
 
 	/**
-	 * bbtips is installed ?
-	 *
-	 * @var boolean
-	 */
-	public $bbtips = false;
-
-	/**
 	 * installed games
 	 *
 	 * @var array

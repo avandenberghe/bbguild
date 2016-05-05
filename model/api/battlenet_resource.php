@@ -134,10 +134,18 @@ abstract class battlenet_resource extends admin
 			trigger_error($user->lang['WOWAPI_KEY_MISSING']);
 		}
 
-		//check if locale is allowed
+		//check if default locale is allowed given the guild region
 		if (!in_array($this->locale, $this->locales_allowed[$this->region]))
 		{
-			trigger_error(sprintf($user->lang['WOWAPI_LOCALE_NOTALLOWED'], $this->locale));
+			if($this->region != '')
+			{
+				//get standard locale for guild region
+				$this->locale = $this->locales_allowed[$this->region][0];
+			}
+			else
+			{
+				trigger_error(sprintf($user->lang['WOWAPI_LOCALE_NOTALLOWED'], $this->locale));
+			}
 		}
 
 		// either a valid method is required or an asterisk

@@ -41,7 +41,7 @@ use bbdkp\bbguild\model\api\battlenet;
  * @property string $player_guild_name
  * @property string $player_realm
  * @property string $player_region
- * @property string $regionlist
+ * @property array $regionlist
  * @property int $player_gender_id
  * @property int $player_achiev
  * @property string $player_armory_url
@@ -114,6 +114,7 @@ class player extends admin
 	 * @var integer
 	 */
 	protected $player_class_id;
+
 	/**
 	 * Class name
 	 *
@@ -215,11 +216,10 @@ class player extends admin
 
 	/**
 	 * Allowed regions
-	 * readonly!
 	 *
 	 * @var array
 	 */
-	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
+	protected $regionlist;
 
 	/**
 	 *gender ID 0=male, 1=female
@@ -332,6 +332,634 @@ class player extends admin
 
 
 	/**
+	 * @return int
+	 */
+	public function getGameId()
+	{
+		return $this->game_id;
+	}
+
+	/**
+	 * @param int $game_id
+	 */
+	public function setGameId($game_id)
+	{
+		$this->game_id = $game_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerName()
+	{
+		return $this->player_name;
+	}
+
+	/**
+	 * @param string $player_name
+	 */
+	public function setPlayerName($player_name)
+	{
+		$this->player_name = $player_name;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isPlayerStatus()
+	{
+		return $this->player_status;
+	}
+
+	/**
+	 * @param boolean $player_status
+	 */
+	public function setPlayerStatus($player_status)
+	{
+		$this->player_status = $player_status;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerLevel()
+	{
+		return $this->player_level;
+	}
+
+	/**
+	 * @param int $player_level
+	 */
+	public function setPlayerLevel($player_level)
+	{
+		$this->player_level = $player_level;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerRaceId()
+	{
+		return $this->player_race_id;
+	}
+
+	/**
+	 * @param int $player_race_id
+	 */
+	public function setPlayerRaceId($player_race_id)
+	{
+		$this->player_race_id = $player_race_id;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getTalents()
+	{
+		return $this->talents;
+	}
+
+	/**
+	 * @param string $talents
+	 */
+	public function setTalents($talents)
+	{
+		$this->talents = $talents;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getClassImage()
+	{
+		return $this->class_image;
+	}
+
+	/**
+	 * @param string $class_image
+	 */
+	public function setClassImage($class_image)
+	{
+		$this->class_image = $class_image;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getColorcode()
+	{
+		return $this->colorcode;
+	}
+
+	/**
+	 * @param string $colorcode
+	 */
+	public function setColorcode($colorcode)
+	{
+		$this->colorcode = $colorcode;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDeactivateReason()
+	{
+		return $this->deactivate_reason;
+	}
+
+	/**
+	 * @param string $deactivate_reason
+	 */
+	public function setDeactivateReason($deactivate_reason)
+	{
+		$this->deactivate_reason = $deactivate_reason;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getGuildlist()
+	{
+		return $this->guildlist;
+	}
+
+	/**
+	 * @param array $guildlist
+	 */
+	public function setGuildlist($guildlist)
+	{
+		$this->guildlist = $guildlist;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGuildplayerlist()
+	{
+		return $this->guildplayerlist;
+	}
+
+	/**
+	 * @param array $guildplayerlist
+	 */
+	public function setGuildplayerlist($guildplayerlist)
+	{
+		$this->guildplayerlist = $guildplayerlist;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLastUpdate()
+	{
+		return $this->last_update;
+	}
+
+	/**
+	 * @param int $last_update
+	 */
+	public function setLastUpdate($last_update)
+	{
+		$this->last_update = $last_update;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPhpbbUserId()
+	{
+		return $this->phpbb_user_id;
+	}
+
+	/**
+	 * @param int $phpbb_user_id
+	 */
+	public function setPhpbbUserId($phpbb_user_id)
+	{
+		$this->phpbb_user_id = $phpbb_user_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerAchiev()
+	{
+		return $this->player_achiev;
+	}
+
+	/**
+	 * @param int $player_achiev
+	 */
+	public function setPlayerAchiev($player_achiev)
+	{
+		$this->player_achiev = $player_achiev;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerArmoryUrl()
+	{
+		return $this->player_armory_url;
+	}
+
+	/**
+	 * @param string $player_armory_url
+	 */
+	public function setPlayerArmoryUrl($player_armory_url)
+	{
+		$this->player_armory_url = $player_armory_url;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerClass()
+	{
+		return $this->player_class;
+	}
+
+	/**
+	 * @param string $player_class
+	 */
+	public function setPlayerClass($player_class)
+	{
+		$this->player_class = $player_class;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerClassId()
+	{
+		return $this->player_class_id;
+	}
+
+	/**
+	 * @param int $player_class_id
+	 */
+	public function setPlayerClassId($player_class_id)
+	{
+		$this->player_class_id = $player_class_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerComment()
+	{
+		return $this->player_comment;
+	}
+
+	/**
+	 * @param string $player_comment
+	 */
+	public function setPlayerComment($player_comment)
+	{
+		$this->player_comment = $player_comment;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerGenderId()
+	{
+		return $this->player_gender_id;
+	}
+
+	/**
+	 * @param int $player_gender_id
+	 */
+	public function setPlayerGenderId($player_gender_id)
+	{
+		$this->player_gender_id = $player_gender_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerGuildId()
+	{
+		return $this->player_guild_id;
+	}
+
+	/**
+	 * @param int $player_guild_id
+	 */
+	public function setPlayerGuildId($player_guild_id)
+	{
+		$this->player_guild_id = $player_guild_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerGuildName()
+	{
+		return $this->player_guild_name;
+	}
+
+	/**
+	 * @param string $player_guild_name
+	 */
+	public function setPlayerGuildName($player_guild_name)
+	{
+		$this->player_guild_name = $player_guild_name;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerJoindate()
+	{
+		return $this->player_joindate;
+	}
+
+	/**
+	 * @param int $player_joindate
+	 */
+	public function setPlayerJoindate($player_joindate)
+	{
+		$this->player_joindate = $player_joindate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerJoindateD()
+	{
+		return $this->player_joindate_d;
+	}
+
+	/**
+	 * @param int $player_joindate_d
+	 */
+	public function setPlayerJoindateD($player_joindate_d)
+	{
+		$this->player_joindate_d = $player_joindate_d;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerJoindateMo()
+	{
+		return $this->player_joindate_mo;
+	}
+
+	/**
+	 * @param int $player_joindate_mo
+	 */
+	public function setPlayerJoindateMo($player_joindate_mo)
+	{
+		$this->player_joindate_mo = $player_joindate_mo;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerJoindateY()
+	{
+		return $this->player_joindate_y;
+	}
+
+	/**
+	 * @param int $player_joindate_y
+	 */
+	public function setPlayerJoindateY($player_joindate_y)
+	{
+		$this->player_joindate_y = $player_joindate_y;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerOutdate()
+	{
+		return $this->player_outdate;
+	}
+
+	/**
+	 * @param int $player_outdate
+	 */
+	public function setPlayerOutdate($player_outdate)
+	{
+		$this->player_outdate = $player_outdate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerOutdateD()
+	{
+		return $this->player_outdate_d;
+	}
+
+	/**
+	 * @param int $player_outdate_d
+	 */
+	public function setPlayerOutdateD($player_outdate_d)
+	{
+		$this->player_outdate_d = $player_outdate_d;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerOutdateMo()
+	{
+		return $this->player_outdate_mo;
+	}
+
+	/**
+	 * @param int $player_outdate_mo
+	 */
+	public function setPlayerOutdateMo($player_outdate_mo)
+	{
+		$this->player_outdate_mo = $player_outdate_mo;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerOutdateY()
+	{
+		return $this->player_outdate_y;
+	}
+
+	/**
+	 * @param int $player_outdate_y
+	 */
+	public function setPlayerOutdateY($player_outdate_y)
+	{
+		$this->player_outdate_y = $player_outdate_y;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerPortraitUrl()
+	{
+		return $this->player_portrait_url;
+	}
+
+	/**
+	 * @param string $player_portrait_url
+	 */
+	public function setPlayerPortraitUrl($player_portrait_url)
+	{
+		$this->player_portrait_url = $player_portrait_url;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerRace()
+	{
+		return $this->player_race;
+	}
+
+	/**
+	 * @param string $player_race
+	 */
+	public function setPlayerRace($player_race)
+	{
+		$this->player_race = $player_race;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getPlayerRankId()
+	{
+		return $this->player_rank_id;
+	}
+
+	/**
+	 * @param int $player_rank_id
+	 */
+	public function setPlayerRankId($player_rank_id)
+	{
+		$this->player_rank_id = $player_rank_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerRealm()
+	{
+		return $this->player_realm;
+	}
+
+	/**
+	 * @param string $player_realm
+	 */
+	public function setPlayerRealm($player_realm)
+	{
+		$this->player_realm = $player_realm;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerRegion()
+	{
+		return $this->player_region;
+	}
+
+	/**
+	 * @param string $player_region
+	 */
+	public function setPlayerRegion($player_region)
+	{
+		$this->player_region = $player_region;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerRole()
+	{
+		return $this->player_role;
+	}
+
+	/**
+	 * @param string $player_role
+	 */
+	public function setPlayerRole($player_role)
+	{
+		$this->player_role = $player_role;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerTitle()
+	{
+		return $this->player_title;
+	}
+
+	/**
+	 * @param string $player_title
+	 */
+	public function setPlayerTitle($player_title)
+	{
+		$this->player_title = $player_title;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPlayerdata()
+	{
+		return $this->playerdata;
+	}
+
+	/**
+	 * @param array $playerdata
+	 */
+	public function setPlayerdata($playerdata)
+	{
+		$this->playerdata = $playerdata;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRaceImage()
+	{
+		return $this->race_image;
+	}
+
+	/**
+	 * @param string $race_image
+	 */
+	public function setRaceImage($race_image)
+	{
+		$this->race_image = $race_image;
+	}
+
+	/**
+	 * @param string $region
+	 */
+	public function getRegionlist()
+	{
+		global $user;
+		return array(
+			'eu' => $user->lang['REGIONEU'],
+			'kr' => $user->lang['REGIONKR'],
+			'sea' => $user->lang['REGIONSEA'],
+			'tw' => $user->lang['REGIONTW'],
+			'us' => $user->lang['REGIONUS'],
+		);
+
+	}
+
+	/**
 	 * Player class constructor
 	 *
 	 * @param int   $player_id
@@ -364,54 +992,6 @@ class player extends admin
 			$this->guildlist = $guildlist;
 		}
 
-	}
-
-
-	/**
-	 * player class property getter
-	 *
-	 * @param  string $fieldName
-	 * @return null
-	 */
-	public function __get($fieldName)
-	{
-		global $user;
-
-		if (property_exists($this, $fieldName))
-		{
-			return $this->$fieldName;
-		}
-		else
-		{
-			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
-		}
-		return null;
-	}
-
-	/**
-	 * player class property setter
-	 *
-	 * @param string $property
-	 * @param string $value
-	 */
-	public function __set($property, $value)
-	{
-		global $user;
-		switch ($property)
-		{
-			case 'regionlist':
-				// is readonly
-				break;
-			default:
-				if (property_exists($this, $property))
-				{
-					$this->$property = $value;
-				}
-				else
-				{
-					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
-				}
-		}
 	}
 
 	/**

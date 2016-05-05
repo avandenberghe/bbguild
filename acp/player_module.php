@@ -230,7 +230,7 @@ class player_module extends admin
 								'del_player_id' => $deleteplayer->player_id)
 						);
 
-						confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_PLAYER'], $deleteplayer->player_name), $s_hidden_fields);
+						confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_PLAYER'], $deleteplayer->getPlayerName()), $s_hidden_fields);
 					}
 					unset($deleteplayer);
 				}
@@ -309,41 +309,41 @@ class player_module extends admin
 
 		$newplayer = new player();
 		$newplayer->game_id = $this->request->variable('game_id', '');
-		$newplayer->player_name = $this->request->variable('player_name', '', true);
-		$newplayer->player_title = $this->request->variable('player_title', '', true);
-		$newplayer->player_guild_id = $this->request->variable('player_guild_id', 0);
-		$newplayer->player_rank_id = $this->request->variable('player_rank_id', 99);
-		$newplayer->player_level = $this->request->variable('player_level', 1);
-		$newplayer->player_realm = $this->request->variable('realm', '');
+		$newplayer->setPlayerName($this->request->variable('player_name', '', true));
+		$newplayer->setPlayerTitle($this->request->variable('player_title', '', true));
+		$newplayer->setPlayerGuildId($this->request->variable('player_guild_id', 0));
+		$newplayer->setPlayerRankId($this->request->variable('player_rank_id', 99));
+		$newplayer->setPlayerLevel($this->request->variable('player_level', 1));
+		$newplayer->setPlayerRealm($this->request->variable('realm', ''));
 
 		/* @todo */
-		$newplayer->player_region = $this->request->variable('region_id', '');
+		$newplayer->setPlayerRegion($this->request->variable('hidden_player_region', ''));
 
-		if (!in_array($newplayer->player_region, $newplayer->regionlist))
+		if (!in_array($newplayer->getPlayerRegion(), $newplayer->getRegionlist()))
 		{
-			$newplayer->player_region = '';
+			$newplayer->setPlayerRegion('');
 		}
-		$newplayer->player_race_id = $this->request->variable('player_race_id', 1);
-		$newplayer->player_class_id = $this->request->variable('player_class_id', 1);
-		$newplayer->player_role = $this->request->variable('player_role', 0);
-		$newplayer->player_gender_id = $this->request->variable('gender', 0);
-		$newplayer->player_comment = $this->request->variable('player_comment', '', true);
-		$newplayer->player_joindate = mktime(0, 0, 0, $this->request->variable('player_joindate_mo', 0), $this->request->variable('player_joindate_d', 0), $this->request->variable('player_joindate_y', 0));
-		$newplayer->player_outdate = 0;
+		$newplayer->setPlayerRaceId($this->request->variable('player_race_id', 1));
+		$newplayer->setPlayerClassId($this->request->variable('player_class_id', 1));
+		$newplayer->setPlayerRole($this->request->variable('player_role', 0));
+		$newplayer->setPlayerGenderId($this->request->variable('gender', 0));
+		$newplayer->setPlayerComment($this->request->variable('player_comment', '', true));
+		$newplayer->setPlayerJoindate(mktime(0, 0, 0, $this->request->variable('player_joindate_mo', 0), $this->request->variable('player_joindate_d', 0), $this->request->variable('player_joindate_y', 0)));
+		$newplayer->setPlayerOutdate(0);
 		if ($this->request->variable('player_outdate_mo', 0) + $this->request->variable('player_outdate_d', 0) != 0)
 		{
-			$newplayer->player_outdate = mktime(0, 0, 0, $this->request->variable('player_outdate_mo', 0), $this->request->variable('player_outdate_d', 0), $this->request->variable('player_outdate_y', 0));
+			$newplayer->setPlayerOutdate(mktime(0, 0, 0, $this->request->variable('player_outdate_mo', 0), $this->request->variable('player_outdate_d', 0), $this->request->variable('player_outdate_y', 0)));
 		}
-		$newplayer->player_achiev = 0;
-		$newplayer->player_armory_url = $this->request->variable('player_armorylink', '', true);
-		$newplayer->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
-		$newplayer->player_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
+		$newplayer->setPlayerAchiev(0);
+		$newplayer->setPlayerArmoryUrl($this->request->variable('player_armorylink', '', true));
+		$newplayer->setPhpbbUserId($this->request->variable('phpbb_user_id', 0));
+		$newplayer->setPlayerStatus($this->request->variable('activated', '') == 'on' ? 1 : 0);
 
-		$this->guild = new guilds($newplayer->player_guild_id);
+		$this->guild = new guilds($newplayer->getPlayerGuildId());
 		$this->guild->get_guild();
 
 		//only call armory if it is enabled.
-		if ($newplayer->player_rank_id < 90 && $this->guild->isArmoryEnabled() == 1 )
+		if ($newplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
 		{
 			$newplayer->Armory_getplayer();
 		}
@@ -353,18 +353,18 @@ class player_module extends admin
 		if ($newplayer->player_id > 0)
 		{
 			//record added. now update some stats
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id));
-			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->player_name), date('F j, Y, g:i a'));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->getPlayerGuildId()));
+			$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->getPlayerName()), date('F j, Y, g:i a'));
 
-			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+			$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->getPlayerGuildId()) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 		}
 		else
 		{
-			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->player_guild_id));
+			meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $newplayer->getPlayerGuildId()));
 
-			$failure_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_FAIL'], ucwords($newplayer->player_name));
+			$failure_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_FAIL'], ucwords($newplayer->getPlayerName()));
 			trigger_error($failure_message . $this->link, E_USER_WARNING);
 		}
 	}
@@ -386,56 +386,55 @@ class player_module extends admin
 		$updateplayer->Getplayer();
 
 		$updateplayer->game_id = $this->request->variable('game_id', '');
-		$updateplayer->player_class_id = $this->request->variable('player_class_id', 0);
-		$updateplayer->player_race_id = $this->request->variable('player_race_id', 0);
-		$updateplayer->player_role = $this->request->variable('player_role', 0);
-		$updateplayer->player_realm = $this->request->variable('realm', '');
+		$updateplayer->setPlayerClassId($this->request->variable('player_class_id', 0));
+		$updateplayer->setPlayerRaceId($this->request->variable('player_race_id', 0));
+		$updateplayer->setPlayerRole($this->request->variable('player_role', 0));
+		$updateplayer->setPlayerRealm($this->request->variable('realm', ''));
 
 		/* @todo */
 
-		$updateplayer->player_region = $this->request->variable('region_id', '');
-
-		if (!in_array($updateplayer->player_region, $updateplayer->regionlist))
+		$updateplayer->setPlayerRegion($this->request->variable('hidden_player_region', ''));
+		if (!in_array($updateplayer->getPlayerRegion(), $updateplayer->getRegionlist()))
 		{
-			$updateplayer->player_region = '';
+			$updateplayer->setPlayerRegion('');
 		}
 
-		$updateplayer->player_name = $this->request->variable('player_name', '', true);
-		$updateplayer->player_gender_id = $this->request->variable('gender', 0);
-		$updateplayer->player_title = $this->request->variable('player_title', '', true);
-		$updateplayer->player_guild_id = $this->request->variable('player_guild_id', 0);
-		$updateplayer->player_rank_id = $this->request->variable('player_rank_id', 99);
-		$updateplayer->player_level = $this->request->variable('player_level', 0);
-		$updateplayer->player_joindate = mktime(0, 0, 0, $this->request->variable('player_joindate_mo', 0), $this->request->variable('player_joindate_d', 0), $this->request->variable('player_joindate_y', 0));
-		$updateplayer->player_outdate = mktime(0, 0, 0, 12, 31, 2030);
+		$updateplayer->setPlayerName($this->request->variable('player_name', '', true));
+		$updateplayer->setPlayerGenderId($this->request->variable('gender', 0));
+		$updateplayer->setPlayerTitle($this->request->variable('player_title', '', true));
+		$updateplayer->setPlayerGuildId($this->request->variable('player_guild_id', 0));
+		$updateplayer->setPlayerRankId($this->request->variable('player_rank_id', 99));
+		$updateplayer->setPlayerLevel($this->request->variable('player_level', 0));
+		$updateplayer->setPlayerJoindate(mktime(0, 0, 0, $this->request->variable('player_joindate_mo', 0), $this->request->variable('player_joindate_d', 0), $this->request->variable('player_joindate_y', 0)));
+		$updateplayer->setPlayerOutdate(mktime(0, 0, 0, 12, 31, 2030));
 
 		if ($this->request->variable('player_outdate_mo', 0) + $this->request->variable('player_outdate_d', 0) != 0)
 		{
-			$updateplayer->player_outdate = mktime(0, 0, 0, $this->request->variable('player_outdate_mo', 0), $this->request->variable('player_outdate_d', 0), $this->request->variable('player_outdate_y', 0));
+			$updateplayer->setPlayerOutdate(mktime(0, 0, 0, $this->request->variable('player_outdate_mo', 0), $this->request->variable('player_outdate_d', 0), $this->request->variable('player_outdate_y', 0)));
 		}
 
-		$updateplayer->player_achiev = $this->request->variable('player_achiev', 0);
-		$updateplayer->player_comment = $this->request->variable('player_comment', '', true);
-		$updateplayer->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
+		$updateplayer->setPlayerAchiev($this->request->variable('player_achiev', 0));
+		$updateplayer->setPlayerComment($this->request->variable('player_comment', '', true));
+		$updateplayer->setPhpbbUserId($this->request->variable('phpbb_user_id', 0));
 
-		$this->guild = new guilds($updateplayer->player_guild_id);
+		$this->guild = new guilds($updateplayer->getPlayerGuildId());
 		$this->guild->get_guild();
 
-		if ($updateplayer->player_rank_id < 90 && $this->guild->isArmoryEnabled() == 1 )
+		if ($updateplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
 		{
 			$updateplayer->Armory_getplayer();
 		}
 
-		$updateplayer->player_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
+		$updateplayer->setPlayerStatus($this->request->variable('activated', '') == 'on' ? 1 : 0);
 
 		$old_player = new player();
 		$old_player->player_id = $updateplayer->player_id;
 		$old_player->Getplayer();
 		$updateplayer->Updateplayer($old_player);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id));
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->player_guild_id) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
-		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_SUCCESS'], $updateplayer->player_name);
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->getPlayerGuildId()));
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $updateplayer->getPlayerGuildId()) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
+		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_SUCCESS'], $updateplayer->getPlayerName());
 		trigger_error($success_message . $this->link);
 
 	}
@@ -450,12 +449,12 @@ class player_module extends admin
 		$deleteplayer->player_id = $this->request->variable('del_player_id', 0);
 		$deleteplayer->Getplayer();
 		$deleteplayer->Deleteplayer();
-		$success_message = sprintf($this->user->lang['ADMIN_DELETE_PLAYERS_SUCCESS'], $deleteplayer->player_name);
+		$success_message = sprintf($this->user->lang['ADMIN_DELETE_PLAYERS_SUCCESS'], $deleteplayer->getPlayerName());
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $deleteplayer->player_guild_id));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=listplayers&amp;' . URI_GUILD . '=' . $deleteplayer->getPlayerGuildId()));
 		$this->link = '<br /><a href="' . append_sid(
 				"{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=list_players&amp;' .
-				URI_GUILD . '=' . $deleteplayer->player_guild_id
+				URI_GUILD . '=' . $deleteplayer->getPlayerGuildId()
 			) . '"><h3>' . $this->user->lang['RETURN_PLAYERLIST'] . '</h3></a>';
 
 		trigger_error($success_message . $this->link, E_USER_WARNING);
@@ -506,7 +505,7 @@ class player_module extends admin
 			}
 			$player = new player($row['player_id']);
 
-			$last_update = $player->last_update;
+			$last_update = $player->getLastUpdate();
 
 			$diff = \round(\abs((\time() - $last_update)) / 86400, 2);
 
@@ -522,7 +521,7 @@ class player_module extends admin
 
 				if (isset($player))
 				{
-					if ($player->player_rank_id < 90)
+					if ($player->getPlayerRankId() < 90)
 					{
 						$player->Armory_getplayer();
 					}
@@ -742,18 +741,18 @@ class player_module extends admin
 		if ($S_ADD)
 		{
 			// set defaults
-			$editplayer->player_guild_id = $this->request->variable(URI_GUILD, 0);
+			$editplayer->setPlayerGuildId($this->request->variable(URI_GUILD, 0));
 		}
-		$this->guild     = new guilds($editplayer->player_guild_id);
+		$this->guild     = new guilds($editplayer->getPlayerGuildId());
 
 		if ($S_ADD)
 		{
 			$editplayer->game_id          = $this->guild->getGameId();
-			$editplayer->player_region    = $this->guild->getRegion();
-			$editplayer->player_realm     = $this->guild->getRealm();
-			$editplayer->player_rank_id   = $this->guild->getRaidtrackerrank();
-			$editplayer->player_status    = 1;
-			$editplayer->player_gender_id = 0;
+			$editplayer->setPlayerRegion($this->guild->getRegion());
+			$editplayer->setPlayerRealm($this->guild->getRealm());
+			$editplayer->setPlayerRankId($this->guild->getRaidtrackerrank());
+			$editplayer->setPlayerStatus(1);
+			$editplayer->setPlayerGenderId(0);
 		}
 
 		// Game dropdown
@@ -781,21 +780,21 @@ class player_module extends admin
 			$this->template->assign_block_vars(
 				'guild_row', array(
 					'VALUE'    => $g['id'],
-					'SELECTED' => ($g['id'] == $editplayer->player_guild_id) ? ' selected="selected"' : '',
+					'SELECTED' => ($g['id'] == $editplayer->getPlayerGuildId()) ? ' selected="selected"' : '',
 					'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)')
 			);
 		}
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks  = new ranks($editplayer->player_guild_id);
+		$Ranks  = new ranks($editplayer->getPlayerGuildId());
 		$result = $Ranks->listranks();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars(
 				'rank_row', array(
 					'VALUE'    => $row['rank_id'],
-					'SELECTED' => ($editplayer->player_rank_id == $row['rank_id']) ? ' selected="selected"' : '',
+					'SELECTED' => ($editplayer->getPlayerRankId() == $row['rank_id']) ? ' selected="selected"' : '',
 					'OPTION'   => (!empty($row['rank_name'])) ? $row['rank_name'] : '(None)')
 			);
 		}
@@ -821,7 +820,7 @@ class player_module extends admin
 				$this->template->assign_block_vars(
 					'race_row', array(
 						'VALUE'    => $row['race_id'],
-						'SELECTED' => ($editplayer->player_race_id == $row['race_id']) ? ' selected="selected"' : '',
+						'SELECTED' => ($editplayer->getPlayerRaceId() == $row['race_id']) ? ' selected="selected"' : '',
 						'OPTION'   => (!empty($row['race_name'])) ? $row['race_name'] : '(None)')
 				);
 			}
@@ -871,7 +870,7 @@ class player_module extends admin
 				$this->template->assign_block_vars(
 					'class_row', array(
 						'VALUE'    => $row['class_id'],
-						'SELECTED' => ($editplayer->player_class_id == $row['class_id']) ? ' selected="selected"' : '',
+						'SELECTED' => ($editplayer->getPlayerClassId() == $row['class_id']) ? ' selected="selected"' : '',
 						'OPTION'   => $option)
 				);
 			} else
@@ -889,14 +888,14 @@ class player_module extends admin
 		// get roles
 		$Roles = new roles();
 		$Roles->game_id = $this->guild->getGameId();
-		$Roles->guild_id = $editplayer->player_guild_id;
+		$Roles->guild_id = $editplayer->getPlayerGuildId();
 		$listroles = $Roles->list_roles();
 		foreach ($listroles as $roleid => $Role)
 		{
 			$this->template->assign_block_vars(
 				'role_row', array(
 					'VALUE' => $Role['role_id'] ,
-					'SELECTED' => ($editplayer->player_role == $Role['role_id']) ? ' selected="selected"' : '' ,
+					'SELECTED' => ($editplayer->getPlayerRole() == $Role['role_id']) ? ' selected="selected"' : '' ,
 					'OPTION' => $Role['rolename'] )
 			);
 		}
@@ -906,32 +905,32 @@ class player_module extends admin
 		$s_playerjoin_day_options = '<option value="0"	>--</option>';
 		for ($i = 1; $i < 32; $i++)
 		{
-			$day      = $editplayer->player_id > 0 ? $editplayer->player_joindate_d : $now['mday'];
+			$day      = $editplayer->player_id > 0 ? $editplayer->getPlayerJoindateD() : $now['mday'];
 			$selected = ($i == $day) ? ' selected="selected"' : '';
 			$s_playerjoin_day_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 		$s_playerjoin_month_options = '<option value="0">--</option>';
 		for ($i = 1; $i < 13; $i++)
 		{
-			$month    = $editplayer->player_id > 0 ? $editplayer->player_joindate_mo : $now['mon'];
+			$month    = $editplayer->player_id > 0 ? $editplayer->getPlayerJoindateMo() : $now['mon'];
 			$selected = ($i == $month) ? ' selected="selected"' : '';
 			$s_playerjoin_month_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 		$s_playerjoin_year_options = '<option value="0">--</option>';
 		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
 		{
-			$yr       = $editplayer->player_id > 0 ? $editplayer->player_joindate_y : $now['year'];
+			$yr       = $editplayer->player_id > 0 ? $editplayer->getPlayerJoindateY() : $now['year'];
 			$selected = ($i == $yr) ? ' selected="selected"' : '';
 			$s_playerjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 
 		// build presets for outdate pulldowns
-		$s_playerout_day_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->player_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+		$s_playerout_day_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->getPlayerOutdate() != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
 		for ($i = 1; $i < 32; $i++)
 		{
-			if ($editplayer->player_id > 0 && $editplayer->player_outdate != 0)
+			if ($editplayer->player_id > 0 && $editplayer->getPlayerOutdate() != 0)
 			{
-				$day      = $editplayer->player_outdate_d;
+				$day      = $editplayer->getPlayerOutdate();
 				$selected = ($i == $day) ? ' selected="selected"' : '';
 			} else
 			{
@@ -939,12 +938,12 @@ class player_module extends admin
 			}
 			$s_playerout_day_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
-		$s_playerout_month_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->player_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+		$s_playerout_month_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->getPlayerOutdate() != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
 		for ($i = 1; $i < 13; $i++)
 		{
-			if ($editplayer->player_id > 0 && $editplayer->player_outdate != 0)
+			if ($editplayer->player_id > 0 && $editplayer->getPlayerOutdate() != 0)
 			{
-				$month    = $editplayer->player_outdate_mo;
+				$month    = $editplayer->getPlayerOutdateMo();
 				$selected = ($i == $month) ? ' selected="selected"' : '';
 			} else
 			{
@@ -952,12 +951,12 @@ class player_module extends admin
 			}
 			$s_playerout_month_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
-		$s_playerout_year_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->player_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+		$s_playerout_year_options = '<option value="0"' . ($editplayer->player_id > 0 ? (($editplayer->getPlayerOutdate() != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
 		for ($i = $now['year'] - 10; $i <= $now['year'] + 10; $i++)
 		{
-			if ($editplayer->player_id > 0 && $editplayer->player_outdate != 0)
+			if ($editplayer->player_id > 0 && $editplayer->getPlayerOutdate() != 0)
 			{
-				$yr       = $editplayer->player_outdate_y;
+				$yr       = $editplayer->getPlayerOutdateY();
 				$selected = ($i == $yr) ? ' selected="selected"' : '';
 			} else
 			{
@@ -967,7 +966,7 @@ class player_module extends admin
 		}
 
 		// phpbb User dropdown
-		$phpbb_user_id = $editplayer->player_id > 0 ? $editplayer->phpbb_user_id : 0;
+		$phpbb_user_id = $editplayer->player_id > 0 ? $editplayer->getPhpbbUserId() : 0;
 		$sql_array     = array(
 			'SELECT'   => ' u.user_id, u.username ',
 			'FROM'     => array(
@@ -991,29 +990,30 @@ class player_module extends admin
 				'L_TITLE'                  => $this->user->lang['ACP_MM_ADDPLAYER'],
 				'L_EXPLAIN'                => $this->user->lang['ACP_MM_ADDPLAYER_EXPLAIN'],
 				'F_ADD_PLAYER'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\player_module&amp;mode=addplayer&amp;'),
-				'STATUS'                   => $editplayer->player_status == 1 ? 'checked="checked"' : '',
-				'PLAYER_NAME'              => $editplayer->player_name,
+				'STATUS'                   => $editplayer->isPlayerStatus() == 1 ? 'checked="checked"' : '',
+				'PLAYER_NAME'              => $editplayer->getPlayerName(),
 				'PLAYER_ID'                => $editplayer->player_id,
-				'PLAYER_LEVEL'             => $editplayer->player_level,
-				'REALM'                    => $editplayer->player_realm,
-				'REGION'                   => strtoupper($editplayer->player_region),
-				'DEACTIVATE_REASON'        => $editplayer->deactivate_reason == '' ? '' : $this->user->lang[$editplayer->deactivate_reason],
-				'STATUS_LOCK'              => $editplayer->deactivate_reason == '' ? false : true,
-				'PLAYER_ACHIEV'            => $editplayer->player_achiev,
-				'PLAYER_TITLE'             => $editplayer->player_title,
-				'MALE_CHECKED'             => ($editplayer->player_gender_id == '0') ? ' checked="checked"' : '',
-				'FEMALE_CHECKED'           => ($editplayer->player_gender_id == '1') ? ' checked="checked"' : '',
-				'PLAYER_COMMENT'           => $editplayer->player_comment,
+				'PLAYER_LEVEL'             => $editplayer->getPlayerLevel(),
+				'REALM'                    => $editplayer->getPlayerRealm(),
+				'REGION'                   => $editplayer->getPlayerRegion(),
+				'REGIONNAME'               => $editplayer->getRegionlist()[$editplayer->getPlayerRegion()],
+				'DEACTIVATE_REASON'        => $editplayer->getDeactivateReason() == '' ? '' : $this->user->lang[$editplayer->getDeactivateReason()],
+				'STATUS_LOCK'              => $editplayer->getDeactivateReason() == '' ? false : true,
+				'PLAYER_ACHIEV'            => $editplayer->getPlayerAchiev(),
+				'PLAYER_TITLE'             => $editplayer->getPlayerTitle(),
+				'MALE_CHECKED'             => ($editplayer->getPlayerGenderId() == '0') ? ' checked="checked"' : '',
+				'FEMALE_CHECKED'           => ($editplayer->getPlayerGenderId() == '1') ? ' checked="checked"' : '',
+				'PLAYER_COMMENT'           => $editplayer->getPlayerComment(),
 				'S_CAN_HAVE_ARMORY'        => $editplayer->game_id == 'wow' || $editplayer->game_id == 'aion' ? true : false,
-				'PLAYER_URL'               => $editplayer->player_armory_url,
-				'PLAYER_PORTRAIT'          => $editplayer->player_portrait_url,
-				'S_PLAYER_PORTRAIT_EXISTS' => (strlen($editplayer->player_portrait_url) > 1) ? true : false,
+				'PLAYER_URL'               => $editplayer->getPlayerArmoryUrl(),
+				'PLAYER_PORTRAIT'          => $editplayer->getPlayerPortraitUrl(),
+				'S_PLAYER_PORTRAIT_EXISTS' => (strlen($editplayer->getPlayerPortraitUrl()) > 1) ? true : false,
 				'S_CAN_GENERATE_ARMORY'    => $editplayer->game_id == 'wow' ? true : false,
-				'COLORCODE'                => ($editplayer->colorcode == '') ? '#254689' : $editplayer->colorcode,
-				'CLASS_IMAGE'              => $editplayer->class_image,
-				'S_CLASS_IMAGE_EXISTS'     => (strlen($editplayer->class_image) > 1) ? true : false,
-				'RACE_IMAGE'               => (strlen($editplayer->race_image) > 1) ? $editplayer->race_image : '',
-				'S_RACE_IMAGE_EXISTS'      => (strlen($editplayer->race_image) > 1) ? true : false,
+				'COLORCODE'                => ($editplayer->getColorcode() == '') ? '#254689' : $editplayer->getColorcode(),
+				'CLASS_IMAGE'              => $editplayer->getClassImage(),
+				'S_CLASS_IMAGE_EXISTS'     => (strlen($editplayer->getClassImage()) > 1) ? true : false,
+				'RACE_IMAGE'               => $editplayer->getRaceImage(),
+				'S_RACE_IMAGE_EXISTS'      => (strlen($editplayer->getRaceImage()) > 1) ? true : false,
 				'S_JOINDATE_DAY_OPTIONS'   => $s_playerjoin_day_options,
 				'S_JOINDATE_MONTH_OPTIONS' => $s_playerjoin_month_options,
 				'S_JOINDATE_YEAR_OPTIONS'  => $s_playerjoin_year_options,
@@ -1021,7 +1021,7 @@ class player_module extends admin
 				'S_OUTDATE_MONTH_OPTIONS'  => $s_playerout_month_options,
 				'S_OUTDATE_YEAR_OPTIONS'   => $s_playerout_year_options,
 				'S_PHPBBUSER_OPTIONS'      => $s_phpbb_user,
-				'TITLE_NAME'               => ($editplayer->game_id == 'wow') ? sprintf($editplayer->player_title, $editplayer->player_name) : '',
+				'TITLE_NAME'               => ($editplayer->game_id == 'wow') ? sprintf($editplayer->getPlayerTitle(), $editplayer->getPlayerName()) : '',
 				// javascript
 				'LA_ALERT_AJAX'            => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER'      => $this->user->lang['ALERT_OLDBROWSER'],

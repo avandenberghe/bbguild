@@ -24,7 +24,7 @@
         </dl>
         <dl>
             <dt><label for="realm">{L_REALM_NAME}:</label></dt>
-            <dd>{REGION} - <input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
+            <dd>{REGIONNAME} - <input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
         </dl>
 
         <dl>
@@ -183,6 +183,7 @@
 
         <p class="quick">
             {S_FORM_TOKEN}
+            <input type="hidden" name="hidden_player_region" value="{REGION}" />
             <input type="hidden" name="hidden_player_id" value="{PLAYER_ID}" />
             <input type="hidden" name="hidden_player_name" value="{PLAYER_NAME}" />
             <!-- IF S_ADD -->
