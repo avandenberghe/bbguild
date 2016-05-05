@@ -45,7 +45,10 @@ if (empty($lang) || !is_array($lang))
 // DKP
 $lang = array_merge(
 	$lang, array(
-	'REQUIREDPHPBB' => 'This extension requires 3.2 or higher.',
+	'REQUIREDPHPBB' => 'This extension requires 3.1 or higher.',
+	'REQUIREDPHPGD' => 'This extension requires the GD php extension.',
+	'REQUIREDPHPCURL' => 'This extension requires the CURL php extension.',
+	'REQUIREDPHP54' => 'This extension requires PHP 5.4',
 	'NOT_UP_TO_DATE_TITLE' => 'Your %s is out of date.',
 	'PRELELEASE_TITLE' => 'Your %s is a prelease version.',
 	'BBGUILD_LATESTVERSION' => 'Latest Version:',

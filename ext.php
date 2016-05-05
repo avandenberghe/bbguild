@@ -44,8 +44,20 @@ class ext extends base
 
 		if (version_compare(phpversion(), '5.4.39', '<'))
 		{
-			// php version isn't high enough
+			// 5.4 required because of function array dereferencing, e.g. foo()[0].
 			trigger_error($user->lang['REQUIREDPHP54']);
+		}
+
+		if ( ! @extension_loaded('GD'))
+		{
+			// GD required for emblem generator
+			trigger_error($user->lang['GDREQUIRED']);
+		}
+
+		if ( ! @extension_loaded('curl'))
+		{
+			// CURL required for callbacks
+			trigger_error($user->lang['CURLREQUIRED']);
 		}
 
 		return parent::enable_step($old_state);
