@@ -127,7 +127,6 @@ class viewwelcome implements iviews
 
 		$text='';
 		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . MOTD_TABLE;
-		$db->sql_query($sql);
 		$result = $db->sql_query($sql);
 		while ( $row = $db->sql_fetchrow($result) )
 		{
