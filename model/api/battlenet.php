@@ -38,7 +38,7 @@ class battlenet
 	 * @var array
 	 */
 	protected $api = array(
-	'guild', 'realm', 'character'
+	'guild', 'realm', 'character', 'achievement'
 	);
 
 

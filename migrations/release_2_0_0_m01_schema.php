@@ -34,6 +34,8 @@ class release_2_0_0_m01_schema extends migration
 	protected $plugins_table;
 	protected $achievement_table;
 	protected $achievement_track_table;
+	protected $achievement_criteria_table;
+	protected $achievement_rewards_table;
 
 	static public function depends_on()
 	{
@@ -43,7 +45,7 @@ class release_2_0_0_m01_schema extends migration
 	public function effectively_installed()
 	{
 		$this->GetTablenames();
-		return $this->db_tools->sql_table_exists($this->guild_table);
+		return $this->db_tools->sql_table_exists($this->achievement_rewards_table);
 	}
 
 	/**
@@ -319,13 +321,29 @@ class release_2_0_0_m01_schema extends migration
 						'player_id'             => array('UINT', 0),
 						'achievement_id'        => array('UINT', 0),
 						'achievements_completed' => array('TIMESTAMP', 0),
-						'criteria'               => array('VCHAR:3000', ''),
-						'criteria_quantity'      => array('VCHAR_UNI:255', ''),
+						'criteria_id'            => array('UINT', 0),
+						'criteria_quantity'      => array('UINT', 0),
 						'criteria_timestamp'     => array('TIMESTAMP', 0),
 					),
 				),
 
+				$this->achievement_criteria_table    => array(
+					'COLUMNS'    => array(
+						'criteria_id'   => array('UINT', 0),
+						'description'   => array('VCHAR_UNI:255', ''),
+						'orderIndex'    => array('UINT', 0),
+						'max'           => array('TIMESTAMP', 0)
+					),
+				),
 
+				$this->achievement_rewards_table    => array(
+					'COLUMNS'    => array(
+						'rewards_item_id'     => array('UINT', 0),
+						'description'             => array('VCHAR_UNI:255', ''),
+						'orderIndex'        => array('UINT', 0),
+						'max' => array('TIMESTAMP', 0)
+					),
+				),
 			),
 		);
 	}
@@ -357,7 +375,9 @@ class release_2_0_0_m01_schema extends migration
 				$this->bblogs_table,
 				$this->plugins_table,
 				$this->achievement_table,
-				$this->achievement_track_table
+				$this->achievement_track_table,
+				$this->achievement_criteria_table,
+				$this->achievement_rewards_table,
 			),
 		);
 	}
@@ -383,8 +403,8 @@ class release_2_0_0_m01_schema extends migration
 		$this->plugins_table      = $this->table_prefix  . 'bb_plugins';
 		$this->achievement_table  = $this->table_prefix  . 'bb_achievement';
 		$this->achievement_track_table = $this->table_prefix  . 'bb_achievement_track';
-
-
+		$this->achievement_criteria_table = $this->table_prefix  . 'bb_achievement_criteria';
+		$this->achievement_rewards_table = $this->table_prefix  . 'bb_achievement_rewards';
 	}
 
 }

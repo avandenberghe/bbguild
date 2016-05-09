@@ -8,6 +8,9 @@
  */
 namespace bbdkp\bbguild\views;
 
+use bbdkp\bbguild\model\games\game;
+use bbdkp\bbguild\model\games\rpg\achievement;
+
 /**
  * Class viewachievements
  *
@@ -18,6 +21,7 @@ class viewachievements implements iviews
 	private $navigation;
 	public  $response;
 	private $tpl;
+	public $achievement;
 
 	/**
 	 * viewachievements constructor.
@@ -35,62 +39,53 @@ class viewachievements implements iviews
 	 */
 	public function buildpage()
 	{
-		global $user, $template;
+		global $template;
 		$this->tpl = 'main.html';
 
-		if ($this->navigation->guild->isArmoryEnabled())
+		$achievements =  $this->navigation->guild->getGuildAchievements();
+
+		foreach ($achievements as $achi)
 		{
-			$data = $this->navigation->guild->Call_Guild_API(array('achievements'));
-			if ($data)
+			$a = $achi;
+			//$achi['detail'] = new achievement($game, $achi[$i]['id']);
+		}
+
+		$i=0;
+		/*
+		foreach ($achievements['achievements'] as $id => $achievement)
+		{
+			$i++;
+			switch ($achievement['type'])
 			{
-				$this->navigation->guild->setGuildAchievements($data['achievements']);
-				$achievements =  $this->navigation->guild->getGuildAchievements();
+			case 'itemCraft' :
+			case 'itemLoot' :
+				$template->assign_block_vars(
+					'activityfeed', array(
+					'TYPE'      => 'ITEM',
+					'ID'        => $id,
+					'VERB'      => $user->lang('LOOTED'),
+					'CHARACTER' => $achievement['character'],
+					'TIMESTAMP' => (!empty($achievement['timestamp'])) ? $this->date_diff($achievement['timestamp']) . '&nbsp;' : '&nbsp;',
+					'ITEM'      => isset($achievement['itemId']) ? $achievement['itemId'] : '',
+					'CONTEXT'   => $achievement['context'],
+					)
+				);
+				break;
 
-				for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++)
-				{
-					// Build the new array to return
-					$achievement[$i]['id']=$achievements['achievementsCompleted'][$i];
-					$achievement[$i]['timestamp']=$achievements['achievementsCompletedTimestamp'][$i];
-					$achievement[$i]['url'] =  $this->navigation->guild->getGuildarmoryurl() ."achievement#".$achievements['achievementsCompleted'][$i];
-				}
-
-				$i=0;
-				/*
-				foreach ($achievements['achievements'] as $id => $achievement)
-				{
-					$i++;
-					switch ($achievement['type'])
-					{
-					case 'itemCraft' :
-					case 'itemLoot' :
-						$template->assign_block_vars(
-							'activityfeed', array(
-							'TYPE'      => 'ITEM',
-							'ID'        => $id,
-							'VERB'      => $user->lang('LOOTED'),
-							'CHARACTER' => $achievement['character'],
-							'TIMESTAMP' => (!empty($achievement['timestamp'])) ? $this->date_diff($achievement['timestamp']) . '&nbsp;' : '&nbsp;',
-							'ITEM'      => isset($achievement['itemId']) ? $achievement['itemId'] : '',
-							'CONTEXT'   => $achievement['context'],
-							)
-						);
-						break;
-
-					default:
-						$a=$achievement['type'];
-						break;
-
-					}
-					if ($i > 25)
-					{
-						break;
-					}
-				}
-				*/
+			default:
+				$a=$achievement['type'];
+				break;
 
 			}
-
+			if ($i > 25)
+			{
+				break;
+			}
 		}
+		*/
+
+
+
 
 		$template->assign_vars(
 			array(

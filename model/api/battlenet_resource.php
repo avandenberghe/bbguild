@@ -137,7 +137,7 @@ abstract class battlenet_resource extends admin
 		//check if default locale is allowed given the guild region
 		if (!in_array($this->locale, $this->locales_allowed[$this->region]))
 		{
-			if($this->region != '')
+			if ($this->region != '')
 			{
 				//get standard locale for guild region
 				$this->locale = $this->locales_allowed[$this->region][0];

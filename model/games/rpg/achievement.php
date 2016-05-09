@@ -11,15 +11,17 @@
  */
 
 namespace bbdkp\bbguild\model\games\rpg;
+
 use bbdkp\bbguild\model\api\battlenet;
 use bbdkp\bbguild\model\games\game;
+use bbdkp\bbguild\model\admin\admin;
 
 /**
  * Class achievement
  *
  * @package bbdkp\bbguild\model\games\rpg
  */
-class achievement
+class achievement extends admin
 {
 	/**
 	 * game id
@@ -80,7 +82,7 @@ class achievement
 	/**
 	 * reward
 	 *
-	 * @var array
+	 * @var string
 	 */
 	protected $rewardItems;
 
@@ -94,7 +96,7 @@ class achievement
 	/**
 	 * criteria
 	 *
-	 * @var array
+	 * @var string
 	 */
 	protected $criteria;
 
@@ -106,16 +108,9 @@ class achievement
 	protected $factionId;
 
 	/**
-	 * achievement constructor.
-	 *
-	 * @param string $game_id
-	 * @param int $id
+	 * @type game
 	 */
-	public function __construct($game_id, $id)
-	{
-		$this->game_id = $game_id;
-		$this->id = $id;
-	}
+	private $game;
 
 	/**
 	 * @return array
@@ -297,20 +292,83 @@ class achievement
 		return $this;
 	}
 
+	/**
+	 * achievement constructor.
+	 *
+	 * @param string $game_id
+	 * @param int $id
+	 */
+	public function __construct(game $game, $id)
+	{
+		parent::__construct();
+		$this->game_id = $game->game_id;
+		$this->game = $game;
+		$this->id = $id;
+
+		if($id > 0)
+		{
+			if($this->get_achievement() == 0)
+			{
+				$data = $this->Call_Achievement_API();
+				$this->insert_achievement($data);
+			}
+		}
+	}
+
+	/**
+	 * call achievement endpoint
+	 * @return array|bool
+	 */
+	private function Call_Achievement_API()
+	{
+		global $cache;
+		$data = array();
+		if (! $this->game->getArmoryEnabled())
+		{
+			return false;
+		}
+
+		$api  = new battlenet('achievement',$this->game->getRegion(), $this->game->getApikey(),
+			$this->game->get_apilocale(), $this->game->get_privkey(), $this->ext_path, $cache);
+		$data = $api->achievement->getAchievementDetail($this->id);
+		$data = $data['response'];
+		unset($api);
+		if (!isset($data))
+		{
+			return false;
+		}
+
+		//if we get error code
+		if (isset($data['code']))
+		{
+			return false;
+		}
+
+		if (isset($data['status']))
+		{
+			return false;
+		}
+
+		return $data;
+	}
 
 	/**
 	 * get achievement from local database
+	 *
+	 * @return int
 	 */
-	public function get()
+	public function get_achievement()
 	{
 		global $db;
-		$sql = 'SELECT id, game_id, title, points, description, reward, rewarditems, icon, criteria, factionid
+		$i=0;
+		$sql = 'SELECT id, game_id, title, points, description, reward, rewarditems, icon, factionid, criteria
     			FROM ' . ACHIEVEMENT_TABLE . '
     			WHERE id = ' . (int) $this->id . " and game_id = '" . $this->game_id . "'";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$this->title = $row['titletitle'];
+			$i=1;
+			$this->title = $row['title'];
 			$this->points    = $row['points'];
 			$this->description    = $row['description'];
 			$this->reward    = $row['reward'];
@@ -320,7 +378,44 @@ class achievement
 			$this->factionId    = $row['factionid'];
 		}
 		$db->sql_freeresult($result);
+		return $i;
 	}
+
+	/**
+	 * Insert an achievement into local database
+	 *
+	 * @param array $data
+	 */
+	private function insert_achievement(array $data)
+	{
+		global $db;
+		$this->id = isset($data['id']) ? $data['id'] : 0;
+		$this->game_id = 'wow';
+		$this->title = isset($data['title']) ? $data['title']: '';
+		$this->points = isset($data['points']) ? $data['points']: 0;
+		$this->description = isset($data['description']) ? $data['description']: '';
+		$this->reward = isset($data['reward']) ? $data['reward']: '';
+		$this->rewardItems = isset($data['rewardItems']) ? json_encode($data['rewardItems']): '';
+		$this->icon = isset($data['icon']) ? $data['icon']: '';
+		$this->criteria = isset($data['criteria']) ? json_encode($data['criteria']): '';
+		$this->factionId = isset($data['factionId']) ? $data['factionId']: '';
+
+		$sql_ary = array(
+				'id'            => $this->id,
+				'game_id'          => $this->game_id,
+				'title'         => $this->title,
+				'points'        => $this->points,
+				'description'   => $this->description,
+				'reward'        => $this->reward,
+				'rewarditems'   => $this->rewardItems,
+				'criteria'      => $this->criteria,
+				'factionid'     => $this->factionId,
+		);
+
+		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+
+	}
+
 
 	/**
 	 * get tracked achievements from local database
@@ -360,90 +455,6 @@ class achievement
 		return $achievementlist;
 	}
 
-	/**
-	 * call achievement endpoint
-	 *
-	 * @param game $game
-	 * @param $ext_path
-	 * @param $cache
-	 * @return bool
-	 * @internal param $params
-	 */
-	public function Call_Achievement_API(game $game, $ext_path, $cache)
-	{
-		global $user;
-		$data= 0;
-		if (! $game->getArmoryEnabled())
-		{
-			return false;
-		}
 
-		$api  = new battlenet('achievement',$game->getRegion(), $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $ext_path, $cache);
-		$data = $api->achievement->getAchievementDetail($this->id);
-		$data = $data['response'];
-		unset($api);
-		if (!isset($data))
-		{
-			return false;
-		}
-
-		//if we get error code
-		if (isset($data['code']))
-		{
-			return false;
-		}
-
-		if (isset($data['status']))
-		{
-			return false;
-		}
-
-	}
-
-	/**
-	 * fetch Battlenet achievement api endpoint and insert
-	 *
-	 * @param array $data
-	 * @param       $params
-	 */
-	public function update_achievement_battleNet(array $data, $params)
-	{
-		global $db;
-
-		$this->id = isset($data['id']) ? $data['id'] : 0;
-		$this->title = isset($data['title']) ? $data['title']: '';
-		$this->points = isset($data['points']) ? $data['points']: 0;
-		$this->description = isset($data['description']) ? $data['description']: '';
-		$this->reward = isset($data['reward']) ? $data['reward']: '';
-		$this->factionId = isset($data['factionId']) ? $data['factionId']: '';
-
-		$query = $db->sql_build_array(
-			'INSERT', array(
-				'guild_id'          => $this->guild_id,
-				'player_id'         => $this->player_id,
-				'achievement_id'    => $this->id,
-				//'achievements_completed'  => $this->a,
-				'criteria'           => $this->criteria,
-				'criteria_quantity'  => $this->armoryresult,
-				'criteria_timestamp' => $this->playercount,
-			)
-		);
-		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-
-		$query = $db->sql_build_array(
-			'INSERT', array(
-				'id'        => $this->id,
-				'game_id'   => $this->game_id,
-				'title'     => $this->title,
-				'points'    => $this->points,
-				'description' => $this->description,
-				'reward'    => $this->reward,
-				'rewarditems' => $this->rewardItems,
-				'icon'        => $this->icon,
-				'criteria'    => $this->criteria,
-				'factionid'   => $this->factionId,
-			)
-		);
-	}
 
 }

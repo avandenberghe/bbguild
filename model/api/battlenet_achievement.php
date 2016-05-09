@@ -35,11 +35,9 @@ class battlenet_achievement extends battlenet_resource
 	public function getAchievementDetail($id)
 	{
 		global $user;
-
+		https://us.api.battle.net/wow/achievement/2860?locale=en_US&apikey=<key>
 		$data = $this->consume(
-			'status', array(
-				'data' => 'achievement/'.$id
-			)
+			$id, array('*')
 		);
 		return $data;
 	}

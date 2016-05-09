@@ -737,26 +737,16 @@ class guilds extends admin
 	}
 
 	/**
-	 * @param $guildachievements
-	 */
-	public function setGuildAchievements($guildachievements)
-	{
-		if ($this->armoryresult == 'KO')
-		{
-			$this->guildachievements = array();
-		}
-		else
-		{
-			$this->guildachievements = (array) $guildachievements;
-		}
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getGuildAchievements()
 	{
-		return $this->guildachievements;
+		if($this->get_achievements() == 0)
+		{
+			$this->set_achievements();
+		}
+
+		return $this->guildachievements();
 	}
 
 	/**
@@ -779,6 +769,167 @@ class guilds extends admin
 			1 => $user->lang['OPEN']);
 
 	}
+
+	/**
+	 * call guild endpoint
+	 *
+	 * @param  $params
+	 * @return bool
+	 */
+	public function Call_Guild_API($params)
+	{
+		global $user, $cache;
+		$data= 0;
+		$game          = new game;
+		$game->game_id = $this->game_id;
+		$game->get_game();
+
+		if ( (!$game->getArmoryEnabled()) || trim($game->getApikey()) == '' || trim($game->get_apilocale()) == '')
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		//is this guild armory-enabled ?
+		if ($this->armory_enabled == 0)
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		//available extra fields for guild endpoint : 'members', 'achievements','news'
+		$api  = new battlenet('guild', $this->region, $game->getApikey(),
+			$game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
+		$data = $api->guild->getGuild($this->name, $this->realm, $params);
+		$data = $data['response'];
+		unset($api);
+		if (!isset($data))
+		{
+			$this->armoryresult = 'KO';
+			$log_action         = array(
+				'header'       => 'L_ERROR_ARMORY_DOWN',
+				'L_UPDATED_BY' => $user->data['username'],
+				'L_GUILD'      => $this->name . '-' . $this->realm,
+			);
+			$this->log_insert(
+				array(
+					'log_type'   => $log_action['header'],
+					'log_action' => $log_action,
+					'log_result' => 'L_ERROR'
+				)
+			);
+			return false;
+		}
+
+		//if we get error code
+		if (isset($data['code']))
+		{
+			if ($data['code'] == '403')
+			{
+				// even if we have active API account, it may be that Blizzard account is inactive
+				$this->armoryresult = 'KO';
+				$this->armory_enabled = false;
+				$log_action         = array(
+					'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
+					'L_UPDATED_BY' => $user->data['username'],
+					'L_GUILD'      => $this->name . '-' . $this->realm,
+				);
+				$this->log_insert(
+					array(
+						'log_type'   => $log_action['header'],
+						'log_action' => $log_action,
+						'log_result' => 'L_ERROR'
+					)
+				);
+				return false;
+			}
+		}
+
+		if (!is_array($data))
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		if (isset($data['status']))
+		{
+			$this->armoryresult = 'KO';
+			return false;
+		}
+
+		$this->armoryresult = 'OK';
+
+		return $data;
+	}
+
+	/**
+	 * fetch Battlenet Guild api endpoint and update the guild object
+	 *
+	 * @param array $data
+	 * @param       $params
+	 */
+	public function update_guild_battleNet(array $data, $params)
+	{
+		global $db;
+
+		if ($this->armoryresult == 'KO')
+		{
+			return;
+		}
+
+		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
+		$this->level = isset($data['level']) ? $data['level']: 0;
+		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
+
+		if ($data['side'] == 0)
+		{
+			$this->faction = isset($data['side']) ? (1) : '';
+		} else
+		{
+			$this->faction = isset($data['side']) ? (2) : '';
+		} // bbguild wants Alliance 1 and Horde 2
+
+		$this->guildarmoryurl = '';
+		if (isset($data['name']))
+		{
+			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+		}
+
+		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
+
+		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(): '';
+		if (isset($data['members']))
+		{
+			$this->playercount = count($data['members']);
+		}
+
+		$query = $db->sql_build_array(
+			'UPDATE', array(
+				'achievementpoints' => $this->achievementpoints,
+				'level'             => $this->level,
+				'guildarmoryurl'    => $this->guildarmoryurl,
+				'emblemurl'         => $this->emblempath,
+				'battlegroup'       => $this->battlegroup,
+				'armoryresult'      => $this->armoryresult,
+				'players'           => $this->playercount,
+				'faction'           => $this->faction,
+			)
+		);
+
+		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+		if (in_array('members', $params, true))
+		{
+			$this->playerdata = $data['members'];
+			// update ranks table
+			$rank = new ranks($this->guildid);
+			$rank->WoWRankFix($this->playerdata, $this->guildid);
+			//update player table
+			$mb = new player();
+			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
+		}
+
+	}
+
 
 	/**
 	 * inserts a new guild to database
@@ -1181,7 +1332,6 @@ class guilds extends admin
 		return $haystack;
 	}
 
-
 	/**
 	 * gets a guild from database
 	 * used in sidebar
@@ -1328,7 +1478,6 @@ class guilds extends admin
 	 */
 	public function class_distribution()
 	{
-
 		global $config, $db;
 
 		$sql = 'SELECT c.class_id, ';
@@ -1456,165 +1605,77 @@ class guilds extends admin
 		return $guild;
 	}
 
+	/**
+	 * get achievements from db
+	 * @return int
+	 */
+	private function get_achievements()
+	{
+		global $db;
+		$i=0;
+		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed, criteria, criteria_quantity, criteria_timestamp
+    			FROM ' . ACHIEVEMENT_TRACK_TABLE. '
+    			WHERE guild_id = ' . (int) $this->guildid ;
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$i=1;
+			$this->guildachievements[] = array (
+				'guild_id' => $row['guild_id'] ,
+				'player_id' => $row['player_id'] ,
+				'achievement_id' => $row['achievement_id'],
+				'achievements_completed' => $row['achievements_completed'],
+				'criteria' => $row['criteria'],
+				'criteria_quantity' => $row['criteria_quantity'],
+				'criteria_timestamp' => $row['criteria_timestamp']
+			);
+		}
+		$db->sql_freeresult($result);
+
+		// @todo add check if achievements are old
+		return $i;
+	}
 
 	/**
-	 * call guild endpoint
-	 *
-	 * @param  $params
-	 * @return bool
+	 * call API and set set achievment tracked
 	 */
-	public function Call_Guild_API($params)
+	private function set_achievements()
 	{
-		global $user, $cache;
-		$data= 0;
+		global $db;
+		$i=0;
+
+		$data = $this->Call_Guild_API(array('achievements'));
+		if ($data['achievements'])
+		{
+			$this->guildachievements = (array) $data['achievements'];
+		}
+
+		$achievements = array();
+
 		$game          = new game;
 		$game->game_id = $this->game_id;
 		$game->get_game();
 
-		if ( (!$game->getArmoryEnabled()) || trim($game->getApikey()) == '' || trim($game->get_apilocale()) == '')
+		foreach ($this->guildachievements as $achi)
 		{
-			$this->armoryresult = 'KO';
-			return false;
-		}
-
-		//is this guild armory-enabled ?
-		if ($this->armory_enabled == 0)
-		{
-			$this->armoryresult = 'KO';
-			return false;
-		}
-
-		//available extra fields for guild endpoint : 'members', 'achievements','news'
-		$api  = new battlenet('guild', $this->region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
-		$data = $api->guild->getGuild($this->name, $this->realm, $params);
-		$data = $data['response'];
-		unset($api);
-		if (!isset($data))
-		{
-			$this->armoryresult = 'KO';
-			$log_action         = array(
-				'header'       => 'L_ERROR_ARMORY_DOWN',
-				'L_UPDATED_BY' => $user->data['username'],
-				'L_GUILD'      => $this->name . '-' . $this->realm,
+			$i += 1;
+			$achievement[$i]['id']=$achi['achievementsCompleted'][$i];
+			$achievement[$i]['timestamp']= $achi['achievementsCompletedTimestamp'][$i];
+			$achievement[$i]['url'] =  $this->guildarmoryurl ."achievement#".$achi['achievementsCompleted'][$i];
+			$achievement[$i]['criteria'] = $achi['criteria'][$i];
+			$achievement[$i]['criteriaCreated'] = $achi['criteriaCreated'][$i];
+			$achievement[$i]['criteriaQuantity'] = $achi['criteriaQuantity'][$i];
+			$sql_ary = array(
+				'guild_id' => $this->guildid,
+				'player_id' => 0,
+				'achievement_id' => $achievement[$i]['id'],
+				'achievements_completed' => $achievement[$i]['timestamp'],
+				'criteria' => $achievement[$i]['criteria'],
+				'criteria_quantity' => $achievement[$i]['criteriaQuantity'],
+				'criteria_timestamp' => $achievement[$i]['criteriaCreated']
 			);
-			$this->log_insert(
-				array(
-					'log_type'   => $log_action['header'],
-					'log_action' => $log_action,
-					'log_result' => 'L_ERROR'
-				)
-			);
-			return false;
+			$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TRACK_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
 		}
-
-		//if we get error code
-		if (isset($data['code']))
-		{
-			if ($data['code'] == '403')
-			{
-				// even if we have active API account, it may be that Blizzard account is inactive
-				$this->armoryresult = 'KO';
-				$this->armory_enabled = false;
-				$log_action         = array(
-					'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
-					'L_UPDATED_BY' => $user->data['username'],
-					'L_GUILD'      => $this->name . '-' . $this->realm,
-				);
-				$this->log_insert(
-					array(
-						'log_type'   => $log_action['header'],
-						'log_action' => $log_action,
-						'log_result' => 'L_ERROR'
-					)
-				);
-				return false;
-			}
-		}
-
-
-		if (!is_array($data))
-		{
-			$this->armoryresult = 'KO';
-			return false;
-		}
-
-		if (isset($data['status']))
-		{
-			$this->armoryresult = 'KO';
-			return false;
-		}
-
-		$this->armoryresult = 'OK';
-
-		return $data;
-	}
-
-	/**
-	 * fetch Battlenet Guild api endpoint and update the guild object
-	 *
-	 * @param array $data
-	 * @param       $params
-	 */
-	public function update_guild_battleNet(array $data, $params)
-	{
-		global $db;
-
-		if ($this->armoryresult == 'KO')
-		{
-			return;
-		}
-
-		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
-		$this->level = isset($data['level']) ? $data['level']: 0;
-		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-
-		if ($data['side'] == 0)
-		{
-			$this->faction = isset($data['side']) ? (1) : '';
-		} else
-		{
-			$this->faction = isset($data['side']) ? (2) : '';
-		} // bbguild wants Alliance 1 and Horde 2
-
-		$this->guildarmoryurl = '';
-		if (isset($data['name']))
-		{
-			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
-		}
-
-		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-
-		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(): '';
-		if (isset($data['members']))
-		{
-			$this->playercount = count($data['members']);
-		}
-
-		$query = $db->sql_build_array(
-			'UPDATE', array(
-				'achievementpoints' => $this->achievementpoints,
-				'level'             => $this->level,
-				'guildarmoryurl'    => $this->guildarmoryurl,
-				'emblemurl'         => $this->emblempath,
-				'battlegroup'       => $this->battlegroup,
-				'armoryresult'      => $this->armoryresult,
-				'players'           => $this->playercount,
-				'faction'           => $this->faction,
-			)
-		);
-
-		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-		if (in_array('members', $params, true))
-		{
-			$this->playerdata = $data['members'];
-			// update ranks table
-			$rank = new ranks($this->guildid);
-			$rank->WoWRankFix($this->playerdata, $this->guildid);
-			//update player table
-			$mb = new player();
-			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
-		}
-
 	}
 
 }
