@@ -114,7 +114,8 @@
                 <td style="text-align:center;"><input type="checkbox" class="radio" name="activate_id[{players_row.ID}]" value="{players_row.ID}" {players_row.STATUS} /></td>
 
                 <td style="text-align:center;">{players_row.ID}</td>
-                <td class="row2" style="text-align:left;" ><a style="color:{players_row.COLORCODE}"  href="{players_row.U_VIEW_PLAYER}"><strong>{players_row.NAME}</strong></a></td>
+                <td class="row2" style="text-align:left; background-color: {players_row.COLORCODE}" >
+                    <a href="{players_row.U_VIEW_PLAYER}"><strong>{players_row.NAME}</strong></a></td>
                 <td style="text-align:left;" ><!-- IF players_row.S_RACE_IMAGE_EXISTS --><img src="{players_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF players_row.S_CLASS_IMAGE_EXISTS --><img src="{players_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{players_row.COLORCODE}" >{players_row.CLASS}</span></td>
                 <td style="text-align:center;" >{players_row.LEVEL}</td>
                 <td style="text-align:left;" ><a href="{players_row.U_VIEW_USER}">{players_row.USERNAME}</a></td>
