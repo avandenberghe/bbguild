@@ -88,7 +88,7 @@ class recruit_module extends admin
 
 		parent::__construct();
 		$this->tpl_name = 'dkp/acp_' . $mode;
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
 
@@ -119,11 +119,11 @@ class recruit_module extends admin
 			array(
 				'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
 				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\recruit_module&amp;mode=editrecruit'),
-				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=editrecruit'),
+				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=listguilds'),
 			)
 		);
 

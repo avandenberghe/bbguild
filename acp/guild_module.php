@@ -93,7 +93,7 @@ class guild_module extends admin
 
 		$this->tpl_name   = 'acp_'.$mode;
 		$this->link       = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx",
-				'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
+				'i=-bbdkp-bbguild-acp-guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
 		$this->page_title = 'ACP_LISTGUILDS';
 
 		if (! $this->auth->acl_get('a_bbguild'))
@@ -193,7 +193,7 @@ class guild_module extends admin
 				$updateguild  = new guilds($this->url_id);
 				if ($this->request->is_set_post('playeradd'))
 				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\mm_module&amp;mode=addplayer&amp;'.URI_GUILD. '=' .$this->url_id));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-mm_module&amp;mode=addplayer&amp;'.URI_GUILD. '=' .$this->url_id));
 				}
 
 				$action = $this->request->variable('action', '');
@@ -203,7 +203,7 @@ class guild_module extends admin
 						$updaterank = $this->request->is_set_post('updaterank');
 						$deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
 						$addrank    = $this->request->is_set_post('addrank');
-						$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.
+						$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.
 								$updateguild->getGuildid()).'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
 
 						if (($updaterank || $addrank) && (!check_form_key('bbdkp/bbguild')))
@@ -240,7 +240,7 @@ class guild_module extends admin
 						$submit        = $this->request->is_set_post('updateguild');
 						$delete        = $this->request->is_set_post('deleteguild');
 						$updatearmory  = $this->request->is_set_post('armory');
-						$this->link    = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildedit&amp;'.URI_GUILD.'='.
+						$this->link    = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildedit&amp;'.URI_GUILD.'='.
 								$updateguild->getGuildid()).'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
 						// POST check
 						if ($submit)
@@ -607,9 +607,9 @@ class guild_module extends admin
 				'MSG_NAME_EMPTY'          => $this->user->lang['FV_REQUIRED_NAME'],
 				'EMBLEM'                  => $updateguild->getEmblempath(),
 				'EMBLEMFILE'              => basename($updateguild->getEmblempath()),
-				'U_EDIT_GUILD'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
-				'U_EDIT_GUILDRANKS'       => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
-				'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILD'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILDRANKS'       => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
 				'F_ENABLGAMEEARMORY'      => $game->getArmoryEnabled()
 			)
 		);
@@ -656,7 +656,7 @@ class guild_module extends admin
 					'RANK_SUFFIX'   => $suffix,
 					'HIDE_CHECKED'  => ($row['rank_hide'] == 1) ? 'checked="checked"' : '',
 					'S_READONLY'    => $row['rank_id'] >= 90,
-					'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete='.$row['rank_id']. '&amp;' .URI_GUILD. '=' .$updateguild->getGuildid()),
+					'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete='.$row['rank_id']. '&amp;' .URI_GUILD. '=' .$updateguild->getGuildid()),
 				)
 			);
 		}
@@ -676,7 +676,7 @@ class guild_module extends admin
 				'GAME_ID'                 => $updateguild->getGameId(),
 				'GUILDID'                 => $updateguild->getGuildid(),
 				'GUILD_NAME'              => $updateguild->getName(),
-				'U_ADD_RANK'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;addrank=1&amp;guild='.$updateguild->getGuildid()),
+				'U_ADD_RANK'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;addrank=1&amp;guild='.$updateguild->getGuildid()),
 				// Language
 				'L_TITLE'                 => ($this->url_id < 0) ? $this->user->lang['ACP_ADDGUILD'] : $this->user->lang['ACP_EDITGUILD'],
 				'L_EXPLAIN'               => ($this->url_id < 0) ? $this->user->lang['ACP_ADDGUILD_EXPLAIN'] : $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
@@ -687,9 +687,9 @@ class guild_module extends admin
 				'EMBLEMFILE'              => basename($updateguild->getEmblempath()),
 				// only filename
 				'S_ADD'                   => $this->url_id < 0,
-				'U_EDIT_GUILD'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=editguild&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
-				'U_EDIT_GUILDRANKS'       => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
-				'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILD'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILDRANKS'       => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
+				'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;'.URI_GUILD.'='.$updateguild->getGuildid()),
 			)
 		);
 
@@ -732,7 +732,7 @@ class guild_module extends admin
 		$guildadd = $this->request->is_set_post('addguild');
 		if ($guildadd)
 		{
-			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=addguild'));
+			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=addguild'));
 		}
 
 		$sort_order      = array(
@@ -782,16 +782,16 @@ class guild_module extends admin
 					'GAME'         => $listguild->getGameId(),
 					'PLAYERCOUNT'  => $listguild->getPlayercount(),
 					'SHOW_ROSTER'  => $listguild->getShowroster() == 1 ? 'yes' : 'no',
-					'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=editguild&amp;'.URI_GUILD.'='.$listguild->getGuildid()),
+					'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;'.URI_GUILD.'='.$listguild->getGuildid()),
 				)
 			);
 		}
 
 		$this->template->assign_vars(
 			array(
-				'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module').'&amp;mode=listguilds',
-				'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module').'&amp;mode=addguild',
-				'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module').'&amp;mode=editguild',
+				'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module').'&amp;mode=listguilds',
+				'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module').'&amp;mode=addguild',
+				'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module').'&amp;mode=editguild',
 				'L_TITLE'                => $this->user->lang['ACP_LISTGUILDS'],
 				'L_EXPLAIN'              => $this->user->lang['ACP_LISTGUILDS_EXPLAIN'],
 				'BUTTON_VALUE'           => $this->user->lang['DELETE_SELECTED_GUILDS'],
@@ -800,7 +800,7 @@ class guild_module extends admin
 				'O_REALM'                => $current_order['uri'][2],
 				'O_REGION'               => $current_order['uri'][3],
 				'O_ROSTER'               => $current_order['uri'][4],
-				'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\guild_module&amp;mode=listguilds'),
+				'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=listguilds'),
 				'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count),
 			)
 		);

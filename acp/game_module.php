@@ -110,7 +110,7 @@ class game_module extends admin
 		{
 			case 'listgames' :
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
 
 				//game dropdown
 				$newpresetgame = $this->request->is_set_post('addgame1');
@@ -240,7 +240,7 @@ class game_module extends admin
 							'ID' => $game['id'] ,
 							'NAME' => $game['name'] ,
 							'GAME_ID' => $game['game_id'] ,
-							'U_VIEW_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . '=' . $game['game_id']),
+							'U_VIEW_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . '=' . $game['game_id']),
 							'STATUS' => $game['status'],
 						)
 					);
@@ -249,7 +249,7 @@ class game_module extends admin
 				$this->template->assign_vars(
 					array (
 						'S_INSTALLED' => count($installed) > 0 ? true: false,
-						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
+						'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') ,
 						'CANINSTALL' => ($can_install_count == 0) ? false : true,
 						'O_ID' => $current_order['uri'][0] ,
 						'O_GAMEID' => $current_order['uri'][1] ,
@@ -271,7 +271,7 @@ class game_module extends admin
 				$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
 				$editgame->get_game();
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' .
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' .
 					$this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
 
 				$gamereset = $this->request->is_set_post('gamereset');
@@ -280,7 +280,7 @@ class game_module extends admin
 
 				$this->template->assign_vars(
 					array (
-						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames') ,
+						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') ,
 					)
 				);
 
@@ -294,7 +294,7 @@ class game_module extends admin
 				{
 					$editgame = $this->SaveGameSettings();
 					$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
-					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
+					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
 					trigger_error($success_message . $this->link, E_USER_NOTICE);
 
 				}
@@ -529,7 +529,7 @@ class game_module extends admin
 			$editgame->get_game();
 			$editgame->delete_game();
 			$editgame->install_game();
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=listgames'));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames'));
 			trigger_error(sprintf($this->user->lang['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
 		}
 		else
@@ -625,7 +625,7 @@ class game_module extends admin
 				'log_action' => $log_action)
 		);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$role->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$role->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_ADD_ROLE_SUCCESS'], $role->rolename), E_USER_NOTICE);
 	}
 
@@ -667,7 +667,7 @@ class game_module extends admin
 				'log_action' => $log_action)
 		);
 
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newrole->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newrole->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_ROLE_SUCCESS'], $newrole->rolename), E_USER_NOTICE);
 
 	}
@@ -699,7 +699,7 @@ class game_module extends admin
 					'log_action' => $log_action)
 			);
 
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterole->game_id}"));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterole->game_id}"));
 
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_ROLE_SUCCESS'], $deleterole->rolename) . $this->link, E_USER_WARNING);
 
@@ -752,7 +752,7 @@ class game_module extends admin
 				'log_result' => 'L_SUCCESS',
 				'log_action' => $log_action)
 		);
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
 
 		trigger_error(sprintf($this->user->lang['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
 	}
@@ -801,7 +801,7 @@ class game_module extends admin
 					'log_result' => 'L_SUCCESS',
 					'log_action' => $log_action)
 			);
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_FACTION_SUCCESS'], $faction->game_id, $faction->faction_name) . $this->link, E_USER_WARNING);
 
 		}
@@ -844,7 +844,7 @@ class game_module extends admin
 		$newclass->heal       = '';
 		$newclass->tank       = '';
 		$newclass->make_class();
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_ADD_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
 	}
 
@@ -877,7 +877,7 @@ class game_module extends admin
 		$newclass->heal       = '';
 		$newclass->tank       = '';
 		$newclass->update_class($oldclass);
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
 	}
 
@@ -897,7 +897,7 @@ class game_module extends admin
 			$deleteclass->game_id  = $this->request->variable('hidden_game_id', '');
 			$deleteclass->get_class();
 			$deleteclass->delete_class();
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleteclass->game_id}"));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleteclass->game_id}"));
 			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $deleteclass->classname) . $this->link, E_USER_WARNING);
 		} else
 		{
@@ -952,7 +952,7 @@ class game_module extends admin
 				'log_result' => 'L_SUCCESS',
 				'log_action' => $log_action)
 		);
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
 	}
 
@@ -982,7 +982,7 @@ class game_module extends admin
 				'log_result' => 'L_SUCCESS',
 				'log_action' => $log_action)
 		);
-		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
+		meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
 		trigger_error(sprintf($this->user->lang['ADMIN_ADD_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
 	}
 
@@ -1016,7 +1016,7 @@ class game_module extends admin
 					'log_action' => $log_action)
 			);
 			$success_message = sprintf($this->user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->game_id, $deleterace->race_name);
-			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterace->game_id}"));
+			meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterace->game_id}"));
 			trigger_error($success_message . $this->link, E_USER_WARNING);
 
 		}
@@ -1071,7 +1071,7 @@ class game_module extends admin
 				'GAME_NAME'             => $editgame->getName(),
 				'S_FACTIONLIST_OPTIONS' => $s_faction_options,
 				'S_ADD'                 => true,
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addrace'),
+				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
 				'LA_ALERT_AJAX' => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
 				'UA_FINDFACTION' => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
@@ -1151,7 +1151,7 @@ class game_module extends admin
 				'LA_ALERT_AJAX' => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
 				'UA_FINDFACTION' => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addrace'),
+				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($races);
@@ -1220,7 +1220,7 @@ class game_module extends admin
 				'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png' : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
 				'S_ADD'                => false,
-				'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addclass'),
+				'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
 				'MSG_NAME_EMPTY'       => $this->user->lang['FV_REQUIRED_NAME'],
 				'MSG_ID_EMPTY'         => $this->user->lang['FV_REQUIRED_ID'])
 		);
@@ -1253,7 +1253,7 @@ class game_module extends admin
 				'S_ARMOR_OPTIONS' => $s_armor_options,
 				'S_ADD'           => true,
 				'COLORCODE'       => '#EE8611',
-				'U_ACTION'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addclass'),
+				'U_ACTION'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
 				'MSG_NAME_EMPTY'  => $this->user->lang['FV_REQUIRED_NAME'],
 				'MSG_ID_EMPTY'    => $this->user->lang['FV_REQUIRED_ID'])
 		);
@@ -1282,7 +1282,7 @@ class game_module extends admin
 				'GAME_ID'               => $faction->game_id,
 				'GAME_NAME'             => $editgame->getName(),
 				'IS_ADD'                => $faction->faction_id == 0 ? true : false,
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addfaction'),
+				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addfaction'),
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($races);
@@ -1321,7 +1321,7 @@ class game_module extends admin
 				'GAME_ID'            => $role->game_id,
 				'GAME_NAME'          => $editgame->getName(),
 				'IS_ADD'             => $add,
-				'U_ACTION'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
+				'U_ACTION'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
 				'MSG_NAME_EMPTY'     => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($role);
@@ -1391,11 +1391,11 @@ class game_module extends admin
 					'FACTIONNAME' => $faction['faction_name'],
 					'U_DELETE' => append_sid(
 						"{$phpbb_admin_path}index.$phpEx",
-						'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;action=deletefaction&amp;id=' . $faction['f_index'] . '&amp;' . URI_GAME . '=' . $editgame->game_id
+						'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;action=deletefaction&amp;id=' . $faction['f_index'] . '&amp;' . URI_GAME . '=' . $editgame->game_id
 					),
 					'U_EDIT' => append_sid(
 						"{$phpbb_admin_path}index.$phpEx",
-						'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;action=editfaction&amp;id=' . $faction['f_index'] . '&amp;' . URI_GAME . '=' . $editgame->game_id
+						'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;action=editfaction&amp;id=' . $faction['f_index'] . '&amp;' . URI_GAME . '=' . $editgame->game_id
 					),
 				)
 			);
@@ -1426,7 +1426,7 @@ class game_module extends admin
 					'RACE_IMAGE_F' => (strlen($race['image_female']) > 1) ? $this->ext_path . 'images/race_images/' . $race['image_female'] . '.png' : '',
 					'S_RACE_IMAGE_M_EXISTS' => (strlen($race['image_male']) > 1) ? true : false,
 					'S_RACE_IMAGE_F_EXISTS' => (strlen($race['image_female']) > 1) ? true : false,
-					'U_VIEW_RACE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addrace&amp;r=' . $race['race_id'] . '&amp;' . URI_GAME ."={$listraces->game_id}"),
+					'U_VIEW_RACE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace&amp;r=' . $race['race_id'] . '&amp;' . URI_GAME ."={$listraces->game_id}"),
 					'U_DELETE' =>  $this->u_action. "&amp;racedelete=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}",
 					'U_EDIT' =>  $this->u_action.   "&amp;raceedit=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}",
 				)
@@ -1495,9 +1495,9 @@ class game_module extends admin
 					'CLASSHIDE' => $class['class_hide'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen($class['imagename']) > 1) ? true : false,
 					'CLASSIMAGE' => (strlen($class['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $class['imagename'] . '.png' : '',
-					'U_VIEW_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=addclass&amp;r=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
-					'U_DELETE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;classdelete=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
-					'U_EDIT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;classedit=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id) )
+					'U_VIEW_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass&amp;r=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
+					'U_DELETE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;classdelete=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id),
+					'U_EDIT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;classedit=1&amp;id=' . $class['class_id'] . '&amp;game_id=' . $listclasses->game_id) )
 			);
 		}
 
@@ -1533,7 +1533,7 @@ class game_module extends admin
 				'O_CLASSARMOR' => $current_order2['uri'][3],
 				'O_CLASSMIN' => $current_order2['uri'][4],
 				'O_CLASSMAX' => $current_order2['uri'][5],
-				'U_ADD_GAMES' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\bbdkp\bbguild\acp\game_module&amp;mode=editgames&amp;'),
+				'U_ADD_GAMES' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;'),
 				'LISTFACTION_FOOTCOUNT' => sprintf($this->user->lang['LISTFACTION_FOOTCOUNT'], $total_factions),
 				'LISTRACE_FOOTCOUNT' => sprintf($this->user->lang['LISTRACE_FOOTCOUNT'], $total_races),
 				'LISTCLASS_FOOTCOUNT' => sprintf($this->user->lang['LISTCLASS_FOOTCOUNT'], $total_classes),
