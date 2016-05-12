@@ -1402,7 +1402,7 @@ class guilds extends admin
 		$sql_array = array(
 			'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as player_class, r.rank_id,
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
-								 c.colorcode , c.imagename, m.player_gender_id, a.image_female, a.image_male' ,
+								 c.colorcode , c.imagename, a.image_female, a.image_male' ,
 			'FROM' => array(
 				PLAYER_LIST_TABLE => 'm' ,
 				PLAYER_RANKS_TABLE => 'r' ,
