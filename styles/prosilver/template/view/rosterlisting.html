@@ -40,15 +40,6 @@
 			</div>
 		</div>
 
-
-		<!--
-        **************
-        list layout
-        **************
-        -->
-
-
-
 		<!-- IF .players_row -->
 		<div class="forumbg forumbg-table">
 			<div class="inner">
@@ -72,11 +63,7 @@
 						<!-- ENDIF -->
 					</tr>
 					</thead>
-					<tfoot>
-					<tr>
-						<th style="text-align: left; white-space: nowrap; color:white;" colspan="0">{LISTPLAYERS_FOOTCOUNT}</th>
-					</tr>
-					</tfoot>
+					<tbody>
 					<!-- BEGIN players_row -->
 					<tr class="<!-- IF players_row.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
 						<td style="text-align:left;">{players_row.PLAYER_ID}</td>
@@ -98,8 +85,13 @@
 						<td style="text-align: left;width: 15%">{players_row.ACHIEVPTS}</td>
 						<!-- ENDIF -->
 					</tr>
-
+					</tbody>
 					<!-- END players_row -->
+					<tfoot>
+					<tr>
+						<th style="text-align: left; white-space: nowrap; color:white;" colspan="0">{LISTPLAYERS_FOOTCOUNT}</th>
+					</tr>
+					</tfoot>
 				</table>
 
 				<span class="corners-bottom"><span></span></span>
