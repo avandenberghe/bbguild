@@ -1,33 +1,32 @@
 <!-- INCLUDE overall_header.html -->
-<!-- IF S_DISPLAY_ROSTERGRID -->
-<div id="bbguildwraphigh">
-<!-- ELSE IF S_DISPLAY_ROSTERLISTING -->
-<div id="bbguildwraphigh">
-<!-- ELSE IF S_DISPLAY_WELCOME -->
-<div id="bbguildwraplow">
-<!-- ELSE IF S_DISPLAY_WOWACHIEVEMENTS -->
-<div id="bbguildwraphigh">
-<!-- ENDIF -->
-    <div class="profile-sidebar-anchor">
-    <!-- INCLUDE sidemenu.html -->
+<div class="bbguildouter">
+    <div id="bbguildwelcome">
+
+     <div class="profile-sidebar-anchor">
+            <!-- INCLUDE sidemenu.html -->
+        </div>
+
+        <div class="profile-contents">
+            <!-- IF S_ERROR -->
+            <h2>{ERROR_MESSAGE}</h2>
+            <!-- ENDIF -->
+
+            <!-- IF S_DISPLAY_ROSTERGRID -->
+            <!-- INCLUDE view/rostergrid.html -->
+            <!-- ENDIF -->
+            <!-- IF S_DISPLAY_ROSTERLISTING -->
+            <!-- INCLUDE view/rosterlisting.html -->
+            <!-- ENDIF -->
+
+            <!-- IF S_DISPLAY_WELCOME -->
+            <!-- INCLUDE view/welcome.html -->
+            <!-- ENDIF -->
+
+            <!-- IF S_DISPLAY_WOWACHIEVEMENTS -->
+            <!-- INCLUDE view/achievements.html -->
+            <!-- ENDIF -->
+        </div>
+        <span class="clear"></span>
     </div>
-    <div class="profile-contents">
-        <!-- IF S_ERROR -->
-        <h2>{ERROR_MESSAGE}</h2>
-        <!-- ENDIF -->
-        <!-- IF S_DISPLAY_ROSTERGRID -->
-        <!-- INCLUDE view/rostergrid.html -->
-        <!-- ENDIF -->
-        <!-- IF S_DISPLAY_ROSTERLISTING -->
-        <!-- INCLUDE view/rosterlisting.html -->
-        <!-- ENDIF -->
-        <!-- IF S_DISPLAY_WELCOME -->
-        <!-- INCLUDE view/welcome.html -->
-        <!-- ENDIF -->
-        <!-- IF S_DISPLAY_WOWACHIEVEMENTS -->
-        <!-- INCLUDE view/achievements.html -->
-        <!-- ENDIF -->
-    </div>
-    <span class="clear"></span>
 </div>
-<!-- INCLUDE overall_footer.html -->
+            <!-- INCLUDE overall_footer.html -->

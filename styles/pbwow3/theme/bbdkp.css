@@ -1,23 +1,10 @@
 /* Custom CSS for bbGuild */
-
-/* sidebar page
---------------------------------------------- */
-.summary {
-    padding-top: 200px;
-}
-
-#bbguildwraplow
+.bbguildouter
 {
-    width: 100%;
-    color: #c09a67;
-    margin: 0 auto;
-    position: relative;
-    min-height: 600px;
-    clear: both;
     background: rgba(0, 0, 0, 0) url("./images/bg-alliance.jpg") no-repeat scroll left top;
 }
 
-#bbguildwraphigh
+#bbguildwelcome
 {
     width: 100%;
     color: #c09a67;
@@ -25,13 +12,15 @@
     position: relative;
     min-height: 600px;
     clear: both;
+    /* to do slice this image */
+
 }
 
 .roster {
-     padding-top: 15px;
-     margin-left: 5px;
-     min-height: 807px;
-     padding-bottom: 40px;
+    padding-top: 15px;
+    margin-left: 5px;
+    min-height: 807px;
+    padding-bottom: 40px;
 }
 
 .category, .subheader-3 {
@@ -245,13 +234,15 @@ ul.profile-sidebar-menu a .arrow {
 }
 
 .profile-section {
-    min-height: 723px;
-}
-
-.profile-section {
     /*background: rgba(0, 0, 0, 0) url("./images/section-bg.png") no-repeat scroll 0 0;*/
     min-height: 400px;
     padding: 15px;
+}
+
+
+.profile-section-sub {
+    min-height: 400px;
+    margin-left: -150px;
 }
 
 .profile-contents {
@@ -262,11 +253,29 @@ ul.profile-sidebar-menu a .arrow {
 
 /* welcome page */
 
-.profile-box-simple {
-    border-top: 2px solid #4a240f;
-    margin-top: 5px;
-    padding: 11px 0;
+.welcome-top {
+    padding-top: 200px;
+    margin: 0 0 8px;
+    overflow: auto;
+    position: relative;
 }
+
+.welcome-col1 {
+    display: inline-block;
+    margin: 0 4px 0 0;
+    min-height: 250px;
+    vertical-align: top;
+    width: calc(60% - 8px);
+}
+
+.welcome-col2 {
+    display: inline-block;
+    margin: 0 0 0 4px;
+    min-height: 250px;
+    vertical-align: top;
+    width: calc(40% - 7px);
+}
+
 
 .bbguild-activity-feed li {
     background-position: 5px 50%;
@@ -295,10 +304,10 @@ ul#bbguild-activity-feed li {
     border-top-color: #371b0d;
     border-top-style: solid;
     border-top-width: 1px;
-    padding-bottom: 9px;
+    padding-bottom: 5px;
     padding-left: 29px;
     padding-right: 0;
-    padding-top: 9px;
+    padding-top: 5px;
     position: relative;
     font-family: Verdana,Helvetica,Arial,sans-serif;
     font-size: 12px;
