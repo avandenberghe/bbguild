@@ -4,33 +4,35 @@
     </div>
 <div class="roster">
 
-    <div class="navbar" style="clear:both;">
-        <span class="corners-top"><span></span></span>
-        <form method="post" action="{F_PLAYERS}">
-            <input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
-            <div style="white-space:nowrap; text-align: right;">
-                <div style="text-align:right; white-space:nowrap; width:100%" >
-                    <select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();">
-                        <!-- BEGIN rosterlayout_row -->
-                        <option value="{rosterlayout_row.VALUE}"{rosterlayout_row.SELECTED}>{rosterlayout_row.OPTION}</option>
-                        <!-- END rosterlayout_row -->
-                    </select>
-                    <select name="filter" class="input" onchange="javascript:form.submit();">
-                        <!-- BEGIN filter_row -->
-                        <option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
-                        <!-- END filter_row -->
-                    </select>
+    <div class="action-bar top">
+        <form id="player_search" method="get" action="{F_PLAYERS}">
+
+            <div style="float:left; text-align:left; white-space:nowrap; padding-top: 4px;" >
+                <select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();"> 
+                    <!-- BEGIN rosterlayout_row --> 
+                    <option value="{rosterlayout_row.VALUE}"{rosterlayout_row.SELECTED}>{rosterlayout_row.OPTION}</option> 
+                    <!-- END rosterlayout_row --> 
+                </select> 
+                <select name="filter" class="input" onchange="javascript:form.submit();"> 
+                    <!-- BEGIN filter_row --> 
+                    <option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option> 
+                    <!-- END filter_row --> 
+                </select>
+            </div>
+
+            <div class="search-box" style="text-align:right; float:right; white-space:nowrap;" >
+                <fieldset>
+
+                    <input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
                     <input type="hidden" name="hidden_show" value="{SHOWALL}" />
-
-
-                    <label>&nbsp;&nbsp;{L_NAME}:</label>
-                    <input type="text" name="player_name" id="player_name" size="20" maxlength="30" value="{PLAYER_NAME}" class="input" />
-                    <input type="submit" name="submit_options" value="{L_FILTER}" class="button1" />
-                </div>
+                    <input type="search" name="player_name" id="player_name" size="20" maxlength="20" placeholder="Search playerbase…" value="{PLAYER_NAME}" class="inputbox search tiny" />
+                    <button type="submit" name="submit_options" title="{L_FILTER}" class="button icon-button search-icon" >{L_FILTER}</button>
+                </fieldset>
             </div>
         </form>
-        <span class="corners-bottom"><span></span></span>
     </div>
+
+
     <hr />
     <!-- BEGIN class -->
     <h2><img src="{class.CLASSIMG}" style="max-width:100px; max-height:100px;" alt="{class.CLASSNAME}"  />
