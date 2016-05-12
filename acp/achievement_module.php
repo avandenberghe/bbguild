@@ -13,6 +13,7 @@ namespace bbdkp\bbguild\acp;
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\games\rpg\achievement;
+use bbdkp\bbguild\model\games\game;
 
 /**
  * This class manages player general info
@@ -111,12 +112,6 @@ class achievement_module extends admin
 					break;
 				}
 
-				// batch delete
-				$del_batch = $this->request->is_set_post('delete');
-				if ($del_batch)
-				{
-					$this->achievement_batch_delete();
-				}
 
 				// guild dropdown query
 				$getguild_dropdown = $this->request->is_set_post('player_guild_id');
@@ -135,7 +130,18 @@ class achievement_module extends admin
 
 				$Guild->get_guild();
 
-				$this->achievement = new achievement($Guild->getGameId(),0);
+				$thisgame          = new game;
+				$thisgame->game_id = $Guild->getGameId();
+				$thisgame->get_game();
+
+				// batch delete
+				$del_batch = $this->request->is_set_post('delete');
+				if ($del_batch)
+				{
+					$this->achievement_batch_delete();
+				}
+
+				$this->achievement = new achievement($thisgame, 0);
 
 				// add achievement button redirect
 				$showadd = $this->request->is_set_post('achievementadd');
@@ -223,7 +229,6 @@ class achievement_module extends admin
 		global  $config, $phpbb_admin_path, $phpEx;
 
 		// fill popup and set selected to default selection
-
 		$guildlist = $Guild->guildlist(0);
 		foreach ($guildlist as $g)
 		{
@@ -236,7 +241,6 @@ class achievement_module extends admin
 		}
 
 		$previous_data = '';
-		//get window
 		$start    = $this->request->variable('start', 0, false);
 
 		$sort_order = array(
@@ -251,10 +255,11 @@ class achievement_module extends admin
 		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 		$show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
 
-		$result       = $Guild->list_players($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
-		$player_count = 0;
+		$result       = $Guild->getGuildAchievements();
 
-		while ($row = $this->db->sql_fetchrow($result))
+
+		/*
+		while ($this->db->sql_fetchrow($result))
 		{
 			$player_count += 1;
 		}
@@ -379,6 +384,7 @@ class achievement_module extends admin
 		);
 		$this->page_title = 'ACP_BBGUILD_PLAYER_LIST';
 
+		*/
 	}
 
 	/**

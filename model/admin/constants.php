@@ -41,8 +41,12 @@ define('MOTD_TABLE',                $table_prefix . 'bb_motd');
 define('BBRECRUIT_TABLE',          $table_prefix . 'bb_recruit');
 define('BB_GAMEROLE_TABLE',        $table_prefix . 'bb_gameroles');
 define('BBDKPPLUGINS_TABLE',       $table_prefix . 'bb_plugins');
-define('ACHIEVEMENT_TABLE',       $table_prefix . 'bb_achievement');
 define('ACHIEVEMENT_TRACK_TABLE',       $table_prefix . 'bb_achievement_track');
-define('ACHIEVEMENT_CRITERIA_TABLE',       $table_prefix . 'bb_achievement_criteria');
+define('ACHIEVEMENT_TABLE',       $table_prefix . 'bb_achievement');
 define('ACHIEVEMENT_REWARDS_TABLE',       $table_prefix . 'bb_achievement_rewards');
+define('CRITERIA_TRACK_TABLE',     $table_prefix . 'bb_criteria_track');
+define('ACHIEVEMENT_CRITERIA_TABLE',       $table_prefix . 'bb_achievement_criteria');
 define('BB_RELATIONS_TABLE',     $table_prefix . 'bb_relations_table');
+
+
+criteria_track_table

@@ -24,32 +24,18 @@ use bbdkp\bbguild\model\admin\admin;
 class achievement extends admin
 {
 	/**
+	 * achievement id
+	 *
+	 * @var int
+	 */
+	public $id;
+
+	/**
 	 * game id
 	 *
 	 * @var string
 	 */
 	public $game_id;
-
-	/**
-	 * guild if its a guild achievement
-	 *
-	 * @var string
-	 */
-	public $guild_id;
-
-	/**
-	 * player_id if its an individual achievement
-	 *
-	 * @var string
-	 */
-	public $player_id;
-
-	/**
-	 * achievement id
-	 *
-	 * @var int
-	 */
-	protected $id;
 
 	/**
 	 * title of achievement
@@ -73,20 +59,6 @@ class achievement extends admin
 	protected $description;
 
 	/**
-	 * reward (optional)
-	 *
-	 * @var string
-	 */
-	protected $reward;
-
-	/**
-	 * reward
-	 *
-	 * @var string
-	 */
-	protected $rewardItems;
-
-	/**
 	 * icon
 	 *
 	 * @var string
@@ -96,73 +68,63 @@ class achievement extends admin
 	/**
 	 * criteria
 	 *
+	 * @var int
+	 */
+	protected $factionId;
+
+	/** other tables **/
+	/**
+	 * guild if its a guild achievement
+	 *
 	 * @var string
 	 */
-	protected $criteria;
+	protected $guild_id;
+
+	/**
+	 * player_id if its an individual achievement
+	 *
+	 * @var string
+	 */
+	protected $player_id;
 
 	/**
 	 * criteria
 	 *
-	 * @var int
+	 * @var array
 	 */
-	protected $factionId;
+	protected $criteria;
+
+	/**
+	 * reward
+	 *
+	 * @var array
+	 */
+	protected $rewardItems;
+
+	/**************************/
 
 	/**
 	 * @type game
 	 */
 	private $game;
 
-	/**
-	 * @return array
-	 */
-	public function getCriteria()
-	{
-		return $this->criteria;
-	}
-
-	/**
-	 * @param array $criteria
-	 * @return achievement
-	 */
-	public function setCriteria($criteria)
-	{
-		$this->criteria = $criteria;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return $this->description;
-	}
-
-	/**
-	 * @param string $description
-	 * @return achievement
-	 */
-	public function setDescription($description)
-	{
-		$this->description = $description;
-		return $this;
-	}
+	/**************************/
 
 	/**
 	 * @return int
 	 */
-	public function getFactionId()
+	public function getId()
 	{
-		return $this->factionId;
+		return $this->id;
 	}
 
 	/**
-	 * @param int $factionId
+	 * @param int $id
 	 * @return achievement
 	 */
-	public function setFactionId($factionId)
+	public function setId($id)
 	{
-		$this->factionId = $factionId;
+		$this->id = $id;
 		return $this;
 	}
 
@@ -187,36 +149,18 @@ class achievement extends admin
 	/**
 	 * @return string
 	 */
-	public function getIcon()
+	public function getTitle()
 	{
-		return $this->icon;
+		return $this->title;
 	}
 
 	/**
-	 * @param string $icon
+	 * @param string $title
 	 * @return achievement
 	 */
-	public function setIcon($icon)
+	public function setTitle($title)
 	{
-		$this->icon = $icon;
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * @param int $id
-	 * @return achievement
-	 */
-	public function setId($id)
-	{
-		$this->id = $id;
+		$this->title = $title;
 		return $this;
 	}
 
@@ -238,23 +182,95 @@ class achievement extends admin
 		return $this;
 	}
 
+
 	/**
 	 * @return string
 	 */
-	public function getReward()
+	public function getDescription()
 	{
-		return $this->reward;
+		return $this->description;
 	}
 
 	/**
-	 * @param string $reward
+	 * @param string $description
 	 * @return achievement
 	 */
-	public function setReward($reward)
+	public function setDescription($description)
 	{
-		$this->reward = $reward;
+		$this->description = $description;
 		return $this;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getIcon()
+	{
+		return $this->icon;
+	}
+
+	/**
+	 * @param string $icon
+	 * @return achievement
+	 */
+	public function setIcon($icon)
+	{
+		$this->icon = $icon;
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFactionId()
+	{
+		return $this->factionId;
+	}
+
+	/**
+	 * @param int $factionId
+	 * @return achievement
+	 */
+	public function setFactionId($factionId)
+	{
+		$this->factionId = $factionId;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGuildId()
+	{
+		return $this->guild_id;
+	}
+
+	/**
+	 * @param string $guild_id
+	 */
+	public function setGuildId($guild_id)
+	{
+		$this->guild_id = $guild_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlayerId()
+	{
+		return $this->player_id;
+	}
+
+	/**
+	 * @param string $player_id
+	 */
+	public function setPlayerId($player_id)
+	{
+		$this->player_id = $player_id;
+	}
+
+
+	/*****************************************************/
 
 	/**
 	 * @return array
@@ -275,28 +291,30 @@ class achievement extends admin
 	}
 
 	/**
-	 * @return string
+	 * @return array
 	 */
-	public function getTitle()
+	public function getCriteria()
 	{
-		return $this->title;
+		return $this->criteria;
 	}
 
 	/**
-	 * @param string $title
+	 * @param array $criteria
 	 * @return achievement
 	 */
-	public function setTitle($title)
+	public function setCriteria($criteria)
 	{
-		$this->title = $title;
+		$this->criteria = $criteria;
 		return $this;
 	}
 
+	/*************************************/
 	/**
 	 * achievement constructor.
 	 *
-	 * @param string $game_id
-	 * @param int $id
+	 * @param \bbdkp\bbguild\model\games\game $game
+	 * @param int                             $id
+	 * @internal param string $game_id
 	 */
 	public function __construct(game $game, $id)
 	{
@@ -361,9 +379,30 @@ class achievement extends admin
 	{
 		global $db;
 		$i=0;
-		$sql = 'SELECT id, game_id, title, points, description, reward, rewarditems, icon, factionid, criteria
-    			FROM ' . ACHIEVEMENT_TABLE . '
-    			WHERE id = ' . (int) $this->id . " and game_id = '" . $this->game_id . "'";
+
+		$sql_array = array (
+			'SELECT' => ' a.id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid,
+				r1.rel_value as criteria_id,
+				r2.rel_value as rewards_item_id,
+				c.description as criteria, c.orderindex as criteriaorder, c.max as criteriamax
+				w.description as rewards, w.orderindex as rewardorder, w.max as rewardmax',
+			'FROM' => array (
+				ACHIEVEMENT_TABLE => 'a',
+				BB_RELATIONS_TABLE => 'r1',
+				BB_RELATIONS_TABLE => 'r2',
+				ACHIEVEMENT_CRITERIA_TABLE => 'c',
+				ACHIEVEMENT_REWARDS_TABLE => 'w',
+				),
+			'WHERE' =>  'a.id = ' . (int) $this->id .
+				" AND a.game_id = '". $this->game_id .
+				"' AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' AND r1.att_value = a.id " .
+				"' AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' AND r2.att_value = a.id " .
+				" AND c.criteria_id = r1.rel_value " .
+				" AND c.rewards_item_id = r2.rel_value "
+		);
+
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -371,15 +410,15 @@ class achievement extends admin
 			$this->title = $row['title'];
 			$this->points    = $row['points'];
 			$this->description    = $row['description'];
-			$this->reward    = $row['reward'];
-			$this->rewardItems    = $row['rewarditems'];
 			$this->icon    = $row['icon'];
-			$this->criteria    = $row['criteria'];
 			$this->factionId    = $row['factionid'];
+			$this->criteria       = array( $row['criteria_id'], $row['criteria'], $row['criteriaorder'], $row['criteriamax'] );
+			$this->rewardItems    = array( $row['rewards_item_id'], $row['rewards'], $row['rewardorder'], $row['rewardmax'] );
 		}
 		$db->sql_freeresult($result);
 		return $i;
 	}
+
 
 	/**
 	 * Insert an achievement into local database
@@ -434,8 +473,8 @@ class achievement extends admin
 	public function get_tracked_achievements($guild_id, $player_id)
 	{
 		global $db;
-		$sql = 'SELECT achievement_id, player_id, guild_id, achievements_completed, criteria,
-					criteria_quantity, criteria_timestamp
+		$sql = 'SELECT achievement_id, guild_id, achievements_completed, criteria_id,
+					criteria_quantity, criteria_timestamp, criteria_created
     			FROM ' . ACHIEVEMENT_TRACK_TABLE . '
     			WHERE id = ' . (int) $this->id . " and game_id = '" . $this->game_id . "'";
 		$result = $db->sql_query($sql);
@@ -447,7 +486,8 @@ class achievement extends admin
 			$this->reward    = $row['reward'];
 			$this->rewardItems    = $row['rewarditems'];
 			$this->icon    = $row['icon'];
-			$this->criteria    = $row['criteria'];
+			$this->criteria_timestamp    = $row['criteria_timestamp'];
+			$this->criteria    = $row['criteria_created'];
 			$this->factionId    = $row['factionid'];
 			$achievementlist[] = json_decode($this, true);
 		}

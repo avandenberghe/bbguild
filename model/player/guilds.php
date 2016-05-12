@@ -1613,7 +1613,7 @@ class guilds extends admin
 	{
 		global $db;
 		$i=0;
-		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed, criteria, criteria_quantity, criteria_timestamp
+		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed, criteria_id, criteria_quantity, criteria_timestamp
     			FROM ' . ACHIEVEMENT_TRACK_TABLE. '
     			WHERE guild_id = ' . (int) $this->guildid ;
 		$result = $db->sql_query($sql);
@@ -1625,7 +1625,7 @@ class guilds extends admin
 				'player_id' => $row['player_id'] ,
 				'achievement_id' => $row['achievement_id'],
 				'achievements_completed' => $row['achievements_completed'],
-				'criteria' => $row['criteria'],
+				'criteria_id' => $row['criteria_id'],
 				'criteria_quantity' => $row['criteria_quantity'],
 				'criteria_timestamp' => $row['criteria_timestamp']
 			);
@@ -1645,10 +1645,6 @@ class guilds extends admin
 		$i=0;
 
 		$data = $this->Call_Guild_API(array('achievements'));
-		if ($data['achievements'])
-		{
-			$this->guildachievements = (array) $data['achievements'];
-		}
 
 		$achievements = array();
 
@@ -1656,26 +1652,35 @@ class guilds extends admin
 		$game->game_id = $this->game_id;
 		$game->get_game();
 
-		foreach ($this->guildachievements as $achi)
+		foreach ($data['achievements']['achievementsCompleted'] as $id => $achi)
 		{
-			$i += 1;
-			$achievement[$i]['id']=$achi['achievementsCompleted'][$i];
-			$achievement[$i]['timestamp']= $achi['achievementsCompletedTimestamp'][$i];
-			$achievement[$i]['url'] =  $this->guildarmoryurl ."achievement#".$achi['achievementsCompleted'][$i];
-			$achievement[$i]['criteria'] = $achi['criteria'][$i];
-			$achievement[$i]['criteriaCreated'] = $achi['criteriaCreated'][$i];
-			$achievement[$i]['criteriaQuantity'] = $achi['criteriaQuantity'][$i];
-			$sql_ary = array(
-				'guild_id' => $this->guildid,
-				'player_id' => 0,
-				'achievement_id' => $achievement[$i]['id'],
-				'achievements_completed' => $achievement[$i]['timestamp'],
-				'criteria' => $achievement[$i]['criteria'],
-				'criteria_quantity' => $achievement[$i]['criteriaQuantity'],
-				'criteria_timestamp' => $achievement[$i]['criteriaCreated']
-			);
-			$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TRACK_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+			$achievement[$id]['id'] = $achi;
 		}
+		foreach ($data['achievements']['achievementsCompletedTimestamp'] as $id => $achiTimeStamp)
+		{
+			$achievement[$id]['achievementsCompletedTimestamp'] = $achiTimeStamp;
+		}
+
+		foreach ($data['achievements']['criteria'] as $id => $criterium_id)
+		{
+			$criterium[$id]['criterium_id'] = $criterium_id;
+			$criterium[$id]['criteriaCreated'] = $data['achievements']['criteriaCreated'][$id];
+			$criterium[$id]['criteriaQuantity'] = $data['achievements']['criteriaQuantity'][$id];
+			$criterium[$id]['criteriaTimestamp'] = $data['achievements']['criteriaTimestamp'][$id];
+		}
+
+		$sql_ary = array(
+			'guild_id' => $this->guildid,
+			'player_id' => 0,
+			'achievement_id' => $achievement[$i]['id'],
+			'achievements_completed' => $achievement[$i]['timestamp'],
+			'criteria' => $achievement[$i]['criteria'],
+			'criteria_quantity' => $achievement[$i]['criteriaQuantity'],
+			'criteria_timestamp' => $achievement[$i]['criteriaCreated']
+		);
+
+		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TRACK_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+
 	}
 
 }

@@ -37,6 +37,7 @@ class release_2_0_0_m01_schema extends migration
 	protected $achievement_criteria_table;
 	protected $achievement_rewards_table;
 	protected $bb_relations_table;
+	protected $criteria_track_table;
 
 	static public function depends_on()
 	{
@@ -323,7 +324,7 @@ class release_2_0_0_m01_schema extends migration
 					),
 				),
 
-				/* is the relation table between the entities */
+				/* is the relation table between achievement and criterium/rewards */
 				$this->bb_relations_table    => array(
 					'COLUMNS'    => array(
 						'id'              => array('UINT', null, 'auto_increment'),
@@ -336,6 +337,7 @@ class release_2_0_0_m01_schema extends migration
 					'KEYS'         => array('UQ01'    => array('UNIQUE', array('attribute_id', 'rel_attr_id', 'att_value', 'rel_value'))),
 				),
 
+				/* time achievement reached */
 				$this->achievement_track_table    => array(
 					'COLUMNS'    => array(
 						'guild_id'              => array('UINT', 0),
@@ -348,6 +350,16 @@ class release_2_0_0_m01_schema extends migration
 					),
 				),
 
+				/* time criterium was achieved */
+				$this->criteria_track_table    => array(
+					'COLUMNS'    => array(
+						'guild_id'              => array('UINT', 0),
+						'player_id'             => array('UINT', 0),
+						'criteria_id'            => array('UINT', 0),
+						'criteria_quantity'      => array('UINT', 0),
+						'criteria_timestamp'     => array('TIMESTAMP', 0),
+					),
+				),
 
 				$this->plugins_table    => array(
 					'COLUMNS'    => array(
@@ -396,6 +408,7 @@ class release_2_0_0_m01_schema extends migration
 				$this->achievement_criteria_table,
 				$this->achievement_rewards_table,
 				$this->bb_relations_table,
+				$this->criteria_track_table
 			),
 		);
 	}
@@ -424,6 +437,7 @@ class release_2_0_0_m01_schema extends migration
 		$this->achievement_criteria_table = $this->table_prefix  . 'bb_achievement_criteria';
 		$this->achievement_rewards_table = $this->table_prefix  . 'bb_achievement_rewards';
 		$this->bb_relations_table = $this->table_prefix  . 'bb_relations_table';
+		$this->criteria_track_table = $this->table_prefix  . 'bb_criteria_track';
 
 	}
 
