@@ -289,17 +289,9 @@ class release_2_0_0_m01_schema extends migration
 						'I03'    => array('INDEX', 'log_ipaddress')),
 				),
 
-				$this->plugins_table    => array(
-					'COLUMNS'    => array(
-						'name'            => array('VCHAR_UNI:255', ''),
-						'value'            => array('BOOL', 0),
-						'version'          => array('VCHAR:50', ''),
-						'installdate'   => array('TIMESTAMP', 0),
-						'orginal_copyright' => array('VCHAR_UNI:150', ''),
-						'bbdkp_copyright'      => array('VCHAR_UNI:150', ''),
-					),
-				),
 
+
+				/* entity achievements */
 				$this->achievement_table    => array(
 					'COLUMNS'    => array(
 						'id'              => array('UINT', 0),
@@ -307,11 +299,37 @@ class release_2_0_0_m01_schema extends migration
 						'title'           => array('VCHAR_UNI:255', ''),
 						'points'          => array('UINT', 0),
 						'description'     => array('VCHAR_UNI:255', ''),
-						'reward'          => array('VCHAR_UNI:255', ''),
-						'rewarditems'     => array('VCHAR:3000', ''),
 						'icon'            => array('VCHAR_UNI:255', ''),
-						'criteria'        => array('VCHAR:3000', ''),
 						'factionid'       => array('BOOL', 0),
+					),
+				),
+				/* entity achievements criteria */
+				$this->achievement_criteria_table    => array(
+					'COLUMNS'    => array(
+						'criteria_id'   => array('UINT', 0),
+						'description'   => array('VCHAR_UNI:255', ''),
+						'orderIndex'    => array('UINT', 0),
+						'max'           => array('TIMESTAMP', 0)
+					),
+				),
+				/* entity achievements rewards */
+				$this->achievement_rewards_table    => array(
+					'COLUMNS'    => array(
+						'rewards_item_id'     => array('UINT', 0),
+						'description'             => array('VCHAR_UNI:255', ''),
+						'orderIndex'        => array('UINT', 0),
+						'max' => array('TIMESTAMP', 0)
+					),
+				),
+
+				/* is the relation table between the entities */
+				$this-bb_relations_table    => array(
+					'COLUMNS'    => array(
+						'id'              => array('UINT', null, 'auto_increment'),
+						'attribute_id'    => array('VCHAR:3', ''),
+						'rel_attr_id'     => array('VCHAR:3', ''),
+						'att_value'       => array('UINT', 0),
+						'rel_value'       => array('UINT', 0),
 					),
 				),
 
@@ -327,23 +345,19 @@ class release_2_0_0_m01_schema extends migration
 					),
 				),
 
-				$this->achievement_criteria_table    => array(
+
+				$this->plugins_table    => array(
 					'COLUMNS'    => array(
-						'criteria_id'   => array('UINT', 0),
-						'description'   => array('VCHAR_UNI:255', ''),
-						'orderIndex'    => array('UINT', 0),
-						'max'           => array('TIMESTAMP', 0)
+						'name'            => array('VCHAR_UNI:255', ''),
+						'value'            => array('BOOL', 0),
+						'version'          => array('VCHAR:50', ''),
+						'installdate'   => array('TIMESTAMP', 0),
+						'orginal_copyright' => array('VCHAR_UNI:150', ''),
+						'bbdkp_copyright'      => array('VCHAR_UNI:150', ''),
 					),
 				),
 
-				$this->achievement_rewards_table    => array(
-					'COLUMNS'    => array(
-						'rewards_item_id'     => array('UINT', 0),
-						'description'             => array('VCHAR_UNI:255', ''),
-						'orderIndex'        => array('UINT', 0),
-						'max' => array('TIMESTAMP', 0)
-					),
-				),
+
 			),
 		);
 	}
@@ -378,6 +392,7 @@ class release_2_0_0_m01_schema extends migration
 				$this->achievement_track_table,
 				$this->achievement_criteria_table,
 				$this->achievement_rewards_table,
+				$this->bb_relations_table,
 			),
 		);
 	}
@@ -405,6 +420,8 @@ class release_2_0_0_m01_schema extends migration
 		$this->achievement_track_table = $this->table_prefix  . 'bb_achievement_track';
 		$this->achievement_criteria_table = $this->table_prefix  . 'bb_achievement_criteria';
 		$this->achievement_rewards_table = $this->table_prefix  . 'bb_achievement_rewards';
+		$this->bb_relations_table = $this->table_prefix  . 'bb_relations_table';
+
 	}
 
 }
