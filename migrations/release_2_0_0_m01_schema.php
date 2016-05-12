@@ -36,6 +36,7 @@ class release_2_0_0_m01_schema extends migration
 	protected $achievement_track_table;
 	protected $achievement_criteria_table;
 	protected $achievement_rewards_table;
+	protected $bb_relations_table;
 
 	static public function depends_on()
 	{
@@ -323,7 +324,7 @@ class release_2_0_0_m01_schema extends migration
 				),
 
 				/* is the relation table between the entities */
-				$this-bb_relations_table    => array(
+				$this->bb_relations_table    => array(
 					'COLUMNS'    => array(
 						'id'              => array('UINT', null, 'auto_increment'),
 						'attribute_id'    => array('VCHAR:3', ''),
@@ -331,6 +332,8 @@ class release_2_0_0_m01_schema extends migration
 						'att_value'       => array('UINT', 0),
 						'rel_value'       => array('UINT', 0),
 					),
+					'PRIMARY_KEY'  => 'id',
+					'KEYS'         => array('UQ01'    => array('UNIQUE', array('attribute_id', 'rel_attr_id', 'att_value', 'rel_value'))),
 				),
 
 				$this->achievement_track_table    => array(
