@@ -112,7 +112,7 @@
 }
 
 .profile-sidebar-tabard .tabard-overlay {
-    background: rgba(0, 0, 0, 0) url("./images/bg_overlay_01.png") no-repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0);
     height: 289px;
     left: -22px;
     position: absolute;

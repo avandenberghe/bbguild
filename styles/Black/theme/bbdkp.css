@@ -35,7 +35,6 @@
 }
 
 .category, .subheader-3 {
-    color: #7e3406;
     font-size: 22px;
     font-weight: normal;
     letter-spacing: -0.05em;
@@ -112,7 +111,7 @@
 }
 
 .profile-sidebar-tabard .tabard-overlay {
-    background: rgba(0, 0, 0, 0) url("./images/bg_overlay_01.png") no-repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0);
     height: 289px;
     left: -22px;
     position: absolute;
@@ -203,7 +202,7 @@ ul.profile-sidebar-menu {
 }
 
 ul.profile-sidebar-menu {
-    background: rgba(0, 0, 0, 0) url("./images/sidebar-menu-sep.gif") no-repeat scroll left bottom;
+    background: rgba(0, 0, 0, 0);
     font-size: 13px;
     margin: 14px 0 0 25px;
     padding-bottom: 1px;
@@ -211,7 +210,7 @@ ul.profile-sidebar-menu {
 }
 
 ul.profile-sidebar-menu li {
-    background: rgba(0, 0, 0, 0) url("./images/sidebar-menu-sep.gif") no-repeat scroll left top;
+    background: rgba(0, 0, 0, 0);
     padding-top: 1px;
     white-space: nowrap;
 }

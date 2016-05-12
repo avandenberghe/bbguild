@@ -57,8 +57,8 @@ class release_2_0_0_m03_config extends migration
 			array('config.add', array('bbguild_roster_layout', 0)),
 			// showachiev : show the achievement points
 			array('config.add', array('bbguild_show_achiev', 0)),
-			array('config.add', array('bbguild_user_llimit', 30)),
-			array('config.add', array('bbguild_user_nlimit', 20)),
+			array('config.add', array('bbguild_user_llimit', 15)),
+			array('config.add', array('bbguild_user_nlimit', 15)),
 			// portal settings
 			array('config.add', array('bbguild_portal_links', 1)),
 			array('config.add', array('bbguild_portal_loot', 1)),
