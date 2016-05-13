@@ -205,7 +205,7 @@ class player_module extends admin
 				{
 					if (! check_form_key('bbdkp/bbguild'))
 					{
-						trigger_error('FORM_INVALID');
+						trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 					}
 				}
 
@@ -475,7 +475,7 @@ class player_module extends admin
 	{
 		if (!check_form_key('bbdkp/bbguild'))
 		{
-			trigger_error('FORM_INVALID');
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
 		$activateplayer = new player();
 		$activate_players = $this->request->variable('activate_id', array(0));

@@ -440,7 +440,7 @@ class game_module extends admin
 				{
 					if (! check_form_key('bbdkp/bbguild'))
 					{
-						trigger_error('FORM_INVALID');
+						trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action)) ;
 					}
 				}
 
@@ -466,7 +466,7 @@ class game_module extends admin
 				{
 					if (! check_form_key('bbdkp/bbguild'))
 					{
-						trigger_error('FORM_INVALID');
+						trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action)) ;
 					}
 				}
 
@@ -610,7 +610,7 @@ class game_module extends admin
 
 		if (!check_form_key('bbdkp/bbguild'))
 		{
-			trigger_error('FORM_INVALID');
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
 
 		$role->rolename = $this->request->variable('rolename', '', true);
@@ -743,7 +743,7 @@ class game_module extends admin
 
 		if (!check_form_key('bbdkp/bbguild'))
 		{
-			trigger_error('FORM_INVALID');
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
 		$faction->faction_name = $this->request->variable('factionname', '', true);
 		$faction->make_faction();

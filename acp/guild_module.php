@@ -216,7 +216,7 @@ class guild_module extends admin
 
 						if (($updaterank || $addrank) && (!check_form_key('bbdkp/bbguild')))
 						{
-							trigger_error('FORM_INVALID');
+							trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 						}
 
 						if ($addrank)
@@ -305,7 +305,7 @@ class guild_module extends admin
 	{
 		if (!check_form_key('bbdkp/bbguild'))
 		{
-			trigger_error('FORM_INVALID');
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
 
 		$addguild->setGameId($this->request->variable('game_id', ''));

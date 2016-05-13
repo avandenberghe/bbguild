@@ -589,6 +589,7 @@ $lang = array_merge(
 	'IMAGESIZE_WARNING' => 'Warning, width/height sould be max 32/32px, you have %s/%s',
 	'ERROR_ARMORY_NOTFOUND' => 'Armory not enabled or Guild not found on Battle.NET',
 	'ERROR_BATTLENET_ACCOUNT_INACTIVE' => 'Error: Battle.NET Account inactive',
+	'WARNING_NOACHIEVEMENTS'  =>  'No achievements found.',
 
 	//Curl errors
 	'ERR_UNKNOWN' => 'Unknown error occurred.',
@@ -889,6 +890,9 @@ $lang = array_merge(
 	'UPDATE_CLASS' => 'Update Class',
 	'CHANGE_ACTIVATION' => 'Change Activation',
 	'CHARACTERAPICALL' => 'Update Players from Character API',
+	'ADD_ACHIEVEMENT_MANUAL' => 'Add Achievement manually',
+	'ADD_ACHIEVEMENT_API' => 'Add Achievements by API call',
+
 
 	// Misc
 	'ACTIVE' => 'Active',

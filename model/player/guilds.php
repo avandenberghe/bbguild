@@ -741,12 +741,10 @@ class guilds extends admin
 	 */
 	public function getGuildAchievements()
 	{
-		if($this->get_achievements() == 0)
-		{
-			$this->set_achievements();
-		}
+		$this->get_achievements();
+		return $this->guildachievements;
 
-		return $this->guildachievements();
+
 	}
 
 	/**
