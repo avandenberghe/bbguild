@@ -101,6 +101,14 @@ class guild_module extends admin
 			trigger_error($user->lang['NOAUTH_A_GUILD_MAN']);
 		}
 
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
+
 		switch ($mode)
 		{
 			case 'listguilds':

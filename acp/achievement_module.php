@@ -81,6 +81,13 @@ class achievement_module extends admin
 			trigger_error($user->lang['NOAUTH_A_PLAYERS_MAN']);
 		}
 
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
 		switch ($mode)
 		{
 			/**
@@ -240,6 +247,16 @@ class achievement_module extends admin
 			);
 		}
 
+
+		$a = count($Guild->getGuildAchievements());
+
+		if ($a == 0)
+		{
+			trigger_error($this->user->lang['WARNING_NOACHIEVEMENTS'], E_USER_WARNING);
+		}
+
+
+
 		$previous_data = '';
 		$start    = $this->request->variable('start', 0, false);
 
@@ -255,7 +272,6 @@ class achievement_module extends admin
 		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 		$show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
 
-		$result       = $Guild->getGuildAchievements();
 
 
 		/*

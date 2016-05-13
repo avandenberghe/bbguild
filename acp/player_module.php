@@ -86,6 +86,13 @@ class player_module extends admin
 			trigger_error($user->lang['NOAUTH_A_PLAYERS_MAN']);
 		}
 
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
 		switch ($mode)
 		{
 			/**

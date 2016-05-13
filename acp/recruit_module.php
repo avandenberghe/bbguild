@@ -92,6 +92,14 @@ class recruit_module extends admin
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
 
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
+
 		$this->apply_installed = false;
 		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 

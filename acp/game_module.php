@@ -88,6 +88,13 @@ class game_module extends admin
 			trigger_error($user->lang['NOAUTH_A_GAME_MAN']);
 		}
 
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
 		//list installed games
 		$listgames = new game;
 		$sort_order = array(
