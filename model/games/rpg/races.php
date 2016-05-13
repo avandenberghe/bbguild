@@ -166,7 +166,7 @@ class races
 		$sql_array = array (
 		'SELECT' => ' count(*) as racecount  ',
 		'FROM' => array (
-		 PLAYER_LIST_TABLE => 'm',
+		 PLAYER_TABLE => 'm',
 		 RACE_TABLE => 'r' ),
 		'WHERE' => 'm.player_race_id = r.race_id
 		    			and r.race_id =  ' .  $this->race_id . "

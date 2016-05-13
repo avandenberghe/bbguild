@@ -240,7 +240,7 @@ class classes
 		$sql_array = array (
 		'SELECT' => ' c.class_id, COUNT(*) AS classcount  ',
 		'FROM' => array (
-		 PLAYER_LIST_TABLE => 'm',
+		 PLAYER_TABLE => 'm',
 		 CLASS_TABLE => 'c' ),
 		'WHERE' =>     "m.game_id = c.game_id AND m.game_id = '" . $this->game_id . "'
     					and m.player_class_id = c.class_id AND c.class_id =  " . $this->class_id ,

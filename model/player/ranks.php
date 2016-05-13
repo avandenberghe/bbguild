@@ -176,7 +176,7 @@ class ranks extends guilds
 		if (! $override)
 		{
 			// check if rank is used
-			$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_LIST_TABLE . ' WHERE
+			$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_TABLE . ' WHERE
             		 player_rank_id   = ' . (int) $this->RankId . ' and
             		 player_guild_id =  ' . (int) $this->RankGuild;
 			$result = $db->sql_query($sql);
@@ -284,7 +284,7 @@ class ranks extends guilds
 	{
 		global $db;
 
-		$sql = 'SELECT count(*) as countm FROM ' . PLAYER_LIST_TABLE . '
+		$sql = 'SELECT count(*) as countm FROM ' . PLAYER_TABLE . '
 			WHERE player_rank_id = ' . $this->RankId . ' and player_guild_id = ' . $this->RankGuild;
 		$result = $db->sql_query($sql);
 		$countm = (int) $db->sql_fetchfield('countm');

@@ -423,7 +423,7 @@ class achievement_module extends admin
 		}
 		else
 		{
-			$sql = 'SELECT player_name, player_id FROM ' . PLAYER_LIST_TABLE . ' WHERE ' . $this->db->sql_in_set('player_id', array_keys($players_to_delete));
+			$sql = 'SELECT player_name, player_id FROM ' . PLAYER_TABLE . ' WHERE ' . $this->db->sql_in_set('player_id', array_keys($players_to_delete));
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{

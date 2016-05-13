@@ -505,7 +505,7 @@ class viewnavigation extends admin implements iviews
 			'FROM'      => array(
 				CLASS_TABLE     => 'c',
 				BB_LANGUAGE        => 'l',
-				PLAYER_LIST_TABLE    => 'i',
+				PLAYER_TABLE    => 'i',
 			),
 			'WHERE'        => " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
 				 		AND l.language= '" . $this->config['bbguild_lang'] . "' AND l.attribute = 'class'

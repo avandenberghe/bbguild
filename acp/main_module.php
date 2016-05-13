@@ -77,11 +77,11 @@ class main_module extends admin
 			// MAINPAGE
 			case 'panel':
 				// get inactive players
-				$sql = 'SELECT count(*) as player_count FROM ' . PLAYER_LIST_TABLE . " WHERE player_status='0'";
+				$sql = 'SELECT count(*) as player_count FROM ' . PLAYER_TABLE . " WHERE player_status='0'";
 				$result = $this->db->sql_query($sql);
 				$total_players_inactive = (int) $this->db->sql_fetchfield('player_count');
 				//get the active players
-				$sql = 'SELECT count(*) as player_count FROM ' . PLAYER_LIST_TABLE . " WHERE player_status='1'";
+				$sql = 'SELECT count(*) as player_count FROM ' . PLAYER_TABLE . " WHERE player_status='1'";
 				$result = $this->db->sql_query($sql);
 				$total_players_active = (int) $this->db->sql_fetchfield('player_count');
 				// active player kpi

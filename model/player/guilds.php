@@ -1111,7 +1111,7 @@ class guilds extends admin
 		}
 		$cache->destroy('sql', GUILD_TABLE);
 		// check if guild has players
-		$sql = 'SELECT COUNT(*) as mcount FROM ' . PLAYER_LIST_TABLE . '
+		$sql = 'SELECT COUNT(*) as mcount FROM ' . PLAYER_TABLE . '
            WHERE player_guild_id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
 		if ((int) $db->sql_fetchfield('mcount') >= 1)
@@ -1404,7 +1404,7 @@ class guilds extends admin
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
 								 c.colorcode , c.imagename, a.image_female, a.image_male' ,
 			'FROM' => array(
-				PLAYER_LIST_TABLE => 'm' ,
+				PLAYER_TABLE => 'm' ,
 				PLAYER_RANKS_TABLE => 'r' ,
 				CLASS_TABLE => 'c' ,
 				RACE_TABLE => 'a' ,
@@ -1485,7 +1485,7 @@ class guilds extends admin
 		$sql .= ' Count(m.player_class_id) AS classcount ';
 		$sql .= ' FROM  ' . CLASS_TABLE . ' c ';
 		$sql .= ' INNER JOIN ' . GUILD_TABLE . ' g ON c.game_id = g.game_id ';
-		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . PLAYER_LIST_TABLE . ' WHERE player_level >= ' . $this->min_armory . ') m';
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . PLAYER_TABLE . ' WHERE player_level >= ' . $this->min_armory . ') m';
 		$sql .= '   ON m.game_id = c.game_id  AND m.player_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
@@ -1517,7 +1517,7 @@ class guilds extends admin
 		$sql_array = array(
 			'SELECT' => 'count(*) as playercount ' ,
 			'FROM' => array(
-				PLAYER_LIST_TABLE => 'm' ,
+				PLAYER_TABLE => 'm' ,
 				PLAYER_RANKS_TABLE => 'r' ,
 				CLASS_TABLE => 'c' ,
 				RACE_TABLE => 'a' ,
@@ -1577,7 +1577,7 @@ class guilds extends admin
 				PLAYER_RANKS_TABLE => 'b' ,),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(PLAYER_LIST_TABLE => 'c'),
+					'FROM'  => array(PLAYER_TABLE => 'c'),
 					'ON'    => 'a.id = c.player_guild_id '
 				)
 			),
@@ -1613,7 +1613,7 @@ class guilds extends admin
 	{
 		global $db;
 		$i=0;
-		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed, criteria_id, criteria_quantity, criteria_timestamp
+		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed
     			FROM ' . ACHIEVEMENT_TRACK_TABLE. '
     			WHERE guild_id = ' . (int) $this->guildid ;
 		$result = $db->sql_query($sql);
@@ -1625,9 +1625,6 @@ class guilds extends admin
 				'player_id' => $row['player_id'] ,
 				'achievement_id' => $row['achievement_id'],
 				'achievements_completed' => $row['achievements_completed'],
-				'criteria_id' => $row['criteria_id'],
-				'criteria_quantity' => $row['criteria_quantity'],
-				'criteria_timestamp' => $row['criteria_timestamp']
 			);
 		}
 		$db->sql_freeresult($result);
@@ -1658,8 +1655,21 @@ class guilds extends admin
 		}
 		foreach ($data['achievements']['achievementsCompletedTimestamp'] as $id => $achiTimeStamp)
 		{
-			$achievement[$id]['achievementsCompletedTimestamp'] = $achiTimeStamp;
+			$achievement[$id]['timestamp'] = $achiTimeStamp;
 		}
+
+		$sql_ary = array();
+
+		foreach($achievement as $id => $achi)
+		{
+			$sql_ary[] = array(
+				'guild_id' => $this->guildid,
+				'player_id' => 0,
+				'achievement_id' => $achi['id'],
+				'achievements_completed' => $achi['timestamp'],
+			);
+		}
+		$db->sql_multi_insert(ACHIEVEMENT_TRACK_TABLE, $sql_ary);
 
 		foreach ($data['achievements']['criteria'] as $id => $criterium_id)
 		{
@@ -1669,17 +1679,21 @@ class guilds extends admin
 			$criterium[$id]['criteriaTimestamp'] = $data['achievements']['criteriaTimestamp'][$id];
 		}
 
-		$sql_ary = array(
-			'guild_id' => $this->guildid,
-			'player_id' => 0,
-			'achievement_id' => $achievement[$i]['id'],
-			'achievements_completed' => $achievement[$i]['timestamp'],
-			'criteria' => $achievement[$i]['criteria'],
-			'criteria_quantity' => $achievement[$i]['criteriaQuantity'],
-			'criteria_timestamp' => $achievement[$i]['criteriaCreated']
-		);
+		$sql_ary = array();
+		foreach($criterium as $id => $crit)
+		{
+			$sql_ary[] = array(
+				'guild_id' => $this->guildid,
+				'player_id' => 0,
+				'criteria_id' => $achi['criteria_id'],
+				'criteria_quantity' => $achi['criteriaQuantity'],
+				'criteria_timestamp' => $achi['criteriaTimestamp'],
+				'criteria_created' => $achi['criteriaCreated'],
+			);
+		}
 
-		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TRACK_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+		$db->sql_multi_insert(CRITERIA_TRACK_TABLE, $sql_ary);
+
 
 	}
 

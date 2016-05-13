@@ -1006,7 +1006,7 @@ class player extends admin
 						r.image_female, r.image_male,
 						g.id as guild_id, g.name as guild_name, m.player_realm , g.region' ,
 			'FROM' => array(
-				PLAYER_LIST_TABLE => 'm' ,
+				PLAYER_TABLE => 'm' ,
 				CLASS_TABLE => 'c' ,
 				BB_LANGUAGE => 'l1' ,
 				RACE_TABLE => 'r' ,
@@ -1140,7 +1140,7 @@ class player extends admin
 		if ($guild_id !=0)
 		{
 			$sql = 'SELECT player_id
-                FROM ' . PLAYER_LIST_TABLE . '
+                FROM ' . PLAYER_TABLE . '
                 WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
                 AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char()) . '
                 AND player_guild_id = ' . (int) $db->sql_escape($guild_id);
@@ -1148,7 +1148,7 @@ class player extends admin
 		else
 		{
 			$sql = 'SELECT player_id
-                FROM ' . PLAYER_LIST_TABLE . '
+                FROM ' . PLAYER_TABLE . '
                 WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
                 AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char());
 		}
@@ -1193,7 +1193,7 @@ class player extends admin
 		if ($this->player_name != $old_player->player_name)
 		{
 			$sql = 'SELECT count(*) as playerexists
-				FROM ' . PLAYER_LIST_TABLE . '
+				FROM ' . PLAYER_TABLE . '
 				WHERE player_id <> ' . $this->player_id . "
 				AND UPPER(player_name) = UPPER('" . $db->sql_escape($this->player_name) . "')";
 			$result = $db->sql_query($sql);
@@ -1265,7 +1265,7 @@ class player extends admin
 			)
 		);
 
-		$sql = 'UPDATE ' . PLAYER_LIST_TABLE . ' SET ' . $query . '
+		$sql = 'UPDATE ' . PLAYER_TABLE . ' SET ' . $query . '
 			WHERE player_id= ' . $this->player_id;
 
 		$db->sql_query($sql);
@@ -1282,7 +1282,7 @@ class player extends admin
 			);
 
 			$db->sql_query(
-				'UPDATE ' . PLAYER_LIST_TABLE . ' SET ' . $query . '
+				'UPDATE ' . PLAYER_TABLE . ' SET ' . $query . '
 				WHERE player_id= ' . $this->player_id
 			);
 
@@ -1299,7 +1299,7 @@ class player extends admin
 				)
 			);
 			$db->sql_query(
-				'UPDATE ' . PLAYER_LIST_TABLE . ' SET ' . $query . '
+				'UPDATE ' . PLAYER_TABLE . ' SET ' . $query . '
 				WHERE player_id= ' . $this->player_id
 			);
 		}
@@ -1340,7 +1340,7 @@ class player extends admin
 	{
 		global $user, $db;
 
-		$sql = 'DELETE FROM ' . PLAYER_LIST_TABLE . ' where player_id = ' . (int) $this->player_id;
+		$sql = 'DELETE FROM ' . PLAYER_TABLE . ' where player_id = ' . (int) $this->player_id;
 		$db->sql_query($sql);
 
 		$log_action = array(
@@ -1373,7 +1373,7 @@ class player extends admin
 
 		// check if playername exists
 		$sql = 'SELECT count(*) as playerexists
-				FROM ' . PLAYER_LIST_TABLE . "
+				FROM ' . PLAYER_TABLE . "
 				WHERE player_name= '" . $db->sql_escape(ucwords($this->player_name)) . "'
 				AND player_realm= '" . $db->sql_escape(ucwords($this->player_realm)) . "'
 				AND player_guild_id = " . $this->player_guild_id;
@@ -1491,7 +1491,7 @@ class player extends admin
 			)
 		);
 
-		$db->sql_query('INSERT INTO ' . PLAYER_LIST_TABLE . $query);
+		$db->sql_query('INSERT INTO ' . PLAYER_TABLE . $query);
 
 		$this->player_id = $db->sql_nextid();
 
@@ -1779,7 +1779,7 @@ class player extends admin
 			);
 
 			$db->sql_query(
-				'UPDATE ' . PLAYER_LIST_TABLE . ' SET ' . $query . '
+				'UPDATE ' . PLAYER_TABLE . ' SET ' . $query . '
                 WHERE player_id= ' . $this->player_id
 			);
 		}
@@ -1823,7 +1823,7 @@ class player extends admin
 			);
 
 			$db->sql_query(
-				'UPDATE ' . PLAYER_LIST_TABLE . ' SET ' . $query . '
+				'UPDATE ' . PLAYER_TABLE . ' SET ' . $query . '
                 WHERE player_id= ' . $this->player_id
 			);
 		}
@@ -1866,7 +1866,7 @@ class player extends admin
 		global $db, $user;
 		// find id for existing player name
 		$sql = 'SELECT *
-				FROM ' . PLAYER_LIST_TABLE . "
+				FROM ' . PLAYER_TABLE . "
 				WHERE player_name = '" . $db->sql_escape($player_name) . "' and player_guild_id = " . (int) $guild_id;
 		$result = $db->sql_query($sql);
 		// get old data
@@ -1886,7 +1886,7 @@ class player extends admin
 			'player_outdate' => $this->time ,
 			'player_guild_id' => 0);
 
-		$sql = 'UPDATE ' . PLAYER_LIST_TABLE . '
+		$sql = 'UPDATE ' . PLAYER_TABLE . '
 			SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
 			WHERE player_id = ' . (int) $this->old_player['player_id'] . ' and player_guild_id = ' . (int) $this->old_player['player_guild_id'];
 
@@ -1927,7 +1927,7 @@ class player extends admin
 		$newplayers = array();
 
 		/* GET OLD RANKS */
-		$sql = ' select player_name, player_id, player_realm FROM ' . PLAYER_LIST_TABLE . '
+		$sql = ' select player_name, player_id, player_realm FROM ' . PLAYER_TABLE . '
 				WHERE player_guild_id =  ' . (int) $guild_id . "
 				AND game_id='wow' order by player_name ASC";
 		$result = $db->sql_query($sql);
@@ -2047,7 +2047,7 @@ class player extends admin
 					'player_portrait_url' => (string) $this->player_portrait_url,
 				);
 
-				$sql = 'UPDATE ' . PLAYER_LIST_TABLE . '
+				$sql = 'UPDATE ' . PLAYER_TABLE . '
 						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE player_id = ' . $player_id;
 				$db->sql_query($sql);
@@ -2069,7 +2069,7 @@ class player extends admin
 	{
 		// get player joindate
 		global $db;
-		$sql = 'SELECT player_joindate  FROM ' . PLAYER_LIST_TABLE . ' WHERE player_id = ' . $player_id;
+		$sql = 'SELECT player_joindate  FROM ' . PLAYER_TABLE . ' WHERE player_id = ' . $player_id;
 		$result = $db->sql_query($sql, 3600);
 		$joindate = $db->sql_fetchfield('player_joindate');
 
@@ -2093,7 +2093,7 @@ class player extends admin
 		$sql_array = array(
 			'SELECT'    => 'r.rank_name, m.player_id ,m.player_name, m.player_realm ',
 			'FROM'      => array(
-				PLAYER_LIST_TABLE       => 'm',
+				PLAYER_TABLE       => 'm',
 				PLAYER_RANKS_TABLE    => 'r',
 			),
 
@@ -2140,7 +2140,7 @@ class player extends admin
 			'phpbb_user_id'    => $user->data['user_id'],
 		);
 
-		$sql = 'UPDATE ' . PLAYER_LIST_TABLE . '
+		$sql = 'UPDATE ' . PLAYER_TABLE . '
 						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE player_id = ' . $this->player_id;
 		$db->sql_query($sql);
@@ -2155,7 +2155,7 @@ class player extends admin
 	{
 		global $config, $user, $db;
 		$sql = 'SELECT count(*) as charcount
-				FROM ' . PLAYER_LIST_TABLE . '
+				FROM ' . PLAYER_TABLE . '
 				WHERE phpbb_user_id = ' . (int) $user->data['user_id'];
 		$result = $db->sql_query($sql);
 		$countc = $db->sql_fetchfield('charcount');
@@ -2196,7 +2196,7 @@ class player extends admin
     		g.name as guildname, m.player_realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
 
 		$sql_array['FROM'] = array(
-			PLAYER_LIST_TABLE    =>  'm',
+			PLAYER_TABLE    =>  'm',
 			CLASS_TABLE          =>  'c',
 			GUILD_TABLE          =>  'g',
 			PLAYER_RANKS_TABLE   =>  'r',
@@ -2383,7 +2383,7 @@ class player extends admin
 		$sql_array = array(
 			'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename, c.colorcode' ,
 			'FROM'      => array(
-				PLAYER_LIST_TABLE    =>  'm',
+				PLAYER_TABLE    =>  'm',
 				CLASS_TABLE          =>  'c',
 				BB_LANGUAGE            =>  'c1',
 				PLAYER_RANKS_TABLE   =>  'r',

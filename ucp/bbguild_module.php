@@ -164,7 +164,7 @@ class bbguild_module extends admin
 				}
 
 				//if there are no chars at all, do not show add button
-				$sql = 'SELECT count(*) AS mcount FROM ' . PLAYER_LIST_TABLE .' WHERE player_rank_id < 90  ';
+				$sql = 'SELECT count(*) AS mcount FROM ' . PLAYER_TABLE .' WHERE player_rank_id < 90  ';
 				$result = $this->db->sql_query($sql, 0);
 				$mcount = (int) $this->db->sql_fetchfield('mcount');
 				$show = true;
@@ -818,7 +818,7 @@ class bbguild_module extends admin
 				'FROM'      => array(
 					PLAYER_DKP_TABLE     => 'm',
 					DKPSYS_TABLE         => 'd',
-					PLAYER_LIST_TABLE     => 'l',
+					PLAYER_TABLE     => 'l',
 				),
 				'WHERE'     => "l.player_id = m.player_id and l.player_status = 1 and m.player_dkpid = d.dkpsys_id and d.dkpsys_status='Y' and m.player_id = " . $char['player_id'],
 				'GROUP_BY'  => ' d.dkpsys_id, d.dkpsys_name ',

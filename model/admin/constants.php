@@ -25,28 +25,29 @@ define('URI_PAGE', 'pag');
 define('URI_GUILD', 'guild_id');
 define('URI_GAME', 'game_id');
 define('USER_LLIMIT',  20);
-define('BBGAMES_TABLE',               $table_prefix . 'bb_games');
-define('NEWS_TABLE',               $table_prefix . 'bb_news');
-define('BBLOGS_TABLE',             $table_prefix . 'bb_logs');
-define('PLAYER_RANKS_TABLE',       $table_prefix . 'bb_ranks');
-define('PLAYER_LIST_TABLE',        $table_prefix . 'bb_players');
-define('CLASS_TABLE',              $table_prefix . 'bb_classes');
-define('RACE_TABLE',               $table_prefix . 'bb_races');
-define('FACTION_TABLE',            $table_prefix . 'bb_factions');
+
+define('BBGAMES_TABLE',             $table_prefix . 'bb_games');
+define('BBLOGS_TABLE',              $table_prefix . 'bb_logs');
+define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
 define('GUILD_TABLE',               $table_prefix . 'bb_guild');
+define('PLAYER_TABLE',              $table_prefix . 'bb_players');
+define('CLASS_TABLE',               $table_prefix . 'bb_classes');
+define('BB_GAMEROLE_TABLE',         $table_prefix . 'bb_gameroles');
+define('RACE_TABLE',                $table_prefix . 'bb_races');
+define('FACTION_TABLE',             $table_prefix . 'bb_factions');
 define('BB_LANGUAGE',               $table_prefix . 'bb_language');
-define('BOSSBASE',                 $table_prefix . 'bb_bosstable');
-define('ZONEBASE',                    $table_prefix . 'bb_zonetable');
 define('MOTD_TABLE',                $table_prefix . 'bb_motd');
-define('BBRECRUIT_TABLE',          $table_prefix . 'bb_recruit');
-define('BB_GAMEROLE_TABLE',        $table_prefix . 'bb_gameroles');
-define('BBDKPPLUGINS_TABLE',       $table_prefix . 'bb_plugins');
-define('ACHIEVEMENT_TRACK_TABLE',       $table_prefix . 'bb_achievement_track');
-define('ACHIEVEMENT_TABLE',       $table_prefix . 'bb_achievement');
-define('ACHIEVEMENT_REWARDS_TABLE',       $table_prefix . 'bb_achievement_rewards');
-define('CRITERIA_TRACK_TABLE',     $table_prefix . 'bb_criteria_track');
-define('ACHIEVEMENT_CRITERIA_TABLE',       $table_prefix . 'bb_achievement_criteria');
-define('BB_RELATIONS_TABLE',     $table_prefix . 'bb_relations_table');
+define('BBRECRUIT_TABLE',           $table_prefix . 'bb_recruit');
 
+define('ACHIEVEMENT_TRACK_TABLE',   $table_prefix . 'bb_achievement_track');
+define('ACHIEVEMENT_TABLE',         $table_prefix . 'bb_achievement');
+define('ACHIEVEMENT_REWARDS_TABLE', $table_prefix . 'bb_achievement_rewards');
+define('CRITERIA_TRACK_TABLE',      $table_prefix . 'bb_criteria_track');
+define('ACHIEVEMENT_CRITERIA_TABLE', $table_prefix . 'bb_achievement_criteria');
+define('BB_RELATIONS_TABLE',        $table_prefix . 'bb_relations_table');
 
-criteria_track_table
+define('BOSSBASE',                  $table_prefix . 'bb_bosstable');
+define('ZONEBASE',                  $table_prefix . 'bb_zonetable');
+
+define('NEWS_TABLE',                $table_prefix . 'bb_news');
+define('BBDKPPLUGINS_TABLE',        $table_prefix . 'bb_plugins');
