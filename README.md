@@ -54,7 +54,7 @@ Find support and more on
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
 ### milestone
-  - [new] Achievement page
+  - a6
 
 ### Changelog
 - 2.0.0a5 27/03/2016
