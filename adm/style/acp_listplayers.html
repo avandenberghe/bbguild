@@ -63,6 +63,38 @@
             </p>
         </fieldset>
 
+        <fieldset style="background-color: #EEEEEE">
+            <!-- IF S_WOW -->
+            <dl>
+                <dt style="width: 55%;"><label for="activeplayers">{L_CHARACTERAPICALL}:</label>{L_CALL_BATTLENET_CHAR_API}</dt>
+                <dd style="margin-left: 55%;">
+                    <fieldset class="submit-buttons" style=" text-align: left;">
+                        <input class="button1" name="charapicall" type="submit" value="{L_UPDATE}" title="{L_CHARACTERAPICALL}"/>
+                        <input type="hidden" name="hidden_minlevel" value="{MINLEVEL}" />
+                        <input type="hidden" name="hidden_maxlevel" value="{MAXLEVEL}" />
+                        <input type="hidden" name="hidden_active" value="{F_SELECTACTIVE}" />
+                        <input type="hidden" name="hidden_nonactive" value="{F_SELECTNONACTIVE}" />
+                        <input type="hidden" name="hidden_player_name" value="{PLAYER_NAME}" />
+                    </fieldset>
+                </dd>
+            </dl>
+            <!-- ENDIF -->
+            <dl>
+                <dt style="width: 55%;"><label for="playeradd">{L_ADD_PLAYER}:</label></dt>
+                <dd style="margin-left: 55%;">
+
+                    <fieldset class="submit-buttons" style="  text-align: left;">
+                        <input class="button1" name="playeradd" type="submit" value="{L_ADD_PLAYER}" title="{L_ADD_PLAYER}"/>
+                    </fieldset>
+                </dd>
+            </dl>
+            {S_FORM_TOKEN}
+            <!-- BEGIN players_row -->
+            <input type="hidden" name="hidden_player[{players_row.ID}]" value="{players_row.ID}" />
+            <!-- END players_row -->
+            <input type="hidden" name="start" value="{START}" />
+        </fieldset>
+
         <!-- IF .players_row -->
         <div class="pagination">
             <!-- IF .pagination -->
@@ -149,32 +181,7 @@
             <!-- ENDIF -->
         </div>
 
-        <fieldset>
-            <!-- IF S_WOW -->
-            <dl>
-                <dt style="width: 55%;"><label for="activeplayers">{L_CHARACTERAPICALL}:</label>{L_CALL_BATTLENET_CHAR_API}</dt>
-                <dd style="margin-left: 55%;">
-                    <input class="button2" name="charapicall" type="submit" value="{L_UPDATE}" title="{L_CHARACTERAPICALL}"/>
-                    <input type="hidden" name="hidden_minlevel" value="{MINLEVEL}" />
-                    <input type="hidden" name="hidden_maxlevel" value="{MAXLEVEL}" />
-                    <input type="hidden" name="hidden_active" value="{F_SELECTACTIVE}" />
-                    <input type="hidden" name="hidden_nonactive" value="{F_SELECTNONACTIVE}" />
-                    <input type="hidden" name="hidden_player_name" value="{PLAYER_NAME}" />
-                </dd>
-            </dl>
-            <!-- ENDIF -->
-            <dl>
-                <dt style="width: 55%;"><label for="playeradd">{L_ADD_PLAYER}:</label></dt>
-                <dd style="margin-left: 55%;">
-                    <input class="button2" name="playeradd" type="submit" value="{L_ADD_PLAYER}" title="{L_ADD_PLAYER}"/>
-                </dd>
-            </dl>
-            {S_FORM_TOKEN}
-            <!-- BEGIN players_row -->
-            <input type="hidden" name="hidden_player[{players_row.ID}]" value="{players_row.ID}" />
-            <!-- END players_row -->
-            <input type="hidden" name="start" value="{START}" />
-        </fieldset>
+
 
         <!-- ELSE -->
 
@@ -182,6 +189,8 @@
             <h3>{L_WARNING}</h3>
             <p>{L_WARNING_NOPLAYERS}</p>
         </div>
+
+
 
         <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
             <input type="submit" name="playeradd"  value="{L_ADD_PLAYER}" class="button2" />

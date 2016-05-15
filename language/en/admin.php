@@ -114,6 +114,8 @@ $lang = array_merge(
 	'FV_REQUIRED_STATUS' => 'The status field is required.',
 	'FV_REQUIRED_MESSAGE' => 'The message field is required.',
 	'FV_REQUIRED_NAME' => 'The name field is required.',
+	'FV_REQUIRED_TITLE' => 'The title field is required.',
+	'FV_REQUIRED_DESCRIPTION' => 'The description field is required.',
 	'FV_REQUIRED_ID' => 'The id field is required.',
 	'FV_REQUIRED_HEADLINE' => 'The headline field is required.',
 	'FV_DKPSTATUSYN' => 'Dkpsystem status must either be Y (Active) or N (Inactive)',
@@ -302,6 +304,7 @@ $lang = array_merge(
 	'ACP_GAME_RESET' => 'Reset the game settings. ',
 	'ACP_GAME_DELETE' => 'Delete this game.',
 	'GAME_NAME_EXPLAIN' => 'Name of the Game',
+	'ACHIEVEMENT_ADD_EXPLAIN' => 'Add an achievement to the database',
 
 	// Permission Messages
 	'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -723,6 +726,12 @@ $lang = array_merge(
 	'GAME_ID' => 'Game id',
 	'EVENTS_PER_PAGE' => 'Events per Page',
 	'GAME' => 'Game',
+	'ACHI_ID' => 'Achievement id',
+	'ACHI_TITLE' => 'Achievement Title',
+	'ACHI_DESC' => 'Achievement Description',
+	'ACHI_TITLE' => 'Achievement Title',
+	'ACHI_POINTS' => 'Achievement Points',
+
 
 	'GENERAL_SETTINGS' => 'General Settings',
 	'GUILDTAG' => 'Guildtag / Alliance Name',
@@ -844,6 +853,7 @@ $lang = array_merge(
 	'RAIDITEMS_FOOTCOUNT' => '... found %d Items acquired',
 	'LISTROLES_FOOTCOUNT' => '... found %d roles',
 	'RECRUIT_FOOTCOUNT' => '... found %d recruitments',
+	'ACHIEV_FOOTCOUNT' => '... found %d achievements',
 
 	// Submit Buttons
 	'ADD_ADJUSTMENT' => 'Add Adjustment',
@@ -892,7 +902,7 @@ $lang = array_merge(
 	'CHARACTERAPICALL' => 'Update Players from Character API',
 	'ADD_ACHIEVEMENT_MANUAL' => 'Add Achievement manually',
 	'ADD_ACHIEVEMENT_API' => 'Add Achievements by API call',
-
+	'ADD_ACHIEVEMENT' => 'Add Achievement',
 
 	// Misc
 	'ACTIVE' => 'Active',

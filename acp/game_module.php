@@ -1082,7 +1082,8 @@ class game_module extends admin
 				'LA_ALERT_AJAX' => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
 				'UA_FINDFACTION' => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
-				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
+				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME']
+			)
 		);
 
 		$this->page_title = 'ACP_LISTGAME';

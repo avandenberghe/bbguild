@@ -15,7 +15,6 @@
     <form id="listachievements" method="post" action="{F_PLAYERS_LIST}">
 
         <fieldset style="background-color: #EEEEEE">
-
             <dl>
                 <dt><label for="achievement_guild_id">{L_GUILD}:</label></dt>
                 <dd>
@@ -31,6 +30,22 @@
                         </div>
 
                     </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="player_guild_id">{L_FILTER}:</label></dt>
+                <dd>
+                    <fieldset class="submit-buttons" style="  text-align: left;">
+                    <input type="submit" name="achievaddmanual"  value="{L_ADD_ACHIEVEMENT_MANUAL}" class="button1" />
+                    </fieldset>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="player_guild_id">{L_FILTER}:</label></dt>
+                <dd>
+                    <fieldset class="submit-buttons" style="  text-align: left;">
+                    <input type="submit" name="achievaddapi"  value="{L_ADD_ACHIEVEMENT_API}" class="button1" />
+                    </fieldset>
                 </dd>
             </dl>
         </fieldset>
@@ -123,10 +138,6 @@
             <p>{L_WARNING_NOACHIEVEMENTS}</p>
         </div>
 
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-            <input type="submit" name="achievaddmanual"  value="{L_ADD_ACHIEVEMENT_MANUAL}" class="button2" />
-            <input type="submit" name="achievaddapi"  value="{L_ADD_ACHIEVEMENT_API}" class="button2" />
-        </fieldset>
         <!-- ENDIF -->
     </form>
 </div>

@@ -12,6 +12,7 @@ namespace bbdkp\bbguild\model\player;
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\api\battlenet;
 use bbdkp\bbguild\model\games\game;
+use bbdkp\bbguild\model\games\rpg\achievement;
 
 /**
  * Manages Guild creation
@@ -47,7 +48,6 @@ use bbdkp\bbguild\model\games\game;
  * @property string $armoryresult
  * @property int $recruitforum
  * @property array $guildnews
- * @property array $guildachievements
  */
 class guilds extends admin
 {
@@ -241,13 +241,6 @@ class guilds extends admin
 	 * @type string
 	 */
 	protected $factionname;
-
-	/**
-	 * guildachi array from battle.NET
-	 *
-	 * @type array
-	 */
-	protected $guildachievements;
 
 	/**
 	 * @return int
@@ -736,16 +729,7 @@ class guilds extends admin
 		}
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getGuildAchievements()
-	{
-		$this->get_achievements();
-		return $this->guildachievements;
-
-
-	}
+	// pulling guild achievements from api is met by the achievements class
 
 	/**
 	 * guild class constructor
@@ -1393,7 +1377,8 @@ class guilds extends admin
 	 * @param  bool   $last_update
 	 * @return array
 	 */
-	public function list_players($order = 'm.player_name', $start = 0, $mode = 0, $minlevel = 1, $maxlevel = 200, $selectactive = 1, $selectnonactive = 1, $player_filter = '', $last_update = false)
+	public function list_players($order = 'm.player_name', $start = 0, $mode = 0, $minlevel = 1,
+	                             $maxlevel = 200, $selectactive = 1, $selectnonactive = 1, $player_filter = '', $last_update = false)
 	{
 
 		global $db, $config;
@@ -1586,10 +1571,10 @@ class guilds extends admin
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql, 604800);
-		$guild = array();
+		$guildlist = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$guild[] = array (
+			$guildlist[] = array (
 				'game_id' => $row['game_id'] ,
 				'id' => $row['id'] ,
 				'name' => $row['name'],
@@ -1600,99 +1585,9 @@ class guilds extends admin
 			);
 		}
 		$db->sql_freeresult($result);
-		return $guild;
+		return $guildlist;
 	}
 
-	/**
-	 * get achievements from db
-	 * @return int
-	 */
-	private function get_achievements()
-	{
-		global $db;
-		$i=0;
-		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed
-    			FROM ' . ACHIEVEMENT_TRACK_TABLE. '
-    			WHERE guild_id = ' . (int) $this->guildid ;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$i=1;
-			$this->guildachievements[] = array (
-				'guild_id' => $row['guild_id'] ,
-				'player_id' => $row['player_id'] ,
-				'achievement_id' => $row['achievement_id'],
-				'achievements_completed' => $row['achievements_completed'],
-			);
-		}
-		$db->sql_freeresult($result);
 
-		// @todo add check if achievements are old
-		return $i;
-	}
-
-	/**
-	 * call API and set set achievment tracked
-	 */
-	private function set_achievements()
-	{
-		global $db;
-		$i=0;
-
-		$data = $this->Call_Guild_API(array('achievements'));
-
-		$achievements = array();
-
-		$game          = new game;
-		$game->game_id = $this->game_id;
-		$game->get_game();
-
-		foreach ($data['achievements']['achievementsCompleted'] as $id => $achi)
-		{
-			$achievement[$id]['id'] = $achi;
-		}
-		foreach ($data['achievements']['achievementsCompletedTimestamp'] as $id => $achiTimeStamp)
-		{
-			$achievement[$id]['timestamp'] = $achiTimeStamp;
-		}
-
-		$sql_ary = array();
-
-		foreach($achievement as $id => $achi)
-		{
-			$sql_ary[] = array(
-				'guild_id' => $this->guildid,
-				'player_id' => 0,
-				'achievement_id' => $achi['id'],
-				'achievements_completed' => $achi['timestamp'],
-			);
-		}
-		$db->sql_multi_insert(ACHIEVEMENT_TRACK_TABLE, $sql_ary);
-
-		foreach ($data['achievements']['criteria'] as $id => $criterium_id)
-		{
-			$criterium[$id]['criterium_id'] = $criterium_id;
-			$criterium[$id]['criteriaCreated'] = $data['achievements']['criteriaCreated'][$id];
-			$criterium[$id]['criteriaQuantity'] = $data['achievements']['criteriaQuantity'][$id];
-			$criterium[$id]['criteriaTimestamp'] = $data['achievements']['criteriaTimestamp'][$id];
-		}
-
-		$sql_ary = array();
-		foreach($criterium as $id => $crit)
-		{
-			$sql_ary[] = array(
-				'guild_id' => $this->guildid,
-				'player_id' => 0,
-				'criteria_id' => $achi['criteria_id'],
-				'criteria_quantity' => $achi['criteriaQuantity'],
-				'criteria_timestamp' => $achi['criteriaTimestamp'],
-				'criteria_created' => $achi['criteriaCreated'],
-			);
-		}
-
-		$db->sql_multi_insert(CRITERIA_TRACK_TABLE, $sql_ary);
-
-
-	}
 
 }
