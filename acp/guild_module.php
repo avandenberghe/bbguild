@@ -68,6 +68,11 @@ class guild_module extends admin
 	protected $factions;
 
 	/**
+	 * @type game
+	 */
+	private $game;
+
+	/**
 	 * ACP guild function
 	 *
 	 * @param int $id   the id of the node who parent has to be returned by function
@@ -108,7 +113,6 @@ class guild_module extends admin
 			)
 		);
 
-
 		switch ($mode)
 		{
 			case 'listguilds':
@@ -124,12 +128,12 @@ class guild_module extends admin
 					$this->AddGuild($addguild);
 				}
 
-				$thisgame          = new game;
-				$thisgame->game_id = $addguild->getGameId();
-				$thisgame->get_game();
+				$this->game          = new game;
+				$this->game->game_id = $addguild->getGameId();
+				$this->game->get_game();
 
 				// reset armory_enabled to false if no API key
-				if ($thisgame->game_id == 'wow' && $thisgame->getApikey() == '')
+				if ($this->game->game_id == 'wow' && $this->game->getApikey() == '')
 				{
 					$addguild->setArmoryEnabled(false);
 				}
@@ -146,19 +150,19 @@ class guild_module extends admin
 					);
 				}
 
-				foreach ($thisgame->getRegions() as $key => $regionname)
+				foreach ($this->game->getRegions() as $key => $regionname)
 				{
 					$this->template->assign_block_vars(
 						'region_row',
 						array(
 							'VALUE'    => $key,
-							'SELECTED' => ($thisgame->getRegion() == $key) ? ' selected="selected"' : '',
+							'SELECTED' => ($this->game->getRegion() == $key) ? ' selected="selected"' : '',
 							'OPTION'   => (! empty($regionname)) ? $regionname : '(None)',
 						)
 					);
 				}
 
-				$this->factions = new faction($thisgame->game_id);
+				$this->factions = new faction($this->game->game_id);
 
 				$listfactions = $this->factions->get_factions();
 				if (isset($listfactions))
@@ -176,7 +180,7 @@ class guild_module extends admin
 					}
 				}
 
-				switch ($thisgame->game_id)
+				switch ($this->game->game_id)
 				{
 					case 'gw2':
 						$addguild->setName('Twisted');
@@ -199,6 +203,11 @@ class guild_module extends admin
 			case 'editguild':
 				$this->url_id = $this->request->variable(URI_GUILD, 0);
 				$updateguild  = new guilds($this->url_id);
+
+				$this->game          = new game;
+				$this->game->game_id = $updateguild->getGameId();
+				$this->game->get_game();
+
 				if ($this->request->is_set_post('playeradd'))
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-mm_module&amp;mode=addplayer&amp;'.URI_GUILD. '=' .$this->url_id));
@@ -384,12 +393,11 @@ class guild_module extends admin
 
 	private function BattleNetUpdate(guilds $updateguild, $parameters = array())
 	{
-		$data =  $updateguild->Call_Guild_API($parameters);
+		$data =  $updateguild->Call_Guild_API($parameters , $this->game);
 		if ($updateguild->getArmoryresult() == 'OK')
 		{
 			$updateguild->update_guild_battleNet($data, $parameters);
 		}
-
 	}
 
 

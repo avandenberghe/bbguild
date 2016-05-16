@@ -755,16 +755,14 @@ class guilds extends admin
 	/**
 	 * call guild endpoint
 	 *
-	 * @param  $params
+	 * @param array $params
+	 * @param \bbdkp\bbguild\model\games\game $game
 	 * @return bool
 	 */
-	public function Call_Guild_API($params)
+	public function Call_Guild_API($params, game $game)
 	{
 		global $user, $cache;
 		$data= 0;
-		$game          = new game;
-		$game->game_id = $this->game_id;
-		$game->get_game();
 
 		if ( (!$game->getArmoryEnabled()) || trim($game->getApikey()) == '' || trim($game->get_apilocale()) == '')
 		{

@@ -302,6 +302,7 @@ class release_2_0_0_m01_schema extends migration
 						'description'     => array('VCHAR_UNI:255', ''),
 						'icon'            => array('VCHAR_UNI:255', ''),
 						'factionid'       => array('BOOL', 0),
+						'reward'          => array('VCHAR_UNI:255', ''),
 					),
 					'PRIMARY_KEY'  => 'id',
 				),
@@ -320,8 +321,9 @@ class release_2_0_0_m01_schema extends migration
 					'COLUMNS'    => array(
 						'rewards_item_id'   => array('UINT', 0),
 						'description'       => array('VCHAR_UNI:255', ''),
-						'orderIndex'        => array('UINT', 0),
-						'max'               => array('UINT', 0)
+						'itemlevel'         => array('UINT', 0),
+						'quality'           => array('UINT', 0),
+						'icon'              => array('VCHAR:255', 0),
 					),
 					'PRIMARY_KEY'  => 'rewards_item_id',
 				),

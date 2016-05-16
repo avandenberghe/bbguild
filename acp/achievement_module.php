@@ -427,11 +427,10 @@ class achievement_module extends admin
 	 */
 	private function LoadAPIGuildachievements(guilds $Guild)
 	{
-		//new instance of achievement class
+		//call achievement API
 		$this->achievement = new achievement($this->game, 0);
-
-		$data = $this->achievement->Call_Achievement_API();
-
+		$this->achievement->setGuildId($this->guild->guildid);
+		$this->achievement->setAchievements($Guild, $this->game);
 
 	}
 

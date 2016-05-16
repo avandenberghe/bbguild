@@ -15,10 +15,89 @@ namespace bbdkp\bbguild\model\games\rpg;
 use bbdkp\bbguild\model\api\battlenet;
 use bbdkp\bbguild\model\games\game;
 use bbdkp\bbguild\model\admin\admin;
+use bbdkp\bbguild\model\player\guilds;
 
-/**
- * Class achievement
- *
+	/**
+	* This provides data about an individual achievement.
+	* example json
+		{
+			"id": 2144,
+			"title": "What a Long, Strange Trip It's Been",
+			"points": 50,
+			"description": "Complete the world events achievements listed below.",
+			"reward": "Rewards: Violet Proto-Drake",
+			"rewardItems": [
+			{
+			"id": 44177,
+			"name": "Reins of the Violet Proto-Drake",
+			"icon": "ability_mount_drake_proto",
+			"quality": 4,
+			"itemLevel": 70,
+			"tooltipParams": {
+			"timewalkerLevel": 0
+			},
+
+			"stats": [],
+			"armor": 0,
+			"context": "",
+			"bonusLists": []
+		}
+		],
+
+		"icon": "achievement_bg_masterofallbgs",
+	"criteria": [
+		{
+			"id": 7553,
+			"description": "To Honor One's Elders",
+			"orderIndex": 0,
+			"max": 1
+		},
+		{
+			"id": 7561,
+			"description": "Fool For Love",
+			"orderIndex": 1,
+			"max": 1
+		},
+		{
+			"id": 9880,
+			"description": "Noble Gardener",
+			"orderIndex": 2,
+			"max": 1
+		},
+		{
+			"id": 7555,
+			"description": "For The Children",
+			"orderIndex": 3,
+			"max": 1
+		},
+		{
+			"id": 0,
+			"description": "The Flame Warden/Keeper",
+			"orderIndex": 4,
+			"max": 1
+		},
+		{
+			"id": 7564,
+			"description": "Brewmaster",
+			"orderIndex": 5,
+			"max": 1
+		},
+		{
+			"id": 7558,
+			"description": "Hallowed Be Thy Name",
+			"orderIndex": 6,
+			"max": 1
+		},
+		{
+			"id": 7566,
+			"description": "Merrymaker",
+			"orderIndex": 7,
+			"max": 1
+		}
+	],
+	"accountWide": true,
+	"factionId": 2
+	}
  * @package bbdkp\bbguild\model\games\rpg
  */
 class achievement extends admin
@@ -85,6 +164,13 @@ class achievement extends admin
 	 * @var string
 	 */
 	protected $player_id;
+
+	/**
+	 * oneline description of rewards attached to this achievement.
+	 *
+	 * @var string
+	 */
+	protected $reward;
 
 	/***************************************/
 
@@ -277,6 +363,21 @@ class achievement extends admin
 		$this->player_id = $player_id;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getReward()
+	{
+		return $this->reward;
+	}
+
+	/**
+	 * @param string $reward
+	 */
+	public function setReward($reward)
+	{
+		$this->reward = $reward;
+	}
 
 	/*****************************************************/
 
@@ -320,8 +421,8 @@ class achievement extends admin
 	/**
 	 * achievement constructor.
 	 *
-	 * @param \bbdkp\bbguild\model\games\game $game
-	 * @param int                             $id
+	 * @param \bbdkp\bbguild\model\games\game    $game
+	 * @param int                                $id
 	 */
 	public function __construct(game $game, $id)
 	{
@@ -329,82 +430,7 @@ class achievement extends admin
 		$this->game_id = $game->game_id;
 		$this->game = $game;
 		$this->id = $id;
-
-		if ($id > 0)
-		{
-			if ($this->get_achievement() == 0)
-			{
-				$data = $this->Call_Achievement_API();
-				$this->insert_achievement($data);
-			}
-		}
 	}
-
-	/**
-	 * call achievement endpoint
-	 * @return array|bool
-	 */
-	public function Call_Achievement_API()
-	{
-		global $cache;
-		$data = array();
-		if (! $this->game->getArmoryEnabled())
-		{
-			return false;
-		}
-
-		$api  = new battlenet('achievement',$this->game->getRegion(), $this->game->getApikey(),
-			$this->game->get_apilocale(), $this->game->get_privkey(), $this->ext_path, $cache);
-		$data = $api->achievement->getAchievementDetail($this->id);
-		$data = $data['response'];
-		unset($api);
-		if (!isset($data))
-		{
-			return false;
-		}
-
-		//if we get error code
-		if (isset($data['code']))
-		{
-			return false;
-		}
-
-		if (isset($data['status']))
-		{
-			return false;
-		}
-
-		return $data;
-	}
-
-	/**
-	 * get achievements from db
-	 * @return int
-	 */
-	private function get_achievements()
-	{
-		global $db;
-		$i=0;
-		$sql = 'SELECT guild_id, player_id, achievement_id, achievements_completed
-    			FROM ' . ACHIEVEMENT_TRACK_TABLE. '
-    			WHERE guild_id = ' . (int) $this->guildid ;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$i=1;
-			$this->guildachievements[] = array (
-				'guild_id' => $row['guild_id'] ,
-				'player_id' => $row['player_id'] ,
-				'achievement_id' => $row['achievement_id'],
-				'achievements_completed' => $row['achievements_completed'],
-			);
-		}
-		$db->sql_freeresult($result);
-
-		// @todo add check if achievements are old
-		return $i;
-	}
-
 
 	/**
 	 * get achievement (no track info)
@@ -416,7 +442,7 @@ class achievement extends admin
 		$i=0;
 
 		$sql_array = array (
-			'SELECT' => ' a.id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid,
+			'SELECT' => ' a.id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid, a.reward,
 				r1.rel_value as criteria_id,
 				r2.rel_value as rewards_item_id,
 				c.description as criteria, c.orderindex as criteriaorder, c.max as criteriamax,
@@ -444,13 +470,14 @@ class achievement extends admin
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$i=1;
-			$this->title = $row['title'];
-			$this->points    = $row['points'];
-			$this->description    = $row['description'];
-			$this->icon    = $row['icon'];
+			$this->title        = $row['title'];
+			$this->points       = $row['points'];
+			$this->description  = $row['description'];
+			$this->icon         = $row['icon'];
 			$this->factionId    = $row['factionid'];
-			$this->criteria       = array( $row['criteria_id'], $row['criteria'], $row['criteriaorder'], $row['criteriamax'] );
-			$this->rewardItems    = array( $row['rewards_item_id'], $row['rewards'], $row['rewardorder'], $row['rewardmax'] );
+			$this->reward       = $row['reward'];
+			$this->criteria     = array( $row['criteria_id'], $row['criteria'], $row['criteriaorder'], $row['criteriamax']);
+			$this->rewardItems  = array( $row['rewards_item_id'], $row['rewards'], $row['rewardorder'], $row['rewardmax']);
 		}
 		$db->sql_freeresult($result);
 		return $i;
@@ -466,8 +493,9 @@ class achievement extends admin
 	 * criteria_quantity'      => array('VCHAR_UNI:255', ''),
 	 * criteria_timestamp'     => array('TIMESTAMP', 0),
 	 *
-	 * @param $guild_id
-	 * @param $player_id
+	 * @param     $start
+	 * @param     $guild_id
+	 * @param int $player_id
 	 * @return array
 	 */
 	public function get_tracked_achievements($start, $guild_id, $player_id = 0)
@@ -477,11 +505,11 @@ class achievement extends admin
 
 		// for understanding the entity schema see achievements.png
 		$sql_array = array (
-			'SELECT' => ' a.id as achievement_id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid,
+			'SELECT' => ' a.id as achievement_id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid, a.reward,
 				r1.rel_value as criteria_id,
 				r2.rel_value as rewards_item_id,
 				c.description as criteriadescription, c.orderindex as criteriaorder, c.max as criteriamax, ct.criteria_quantity, ct.criteria_timestamp, ct.criteria_created,
-				w.description as rewardsdescription, w.orderindex as rewardorder, w.max as rewardmax,
+				w.description as rewardsdescription, w.rewards_item_id as rewards_item_id, w.itemlevel as itemlevel, w.quality as quality,
 				ac.achievements_completed ',
 			'FROM' => array (
 				ACHIEVEMENT_TABLE => 'a',
@@ -499,7 +527,7 @@ class achievement extends admin
 			'WHERE' =>  '1=1
 				    AND (ac.guild_id = ' . $guild_id .' OR ac.player_id= ' . $player_id . ") AND ac.achievement_id = a.id
 				    AND a.game_id = '". $this->game_id . "' AND a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " .
-				' AND c.criteria_id = r1.rel_value AND w.rewards_item_id = r2.rel_value
+			      ' AND c.criteria_id = r1.rel_value AND w.rewards_item_id = r2.rel_value
 					AND (ct.guild_id = ' . $guild_id .' OR ct.player_id= ' . $player_id . ') AND ct.criteria_id = c.criteria_id ',
 		);
 
@@ -519,7 +547,7 @@ class achievement extends admin
 		$dataset = $db->sql_fetchrowset($result);
 		$achievcount = count($dataset);
 
-		if($start> 0)
+		if ($start> 0)
 		{
 			$result = $db->sql_query_limit($sql, 15, $start);
 			$dataset = $db->sql_fetchrowset($result);
@@ -539,6 +567,7 @@ class achievement extends admin
 				'description'              => $row['description'],
 				'icon'                     => $row['icon'],
 				'factionId'                => $row['factionid'],
+				'reward'                   => $row['reward'],
 				'criteria'                 => array(
 						$row['criteria_id'],
 						$row['criteriadescription'],
@@ -547,78 +576,81 @@ class achievement extends admin
 						$row['criteria_quantity'],
 						$row['criteria_timestamp'],
 						$row['criteria_created']),
-				'rewardItems'              => array(
+				'rewardItems'  => array(
 						$row['rewards_item_id'],
 						$row['rewardsdescription'],
-						$row['rewardorder'],
-						$row['rewardmax']),
+						$row['itemlevel'],
+						$row['quality']
+				),
 				'achievements_completed'   => $row['achievements_completed']
 			);
 		}
-		$a = 1;
+
 		return array($achievements, $current_order, $achievcount);
 
 	}
 
+
 	/**
-	 * Insert an achievement into local database
+	 * call API and set set achievment tracked for one guild
 	 *
-	 * @param array $data
+	 * 1) delete from achievement track
+	 *    insert achievement track
+	 * 2) delete from criteria track
+	 *    insert criteria track
+	 * 3) insert achievements if not already exists
+	 * 4) insert criteria if not already exists
+	 * 5) insert ACH-REW in bb_relations if not already exists
+	 * 6) insert relations if not already exists
+	 * 7) insert ACH-CRI in bb_relations if not already exists
+	 *
+	 * @param \bbdkp\bbguild\model\player\guilds $Guild
+	 * @param \bbdkp\bbguild\model\games\game    $game
 	 */
-	private function insert_achievement(array $data)
+	public function setAchievements(guilds $Guild, game $game)
 	{
 		global $db;
-		$this->id = isset($data['id']) ? $data['id'] : 0;
-		$this->game_id = 'wow';
-		$this->title = isset($data['title']) ? $data['title']: '';
-		$this->points = isset($data['points']) ? $data['points']: 0;
-		$this->description = isset($data['description']) ? $data['description']: '';
-		$this->reward = isset($data['reward']) ? $data['reward']: '';
-		$this->rewardItems = isset($data['rewardItems']) ? json_encode($data['rewardItems']): '';
-		$this->icon = isset($data['icon']) ? $data['icon']: '';
-		$this->criteria = isset($data['criteria']) ? json_encode($data['criteria']): '';
-		$this->factionId = isset($data['factionId']) ? $data['factionId']: '';
 
-		$sql_ary = array(
-			'id'            => $this->id,
-			'game_id'          => $this->game_id,
-			'title'         => $this->title,
-			'points'        => $this->points,
-			'description'   => $this->description,
-			'reward'        => $this->reward,
-			'rewarditems'   => $this->rewardItems,
-			'criteria'      => $this->criteria,
-			'factionid'     => $this->factionId,
-		);
+		$achievement = array();
 
-		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
-	}
+		/**** achievement track *****/
+		$sql = 'DELETE FROM ' . ACHIEVEMENT_TRACK_TABLE . ' WHERE guild_id = ' . $Guild->guildid;
+		$db->sql_query($sql);
+		/**** criteria track *****/
+		$sql = 'DELETE FROM ' . CRITERIA_TRACK_TABLE . ' WHERE guild_id = ' . $Guild->guildid;
+		$db->sql_query($sql);
+		/**** achievement  *****/
+		$sql = 'DELETE FROM ' . ACHIEVEMENT_TABLE . ' WHERE 1 <> 1 ';
+		$db->sql_query($sql);
+		/**** achievement rewards *****/
+		$sql = 'DELETE FROM ' . ACHIEVEMENT_REWARDS_TABLE . ' WHERE 1 = 1 ';
+		$db->sql_query($sql);
+		/**** achievement criteria *****/
+		$sql = 'DELETE FROM ' . ACHIEVEMENT_CRITERIA_TABLE . ' WHERE  1 = 1 ';
+		$db->sql_query($sql);
+		/**** relations *****/
+		$sql = 'DELETE FROM ' . BB_RELATIONS_TABLE . ' WHERE 1 = 1' ;
+		$db->sql_query($sql);
 
+		//call Guild API for achievements endpoint
 
+		/**
+		A set of data structures that describe the achievements earned by the guild. When requesting achievement data,
+				several sets of data will be returned.
+		- achievementsCompleted - A list of achievement ids.
+		- achievementsCompletedTimestamp - A list of timestamps whose places correspond to the achievement ids in the
+				achievementsCompleted list. The value of each timestamp indicates when the related achievement was earned
+				by the guild.
+		- criteria - A list of criteria ids that can be used to determine the partial completeness of guild achievements.
+		- criteriaQuantity - A list of values associated with a given achievement criteria. The position of a value
+				corresponds to the position of a given achievement criteria.
+		- criteriaTimestamp - A list of timestamps where the value represents when the criteria was considered complete.
+				The position of a value corresponds to the position of a given achievement criteria.
+		- criteriaCreated - A list of timestamps where the value represents when the criteria was considered started.
+				The position of a value corresponds to the position of a given achievement criteria.
+		***/
 
-
-	/**
-	 * call API and set set achievment tracked
-	 * delete from achievement track
-	 * insert achievement track
-	 * delete from criteria track
-	 * insert criteria track
-	 * insert achievements if not already exists
-	 * insert criteria if not already exists
-	 * insert relations if not already exists
-	 */
-	private function set_achievements()
-	{
-		global $db;
-		$i=0;
-
-		$data = $this->Call_Guild_API(array('achievements'));
-
-		$achievements = array();
-
-		$game          = new game;
-		$game->game_id = $this->game_id;
-		$game->get_game();
+		$data = (array) $Guild->Call_Guild_API(array('achievements'), $game);
 
 		foreach ($data['achievements']['achievementsCompleted'] as $id => $achi)
 		{
@@ -629,18 +661,12 @@ class achievement extends admin
 			$achievement[$id]['timestamp'] = $achiTimeStamp;
 		}
 
-		//delete from achievement track
-
-		$sql = "DELETE FROM " . ACHIEVEMENT_TRACK_TABLE . " WHERE guild_id = " . $this->guildid;
-		$db->sql_query($sql);
-
-		//insert achievement track
 		$sql_ary = array();
 
 		foreach ($achievement as $id => $achi)
 		{
 			$sql_ary[] = array(
-				'guild_id' => $this->guildid,
+				'guild_id' => $Guild->guildid,
 				'player_id' => 0,
 				'achievement_id' => $achi['id'],
 				'achievements_completed' => $achi['timestamp'],
@@ -648,9 +674,7 @@ class achievement extends admin
 		}
 		$db->sql_multi_insert(ACHIEVEMENT_TRACK_TABLE, $sql_ary);
 
-		// delete from criteria track
-		$sql = "DELETE FROM " . CRITERIA_TRACK_TABLE . " WHERE guild_id = " . $this->guildid;
-		$db->sql_query($sql);
+
 
 		$criteria = array();
 		foreach ($data['achievements']['criteria'] as $id => $criteria_id)
@@ -665,7 +689,7 @@ class achievement extends admin
 		foreach ($criteria as $id => $crit)
 		{
 			$sql_ary[] = array(
-				'guild_id' => $this->guildid,
+				'guild_id' => $Guild->guildid,
 				'player_id' => 0,
 				'criteria_id' => $crit['criteria_id'],
 				'criteria_quantity' => $crit['criteriaQuantity'],
@@ -673,12 +697,20 @@ class achievement extends admin
 				'criteria_created' => $crit['criteriaCreated'],
 			);
 		}
-
-		$db->sql_multi_insert(CRITERIA_TRACK_TABLE, $sql_ary);
-
-		//phpbb_bb_achievement
-		$sql = 'SELECT achievement_id from ' . ACHIEVEMENT_TRACK_TABLE . ' where guild_id = ' . $this->guildid;
-		$sql .= ' AND achievement_id not in (SELECT achievement_id from ' . ACHIEVEMENT_TABLE . ')';
+		/**** loop tracked achievements that arent already in achievement table *****/
+		$sql_array = array (
+			'SELECT' => ' t.achievement_id ',
+			'FROM' => array (
+				ACHIEVEMENT_TRACK_TABLE => 't',
+			),
+			'LEFT_JOIN' => array(
+				array(
+					'FROM'  => array(ACHIEVEMENT_TABLE => 's'),
+					'ON'    => ' s.id = t.achievement_id ',
+				)),
+			'WHERE' =>  ' t.guild_id = ' . $Guild->guildid . ' AND s.id is NULL ',
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 
 		$achievement_ids = array();
@@ -690,11 +722,184 @@ class achievement extends admin
 
 		foreach ($achievement_ids as $id => $achievement_id)
 		{
-			$this->achievement = new achievement($game, $achievement_id);
-			unset($this->achievement);
+			$this->id = $achievement_id;
+			$achievementdata = $this->Call_Achievement_API($Guild);
+			if ($achievementdata)
+			{
+				$this->insert_achievement($achievementdata);
+				$this->insert_rewardItems($achievementdata);
+				$this->insert_criteria($achievementdata);
+
+				$a = 1;
+
+			}
+		}
+	}
+
+	/**
+	 * call achievement endpoint
+	 *
+	 * @param \bbdkp\bbguild\model\player\guilds $Guild
+	 * @return array|bool
+	 */
+	private function Call_Achievement_API(guilds $Guild)
+	{
+		global $cache;
+
+
+		// game and guild have to be armory enabled...
+		if (! $this->game->getArmoryEnabled() || !$Guild->isArmoryEnabled() )
+		{
+			return false;
 		}
 
+		// new instance of achievement class..
+		$api  = new battlenet('achievement',$this->game->getRegion(), $this->game->getApikey(),
+			$this->game->get_apilocale(), $this->game->get_privkey(), $this->ext_path, $cache);
+		$data = $api->achievement->getAchievementDetail($this->id);
+		$data = $data['response'];
+		unset($api);
+		if (!isset($data))
+		{
+			return false;
+		}
+
+		//if we get error code
+		if (isset($data['code']))
+		{
+			return false;
+		}
+
+		if (isset($data['status']))
+		{
+			return false;
+		}
+
+		return $data;
+	}
+
+
+	/**
+	 * Insert an achievement into local database
+	 *
+	 * @param array $data
+	 */
+	private function insert_achievement(array $data)
+	{
+		global $db;
+		$this->id = isset($data['id']) ? $data['id'] : 0;
+		$this->game_id = 'wow';
+		$this->title = isset($data['title']) ? $data['title']: '';
+		$this->points = isset($data['points']) ? $data['points']: 0;
+		$this->description = isset($data['description']) ? $data['description']: '';
+		$this->icon = isset($data['icon']) ? $data['icon']: '';
+		$this->factionId = isset($data['factionId']) ? $data['factionId']: '';
+		$this->reward = isset($data['reward']) ? $data['reward']: '';
+
+		$sql_ary = array(
+			'id'            => $this->id,
+			'game_id'       => $this->game_id,
+			'title'         => $this->title,
+			'points'        => $this->points,
+			'description'   => $this->description,
+			'factionid'     => $this->factionId,
+			'icon'          => $this->icon,
+			'reward'        => $this->reward
+		);
+
+		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+	}
+
+	/**
+	 * insert achievement rewardItems array into database
+	 *
+	 * ex. {
+	 * 	"id": 44177,
+	 * 	"name": "Reins of the Violet Proto-Drake",
+	 * 	"icon": "ability_mount_drake_proto",
+	 * 	"quality": 4,
+	 * 	"itemLevel": 70,
+	 * 	"tooltipParams": {
+	 * 	"timewalkerLevel": 0
+	 * 	},
+	 *
+	 * @param array $data
+	 */
+	private function insert_rewardItems(array $data)
+	{
+		$sql_ary1 = array();
+		$sql_ary2 = array();
+		global $db;
+		$this->rewardItems = is_array($data['rewardItems']) ? $data['rewardItems'] : '' ;
+		foreach ($this->rewardItems as $id => $rewardItems)
+		{
+			$sql_ary1[] = array(
+				'rewards_item_id'   => $rewardItems['id'],
+				'description'       => $rewardItems['name'],
+				'itemlevel'         => $rewardItems['itemLevel'],
+				'icon'              => $rewardItems['icon'],
+				'quality'           => $rewardItems['quality'],
+			);
+
+			$sql_ary2[] = array(
+				'attribute_id'  => 'ACH',
+				'rel_attr_id'   => 'REW',
+				'att_value'     => $data['id'],
+				'rel_value'     => $rewardItems['id'],
+			);
+		}
+		if(count($sql_ary1) > 0)
+		{
+			$db->sql_multi_insert(ACHIEVEMENT_REWARDS_TABLE, $sql_ary1);
+		}
+		if(count($sql_ary2) > 0)
+		{
+			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary2);
+		}
 
 	}
+
+	/**
+	 * insert achievement criteria array into database
+	 * ex.
+	 * "id": 7553,
+	 * "description": "To Honor One's Elders",
+	 * "orderIndex": 0,
+	 * "max": 1
+	 * @param array $data
+	 */
+	private function insert_criteria(array $data)
+	{
+		global $db;
+		$sql_ary3 = array();
+		$sql_ary4 = array();
+		$this->criteria = is_array($data['criteria']) ? $data['criteria'] : '' ;
+		foreach ($this->criteria as $id => $criterium)
+		{
+			$sql_ary3[] = array(
+				'criteria_id'   => $criterium['id'],
+				'description'   => $criterium['description'],
+				'orderindex'    => $criterium['orderIndex'],
+				'max'           => $criterium['max'],
+			);
+
+			$sql_ary4[] = array(
+				'attribute_id'  => 'ACH',
+				'rel_attr_id'   => 'CRI',
+				'att_value'     => $data['id'],
+				'rel_value'     => $criterium['id'],
+			);
+		}
+		if(count($sql_ary3) > 0)
+		{
+			$db->sql_multi_insert(ACHIEVEMENT_CRITERIA_TABLE, $sql_ary3);
+		}
+		if(count($sql_ary4) > 0)
+		{
+			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary4);
+		}
+	}
+
+
 
 }

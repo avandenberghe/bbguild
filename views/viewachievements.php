@@ -47,7 +47,7 @@ class viewachievements implements iviews
 		foreach ($achievements as $achi)
 		{
 			$a = $achi;
-			//$achi['detail'] = new achievement($game, $achi[$i]['id']);
+			$achi['detail'] = new achievement($game, $achi[$i]['id']);
 		}
 
 		$i=0;
