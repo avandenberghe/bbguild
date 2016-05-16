@@ -256,7 +256,7 @@ class achievement_module extends admin
 					'REWARDS'    => $achievement['criteria']['criteria_timestamp'],
 					'REWARDSITEM'    => $achievement['rewardItems']['rewards_item_id'],
 					'REWARDDESCR'    => $achievement['rewardItems']['rewardsdescription'],
-					'REWARDSORDER'    => $achievement['rewardItems']['rewardorder'],
+					'ITEMLEVEL'    => $achievement['rewardItems']['itemlevel'],
 					'COMPLETED'    => $achievement['achievements_completed'],
 					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", $modulename . '&amp;o=' .
 						$GuildAchievements[1]['uri'][0] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid()

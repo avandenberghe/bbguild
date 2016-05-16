@@ -442,26 +442,54 @@ class achievement extends admin
 		$i=0;
 
 		$sql_array = array (
-			'SELECT' => ' a.id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid, a.reward,
-				r1.rel_value as criteria_id,
-				r2.rel_value as rewards_item_id,
-				c.description as criteria, c.orderindex as criteriaorder, c.max as criteriamax,
-				w.description as rewards, w.orderindex as rewardorder, w.max as rewardmax',
+			'SELECT' => '
+			a.id   AS achievement_id,
+			a.game_id,
+			a.title,
+			a.points,
+			a.description,
+			a.icon,
+			a.factionid,
+			a.reward,
+			ac.achievements_completed,
+			r2.rel_value      AS rewards_item_id ,
+			w.description     AS rewardsdescription,
+			w.rewards_item_id AS rewards_item_id,
+			w.itemlevel       AS itemlevel,
+			w.quality         AS quality,
+			r1.rel_value      AS criteria_id,
+			c.description     AS criteriadescription,
+			c.orderindex      AS criteriaorder,
+			c.max             AS criteriamax,
+			ct.criteria_quantity,
+			ct.criteria_timestamp,
+			ct.criteria_created ',
 			'FROM' => array (
 				ACHIEVEMENT_TABLE => 'a',
-				BB_RELATIONS_TABLE => 'r1',
-				ACHIEVEMENT_CRITERIA_TABLE => 'c',
-				ACHIEVEMENT_REWARDS_TABLE => 'w',
+				ACHIEVEMENT_TRACK_TABLE => 'ac',
 			),
 			'LEFT_JOIN' => array(
 				array(
 					'FROM'  => array(BB_RELATIONS_TABLE => 'r2'),
-					'ON'    => " r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' AND r2.att_value = a.id" ,
+					'ON'    => "  a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' " ,
+				),
+				array(
+					'FROM'  => array(ACHIEVEMENT_REWARDS_TABLE => 'w'),
+					'ON'    => " w.rewards_item_id = r2.rel_value " ,
+				),
+				array(
+					'FROM'  => array(BB_RELATIONS_TABLE => 'r1'),
+					'ON'    => " a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " ,
+				),
+				array(
+					'FROM'  => array(ACHIEVEMENT_CRITERIA_TABLE => 'c'),
+					'ON'    => " c.criteria_id = r1.rel_value " ,
+				),
+				array(
+					'FROM'  => array(CRITERIA_TRACK_TABLE => 'ct'),
+					'ON'    => " ct.criteria_id = c.criteria_id AND ( ct.guild_id = 1 OR ct.player_id = 0) " ,
 				)),
-			'WHERE' =>  'a.id = ' . (int) $this->id .
-				" AND a.game_id = '". $this->game_id .
-				"' AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' AND r1.att_value = a.id
-				   AND c.criteria_id = r1.rel_value AND c.rewards_item_id = r2.rel_value "
+			'WHERE' =>  '1=1 AND a.id = ' . (int) $this->id . " AND a.game_id = '". $this->game_id . "'" ,
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -492,7 +520,6 @@ class achievement extends admin
 	 * criteria'               => array('VCHAR:3000', ''),
 	 * criteria_quantity'      => array('VCHAR_UNI:255', ''),
 	 * criteria_timestamp'     => array('TIMESTAMP', 0),
-	 *
 	 * @param     $start
 	 * @param     $guild_id
 	 * @param int $player_id
@@ -504,44 +531,101 @@ class achievement extends admin
 		global $db;
 
 		// for understanding the entity schema see achievements.png
+
+		/*
+			 * 	 * 	SELECT
+			a.id   AS achievement_id,
+			a.game_id,
+			a.title,
+			a.points,
+			a.description,
+			a.icon,
+			a.factionid,
+			a.reward,
+			ac.achievements_completed,
+			r2.rel_value      AS rewards_item_id ,
+			w.description     AS rewardsdescription,
+			w.rewards_item_id AS rewards_item_id,
+			w.itemlevel       AS itemlevel,
+			w.quality         AS quality,
+			r1.rel_value      AS criteria_id,
+			c.description     AS criteriadescription,
+			c.orderindex      AS criteriaorder,
+			c.max             AS criteriamax,
+			ct.criteria_quantity,
+			ct.criteria_timestamp,
+			ct.criteria_created
+		    FROM   phpbb_bb_achievement a
+			INNER JOIN phpbb_bb_achievement_track ac on ac.achievement_id = a.id
+			LEFT OUTER JOIN phpbb_bb_relations_table r2 ON a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW'
+			LEFT OUTER join phpbb_bb_achievement_rewards w ON w.rewards_item_id = r2.rel_value
+			LEFT OUTER JOIN phpbb_bb_relations_table r1 ON a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI'
+			LEFT OUTER JOIN phpbb_bb_achievement_criteria c ON c.criteria_id = r1.rel_value
+			LEFT OUTER join phpbb_bb_criteria_track ct ON ct.criteria_id = c.criteria_id AND ( ct.guild_id = 1 OR ct.player_id = 0)
+			WHERE  1 = 1 AND a.game_id = 'wow' AND (ac.guild_id = 1 OR ac.player_id = 0)
+			ORDER  BY a.id
+		 */
 		$sql_array = array (
-			'SELECT' => ' a.id as achievement_id, a.game_id, a.title, a.points, a.description, a.icon, a.factionid, a.reward,
-				r1.rel_value as criteria_id,
-				r2.rel_value as rewards_item_id,
-				c.description as criteriadescription, c.orderindex as criteriaorder, c.max as criteriamax, ct.criteria_quantity, ct.criteria_timestamp, ct.criteria_created,
-				w.description as rewardsdescription, w.rewards_item_id as rewards_item_id, w.itemlevel as itemlevel, w.quality as quality,
-				ac.achievements_completed ',
+			'SELECT' => '
+			a.id   AS achievement_id,
+			a.game_id,
+			a.title,
+			a.points,
+			a.description,
+			a.icon,
+			a.factionid,
+			a.reward,
+			ac.achievements_completed,
+			r2.rel_value      AS rewards_item_id ,
+			w.description     AS rewardsdescription,
+			w.rewards_item_id AS rewards_item_id,
+			w.itemlevel       AS itemlevel,
+			w.quality         AS quality,
+			r1.rel_value      AS criteria_id,
+			c.description     AS criteriadescription,
+			c.orderindex      AS criteriaorder,
+			c.max             AS criteriamax,
+			ct.criteria_quantity,
+			ct.criteria_timestamp,
+			ct.criteria_created ',
 			'FROM' => array (
 				ACHIEVEMENT_TABLE => 'a',
 				ACHIEVEMENT_TRACK_TABLE => 'ac',
-				BB_RELATIONS_TABLE => 'r1',
-				ACHIEVEMENT_REWARDS_TABLE => 'w',
-				ACHIEVEMENT_CRITERIA_TABLE => 'c',
-				CRITERIA_TRACK_TABLE => 'ct'
-			),
+				),
 			'LEFT_JOIN' => array(
 				array(
 					'FROM'  => array(BB_RELATIONS_TABLE => 'r2'),
-					'ON'    => " a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' " ,
+					'ON'    => "  a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' " ,
+				),
+				array(
+					'FROM'  => array(ACHIEVEMENT_REWARDS_TABLE => 'w'),
+					'ON'    => " w.rewards_item_id = r2.rel_value " ,
+				),
+				array(
+					'FROM'  => array(BB_RELATIONS_TABLE => 'r1'),
+					'ON'    => " a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " ,
+				),
+				array(
+					'FROM'  => array(ACHIEVEMENT_CRITERIA_TABLE => 'c'),
+					'ON'    => " c.criteria_id = r1.rel_value " ,
+				),
+				array(
+					'FROM'  => array(CRITERIA_TRACK_TABLE => 'ct'),
+					'ON'    => " ct.criteria_id = c.criteria_id AND ( ct.guild_id = 1 OR ct.player_id = 0) " ,
 				)),
-			'WHERE' =>  '1=1
-				    AND (ac.guild_id = ' . $guild_id .' OR ac.player_id= ' . $player_id . ") AND ac.achievement_id = a.id
-				    AND a.game_id = '". $this->game_id . "' AND a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " .
-			      ' AND c.criteria_id = r1.rel_value AND w.rewards_item_id = r2.rel_value
-					AND (ct.guild_id = ' . $guild_id .' OR ct.player_id= ' . $player_id . ') AND ct.criteria_id = c.criteria_id ',
+			'WHERE' =>  '1=1 AND (ac.guild_id = ' . $guild_id .' OR ac.player_id= ' . $player_id . ") AND a.game_id = '". $this->game_id . "'" ,
 		);
 
 		$sort_order = array(
-			0 => array('achievement_id', 'achievement_id desc'),
-			1 => array('title', 'title desc'),
-			2 => array('description', 'description desc'),
-			3 => array('points', 'points desc'),
-			4 => array('achievements_completed', 'achievements_completed desc'),
+			0 => array('a.id', 'a.id desc'),
+			1 => array('a.title', 'a.title desc'),
+			2 => array('a.description', 'a.description desc'),
+			3 => array('a.points', 'a.points desc'),
+			4 => array('ac.achievements_completed', 'ac.achievements_completed desc'),
 		);
 
 		$current_order   = $this->switch_order($sort_order);
 		$sql_array['ORDER_BY']  = $current_order['sql'];
-
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$dataset = $db->sql_fetchrowset($result);
@@ -569,18 +653,18 @@ class achievement extends admin
 				'factionId'                => $row['factionid'],
 				'reward'                   => $row['reward'],
 				'criteria'                 => array(
-						$row['criteria_id'],
-						$row['criteriadescription'],
-						$row['criteriaorder'],
-						$row['criteriamax'],
-						$row['criteria_quantity'],
-						$row['criteria_timestamp'],
-						$row['criteria_created']),
+					'criteria_id' => $row['criteria_id'],
+					'criteriadescription' =>	$row['criteriadescription'],
+					'criteriaorder' =>	$row['criteriaorder'],
+					'criteriamax' =>	$row['criteriamax'],
+					'criteria_quantity' =>	$row['criteria_quantity'],
+					'criteria_timestamp' =>	$row['criteria_timestamp'],
+					'criteria_created' =>	$row['criteria_created']),
 				'rewardItems'  => array(
-						$row['rewards_item_id'],
-						$row['rewardsdescription'],
-						$row['itemlevel'],
-						$row['quality']
+					'rewards_item_id' =>	$row['rewards_item_id'],
+					'rewardsdescription' =>	$row['rewardsdescription'],
+					'itemlevel' =>	$row['itemlevel'],
+					'quality'   => $row['quality']
 				),
 				'achievements_completed'   => $row['achievements_completed']
 			);
@@ -840,6 +924,7 @@ class achievement extends admin
 				'icon'              => $rewardItems['icon'],
 				'quality'           => $rewardItems['quality'],
 			);
+			$db->sql_query('DELETE FROM ' . ACHIEVEMENT_REWARDS_TABLE . ' WHERE rewards_item_id =  ' . $rewardItems['id']);
 
 			$sql_ary2[] = array(
 				'attribute_id'  => 'ACH',
@@ -847,11 +932,15 @@ class achievement extends admin
 				'att_value'     => $data['id'],
 				'rel_value'     => $rewardItems['id'],
 			);
+
+			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'REW' and att_value= '" . $data['id'] . "' and rel_value = '".  $rewardItems['id'] ."' " );
 		}
+
 		if(count($sql_ary1) > 0)
 		{
 			$db->sql_multi_insert(ACHIEVEMENT_REWARDS_TABLE, $sql_ary1);
 		}
+
 		if(count($sql_ary2) > 0)
 		{
 			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary2);
@@ -883,17 +972,23 @@ class achievement extends admin
 				'max'           => $criterium['max'],
 			);
 
+			$db->sql_query('DELETE FROM ' . ACHIEVEMENT_CRITERIA_TABLE . ' WHERE criteria_id =  ' . $criterium['id']);
+
 			$sql_ary4[] = array(
 				'attribute_id'  => 'ACH',
 				'rel_attr_id'   => 'CRI',
 				'att_value'     => $data['id'],
 				'rel_value'     => $criterium['id'],
 			);
+
+			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'CRI' and att_value= '" . $data['id'] . "' and rel_value = '".  $criterium['id'] ."' " );
 		}
+
 		if(count($sql_ary3) > 0)
 		{
 			$db->sql_multi_insert(ACHIEVEMENT_CRITERIA_TABLE, $sql_ary3);
 		}
+
 		if(count($sql_ary4) > 0)
 		{
 			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary4);
