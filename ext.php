@@ -18,6 +18,30 @@ use phpbb\extension\base;
  */
 class ext extends base
 {
+
+	/**
+	 * Check whether or not the extension can be enabled.
+	 * The current phpBB version should meet or exceed
+	 * the minimum version required by this extension:
+	 *
+	 * Requires phpBB 3.1.3 due to usage of container aware migrations.
+	 *
+	 * @return bool
+	 * @access public
+	 */
+	public function is_enableable()
+	{
+		$condition = array();
+		$config = $this->container->get('config');
+		$condition[] = phpbb_version_compare($config['version'], '3.1.3', '>=');
+		$condition[] = phpbb_version_compare(phpversion(), '5.4.39', '>=');
+		$condition[] = @extension_loaded('GD');
+		$condition[] = @extension_loaded('curl');
+		return (!in_array('false', $condition));
+
+	}
+
+
 	/**
 	 * override enable step
 	 * enable_step is executed on enabling an extension until it returns false.
@@ -34,32 +58,9 @@ class ext extends base
 	public function enable_step($old_state)
 	{
 		global $user, $config;
-		$user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
 		ini_set('max_execution_time', 300);
-
-		if (phpbb_version_compare($config['version'], '3.1.*', '<'))
-		{
-			trigger_error($user->lang['REQUIREDPHPBB'], E_USER_WARNING);
-		}
-
-		if (version_compare(phpversion(), '5.4.39', '<'))
-		{
-			// 5.4 required because of function array dereferencing, e.g. foo()[0].
-			trigger_error($user->lang['REQUIREDPHP54'], E_USER_WARNING);
-		}
-
-		if ( ! @extension_loaded('GD'))
-		{
-			// GD required for emblem generator
-			trigger_error($user->lang['GDREQUIRED'], E_USER_WARNING);
-		}
-
-		if ( ! @extension_loaded('curl'))
-		{
-			// CURL required for callbacks
-			trigger_error($user->lang['CURLREQUIRED'], E_USER_WARNING);
-		}
 
 		return parent::enable_step($old_state);
 	}
+
 }
