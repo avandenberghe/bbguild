@@ -12,7 +12,6 @@ namespace bbdkp\bbguild\model\player;
 use bbdkp\bbguild\model\admin\admin;
 use bbdkp\bbguild\model\api\battlenet;
 use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\games\rpg\achievement;
 
 /**
  * Manages Guild creation
