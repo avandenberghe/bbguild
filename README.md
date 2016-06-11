@@ -30,11 +30,11 @@ Further development requests, support questions are welcome at our [Support Foru
 
 ### Installation
 ##### Requirements
-1.	phpbb > 3.1.*
-2.  PHP >= 5.4
+1.  phpbb > 3.1.3
+2.  PHP >= 5.4.39
 3.  PHP Client URL Library (php_curl.dll)
 4.  PHP GD library (php_gd2.dll)
-5.	ftp and acp access to your phpbb forum.
+
 
 ##### Install
 1. Download the latest release.
