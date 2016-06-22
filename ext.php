@@ -42,7 +42,7 @@ class ext extends base
 		
 		if ($result < 4)
 		{
-		   trigger_error($output);
+		   trigger_error($output,  E_USER_WARNING);
 		}
 		return true;
 	}
