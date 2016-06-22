@@ -44,6 +44,7 @@ class ext extends base
 		{
 		   trigger_error($output);
 		}
+		return true;
 	}
 
 	/**
