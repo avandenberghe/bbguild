@@ -6,6 +6,8 @@ bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally
 Issues
 [![Stories in Ready](https://badge.waffle.io/bbDKP/bbguild.png?label=ready&title=Ready)](http://waffle.io/bbDKP/bbguild)
 
+Please note that bbGuild is pre-Alpha software and is not intended for live installations. Use at your own risk.
+
 [![Build Status](https://api.travis-ci.org/bbDKP/bbguild.svg)](https://travis-ci.org/bbDKP/bbguild)
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
