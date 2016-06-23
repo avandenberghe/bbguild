@@ -1,10 +1,10 @@
-####Please describe the steps to reproduce the problem.
+Please describe the steps to reproduce the problem.
 
 
-####Expected behavior and actual behavior.
+Expected behavior and actual behavior.
 
 
-####Specifications
+Specifications
  - phpbb version : 
  - style : 
  - php version : 
