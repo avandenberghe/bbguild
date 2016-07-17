@@ -37,8 +37,8 @@ class ext extends base
 		$condition[] = phpbb_version_compare(phpversion(), '5.4.39', '>=');
 		$condition[] = @extension_loaded('gd');
 		$condition[] = @extension_loaded('curl');
-		return (!in_array('false', $condition));
-
+		$success = (!in_array(false, $condition));
+		return $success;
 	}
 
 
