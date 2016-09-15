@@ -123,14 +123,14 @@ class guild_module extends admin
 				$addguild = new guilds();
 				$addguild->setGameId($config['bbguild_default_game']);
 
+				$this->game          = new game;
+				$this->game->game_id = $addguild->getGameId();
+				$this->game->get_game();
+				
 				if ($this->request->is_set_post('newguild'))
 				{
 					$this->AddGuild($addguild);
 				}
-
-				$this->game          = new game;
-				$this->game->game_id = $addguild->getGameId();
-				$this->game->get_game();
 
 				// reset armory_enabled to false if no API key
 				if ($this->game->game_id == 'wow' && $this->game->getApikey() == '')

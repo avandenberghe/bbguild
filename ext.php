@@ -37,7 +37,7 @@ class ext extends base
 		foreach ($condition as $key => $val)
 		{
 		   $result += (int) $val;
-		   $output .= $key . ' ' . (($val == true) ? ': OK' : ': KO') .=	'<br />' ;
+		   $output += $key . ' ' . (($val == true) ? ': OK' : ': KO') . '<br />' ;
 		};
 		
 		if ($result < 4)
