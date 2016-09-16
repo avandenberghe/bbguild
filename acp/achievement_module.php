@@ -15,6 +15,7 @@ use bbdkp\bbguild\model\player\guilds;
 use bbdkp\bbguild\model\games\rpg\achievement;
 use bbdkp\bbguild\model\games\game;
 use bbdkp\bbguild\model\games\rpg\faction;
+
 /**
  * This class manages player general info
  * @todo finish this module
@@ -336,7 +337,6 @@ class achievement_module extends admin
 	 */
 	private function BuildTemplateAddEditAchievements($achievement_id)
 	{
-
 		$achievement = new achievement($this->game, $achievement_id);
 		if($achievement_id > 0)
 		{
@@ -344,7 +344,7 @@ class achievement_module extends admin
 		}
 
 		// Game dropdown
-		if (isset($this->games))
+		if (isset ($this->games))
 		{
 			foreach ($this->games as $gameid => $gamename)
 			{
@@ -371,7 +371,6 @@ class achievement_module extends admin
 				)
 			);
 		}
-
 
 		$this->template->assign_vars(
 			array(

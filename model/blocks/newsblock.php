@@ -11,5 +11,5 @@ namespace bbdkp\bbguild;
 
 class newsblock
 {
-	
+
 }

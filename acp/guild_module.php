@@ -316,8 +316,7 @@ class guild_module extends admin
 		{
 			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
-		
-		$this->game          = new game;
+		$this->game = new game;
 		$this->game->game_id = $this->request->variable('game_id', '');
 		$this->game->get_game();
 		

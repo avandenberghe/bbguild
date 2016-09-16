@@ -377,8 +377,6 @@ class release_2_0_0_m01_schema extends migration
 					),
 					'PRIMARY_KEY'   => array('name'),
 				),
-
-
 			),
 		);
 	}

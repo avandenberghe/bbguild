@@ -99,7 +99,6 @@ class recruit_module extends admin
 			)
 		);
 
-
 		$this->apply_installed = false;
 		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
