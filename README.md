@@ -31,7 +31,7 @@ See todo.md for upcoming changes.
 Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
-2.0.0-a6
+2.0.0-a7
 
 ### Installation
 ##### Requirements
@@ -58,10 +58,13 @@ Find support and more on
 *	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
-### milestone
-  - a6
-
 ### Changelog
+- 2.0.0a7 
+  - [FIX] ext.php fixed.
+  - [FIX] guild_module.php fixed. guild object was created too late.  
+
+- 2.0.0a6 not released 
+  
 - 2.0.0a5 27/03/2016
   - [NEW] Front Page design updated to look like Blizzard Armory
   - [NEW] WoW emblem generator now makes 200px emblems (should be made configurable)    

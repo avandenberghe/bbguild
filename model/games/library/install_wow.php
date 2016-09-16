@@ -58,7 +58,7 @@ class install_wow extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#f0ebe0', 'imagename' => 'wow_priest');
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 110 , 'colorcode' =>  '#c41e3b',  'imagename' => 'wow_death_knight');
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#00ffba', 'imagename' => 'wow_monk');
-		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 12, 'class_armor_type' => 'LEATHER', 'class_min_level' => 98, 'class_max_level' => 110 ,  'colorcode' =>  '#4dd827', 'imagename' => 'wow_demon_hunter');
+		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 12, 'class_armor_type' => 'LEATHER', 'class_min_level' => 98, 'class_max_level' => 110 ,  'colorcode' =>  '#A330C3', 'imagename' => 'wow_demon_hunter');
 		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
 		unset($sql_ary);
 
