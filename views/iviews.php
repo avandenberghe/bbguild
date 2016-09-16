@@ -16,7 +16,5 @@ namespace bbdkp\bbguild\views;
  */
 interface iviews
 {
-
 	public function buildpage();
-
 }

@@ -8,6 +8,8 @@
  */
 namespace bbdkp\bbguild\views;
 
+use bbdkp\bbguild\model\games\game;
+
 /**
  * Class viewwelcome
  *
@@ -101,7 +103,6 @@ class viewwelcome implements iviews
 					}
 				}
 			}
-
 		}
 
 		$template->assign_vars(
