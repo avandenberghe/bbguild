@@ -1,5 +1,5 @@
 [![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
-
+### NO SUPPORT IS PROVIDED FOR ALPHA VERSIONS
 ### About
 bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008. 2.0 version is rebuild on the Symfony 2 framework for phpBB 3.1. 
 
