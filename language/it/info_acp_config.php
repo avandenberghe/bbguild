@@ -28,7 +28,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge(
 	$lang, array(
-	'ACP_CAT_BBGUILD'            => 'BBDKP',
+	'ACP_CAT_BBGUILD'            => 'bbGuild',
 	'ACP_BBGUILD_MAINPAGE'        => 'Impostazioni Generali',
 	'ACP_BBGUILD_PANEL'                => 'Pannello Admin',
 	'ACP_BBGUILD_CONFIG'        => 'Impostazioni bbguild',

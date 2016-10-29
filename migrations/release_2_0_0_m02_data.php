@@ -118,7 +118,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
 		$welcome = array(
 			array(
-				'motd_title' => 'Welcome to our guild',
+				'motd_title' => $user->lang['MOTDGREETING'],
 				'motd_timestamp' => (int) time(),
 				'motd_msg' => $welcome_message['text'],
 				'bbcode_uid' => $welcome_message['uid'],
