@@ -622,6 +622,25 @@ class player_module extends admin
 			$phpbb_user_id = (int) $row['phpbb_user_id'];
 			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$lines += 1;
+
+            if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+            {
+                $class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+            }
+            else
+            {
+                $class_img = '';
+            }
+
+            if(file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
+            {
+                $race_img = $this->ext_path . 'images/race_images/' . $race_image . '.png';
+            }
+            else
+            {
+                $race_img = '';
+            }
+
 			$this->template->assign_block_vars(
 				'players_row', array(
 					'S_READONLY'           => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false,
@@ -634,9 +653,9 @@ class player_module extends admin
 					'LEVEL'                => ($row['player_level'] > 0) ? $row['player_level'] : '&nbsp;',
 					'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
 					'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
-					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
+					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $class_img : '',
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . 'images/race_images/' . $race_image . '.png' : '',
+					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $race_img : '',
 					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
 					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
 					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbguild_date_format'] . ' H:i:s', $row['last_update']),

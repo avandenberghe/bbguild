@@ -16,7 +16,6 @@ use phpbb\db\migration\migration;
  */
 class release_2_0_0_m01_schema extends migration
 {
-	protected $bbguild_version = '2.0.0-a6';
 	protected $table_prefix;
 	protected $bbgames_table;
 	protected $news_table;
@@ -107,7 +106,7 @@ class release_2_0_0_m01_schema extends migration
 						'c_index'           => array('USINT', null, 'auto_increment'),
 						'game_id'           => array('VCHAR:10', ''),
 						'class_id'          => array('USINT', 0),
-						'class_faction_id'  => array('UINT', 0),
+						'class_faction_id'  => array('USINT', 0),
 						'class_min_level'   => array('USINT', 0),
 						'class_max_level'   => array('USINT', 0),
 						'class_armor_type'  => array('VCHAR_UNI', ''),
@@ -344,7 +343,7 @@ class release_2_0_0_m01_schema extends migration
 				/*18 time achievement reached */
 				$this->achievement_track_table    => array(
 					'COLUMNS'   => array(
-						'guild_id'               => array('UINT', 0),
+						'guild_id'               => array('USINT', 0),
 						'player_id'              => array('UINT', 0),
 						'achievement_id'         => array('UINT', 0),
 						'achievements_completed' => array('BINT', 0),
@@ -355,7 +354,7 @@ class release_2_0_0_m01_schema extends migration
 				/*19 time criterium was achieved */
 				$this->criteria_track_table    => array(
 					'COLUMNS'    => array(
-						'guild_id'               => array('UINT', 0),
+						'guild_id'               => array('USINT', 0),
 						'player_id'              => array('UINT', 0),
 						'criteria_id'            => array('UINT', 0),
 						'criteria_quantity'      => array('BINT', 0),
@@ -377,8 +376,6 @@ class release_2_0_0_m01_schema extends migration
 					),
 					'PRIMARY_KEY'   => array('name'),
 				),
-
-
 			),
 		);
 	}

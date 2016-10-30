@@ -99,7 +99,6 @@ class recruit_module extends admin
 			)
 		);
 
-
 		$this->apply_installed = false;
 		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
@@ -294,7 +293,17 @@ class recruit_module extends admin
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$recruit_count++;
-			$this->template->assign_block_vars(
+
+            if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+            {
+                $class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+            }
+            else
+            {
+                $class_img = '';
+            }
+
+            $this->template->assign_block_vars(
 				'recruit_row', array(
 					'ID'                => $row['id'],
 					'GUILD_ID'          => $row['guild_id'],
@@ -303,7 +312,7 @@ class recruit_module extends admin
 					'CLASS_NAME'        => $row['class_name'],
 					'COLOR_CODE'        => $row['colorcode'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'CLASS_IMAGE'       => (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '',
+					'CLASS_IMAGE'       => (strlen($row['imagename']) > 1) ? $class_img : '',
 					'POSITIONS'         => $row['positions'],
 					'APPLICANTS'        => $row['applicants'],
 					'STATUS'            => $row['status'] == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],

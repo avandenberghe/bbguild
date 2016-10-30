@@ -18,14 +18,8 @@ use phpbb\extension\base;
  */
 class ext extends base
 {
-
 	/**
 	 * Check whether or not the extension can be enabled.
-	 * The current phpBB version should meet or exceed
-	 * the minimum version required by this extension:
-	 *
-	 * Requires phpBB 3.1.3 due to usage of container aware migrations.
-	 * Requires php 5.4 due to
 	 *
 	 * @return bool
 	 * @access public
@@ -34,14 +28,23 @@ class ext extends base
 	{
 		$condition = array();
 		$config = $this->container->get('config');
-		$condition[] = phpbb_version_compare($config['version'], '3.1.3', '>=');
-		$condition[] = phpbb_version_compare(phpversion(), '5.4.0', '>=');
-		$condition[] = extension_loaded('gd');
-		$condition[] = extension_loaded('curl');
-		$success = (!in_array(false, $condition));
-		return $success;
+		$condition['phpbb'] = phpbb_version_compare($config['version'], '3.1.3', '>=');
+		$condition['php'] = version_compare(PHP_VERSION , '5.4.39', '>=') ? 1: 0;
+		$condition['gd'] = extension_loaded('gd');
+		$condition['curl'] = extension_loaded('curl');
+		$output= '';
+		$result = 0;
+		foreach ($condition as $key => $val)
+		{
+		   $result += (int) $val;
+		   $output += $key . ' ' . (($val == true) ? ': OK' : ': KO') . '<br />';
+		}
+		if ($result < 4)
+		{
+		   trigger_error($output,  E_USER_WARNING);
+		}
+		return true;
 	}
-
 
 	/**
 	 * override enable step

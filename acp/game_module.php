@@ -163,7 +163,8 @@ class game_module extends admin
 							$listgames->setName($this->request->variable('ngame_name', '', true));
 						}
 
-						$listgames->setRegion($this->request->variable('region_id', ''));
+						$region = $this->request->variable('region_id', 'eu');
+						$listgames->setRegion($region);
 
 						$s_hidden_fields = build_hidden_fields(
 							array (
@@ -1203,7 +1204,16 @@ class game_module extends admin
 			$selected = ($armor == $GameClass->armor_type) ? ' selected="selected"' : '';
 			$s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
 		}
-		$size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
+
+		if(file_exists($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png'))
+        {
+            $size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
+        }
+        else
+        {
+            $size = 0;
+        }
+
 
 		$warning ='';
 		if ($size[0] > 32 || $size[0] >32)

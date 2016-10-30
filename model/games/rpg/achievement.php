@@ -758,8 +758,6 @@ class achievement extends admin
 		}
 		$db->sql_multi_insert(ACHIEVEMENT_TRACK_TABLE, $sql_ary);
 
-
-
 		$criteria = array();
 		foreach ($data['achievements']['criteria'] as $id => $criteria_id)
 		{
@@ -830,7 +828,6 @@ class achievement extends admin
 	{
 		global $cache;
 
-
 		// game and guild have to be armory enabled...
 		if (! $this->game->getArmoryEnabled() || !$Guild->isArmoryEnabled() )
 		{
@@ -861,7 +858,6 @@ class achievement extends admin
 
 		return $data;
 	}
-
 
 	/**
 	 * Insert an achievement into local database
@@ -936,12 +932,12 @@ class achievement extends admin
 			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'REW' and att_value= '" . $data['id'] . "' and rel_value = '".  $rewardItems['id'] ."' " );
 		}
 
-		if(count($sql_ary1) > 0)
+		if (count($sql_ary1) > 0)
 		{
 			$db->sql_multi_insert(ACHIEVEMENT_REWARDS_TABLE, $sql_ary1);
 		}
 
-		if(count($sql_ary2) > 0)
+		if (count($sql_ary2) > 0)
 		{
 			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary2);
 		}

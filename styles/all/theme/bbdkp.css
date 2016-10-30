@@ -23,6 +23,7 @@
 }
 
 .category, .subheader-3 {
+    color: #7e3406;
     font-size: 22px;
     font-weight: normal;
     letter-spacing: -0.05em;
@@ -50,11 +51,12 @@
 .profile-sidebar-inner {
    /* background: rgba(0, 0, 0, 0) url("./images/sidebar-bg.jpg") no-repeat scroll 0 0;*/
     height: 684px;
-    width: 230px;
+    width: 175px;
 }
 
 .profile-wrapper-alliance {
     background-image: url("./images/sidebar-bg-alliance.png");
+    width: 200px;
 }
 .profile-wrapper-horde {
     background-image: url("./images/sidebar-bg-horde.png");
@@ -128,7 +130,7 @@
 }
 
 .profile-info .name {
-    color: #000000;
+    color: #CDCCC3;
     float: left;
     font-size: 36px;
     font-weight: bold;
@@ -140,7 +142,7 @@
 }
 
 .profile-info .name a {
-    color: #000000;
+    color: #CDCCC3;
     outline: medium none;
     text-decoration: none;
 }
@@ -176,7 +178,7 @@
 
 .profile-info .achievements a {
     background: rgba(0, 0, 0, 0) url("./images/achievements.gif") no-repeat scroll left 7px;
-    color: white;
+    color: #CDCCC3;
     font-family: "Arial Black",Arial,sans-serif;
     font-size: 20px;
     font-weight: 900;
@@ -192,9 +194,9 @@ ul.profile-sidebar-menu {
 ul.profile-sidebar-menu {
     background: rgba(0, 0, 0, 0);
     font-size: 13px;
-    margin: 14px 0 0 25px;
+    margin: 14px 0 0 15px;
     padding-bottom: 1px;
-    width: 196px;
+    width: 100%;
 }
 
 ul.profile-sidebar-menu li {
@@ -244,7 +246,7 @@ ul.profile-sidebar-menu a .arrow {
 }
 
 .profile-contents {
-    margin-left: 200px;
+    margin-left: 170px;
     min-height: 807px;
     padding-bottom: 40px;
 }

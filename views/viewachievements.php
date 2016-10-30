@@ -41,9 +41,9 @@ class viewachievements implements iviews
 	{
 		global $template;
 		$this->tpl = 'main.html';
-
+		
 		$achievements =  $this->navigation->guild->getGuildAchievements();
-
+		
 		foreach ($achievements as $achi)
 		{
 			$a = $achi;
@@ -83,9 +83,6 @@ class viewachievements implements iviews
 			}
 		}
 		*/
-
-
-
 
 		$template->assign_vars(
 			array(
