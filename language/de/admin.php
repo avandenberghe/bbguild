@@ -275,9 +275,9 @@ $lang = array_merge(
 	'ACP_ROLES_EXPLAIN' => 'Hier kannst du die Rollen für das Spiel bearbeiten.',
 	'ACP_LISTRECRUITS_EXPLAIN' => 'Hier kannst du Rekrutierungen hinzufügen oder bearbeiten',
 
-	'RACEID_EXPLAIN' => 'Die ID ist einmalig und sollte (für WoW) mit der Blizzard-XML übereinstimmen',
+	'RACEID_EXPLAIN' => 'Die ID ist einmalig und numerisch',
 	'RACE_EXPLAIN' => 'Namen',
-	'CLASS_ID_EXPLAIN' => 'Die ID ist einmalig und sollte (für WoW) mit der Blizzard-XML übereinstimmen',
+	'CLASS_ID_EXPLAIN' => 'Die ID ist einmalig und numerisch',
 	'CLASS_ARMORY_EXPLAIN' => '',
 	'ARMORY_ENABLED_EXPLAIN' => 'Ist die Armory API eingeschaltet für dieses Spiel? (Nur WoW und Guildwars haben eine öffentlich zugängliche Web API, aber bbGuild benutzt nur die WoW API).',
 	'ARMORY_ENABLED_GUILD_EXPLAIN' => 'Ist die Armory API eingeschaltet für diese Gilde? <br/>(hängt auch von den Spiele-Einstellungen ab)',

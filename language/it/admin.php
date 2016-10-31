@@ -270,9 +270,9 @@ $lang = array_merge(
 	'ACP_ROLES_EXPLAIN' => 'Here you can edit the roles for this game.',
 	'ACP_LISTRECRUITS_EXPLAIN' => 'Here you can add or edit Recruitments',
 
-	'RACEID_EXPLAIN' =>'Nota. L’ID è unico. Per Wow, dovrebbe combaciare con il raceId XML dell’armory tag.',
+	'RACEID_EXPLAIN' =>'Nota. L’ID è unico e numerico',
 	'RACE_EXPLAIN' =>'Nome Razza',
-	'CLASS_ID_EXPLAIN' => 'Nota. L’ID è unico. Per Wow, dovrebbe combaciare con il ClassId XML dell’armory tag.',
+	'CLASS_ID_EXPLAIN' => 'Nota. L’ID è unico e numerico',
 	'CLASS_ARMORY_EXPLAIN' => 'Max itemlevel per questa classe',
 	'ARMORY_ENABLED_EXPLAIN' => 'Hai abilitato l’API per questo gioco? (Nota: Disponibile solo per WoW).',
 	'ARMORY_ENABLED_GUILD_EXPLAIN' => 'è abilitata l’API dell’armory per questa gilda ? <br/>(dipende comunque dalle impostazioni di gioco)',
