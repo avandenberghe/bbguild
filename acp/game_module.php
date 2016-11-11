@@ -13,8 +13,6 @@ use bbdkp\bbguild\model\games\rpg\classes;
 use bbdkp\bbguild\model\games\rpg\faction;
 use bbdkp\bbguild\model\games\rpg\races;
 use bbdkp\bbguild\model\games\rpg\roles;
-use phpbb\controller\helper;
-use phpbb\controller\provider;
 
 /**
  * This class manages Game settings
@@ -41,17 +39,21 @@ class game_module extends admin
 	 * @var \phpbb\request\request
 	 **/
 	protected $request;
-	/*** @var \phpbb\template\template **/
+	/**
+	 * @var \phpbb\template\template
+	 **/
 	protected $template;
-	/** @var \phpbb\user  **/
+	/**
+	 * @var \phpbb\user
+	 **/
 	protected $user;
-    /** @var \phpbb\auth  **/
-    protected $auth;
 
 	public $ext_path;
+	public $ext_manager;
 	public $u_action;
 	public $id;
 	public $mode;
+	public $auth;
 
 	/**
 	 * main ACP game function
@@ -64,10 +66,11 @@ class game_module extends admin
 	{
 
 		global $user, $template, $phpbb_admin_path, $phpEx, $config;
-		global $request, $auth;
+		global $phpbb_container, $request, $auth;
 		parent::__construct();
 
-        global $phpbb_admin_path, $phpEx, $template, $user, $config, $phpbb_root_path;
+		// Get an instance of the admin controller
+		$admin_controller = $phpbb_container->get('bbdkp.bbguild.admin.controller');
 
 		$this->id = $id;
 		$this->mode = $mode;
@@ -114,12 +117,10 @@ class game_module extends admin
 		{
 			case 'listgames' :
 
-				$this->show_listgames($phpbb_admin_path, $phpEx, $listgames, $installed, $config, $current_order);
+				$this->show_listgames($listgames, $installed, $config, $current_order);
 				break;
 
 			case 'editgames' :
-
-				$action = $this->request->variable('action', '');
 
 				$editgame = new game;
 				$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
@@ -127,11 +128,20 @@ class game_module extends admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' .
 					$this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
-
+				
 				$gamereset = $this->request->is_set_post('gamereset');
 				$gamedelete = $this->request->is_set_post('gamedelete');
 				$gamesettings = $this->request->is_set_post('gamesettings');
-
+				$addrole = $this->request->is_set_post('showrolesadd');
+				$action = $this->request->variable('action', '');
+				$addfaction = $this->request->is_set_post('showfactionadd');
+				$addrace = $this->request->is_set_post('showraceadd');
+				$raceedit = (isset($_GET['raceedit'])) ? true : false;
+				$racedelete = (isset($_GET['racedelete'])) ? true : false;
+				$addclass = $this->request->is_set_post('showclassadd');
+				$classedit = (isset($_GET['classedit'])) ? true : false;
+				$classdelete = (isset($_GET['classdelete'])) ? true : false;
+				
 				$this->template->assign_vars(
 					array (
 						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') ,
@@ -142,111 +152,76 @@ class game_module extends admin
 				{
 					$this->ResetGame($editgame);
 				}
-
-				// save game settings
-				if ($gamesettings)
+				elseif ($gamesettings)
 				{
 					$editgame = $this->SaveGameSettings();
 					$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
 					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
 					trigger_error($success_message . $this->link, E_USER_NOTICE);
-
 				}
-
-				if ($gamedelete)
+				elseif ($gamedelete)
 				{
 					$this->DeleteGame($editgame);
 				}
-
-				$addrole = $this->request->is_set_post('showrolesadd');
-				if ($addrole)
+				elseif ($addrole)
 				{
 					$this->BuildTemplateRole($editgame);
-					break;
 				}
-
-				if ($action=='deleterole')
+				elseif ($action=='deleterole')
 				{
 					$this->DeleteRole($editgame);
-					break;
 				}
-				else if ($action=='editrole')
+				elseif ($action=='editrole')
 				{
 					$this->BuildTemplateRole($editgame);
-					break;
 				}
-
-				$addfaction = $this->request->is_set_post('showfactionadd');
-				if ($addfaction)
+				elseif ($addfaction)
 				{
 					$this->BuildTemplateFaction($editgame);
-					break;
 				}
-
-				if ($action=='deletefaction')
+				elseif ($action=='deletefaction')
 				{
 					$this->DeleteFaction($editgame);
-					break;
 				}
-				else if ($action=='editfaction')
+				elseif ($action=='editfaction')
 				{
 					$this->BuildTemplateFaction($editgame);
-					break;
 				}
-
-				$addrace = $this->request->is_set_post('showraceadd');
-				$raceedit = (isset($_GET['raceedit'])) ? true : false;
-				$racedelete = (isset($_GET['racedelete'])) ? true : false;
-
-				if ($raceedit)
+				elseif ($raceedit)
 				{
-					// edit this race
 					$this->BuildTemplateEditRace($editgame);
-					break;
 				}
-
-				if ($addrace)
+				elseif ($addrace)
 				{
-					// add new race
 					$this->BuildTemplateAddRace($editgame);
-					break;
 				}
-
-				if ($racedelete)
+				elseif ($racedelete)
 				{
 					$this->DeleteRace($editgame);
-					break;
 				}
-
-				$addclass = $this->request->is_set_post('showclassadd');
-				$classedit = (isset($_GET['classedit'])) ? true : false;
-				$classdelete = (isset($_GET['classdelete'])) ? true : false;
-
-				if ($classedit || $addclass)
+				elseif ($classedit)
 				{
 					$this->BuildTemplateEditClass($editgame);
-					break;
 				}
-
-				if ($classdelete)
+				elseif ($addclass)
 				{
-					// user pressed delete class
+					$this->BuildTemplateAddClass($editgame);
+				}
+				elseif ($classdelete)
+				{
 					$this->DeleteClass($editgame);
-					break;
 				}
 
 				$this->showgame($editgame);
 				$this->page_title = 'ACP_ADDGAME';
-
+				
 				break;
 
 			case 'addrole' :
-
 				$this->show_addrole();
 				break;
 
 			case 'addfaction' :
-
 				$this->show_addfaction();
 				break;
 
@@ -255,8 +230,6 @@ class game_module extends admin
 				break;
 
 			case 'addclass':
-				// collects data after BuildTemplateEditClass, calls class updater
-
 				$this->show_addclass();
 				break;
 
@@ -833,7 +806,8 @@ class game_module extends admin
 	 */
 	private function BuildTemplateAddRace(game $editgame)
 	{
-        global $phpbb_admin_path, $phpEx;
+		global $phpbb_admin_path, $phpEx;
+
 		$listraces          = new races();
 		$listraces->game_id = $editgame->game_id;
 
@@ -848,7 +822,6 @@ class game_module extends admin
 		{
 			$s_faction_options .= '<option value="' . $faction['faction_id'] . '" > ' . $faction['faction_name'] . '</option>';
 		}
-
 		unset($listfactions);
 		$this->template->assign_vars(
 			array(
@@ -856,9 +829,10 @@ class game_module extends admin
 				'GAME_NAME'             => $editgame->getName(),
 				'S_FACTIONLIST_OPTIONS' => $s_faction_options,
 				'S_ADD'                 => true,
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
-				'LA_ALERT_AJAX'         => $this->user->lang['ALERT_AJAX'],
-				'LA_ALERT_OLDBROWSER'   => $this->user->lang['ALERT_OLDBROWSER'],
+				'U_ACTION2'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
+				'LA_ALERT_AJAX' => $this->user->lang['ALERT_AJAX'],
+				'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
+				'UA_FINDFACTION' => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME']
 			)
 		);
@@ -903,25 +877,18 @@ class game_module extends admin
 		}
 		unset($listfactions);
 
-        $femalesizewarning = '';
-        if(file_exists($this->ext_path . 'images/race_images/' . $races->image_female . '.png'))
-        {
-            $femalesize  = getimagesize($this->ext_path . 'images/race_images/' . $races->image_female . '.png', $info);
-            if ($femalesize[0] > 32 || $femalesize[0] >32)
-            {
-                $femalesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $femalesize[0], $femalesize[1]);
-            }
-        }
-
-        $malesizewarning ='';
-        if(file_exists($this->ext_path . 'images/race_images/' . $races->image_male . '.png'))
-        {
-            $malesize  = getimagesize($this->ext_path . 'images/race_images/' . $races->image_male . '.png', $info);
-            if ($malesize[0] > 32 || $femalesize[0] >32)
-            {
-                $malesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $malesize[0], $malesize[1]);
-            }
-        }
+		$femalesize = getimagesize($this->ext_path . 'images/race_images/' . $races->image_female . '.png', $info);
+		$malesize = getimagesize($this->ext_path . 'images/race_images/' . $races->image_male . '.png', $info);
+		$femalesizewarning ='';
+		$malesizewarning ='';
+		if ($femalesize[0] > 32 || $femalesize[0] >32)
+		{
+			$femalesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $femalesize[0], $femalesize[1]);
+		}
+		if ($malesize[0] > 32 || $femalesize[0] >32)
+		{
+			$malesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $malesize[0], $malesize[1]);
+		}
 
 		// send parameters to template
 		$this->template->assign_vars(
@@ -942,7 +909,8 @@ class game_module extends admin
 				'S_ADD'                 => false,
 				'LA_ALERT_AJAX' => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
+				'UA_FINDFACTION' => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
+				'U_ACTION2'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrace'),
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($races);
@@ -986,22 +954,20 @@ class game_module extends admin
 			$selected = ($armor == $GameClass->armor_type) ? ' selected="selected"' : '';
 			$s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
 		}
-
+		$warning ='';
 		if(file_exists($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png'))
         {
             $size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
+			if ($size[0] > 32 || $size[0] >32)
+			{
+				$warning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
+			}
         }
         else
         {
             $size = 0;
         }
 
-
-		$warning ='';
-		if ($size[0] > 32 || $size[0] >32)
-		{
-			$warning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
-		}
 
 		$this->template->assign_vars(
 			array(
@@ -1020,7 +986,7 @@ class game_module extends admin
 				'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png' : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
 				'S_ADD'                => false,
-				'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
+				'U_ACTION2'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
 				'MSG_NAME_EMPTY'       => $this->user->lang['FV_REQUIRED_NAME'],
 				'MSG_ID_EMPTY'         => $this->user->lang['FV_REQUIRED_ID'])
 		);
@@ -1029,231 +995,7 @@ class game_module extends admin
 		$this->tpl_name = 'acp_addclass';
 	}
 
-    /**
-     * @param $phpbb_admin_path
-     * @param $phpEx
-     * @param $listgames
-     * @param $installed
-     * @param $config
-     * @param $current_order
-     */
-    public function show_listgames($phpbb_admin_path, $phpEx, $listgames, $installed, $config, $current_order)
-    {
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
-
-        //game dropdown
-        $newpresetgame = $this->request->is_set_post('addgame1');
-        $newcustomgame = $this->request->is_set_post('addgame2');
-        $upddefaultgame = $this->request->is_set_post('upddefaultgame');
-
-        if ($newpresetgame || $newcustomgame) {
-            // ask for permission
-            if (confirm_box(true)) {
-                $editgame = new game;
-                $editgame->game_id = $this->request->variable('hidden_game_id', '');
-                $editgame->setName($this->request->variable('hidden_game_name', '', true));
-                $editgame->setRegion($this->request->variable('hidden_region_id', ''));
-                $editgame->install_game();
-                //
-                // Logging
-                //
-                $log_action = array(
-                    'header' => 'L_ACTION_GAME_ADDED',
-                    'L_GAME' => $editgame->game_id,
-                );
-
-                $this->log_insert(
-                    array(
-                        'log_type' => 'L_ACTION_GAME_ADDED',
-                        'log_action' => $log_action)
-                );
-
-                trigger_error(sprintf($this->user->lang['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_NOTICE);
-            } else {
-                // get field content
-                $listgames->game_id = $this->request->variable('ngame_id', '');
-                if ($newpresetgame) {
-                    $listgames->setName($listgames->getPreinstalledGames()[$listgames->game_id]);
-                } else if ($newcustomgame) {
-                    $listgames->setName($this->request->variable('ngame_name', '', true));
-                }
-
-                $region = $this->request->variable('region_id', 'eu');
-                $listgames->setRegion($region);
-
-                $s_hidden_fields = build_hidden_fields(
-                    array(
-                        'addgame1' => $newpresetgame,
-                        'addgame2' => $newcustomgame,
-                        'hidden_game_id' => $listgames->game_id,
-                        'hidden_game_name' => $listgames->getName(),
-                        'hidden_region_id' => $listgames->getRegion(),
-                    )
-                );
-                confirm_box(false, sprintf($this->user->lang['CONFIRM_INSTALL_GAME'], $listgames->getName()), $s_hidden_fields);
-            }
-        }
-
-        if ($upddefaultgame) {
-            $listgames->game_id = $this->request->variable('defaultgame', '');
-            $listgames->update_gamedefault($listgames->game_id);
-            $success_message = sprintf($this->user->lang['ADMIN_UPDATE_DEFAULTGAME_SUCCESS'], $listgames->game_id);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
-        }
-
-        ///template load
-        $can_install_count = 0;
-
-        //is anything installed ?
-        $not_installed = array();
-        if (count($installed) > 0) {
-            $not_installed = array_diff($listgames->getPreinstalledGames(), $installed);
-        } else {
-            // brand new install
-            $not_installed = $listgames->getPreinstalledGames();
-        }
-
-        //set default games pulldown
-        foreach ($installed as $key => $game) {
-            $this->template->assign_block_vars(
-                'defaultgame_row', array(
-                    'VALUE' => $key,
-                    'OPTION' => $game,
-                    'SELECTED' => ($config['bbguild_default_game'] == $key) ? ' selected="selected"' : '',
-                )
-            );
-        }
-
-        //set not installed games pulldown
-        foreach ($not_installed as $key => $game) {
-            $can_install_count += 1;
-            $this->template->assign_block_vars(
-                'gamelistrow', array(
-                    'VALUE' => $key,
-                    'OPTION' => $game,
-                    'SELECTED' => '',
-                )
-            );
-        }
-
-        //show region list
-        foreach ($listgames->getRegions() as $key => $regionname) {
-            $this->template->assign_block_vars(
-                'region_row',
-                array(
-                    'VALUE' => $key,
-                    'SELECTED' => ($listgames->getRegion() == $key) ? ' selected="selected"' : '',
-                    'OPTION' => (!empty($regionname)) ? $regionname : '(None)',
-                )
-            );
-        }
-
-        //list installed games
-        foreach ($this->gamelist as $game_id => $game) {
-            $this->template->assign_block_vars(
-                'gamerow', array(
-                    'ID' => $game['id'],
-                    'NAME' => $game['name'],
-                    'GAME_ID' => $game['game_id'],
-                    'U_VIEW_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . '=' . $game['game_id']),
-                    'STATUS' => $game['status'],
-                )
-            );
-        }
-
-        $this->template->assign_vars(
-            array(
-                'S_INSTALLED' => count($installed) > 0 ? true : false,
-                'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames'),
-                'CANINSTALL' => ($can_install_count == 0) ? false : true,
-                'O_ID' => $current_order['uri'][0],
-                'O_GAMEID' => $current_order['uri'][1],
-                'O_GAMENAME' => $current_order['uri'][2],
-            )
-        );
-
-        $form_key = 'bbdkp/bbguild';
-        add_form_key($form_key);
-
-        $this->page_title = 'ACP_LISTGAME';
-    }
-
-    public function show_addrole()
-    {
-        $role = new roles();
-        $role->game_id = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
-        $editgame = new game;
-        $editgame->game_id = $role->game_id;
-        $editgame->get_game();
-
-        $addnew = $this->request->is_set_post('addrole');
-        $editfaction = $this->request->is_set_post('editrole');
-        if ($addnew) {
-            $this->AddRole($role, $editgame);
-        }
-        if ($editfaction) {
-            $this->EditRole($role, $editgame);
-        }
-    }
-
-    public function show_addfaction()
-    {
-        $faction = new faction($this->request->variable('game_id', $this->request->variable('hidden_game_id', '')));
-        $editgame = new game;
-        $editgame->game_id = $faction->game_id;
-        $editgame->get_game();
-
-        $addnew = $this->request->is_set_post('factionadd');
-        $editfaction = $this->request->is_set_post('factionedit');
-        if ($addnew) {
-            $this->AddFaction($faction, $editgame);
-        }
-        if ($editfaction) {
-            $this->EditFaction($faction, $editgame);
-        }
-    }
-
-    public function show_addrace()
-    {
-        $raceadd = $this->request->is_set_post('add');
-        $raceupdate = $this->request->is_set_post('update');
-
-        if ($raceadd || $raceupdate) {
-            if (!check_form_key('bbdkp/bbguild')) {
-                trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
-            }
-        }
-
-        if ($raceadd) {
-            $this->AddRace();
-        } else if ($raceupdate) {
-            $this->RaceUpdate();
-        }
-
-        $this->page_title = 'ACP_LISTGAME';
-    }
-
-    public function show_addclass()
-    {
-        $classadd = $this->request->is_set_post('add');
-        $classupdate = $this->request->is_set_post('update');
-
-        if ($classadd || $classupdate) {
-            if (!check_form_key('bbdkp/bbguild')) {
-                trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
-            }
-        }
-
-        if ($classadd) {
-            $this->AddClass();
-        } else if ($classupdate) {
-            $this->EditClass();
-
-        }
-        $this->page_title = 'ACP_LISTGAME';
-    }
-
-    /**
+	/**
 	 * Load Template Add Classes
 	 *
 	 * @param game $editgame
@@ -1277,7 +1019,7 @@ class game_module extends admin
 				'S_ARMOR_OPTIONS' => $s_armor_options,
 				'S_ADD'           => true,
 				'COLORCODE'       => '#EE8611',
-				'U_ACTION'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
+				'U_ACTION2'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addclass'),
 				'MSG_NAME_EMPTY'  => $this->user->lang['FV_REQUIRED_NAME'],
 				'MSG_ID_EMPTY'    => $this->user->lang['FV_REQUIRED_ID'])
 		);
@@ -1306,7 +1048,7 @@ class game_module extends admin
 				'GAME_ID'               => $faction->game_id,
 				'GAME_NAME'             => $editgame->getName(),
 				'IS_ADD'                => $faction->faction_id == 0 ? true : false,
-				'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addfaction'),
+				'U_ACTION2'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addfaction'),
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($races);
@@ -1345,7 +1087,7 @@ class game_module extends admin
 				'GAME_ID'            => $role->game_id,
 				'GAME_NAME'          => $editgame->getName(),
 				'IS_ADD'             => $add,
-				'U_ACTION'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
+				'U_ACTION2'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
 				'MSG_NAME_EMPTY'     => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($role);
@@ -1565,5 +1307,228 @@ class game_module extends admin
 				'U_ACTION' => $this->u_action )
 		);
 	}
-
+	
+	private function show_addrole()
+	{
+		$role              = new roles();
+		$role->game_id     = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+		$editgame          = new game;
+		$editgame->game_id = $role->game_id;
+		$editgame->get_game();
+		$addnew      = $this->request->is_set_post('addrole');
+		$editfaction = $this->request->is_set_post('editrole');
+		if ($addnew)
+		{
+			$this->AddRole($role, $editgame);
+		}
+		if ($editfaction)
+		{
+			$this->EditRole($role, $editgame);
+		}
+	}
+	
+	private function show_addfaction()
+	{
+		$faction           = new faction($this->request->variable('game_id', $this->request->variable('hidden_game_id', '')));
+		$editgame          = new game;
+		$editgame->game_id = $faction->game_id;
+		$editgame->get_game();
+		$addnew      = $this->request->is_set_post('factionadd');
+		$editfaction = $this->request->is_set_post('factionedit');
+		if ($addnew)
+		{
+			$this->AddFaction($faction, $editgame);
+		}
+		if ($editfaction)
+		{
+			$this->EditFaction($faction, $editgame);
+		}
+	}
+	
+	private function show_addrace()
+	{
+		$raceadd    = $this->request->is_set_post('add');
+		$raceupdate = $this->request->is_set_post('update');
+		if ($raceadd || $raceupdate)
+		{
+			if (!check_form_key('bbdkp/bbguild'))
+			{
+				trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
+			}
+		}
+		if ($raceadd)
+		{
+			$this->AddRace();
+		} else if ($raceupdate)
+		{
+			$this->RaceUpdate();
+		}
+		$this->page_title = 'ACP_LISTGAME';
+	}
+	
+	private function show_addclass()
+	{
+		$classadd    = $this->request->is_set_post('add');
+		$classupdate = $this->request->is_set_post('update');
+		if ($classadd || $classupdate)
+		{
+			if (!check_form_key('bbdkp/bbguild'))
+			{
+				trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
+			}
+		}
+		if ($classadd)
+		{
+			$this->AddClass();
+		} else if ($classupdate)
+		{
+			$this->EditClass();
+		}
+		$this->page_title = 'ACP_LISTGAME';
+	}
+	
+	/**
+	 * @param $listgames
+	 * @param $installed
+	 * @param $config
+	 * @param $current_order
+	 */
+	private function show_listgames($listgames, $installed, $config, $current_order)
+	{
+		global $phpbb_admin_path, $phpEx;
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
+		//game dropdown
+		$newpresetgame  = $this->request->is_set_post('addgame1');
+		$newcustomgame  = $this->request->is_set_post('addgame2');
+		$upddefaultgame = $this->request->is_set_post('upddefaultgame');
+		if ($newpresetgame || $newcustomgame)
+		{
+			// ask for permission
+			if (confirm_box(true))
+			{
+				$editgame          = new game;
+				$editgame->game_id = $this->request->variable('hidden_game_id', '');
+				$editgame->setName($this->request->variable('hidden_game_name', '', true));
+				$editgame->setRegion($this->request->variable('hidden_region_id', ''));
+				$editgame->install_game();
+				//
+				// Logging
+				//
+				$log_action = array(
+					'header' => 'L_ACTION_GAME_ADDED',
+					'L_GAME' => $editgame->game_id,
+				);
+				$this->log_insert(
+					array(
+						'log_type'   => 'L_ACTION_GAME_ADDED',
+						'log_action' => $log_action)
+				);
+				trigger_error(sprintf($this->user->lang['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_NOTICE);
+			} else
+			{
+				// get field content
+				$listgames->game_id = $this->request->variable('ngame_id', '');
+				if ($newpresetgame)
+				{
+					$listgames->setName($listgames->getPreinstalledGames()[$listgames->game_id]);
+				} else if ($newcustomgame)
+				{
+					$listgames->setName($this->request->variable('ngame_name', '', true));
+				}
+				$region = $this->request->variable('region_id', 'eu');
+				$listgames->setRegion($region);
+				$s_hidden_fields = build_hidden_fields(
+					array(
+						'addgame1'         => $newpresetgame,
+						'addgame2'         => $newcustomgame,
+						'hidden_game_id'   => $listgames->game_id,
+						'hidden_game_name' => $listgames->getName(),
+						'hidden_region_id' => $listgames->getRegion(),
+					)
+				);
+				confirm_box(false, sprintf($this->user->lang['CONFIRM_INSTALL_GAME'], $listgames->getName()), $s_hidden_fields);
+			}
+		}
+		if ($upddefaultgame)
+		{
+			$listgames->game_id = $this->request->variable('defaultgame', '');
+			$listgames->update_gamedefault($listgames->game_id);
+			$success_message = sprintf($this->user->lang['ADMIN_UPDATE_DEFAULTGAME_SUCCESS'], $listgames->game_id);
+			trigger_error($success_message . $this->link, E_USER_NOTICE);
+		}
+		///template load
+		$can_install_count = 0;
+		//is anything installed ?
+		$not_installed = array();
+		if (count($installed) > 0)
+		{
+			$not_installed = array_diff($listgames->getPreinstalledGames(), $installed);
+		} else
+		{
+			// brand new install
+			$not_installed = $listgames->getPreinstalledGames();
+		}
+		//set default games pulldown
+		foreach ($installed as $key => $game)
+		{
+			$this->template->assign_block_vars(
+				'defaultgame_row', array(
+					'VALUE'    => $key,
+					'OPTION'   => $game,
+					'SELECTED' => ($config['bbguild_default_game'] == $key) ? ' selected="selected"' : '',
+				)
+			);
+		}
+		//set not installed games pulldown
+		foreach ($not_installed as $key => $game)
+		{
+			$can_install_count += 1;
+			$this->template->assign_block_vars(
+				'gamelistrow', array(
+					'VALUE'    => $key,
+					'OPTION'   => $game,
+					'SELECTED' => '',
+				)
+			);
+		}
+		//show region list
+		foreach ($listgames->getRegions() as $key => $regionname)
+		{
+			$this->template->assign_block_vars(
+				'region_row',
+				array(
+					'VALUE'    => $key,
+					'SELECTED' => ($listgames->getRegion() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
+				)
+			);
+		}
+		//list installed games
+		foreach ($this->gamelist as $game_id => $game)
+		{
+			$this->template->assign_block_vars(
+				'gamerow', array(
+					'ID'          => $game['id'],
+					'NAME'        => $game['name'],
+					'GAME_ID'     => $game['game_id'],
+					'U_VIEW_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . '=' . $game['game_id']),
+					'STATUS'      => $game['status'],
+				)
+			);
+		}
+		$this->template->assign_vars(
+			array(
+				'S_INSTALLED' => count($installed) > 0 ? true : false,
+				'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames'),
+				'CANINSTALL'  => ($can_install_count == 0) ? false : true,
+				'O_ID'        => $current_order['uri'][0],
+				'O_GAMEID'    => $current_order['uri'][1],
+				'O_GAMENAME'  => $current_order['uri'][2],
+			)
+		);
+		$form_key = 'bbdkp/bbguild';
+		add_form_key($form_key);
+		$this->page_title = 'ACP_LISTGAME';
+	}
+	
 }
