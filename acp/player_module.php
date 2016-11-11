@@ -52,7 +52,16 @@ class player_module extends admin
 	public $mode;
 	public $auth;
 
-	/**
+    protected $admin_controller;
+    protected $factionroute;
+
+    /**
+     * @var \phpbb\controller\helper
+     */
+    protected  $helper;
+
+
+    /**
 	 * @type guilds
 	 */
 	protected $guild;
@@ -66,7 +75,11 @@ class player_module extends admin
 		global $user, $db, $template, $phpbb_admin_path, $phpEx;
 		global $request, $phpbb_container, $auth;
 
-		$this->id = $id;
+        $this->admin_controller = $phpbb_container->get('bbdkp.bbguild.admin.controller');
+        $this->helper = $phpbb_container->get('controller.helper');
+        $this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
+
+        $this->id = $id;
 		$this->mode = $mode;
 		$this->request=$request;
 		$this->template=$template;

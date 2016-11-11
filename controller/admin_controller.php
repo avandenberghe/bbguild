@@ -24,64 +24,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class admin_controller
 {
-	/**
- * @var service
-*/
+	/*** @var service */
 	protected $cache;
 
-	/**
- * @var config
-*/
+    /** @var \phpbb\config\config */
 	protected $config;
 
-	/**
- * @var driver_interface
-*/
+	/*** @var driver_interface */
 	protected $db;
 
-	/**
- * @var pagination
-*/
+	/*** @var pagination */
 	protected $pagination;
 
-	/**
- * @var helper
-*/
+	/*** @var helper */
 	protected $helper;
 
-	/**
- * @var request
-*/
+    /** @var \phpbb\request\request */
 	protected $request;
 
-	/**
- * @var template
-*/
+    /*** @var template */
 	protected $template;
 
-	/**
- * @var user
-*/
+    /** @var \phpbb\user */
 	protected $user;
 
-	/**
- * @var \phpbb\log\log
-*/
-	protected $log;
-
-	/**
- * @var manager "Extension Manager"
-*/
+	/*** @var manager "Extension Manager" */
 	protected $ext_manager;
 
-	/**
- * @var string phpEx
-*/
+	/*** @var string phpEx */
 	protected $php_ext;
 
-	/**
- * @var string Custom form action
-*/
+	/*** @var string Custom form action */
 	protected $u_action;
 
 	/**

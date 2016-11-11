@@ -5,3 +5,6 @@ bbdkp_bbguild_00:
     requirements:
         guild_id: \d*
         page: welcome|roster|achievements
+bbdkp_bbguild_01:
+    path: /getfaction/{game_id}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getFaction, game_id: wow}
