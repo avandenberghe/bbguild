@@ -24,23 +24,19 @@ class guild_module extends admin
 {
 	/**
 	 * url action
-	 *
 	 * @var string
 	 */
 	public $u_action;
 	/**
 	 * trigger url
-	 *
 	 * @var string
 	 */
 	public $link = ' ';
 	/**
 	 * current url
-	 *
 	 * @var string
 	 */
 	public $url_id;
-
 	/**
 	 * @var \phpbb\request\request
 	 **/
@@ -698,12 +694,31 @@ class guild_module extends admin
 	 */
 	private function show_addguild($config)
 	{
-		$addguild = new guilds();
-		$addguild->setGameId($config['bbguild_default_game']);
-		if ($this->request->is_set_post('newguild'))
+        $addguild = new guilds();
+
+        foreach ($this->games as $key => $value)
+        {
+            if($addguild->getGameId() == '')
+            {
+                $addguild->setGameId($key);
+            }
+
+            $this->template->assign_block_vars(
+                'game_row',
+                array(
+                    'VALUE'    => $key,
+                    'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
+                    'OPTION'   => (!empty($value)) ? $value : '(None)',
+                )
+            );
+        }
+
+        if ($this->request->is_set_post('newguild'))
 		{
 			$this->AddGuild($addguild);
+
 		}
+
 		$this->game          = new game;
 		$this->game->game_id = $addguild->getGameId();
 		$this->game->get_game();
@@ -712,17 +727,7 @@ class guild_module extends admin
 		{
 			$addguild->setArmoryEnabled(false);
 		}
-		foreach ($this->games as $key => $gamename)
-		{
-			$this->template->assign_block_vars(
-				'game_row',
-				array(
-					'VALUE'    => $key,
-					'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
-					'OPTION'   => (!empty($gamename)) ? $gamename : '(None)',
-				)
-			);
-		}
+
 		foreach ($this->game->getRegions() as $key => $regionname)
 		{
 			$this->template->assign_block_vars(
