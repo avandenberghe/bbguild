@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class admin_controller
 {
+
 	/*** @var service */
 	protected $cache;
 
@@ -109,8 +110,11 @@ class admin_controller
 	 * @param  $game_id
 	 * @return JsonResponse
 	 */
-	public function getFaction($game_id)
+	public function getfaction($game_id)
 	{
+        global $table_prefix;
+
+        define('FACTION_TABLE',             $table_prefix . 'bb_factions');
 
 		$sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
 		$result = $this->db->sql_query($sql);
@@ -118,7 +122,7 @@ class admin_controller
 		$data =array();
 		while ( $row = $this->db->sql_fetchrow($result))
 		{
-			$data =array(
+			$data[] =array(
 			'faction_id' => $row['faction_id'],
 			'faction_name' =>  $row['faction_name'],
 			);
@@ -137,8 +141,12 @@ class admin_controller
 	 * @param  $guild_id
 	 * @return JsonResponse
 	 */
-	public function getGuildRank($guild_id)
+	public function getguildrank($guild_id)
 	{
+        global $table_prefix;
+        define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
+        define('GUILD_TABLE',               $table_prefix . 'bb_guild');
+
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
         FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
         a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
@@ -147,7 +155,7 @@ class admin_controller
 		$data =array();
 		while ( $row = $this->db->sql_fetchrow($result))
 		{
-			$data =array(
+			$data[] =array(
 			'rank_game_id' => $row['game_id'],
 			'rank_id' => $row['rank_id'],
 			'rank_name' => $row['rank_name']
@@ -167,7 +175,7 @@ class admin_controller
 	* @param  $guild_id
 	 * @return JsonResponse
 	 */
-	public function getPlayerList($guild_id)
+	public function getplayerList($guild_id)
 	{
 		$players = new player();
 		$players->listallplayers($guild_id);
@@ -175,7 +183,7 @@ class admin_controller
 		$data =array();
 		foreach ((array) $players->getGuildplayerlist() as $player)
 		{
-			$data =array(
+			$data[] =array(
 			'player_id' => $player['player_id'],
 			'player_name' =>  $player['rank_name'] . ' '.  $player['player_name'],
 			);
@@ -193,8 +201,13 @@ class admin_controller
 	 * @param  $game_id
 	 * @return JsonResponse
 	 */
-	public function ClassRace($game_id)
+	public function getclassrace($game_id)
 	{
+        global $table_prefix;
+        define('RACE_TABLE',                $table_prefix . 'bb_races');
+        define('BB_LANGUAGE',               $table_prefix . 'bb_language');
+        define('CLASS_TABLE',               $table_prefix . 'bb_classes');
+
 		$sql_array = array(
 		'SELECT'    =>    '  r.race_id, l.name as race_name ',
 		'FROM'        => array(
@@ -214,11 +227,10 @@ class admin_controller
 		$races =array();
 		while ( $row = $this->db->sql_fetchrow($result))
 		{
-			$races =array(
+			$races[] =array(
 			'race_id' => $row['race_id'],
 			'race_name' => $row['race_name']
 			);
-;
 		}
 
 		//now get classes
@@ -236,7 +248,7 @@ class admin_controller
 		$classes = array();
 		while ( $row1 = $this->db->sql_fetchrow($result1))
 		{
-			$classes = array(
+			$classes[] = array(
 			'class_id' => $row1['class_id'],
 			'class_name' => $row1['class_name']
 			);

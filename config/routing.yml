@@ -7,4 +7,15 @@ bbdkp_bbguild_00:
         page: welcome|roster|achievements
 bbdkp_bbguild_01:
     path: /getfaction/{game_id}
-    defaults: { _controller:bbdkp.bbguild.admin.controller:getFaction, game_id: wow}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getfaction, game_id: x}
+bbdkp_bbguild_02:
+    path: /getguildrank/{guild_id}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getguildrank, guild_id: 1}
+    requirements:
+        guild_id: \d*
+bbdkp_bbguild_03:
+    path: /getplayerList/{game_id}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getplayerList, game_id: wow}
+bbdkp_bbguild_04:
+    path: /getclassrace/{game_id}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getclassrace, game_id: wow}

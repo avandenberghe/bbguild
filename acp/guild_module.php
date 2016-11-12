@@ -23,7 +23,7 @@ use bbdkp\bbguild\model\player\ranks;
 class guild_module extends admin
 {
 	/**
-	 * url action
+     * url action
 	 * @var string
 	 */
 	public $u_action;
@@ -32,38 +32,34 @@ class guild_module extends admin
 	 * @var string
 	 */
 	public $link = ' ';
-	/**
-	 * current url
-	 * @var string
-	 */
+	/*** current url
+     * @var string  */
 	public $url_id;
-	/**
-	 * @var \phpbb\request\request
-	 **/
+	/*** @var \phpbb\request\request **/
 	protected $request;
-	/**
-	 * @var \phpbb\template\template
-	 **/
+	/*** @var \phpbb\template\template **/
 	protected $template;
-	/**
-	 * @var \phpbb\user
-	 **/
+	/** @var \phpbb\user  **/
 	protected $user;
-	/**
-	 * @var \phpbb\db\driver\driver_interface
-	 */
+	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
-	/**
-	 * @var \phpbb\config\config
-	 */
+	/*** @var \phpbb\config\config */
 	protected $config;
-
 	public $id;
 	public $mode;
 	public $auth;
 	protected $factions;
+    /* @var \bbdkp\bbguild\controller\admin_controller */
+    protected $admin_controller;
+    /**
+     * @var \phpbb\controller\helper
+     */
+    protected  $helper;
+    protected $phpbb_container;
+    /*** @var string */
+    protected $factionroute;
 
-	/**
+    /**
 	 * @type game
 	 */
 	private $game;
@@ -79,6 +75,8 @@ class guild_module extends admin
 		global $config, $user, $template, $db, $phpbb_admin_path, $phpEx;
 		global $request, $auth;
 
+        global $phpbb_container;
+
 		$this->config   = $config;
 		$this->id       = $id;
 		$this->mode     = $mode;
@@ -87,8 +85,11 @@ class guild_module extends admin
 		$this->user     = $user;
 		$this->db       = $db;
 		$this->auth     = $auth;
+        $this->phpbb_container = $phpbb_container;
+        $this->admin_controller = $this->phpbb_container->get('bbdkp.bbguild.admin.controller');
+        $this->helper = $phpbb_container->get('controller.helper');
 
-		parent::__construct();
+        parent::__construct();
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
 
@@ -761,8 +762,13 @@ class guild_module extends admin
 				$addguild->setName('Twisted');
 				$addguild->setRealm('Gunnar\'s Hold');
 		}
+
+		$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
+        //$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array('game_id' => $addguild->getGameId()  ));
+
 		$this->template->assign_vars(
 			array(
+			    'UA_FACTION'      => $this->factionroute,
 				'GUILD_NAME'      => $addguild->getName(),
 				'REALM_NAME'      => $addguild->getRealm(),
 				'F_ENABLEARMORY'  => $addguild->isArmoryEnabled(),
