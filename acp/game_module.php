@@ -126,9 +126,7 @@ class game_module extends admin
 				$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
 				$editgame->get_game();
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' .
-					$this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
-				
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' . $this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
 				$gamereset = $this->request->is_set_post('gamereset');
 				$gamedelete = $this->request->is_set_post('gamedelete');
 				$gamesettings = $this->request->is_set_post('gamesettings');
@@ -144,7 +142,7 @@ class game_module extends admin
 				
 				$this->template->assign_vars(
 					array (
-						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames') ,
+						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=listgames'),
 					)
 				);
 
@@ -152,62 +150,62 @@ class game_module extends admin
 				{
 					$this->ResetGame($editgame);
 				}
-				elseif ($gamesettings)
+				else if ($gamesettings)
 				{
 					$editgame = $this->SaveGameSettings();
 					$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
 					meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
 					trigger_error($success_message . $this->link, E_USER_NOTICE);
 				}
-				elseif ($gamedelete)
+				else if ($gamedelete)
 				{
 					$this->DeleteGame($editgame);
 				}
-				elseif ($addrole)
+				else if ($addrole)
 				{
 					$this->BuildTemplateRole($editgame);
 				}
-				elseif ($action=='deleterole')
+				else if ($action=='deleterole')
 				{
 					$this->DeleteRole($editgame);
 				}
-				elseif ($action=='editrole')
+				else if ($action=='editrole')
 				{
 					$this->BuildTemplateRole($editgame);
 				}
-				elseif ($addfaction)
+				else if ($addfaction)
 				{
 					$this->BuildTemplateFaction($editgame);
 				}
-				elseif ($action=='deletefaction')
+				else if ($action=='deletefaction')
 				{
 					$this->DeleteFaction($editgame);
 				}
-				elseif ($action=='editfaction')
+				else if ($action=='editfaction')
 				{
 					$this->BuildTemplateFaction($editgame);
 				}
-				elseif ($raceedit)
+				else if ($raceedit)
 				{
 					$this->BuildTemplateEditRace($editgame);
 				}
-				elseif ($addrace)
+				else if ($addrace)
 				{
 					$this->BuildTemplateAddRace($editgame);
 				}
-				elseif ($racedelete)
+				else if ($racedelete)
 				{
 					$this->DeleteRace($editgame);
 				}
-				elseif ($classedit)
+				else if ($classedit)
 				{
 					$this->BuildTemplateEditClass($editgame);
 				}
-				elseif ($addclass)
+				else if ($addclass)
 				{
 					$this->BuildTemplateAddClass($editgame);
 				}
-				elseif ($classdelete)
+				else if ($classdelete)
 				{
 					$this->DeleteClass($editgame);
 				}
@@ -232,7 +230,6 @@ class game_module extends admin
 			case 'addclass':
 				$this->show_addclass();
 				break;
-
 		}
 	}
 
@@ -956,18 +953,17 @@ class game_module extends admin
 		}
 		$warning ='';
 		if(file_exists($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png'))
-        {
-            $size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
+		{
+			$size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
 			if ($size[0] > 32 || $size[0] >32)
 			{
 				$warning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
 			}
-        }
-        else
-        {
-            $size = 0;
-        }
-
+		}
+		else
+		{
+			$size = 0;
+		}
 
 		$this->template->assign_vars(
 			array(
@@ -1028,7 +1024,6 @@ class game_module extends admin
 		$this->tpl_name = 'acp_addclass';
 	}
 
-
 	/**
 	 * @param game $editgame
 	 */
@@ -1052,7 +1047,6 @@ class game_module extends admin
 				'MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'])
 		);
 		unset($races);
-
 		$this->page_title = $this->user->lang['FACTION'];
 		$this->tpl_name = 'acp_addfaction';
 	}
@@ -1104,7 +1098,6 @@ class game_module extends admin
 	private function showgame(game $editgame)
 	{
 		global $phpbb_admin_path, $phpEx;
-
 		//populate dropdown
 		foreach ($this->gamelist as $key => $game)
 		{

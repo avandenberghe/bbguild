@@ -21,7 +21,7 @@
                     <dl>
                         <dt><label for="game_id">{L_GAME}:</label></dt>
                         <dd>
-                            <select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
+                            <select id="game_id" name="game_id" class="input" onchange="return GetFaction(this.value)">
                                 <!-- BEGIN game_row -->
                                 <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
                                 <!-- END game_row -->
@@ -158,6 +158,81 @@
         }
         return true;
     }
+
+    /* ajax function */
+    var xmlhttp;
+    var game;
+    function GetFaction(gameid)
+    {
+        game = gameid;
+        xmlhttp = GetXmlHttpObject();
+        var strURL="{U_FACTION}&game_id="+gameid;
+        xmlhttp.onreadystatechange=stateChanged;
+        xmlhttp.open("GET", strURL, true);
+        // send to server
+        xmlhttp.send(null);
+    }
+
+    /*  make a XMLHTTP Request object */
+    function GetXmlHttpObject()
+    {
+        var xmlhttp=false;
+
+        try
+        {
+            //  IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        catch(e)
+        {	// activex code for IE6, IE5
+            try
+            {
+                xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            catch(e)
+            {
+                try
+                {
+                    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+                catch(e1)
+                {
+                    xmlhttp=false;
+                }
+            }
+        }
+        return xmlhttp;
+    }
+
+    /* called from GetFaction when state changed */
+    function stateChanged()
+    {
+        if (xmlhttp.readyState==4) //request complete
+        {
+            if (xmlhttp.status == 200) {
+                //remove select options
+                var rsel = document.getElementById('faction_id');
+                rsel.options.length = 0;
+                var json_data  = JSON.parse(this.responseText);
+                var myFactions = {};
+                var Faction_id;
+                var Faction_name;
+                for (var i = 0; i < json_data.length ; i++){
+                    myFactions[json_data[i]] = json_data[i];
+                    Faction_id = myFactions[json_data[i]].faction_id;
+                    Faction_name = myFactions[json_data[i]].faction_name;
+                    rsel.options[i] = new Option(Faction_name,Faction_id, true, false);
+
+                }
+            }
+            else
+            {
+                alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+            }
+        }
+    }
+
+
     //]]>
 </script>
 <!-- INCLUDE overall_footer.html -->

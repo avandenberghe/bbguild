@@ -293,17 +293,16 @@ class recruit_module extends admin
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$recruit_count++;
+			if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+			{
+				$class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+			}
+			else
+			{
+			$class_img = '';
+			}
 
-            if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
-            {
-                $class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
-            }
-            else
-            {
-                $class_img = '';
-            }
-
-            $this->template->assign_block_vars(
+			$this->template->assign_block_vars(
 				'recruit_row', array(
 					'ID'                => $row['id'],
 					'GUILD_ID'          => $row['guild_id'],

@@ -104,21 +104,19 @@ class admin_controller
 	}
 
 	/**
-	 * returns GameFaction json list based on ajax call given game id
-	 * used in acp
+	 * returns GameFaction json list based on ajax call given game_id
+	 * used in guild acp & player acp
 	 *
-	 * @param  $game_id
+     * @internal string $game_id must be string values from game table
 	 * @return JsonResponse
 	 */
 	public function getfaction()
 	{
-        global $table_prefix;
+		global $table_prefix;
+		define('FACTION_TABLE',             $table_prefix . 'bb_factions');
 
-        define('FACTION_TABLE',             $table_prefix . 'bb_factions');
-
-        $game_id =  $this->request->variable('game_id', '', true);
-
-        $sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
+		$game_id =  $this->request->variable('game_id', '', true);
+		$sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
 		$result = $this->db->sql_query($sql);
 
 		$data =array();
@@ -133,26 +131,25 @@ class admin_controller
 
 		//transform array to json using phpbb class
 		return new JsonResponse($data);
-
 	}
 
 	/**
 	 * returns Guild rank json list based on ajax call given guild id
 	 * used in acp
 	 *
-	 * @param  $guild_id
 	 * @return JsonResponse
+     * @internal int     $guild_id
 	 */
 	public function getguildrank()
 	{
-        global $table_prefix;
-        define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
-        define('GUILD_TABLE',               $table_prefix . 'bb_guild');
-        $guild_id =  $this->request->variable('guild_id', '', true);
+		global $table_prefix;
+		define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
+		define('GUILD_TABLE',               $table_prefix . 'bb_guild');
+		$guild_id =  $this->request->variable('guild_id', '', true);
 
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
-        FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
-        a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
+		FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
+		a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
 
 		$result = $this->db->sql_query($sql);
 		$data =array();
@@ -175,8 +172,8 @@ class admin_controller
 	 * returns playerlist json based on ajax call
 	 * used by acp_addraid.html
 	 *
-	* @param  $guild_id
-	 * @return JsonResponse
+	 * @internal string      $guild_id
+	 * @return JsonResponse  $JsonResponse
 	 */
 	public function getplayerList()
 	{
@@ -199,19 +196,18 @@ class admin_controller
 	}
 
 
-	/**
-	 * returns race & class json based on ajax call
-	*
-	 * @param  $game_id
-	 * @return JsonResponse
-	 */
+    /**
+     * returns race & class json based on ajax call
+     * @return JsonResponse  $JsonResponse
+     * @internal string $game_id
+     */
 	public function getclassrace()
 	{
-        global $table_prefix;
-        define('RACE_TABLE',                $table_prefix . 'bb_races');
-        define('BB_LANGUAGE',               $table_prefix . 'bb_language');
-        define('CLASS_TABLE',               $table_prefix . 'bb_classes');
-        $game_id  =  $this->request->variable('game_id', '', true);
+		global $table_prefix;
+		define('RACE_TABLE',                $table_prefix . 'bb_races');
+		define('BB_LANGUAGE',               $table_prefix . 'bb_language');
+		define('CLASS_TABLE',               $table_prefix . 'bb_classes');
+		$game_id  =  $this->request->variable('game_id', '', true);
 
 		$sql_array = array(
 		'SELECT'    =>    '  r.race_id, l.name as race_name ',

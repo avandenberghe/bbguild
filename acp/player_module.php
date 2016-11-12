@@ -52,16 +52,15 @@ class player_module extends admin
 	public $mode;
 	public $auth;
 
-    protected $admin_controller;
-    protected $factionroute;
+	protected $admin_controller;
+	protected $factionroute;
 
-    /**
-     * @var \phpbb\controller\helper
-     */
-    protected  $helper;
+	/**
+	* @var \phpbb\controller\helper
+	*/
+	protected  $helper;
 
-
-    /**
+	/**
 	 * @type guilds
 	 */
 	protected $guild;
@@ -75,11 +74,11 @@ class player_module extends admin
 		global $user, $db, $template, $phpbb_admin_path, $phpEx;
 		global $request, $phpbb_container, $auth;
 
-        $this->admin_controller = $phpbb_container->get('bbdkp.bbguild.admin.controller');
-        $this->helper = $phpbb_container->get('controller.helper');
-        $this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
+		$this->admin_controller = $phpbb_container->get('bbdkp.bbguild.admin.controller');
+		$this->helper = $phpbb_container->get('controller.helper');
+		$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
 
-        $this->id = $id;
+		$this->id = $id;
 		$this->mode = $mode;
 		$this->request=$request;
 		$this->template=$template;
@@ -636,23 +635,23 @@ class player_module extends admin
 			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$lines += 1;
 
-            if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
-            {
-                $class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
-            }
-            else
-            {
-                $class_img = '';
-            }
+			if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+			{
+				$class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+			}
+			else
+			{
+				$class_img = '';
+			}
 
-            if(file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
-            {
-                $race_img = $this->ext_path . 'images/race_images/' . $race_image . '.png';
-            }
-            else
-            {
-                $race_img = '';
-            }
+			if(file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
+			{
+				$race_img = $this->ext_path . 'images/race_images/' . $race_image . '.png';
+			}
+			else
+			{
+				$race_img = '';
+			}
 
 			$this->template->assign_block_vars(
 				'players_row', array(

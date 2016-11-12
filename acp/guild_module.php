@@ -22,28 +22,21 @@ use bbdkp\bbguild\model\player\ranks;
  */
 class guild_module extends admin
 {
-	/**
-     * url action
-	 * @var string
-	 */
+	/* @var string */
 	public $u_action;
-	/**
-	 * trigger url
-	 * @var string
-	 */
+	/* @var string */
 	public $link = ' ';
-	/*** current url
-     * @var string  */
+	/* @var string  */
 	public $url_id;
-	/*** @var \phpbb\request\request **/
+	/* @var \phpbb\request\request **/
 	protected $request;
-	/*** @var \phpbb\template\template **/
+	/* @var \phpbb\template\template **/
 	protected $template;
-	/** @var \phpbb\user  **/
+	/* @var \phpbb\user  **/
 	protected $user;
-	/** @var \phpbb\db\driver\driver_interface */
+	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
-	/*** @var \phpbb\config\config */
+	/* @var \phpbb\config\config */
 	protected $config;
 	public $id;
 	public $mode;
@@ -51,17 +44,12 @@ class guild_module extends admin
 	protected $factions;
     /* @var \bbdkp\bbguild\controller\admin_controller */
     protected $admin_controller;
-    /**
-     * @var \phpbb\controller\helper
-     */
+    /* @var \phpbb\controller\helper */
     protected  $helper;
     protected $phpbb_container;
-    /*** @var string */
+    /* @var string */
     protected $factionroute;
-
-    /**
-	 * @type game
-	 */
+    /* @type game */
 	private $game;
 
 	/**
@@ -85,14 +73,14 @@ class guild_module extends admin
 		$this->user     = $user;
 		$this->db       = $db;
 		$this->auth     = $auth;
-        $this->phpbb_container = $phpbb_container;
-        $this->admin_controller = $this->phpbb_container->get('bbdkp.bbguild.admin.controller');
-        $this->helper = $phpbb_container->get('controller.helper');
+		$this->phpbb_container = $phpbb_container;
+		$this->admin_controller = $this->phpbb_container->get('bbdkp.bbguild.admin.controller');
+		$this->helper = $phpbb_container->get('controller.helper');
+		$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
 
-        parent::__construct();
+		parent::__construct();
 		$form_key = 'bbdkp/bbguild';
 		add_form_key($form_key);
-
 		$this->tpl_name   = 'acp_'.$mode;
 		$this->link       = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx",
 				'i=-bbdkp-bbguild-acp-guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
@@ -466,6 +454,7 @@ class guild_module extends admin
 
 		$this->template->assign_vars(
 			array(
+                'U_FACTION'               => $this->factionroute,
 				'F_ENABLGAMEEARMORY'      => $game->getArmoryEnabled(),
 				'F_ENABLEARMORY'          => $updateguild->isArmoryEnabled(),
 				'RECRUITFORUM_OPTIONS'    => make_forum_select($updateguild->getRecruitforum(), false, false, true),
@@ -762,8 +751,6 @@ class guild_module extends admin
 				$addguild->setName('Twisted');
 				$addguild->setRealm('Gunnar\'s Hold');
 		}
-
-		$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
 
 		$this->template->assign_vars(
 			array(

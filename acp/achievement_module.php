@@ -322,7 +322,6 @@ class achievement_module extends admin
 			}
 		}
 		$Guild->get_guild();
-
 		$this->game          = new game;
 		$this->game->game_id = $Guild->getGameId();
 		$this->game->get_game();
@@ -338,7 +337,7 @@ class achievement_module extends admin
 	private function BuildTemplateAddEditAchievements($achievement_id)
 	{
 		$achievement = new achievement($this->game, $achievement_id);
-		if($achievement_id > 0)
+		if ($achievement_id > 0)
 		{
 			$achievement->get_achievement();
 		}
