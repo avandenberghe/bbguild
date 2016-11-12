@@ -1,13 +1,13 @@
 # ext/bbdkp/bbguild/config/routing.yml
 bbdkp_bbguild_00:
     path: /guild/{page}/{guild_id}
-    defaults: { _controller: bbdkp.bbguild.controller:handleguild , guild_id: 1, page: welcome }
+    defaults: { _controller: bbdkp.bbguild.controller:handleguild , guild_id: 1, page: "welcome" }
     requirements:
         guild_id: \d*
         page: welcome|roster|achievements
 bbdkp_bbguild_01:
-    path: /getfaction/{game_id}
-    defaults: { _controller:bbdkp.bbguild.admin.controller:getfaction, game_id: x}
+    path: /getfaction
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getfaction}
 bbdkp_bbguild_02:
     path: /getguildrank/{guild_id}
     defaults: { _controller:bbdkp.bbguild.admin.controller:getguildrank, guild_id: 1}
@@ -15,7 +15,7 @@ bbdkp_bbguild_02:
         guild_id: \d*
 bbdkp_bbguild_03:
     path: /getplayerList/{game_id}
-    defaults: { _controller:bbdkp.bbguild.admin.controller:getplayerList, game_id: wow}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getplayerList, game_id: "wow"}
 bbdkp_bbguild_04:
     path: /getclassrace/{game_id}
-    defaults: { _controller:bbdkp.bbguild.admin.controller:getclassrace, game_id: wow}
+    defaults: { _controller:bbdkp.bbguild.admin.controller:getclassrace, game_id: "wow"}

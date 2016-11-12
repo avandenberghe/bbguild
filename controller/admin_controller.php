@@ -110,13 +110,15 @@ class admin_controller
 	 * @param  $game_id
 	 * @return JsonResponse
 	 */
-	public function getfaction($game_id)
+	public function getfaction()
 	{
         global $table_prefix;
 
         define('FACTION_TABLE',             $table_prefix . 'bb_factions');
 
-		$sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
+        $game_id =  $this->request->variable('game_id', '', true);
+
+        $sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
 		$result = $this->db->sql_query($sql);
 
 		$data =array();
@@ -141,11 +143,12 @@ class admin_controller
 	 * @param  $guild_id
 	 * @return JsonResponse
 	 */
-	public function getguildrank($guild_id)
+	public function getguildrank()
 	{
         global $table_prefix;
         define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
         define('GUILD_TABLE',               $table_prefix . 'bb_guild');
+        $guild_id =  $this->request->variable('guild_id', '', true);
 
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
         FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
@@ -175,9 +178,10 @@ class admin_controller
 	* @param  $guild_id
 	 * @return JsonResponse
 	 */
-	public function getplayerList($guild_id)
+	public function getplayerList()
 	{
 		$players = new player();
+        $guild_id =  $this->request->variable('guild_id', '', true);
 		$players->listallplayers($guild_id);
 
 		$data =array();
@@ -201,12 +205,13 @@ class admin_controller
 	 * @param  $game_id
 	 * @return JsonResponse
 	 */
-	public function getclassrace($game_id)
+	public function getclassrace()
 	{
         global $table_prefix;
         define('RACE_TABLE',                $table_prefix . 'bb_races');
         define('BB_LANGUAGE',               $table_prefix . 'bb_language');
         define('CLASS_TABLE',               $table_prefix . 'bb_classes');
+        $game_id  =  $this->request->variable('game_id', '', true);
 
 		$sql_array = array(
 		'SELECT'    =>    '  r.race_id, l.name as race_name ',

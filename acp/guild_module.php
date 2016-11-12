@@ -764,11 +764,10 @@ class guild_module extends admin
 		}
 
 		$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array());
-        //$this->factionroute =  $this->helper->route('bbdkp_bbguild_01', array('game_id' => $addguild->getGameId()  ));
 
 		$this->template->assign_vars(
 			array(
-			    'UA_FACTION'      => $this->factionroute,
+			    'U_FACTION'       => $this->factionroute,
 				'GUILD_NAME'      => $addguild->getName(),
 				'REALM_NAME'      => $addguild->getRealm(),
 				'F_ENABLEARMORY'  => $addguild->isArmoryEnabled(),

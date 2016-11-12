@@ -125,7 +125,7 @@
     {
         game = gameid;
         xmlhttp = GetXmlHttpObject();
-        var strURL="{UA_FACTION}&amp;game_id="+gameid;
+        var strURL="{U_FACTION}&game_id="+gameid;
         xmlhttp.onreadystatechange=stateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
