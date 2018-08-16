@@ -28,7 +28,7 @@ class admin_controller
 	/*** @var service */
 	protected $cache;
 
-    /** @var \phpbb\config\config */
+	/** @var \phpbb\config\config */
 	protected $config;
 
 	/*** @var driver_interface */
@@ -40,13 +40,13 @@ class admin_controller
 	/*** @var helper */
 	protected $helper;
 
-    /** @var \phpbb\request\request */
+	/** @var \phpbb\request\request */
 	protected $request;
 
-    /*** @var template */
+	/*** @var template */
 	protected $template;
 
-    /** @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
 
 	/*** @var manager "Extension Manager" */
@@ -138,7 +138,7 @@ class admin_controller
 	 * used in acp
 	 *
 	 * @return JsonResponse
-     * @internal int     $guild_id
+	 * @internal int     $guild_id
 	 */
 	public function getguildrank()
 	{
@@ -178,7 +178,7 @@ class admin_controller
 	public function getplayerList()
 	{
 		$players = new player();
-        $guild_id =  $this->request->variable('guild_id', '', true);
+		$guild_id =  $this->request->variable('guild_id', '', true);
 		$players->listallplayers($guild_id);
 
 		$data =array();
@@ -196,11 +196,11 @@ class admin_controller
 	}
 
 
-    /**
-     * returns race & class json based on ajax call
-     * @return JsonResponse  $JsonResponse
-     * @internal string $game_id
-     */
+	/**
+	* returns race & class json based on ajax call
+	* @return JsonResponse  $JsonResponse
+	* @internal string $game_id
+	*/
 	public function getclassrace()
 	{
 		global $table_prefix;

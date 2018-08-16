@@ -8,7 +8,6 @@
  */
 namespace avathar\bbguild\views;
 
-use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\rpg\achievement;
 
 /**
@@ -43,7 +42,6 @@ class viewachievements implements iviews
 		$this->tpl = 'main.html';
 		
 		$achievements =  $this->navigation->guild->getGuildAchievements();
-		
 		foreach ($achievements as $achi)
 		{
 			$a = $achi;

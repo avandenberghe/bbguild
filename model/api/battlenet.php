@@ -93,8 +93,7 @@ class battlenet
 	 * @param \phpbb\cache\service $cache
 	 * @param int                  $cacheTtl
 	 */
-	public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path,
-	                            \phpbb\cache\service $cache, $cacheTtl = 3600)
+	public function __construct($API, $region, $apikey, $locale, $privkey, $ext_path, \phpbb\cache\service $cache, $cacheTtl = 3600)
 	{
 		global $user;
 

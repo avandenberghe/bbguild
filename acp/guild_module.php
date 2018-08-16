@@ -42,14 +42,14 @@ class guild_module extends admin
 	public $mode;
 	public $auth;
 	protected $factions;
-    /* @var \avathar\bbguild\controller\admin_controller */
-    protected $admin_controller;
-    /* @var \phpbb\controller\helper */
-    protected  $helper;
-    protected $phpbb_container;
-    /* @var string */
-    protected $factionroute;
-    /* @type game */
+	/* @var \avathar\bbguild\controller\admin_controller */
+	protected $admin_controller;
+	/* @var \phpbb\controller\helper */
+	protected  $helper;
+	protected $phpbb_container;
+	/* @var string */
+	protected $factionroute;
+	/* @type game */
 	private $game;
 
 	/**
@@ -63,7 +63,7 @@ class guild_module extends admin
 		global $config, $user, $template, $db, $phpbb_admin_path, $phpEx;
 		global $request, $auth;
 
-        global $phpbb_container;
+		global $phpbb_container;
 
 		$this->config   = $config;
 		$this->id       = $id;
@@ -166,11 +166,11 @@ class guild_module extends admin
 		{
 			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 		}
-		
+
 		$this->game          = new game;
 		$this->game->game_id = $this->request->variable('game_id', '');
 		$this->game->get_game();
-		
+
 		$addguild->setGameId($this->request->variable('game_id', ''));
 		$addguild->setName($this->request->variable('guild_name', '', true));
 		$addguild->setRealm($this->request->variable('realm', '', true));
@@ -454,7 +454,7 @@ class guild_module extends admin
 
 		$this->template->assign_vars(
 			array(
-                'U_FACTION'               => $this->factionroute,
+				'U_FACTION'               => $this->factionroute,
 				'F_ENABLGAMEEARMORY'      => $game->getArmoryEnabled(),
 				'F_ENABLEARMORY'          => $updateguild->isArmoryEnabled(),
 				'RECRUITFORUM_OPTIONS'    => make_forum_select($updateguild->getRecruitforum(), false, false, true),
@@ -684,29 +684,28 @@ class guild_module extends admin
 	 */
 	private function show_addguild($config)
 	{
-        $addguild = new guilds();
+		$addguild = new guilds();
 
-        foreach ($this->games as $key => $value)
-        {
-            if($addguild->getGameId() == '')
-            {
-                $addguild->setGameId($key);
-            }
+		foreach ($this->games as $key => $value)
+		{
+			if ($addguild->getGameId() == '')
+			{
+				$addguild->setGameId($key);
+			}
 
-            $this->template->assign_block_vars(
-                'game_row',
-                array(
-                    'VALUE'    => $key,
-                    'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($value)) ? $value : '(None)',
-                )
-            );
-        }
+			$this->template->assign_block_vars(
+				'game_row',
+				array(
+					'VALUE'    => $key,
+					'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($value)) ? $value : '(None)',
+				)
+			);
+		}
 
-        if ($this->request->is_set_post('newguild'))
+		if ($this->request->is_set_post('newguild'))
 		{
 			$this->AddGuild($addguild);
-
 		}
 
 		$this->game          = new game;
@@ -754,7 +753,7 @@ class guild_module extends admin
 
 		$this->template->assign_vars(
 			array(
-			    'U_FACTION'       => $this->factionroute,
+				'U_FACTION'       => $this->factionroute,
 				'GUILD_NAME'      => $addguild->getName(),
 				'REALM_NAME'      => $addguild->getRealm(),
 				'F_ENABLEARMORY'  => $addguild->isArmoryEnabled(),
@@ -779,7 +778,8 @@ class guild_module extends admin
 		$deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
 		$addrank    = $this->request->is_set_post('addrank');
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' .
-				$updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
+		$updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
+
 		if (($updaterank || $addrank) && (!check_form_key('avathar/bbguild')))
 		{
 			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
@@ -803,7 +803,7 @@ class guild_module extends admin
 		$this->tpl_name = 'acp_editguild_ranks';
 		$this->BuildTemplateEditGuildRanks($updateguild);
 	}
-	
+
 	/**
 	 * @param $phpbb_admin_path
 	 * @param $phpEx
@@ -837,6 +837,5 @@ class guild_module extends admin
 		// start template loading
 		$this->BuildTemplateEditGuild($updateguild);
 	}//end BuildTemplateListGuilds()
-
 
 }//end class

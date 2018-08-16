@@ -980,12 +980,12 @@ class achievement extends admin
 			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'CRI' and att_value= '" . $data['id'] . "' and rel_value = '".  $criterium['id'] ."' " );
 		}
 
-		if(count($sql_ary3) > 0)
+		if (count($sql_ary3) > 0)
 		{
 			$db->sql_multi_insert(ACHIEVEMENT_CRITERIA_TABLE, $sql_ary3);
 		}
 
-		if(count($sql_ary4) > 0)
+		if (count($sql_ary4) > 0)
 		{
 			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary4);
 		}

@@ -635,7 +635,7 @@ class player_module extends admin
 			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$lines += 1;
 
-			if(file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+			if (file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
 			{
 				$class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
 			}
@@ -644,7 +644,7 @@ class player_module extends admin
 				$class_img = '';
 			}
 
-			if(file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
+			if (file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
 			{
 				$race_img = $this->ext_path . 'images/race_images/' . $race_image . '.png';
 			}

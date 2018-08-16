@@ -139,7 +139,6 @@ class game_module extends admin
 				$addclass = $this->request->is_set_post('showclassadd');
 				$classedit = (isset($_GET['classedit'])) ? true : false;
 				$classdelete = (isset($_GET['classdelete'])) ? true : false;
-				
 				$this->template->assign_vars(
 					array (
 						'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=listgames'),
@@ -952,7 +951,7 @@ class game_module extends admin
 			$s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
 		}
 		$warning ='';
-		if(file_exists($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png'))
+		if (file_exists($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png'))
 		{
 			$size = getimagesize($this->ext_path . 'images/class_images/' . $GameClass->imagename . '.png', $info);
 			if ($size[0] > 32 || $size[0] >32)
@@ -1300,7 +1299,7 @@ class game_module extends admin
 				'U_ACTION' => $this->u_action )
 		);
 	}
-	
+
 	private function show_addrole()
 	{
 		$role              = new roles();
@@ -1373,13 +1372,14 @@ class game_module extends admin
 		if ($classadd)
 		{
 			$this->AddClass();
-		} else if ($classupdate)
+		}
+		else if ($classupdate)
 		{
 			$this->EditClass();
 		}
 		$this->page_title = 'ACP_LISTGAME';
 	}
-	
+
 	/**
 	 * @param $listgames
 	 * @param $installed
@@ -1523,5 +1523,4 @@ class game_module extends admin
 		add_form_key($form_key);
 		$this->page_title = 'ACP_LISTGAME';
 	}
-	
 }

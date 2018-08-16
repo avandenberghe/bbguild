@@ -1374,8 +1374,7 @@ class guilds extends admin
 	 * @param  bool   $last_update
 	 * @return array
 	 */
-	public function list_players($order = 'm.player_name', $start = 0, $mode = 0, $minlevel = 1,
-	                             $maxlevel = 200, $selectactive = 1, $selectnonactive = 1, $player_filter = '', $last_update = false)
+	public function list_players($order = 'm.player_name', $start = 0, $mode = 0, $minlevel = 1, $maxlevel = 200, $selectactive = 1, $selectnonactive = 1, $player_filter = '', $last_update = false)
 	{
 
 		global $db, $config;
