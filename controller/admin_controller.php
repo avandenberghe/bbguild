@@ -72,6 +72,27 @@ class admin_controller
 	 * @param  manager          $ext_manager Extension manager object
 	 * @param  string           $root_path   phpBB root path
 	 * @param  string           $php_ext     phpEx
+	 * @param  string           $bb_games_table	name of game table
+	 * @param  string           $bb_logs_table	name of logging table
+	 * @param  string           $bb_ranks_table	name of ranks table
+	 * @param  string           $bb_guild_table	name of guild table
+	 * @param  string           $bb_players_table	name of players table
+	 * @param  string           $bb_classes_table	name of classes table
+	 * @param  string           $bb_gameroles_table	name of roles table
+	 * @param  string           $bb_factions_table	name of factions table
+	 * @param  string           $bb_language_table	name of language table
+	 * @param  string           $bb_motd_table	name of motd table
+	 * @param  string           $bb_recruit_table	name of recruit table
+	 * @param  string           $bb_achievement_track_table	name of achievement track table
+	 * @param  string           $bb_achievement_table	name of achievement table
+	 * @param  string           $bb_achievement_rewards_table	name of achievement rewards table
+	 * @param  string           $bb_criteria_track_table	name of achievement criteria track table
+	 * @param  string           $bb_achievement_criteria_table	name of achievement criteria table
+	 * @param  string           $bb_relations_table 	name of relations table
+	 * @param  string           $bb_bosstable	name of boss table
+	 * @param  string           $bb_zonetable	name of zone table
+	 * @param  string           $bb_news	name of news table
+	 * @param  string           $bb_plugins	name of plugin table
 	 * @return \avathar\bbguild\controller\admin_controller
 	 * @access public
 	 */
@@ -86,7 +107,28 @@ class admin_controller
 		user $user,
 		manager $ext_manager,
 		$root_path,
-		$php_ext
+		$php_ext,
+		$bb_games_table,
+		$bb_logs_table,
+		$bb_ranks_table,
+		$bb_guild_table,
+		$bb_players_table,
+		$bb_classes_table,
+		$bb_gameroles_table,
+		$bb_factions_table,
+		$bb_language_table,
+		$bb_motd_table,
+		$bb_recruit_table,
+		$bb_achievement_track_table,
+		$bb_achievement_table,
+		$bb_achievement_rewards_table,
+		$bb_criteria_track_table,
+		$bb_achievement_criteria_table,
+		$bb_relations_table,
+		$bb_bosstable,
+		$bb_zonetable,
+		$bb_news,
+		$bb_plugins
 	)
 	{
 
@@ -101,6 +143,27 @@ class admin_controller
 		$this->ext_manager     = $ext_manager;
 		$this->php_ext = $php_ext;
 		$this->ext_path = $this->ext_manager->get_extension_path('avathar/bbguild', true);
+		$this->bb_games_table = $bb_games_table;
+		$this->bb_logs_table = $bb_logs_table;
+		$this->bb_ranks_table = $bb_ranks_table;
+		$this->bb_guild_table = $bb_guild_table;
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_gameroles_table = $bb_gameroles_table;
+		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_motd_table = $bb_motd_table;
+		$this->bb_recruit_table = $bb_recruit_table;
+		$this->bb_achievement_track_table = $bb_achievement_track_table;
+		$this->bb_achievement_table = $bb_achievement_table;
+		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;
+		$this->bb_criteria_track_table = $bb_criteria_track_table;
+		$this->bb_achievement_criteria_table = $bb_achievement_criteria_table;
+		$this->bb_relations_table = $bb_relations_table;
+		$this->bb_bosstable = $bb_bosstable;
+		$this->bb_zonetable =  $bb_zonetable;
+		$this->bb_news = $bb_news;
+		$this->bb_plugins = $bb_plugins;
 	}
 
 	/**
