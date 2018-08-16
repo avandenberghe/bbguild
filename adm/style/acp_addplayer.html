@@ -1,62 +1,62 @@
-<!-- INCLUDE overall_header.html -->
+{% INCLUDE 'overall_header.html' %}
 
-<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
-<!-- IF S_ADD -->
-<h1>{L_ACP_MM_ADDPLAYER}</h1>
-<!-- ELSE -->
-<h1>{L_ACP_MM_EDITPLAYER}</h1>
-<!-- ENDIF -->
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+{% if S_ADD %}
+<h1>{{ lang('ACP_MM_ADDPLAYER') }}</h1>
+{% else %}
+<h1>{{ lang('ACP_MM_EDITPLAYER') }}</h1>
+{% endif %}
 
-<p>{L_EXPLAIN}</p>
+<p>{{ lang('EXPLAIN') }}</p>
 
-<form method="post" action="{F_ADD_PLAYER}" id="addplayer" onsubmit="return check_form(this)" >
+<form method="post" action="{{ F_ADD_PLAYER }}" id="addplayer" onsubmit="return check_form(this)" >
 
     <fieldset>
-        <legend>{L_ACP_MM_ADDPLAYER}</legend>
+        <legend>{{ lang('ACP_MM_ADDPLAYER') }}</legend>
 
         <br />
 
         <dl>
-            <dt><label for="player_name">{L_NAME}, {L_SURNAME} :</label></dt>
-            <dd><input type="text" name="player_name" id="player_name" size="20" maxlength="30" value="{PLAYER_NAME}" class="input" />
-                <input type="text" name="player_title" id="player_title" size="30" maxlength="40" value="{PLAYER_TITLE}" class="input" />
+            <dt><label for="player_name">{{ lang('NAME') }}, {{ lang('SURNAME') }} :</label></dt>
+            <dd><input type="text" name="player_name" id="player_name" size="20" maxlength="30" value="{{ PLAYER_NAME }}" class="input" />
+                <input type="text" name="player_title" id="player_title" size="30" maxlength="40" value="{{ PLAYER_TITLE }}" class="input" />
             </dd>
         </dl>
         <dl>
-            <dt><label for="realm">{L_REALM_NAME}:</label></dt>
-            <dd>{REGIONNAME} - <input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
+            <dt><label for="realm">{{ lang('REALM_NAME') }}:</label></dt>
+            <dd>{{ REGIONNAME }} - <input type="text" id="realm" size="20" maxlength="30" name="realm" value="{{ REALM }}" /></dd>
         </dl>
 
         <dl>
-            <dt><label for="player_guild_id">{L_GUILD}:</label></dt>
+            <dt><label for="player_guild_id">{{ lang('GUILD') }}:</label></dt>
             <dd>
                 <select name="player_guild_id" id="player_guild_id" class="input" onchange="return GetRank(this.value)">
-                    <!-- BEGIN guild_row -->
-                    <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-                    <!-- END guild_row -->
+                    {% for guild_row in loops.guild_row %}
+                    <option value="{{ guild_row.VALUE }}"{{ guild_row.SELECTED }}>{{ guild_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="player_rank_id">{L_PLAYER_RANK}:</label></dt>
+            <dt><label for="player_rank_id">{{ lang('PLAYER_RANK') }}:</label></dt>
             <dd>
                 <select id="player_rank_id" name="player_rank_id" class="input">
-                    <!-- BEGIN rank_row -->
-                    <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
-                    <!-- END rank_row -->
+                    {% for rank_row in loops.rank_row %}
+                    <option value="{{ rank_row.VALUE }}"{{ rank_row.SELECTED }}>{{ rank_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
 
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="game_id">{L_GAME}:</label></dt>
+            <dt><label for="game_id">{{ lang('GAME') }}:</label></dt>
             <dd>
                 <select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
-                    <!-- BEGIN game_row -->
-                    <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-                    <!-- END game_row -->
+                    {% for game_row in loops.game_row %}
+                    <option value="{{ game_row.VALUE }}"{{ game_row.SELECTED }}>{{ game_row.OPTION }}</option>
+                    {% endfor %}
                 </select></dd>
         </dl>
 
@@ -64,134 +64,134 @@
 
 
         <dl>
-            <dt><label for="player_level">{L_LEVEL}:</label></dt>
-            <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{PLAYER_LEVEL}" class="input" />
-                <a id="levelup"  href="{F_ADD_PLAYER}" target="_blank"><img src="./images/icon_up.gif" /></a>
-                <a id="leveldown" href="{F_ADD_PLAYER}" target="_blank"><img src="./images/icon_down.gif" /></a>
+            <dt><label for="player_level">{{ lang('LEVEL') }}:</label></dt>
+            <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{{ PLAYER_LEVEL }}" class="input" />
+                <a id="levelup"  href="{{ F_ADD_PLAYER }}" target="_blank"><img src="./images/icon_up.gif" /></a>
+                <a id="leveldown" href="{{ F_ADD_PLAYER }}" target="_blank"><img src="./images/icon_down.gif" /></a>
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="player_level">{L_ACHIEV}:</label></dt>
-            <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{PLAYER_ACHIEV}" class="input" /></dd>
+            <dt><label for="player_level">{{ lang('ACHIEV') }}:</label></dt>
+            <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{{ PLAYER_ACHIEV }}" class="input" /></dd>
         </dl>
 
 
 
         <dl>
-            <dt><label for="player_race_id">{L_RACE}:</label></dt>
+            <dt><label for="player_race_id">{{ lang('RACE') }}:</label></dt>
             <dd><select id="player_race_id" name="player_race_id" class="input">
-                <!-- BEGIN race_row -->
-                <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
-                <!-- END race_row -->
+                {% for race_row in loops.race_row %}
+                <option value="{{ race_row.VALUE }}"{{ race_row.SELECTED }}>{{ race_row.OPTION }}</option>
+                {% endfor %}
             </select>
 
-                <!-- IF S_RACE_IMAGE_EXISTS --> <br/><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF -->
+                {% if S_RACE_IMAGE_EXISTS %} <br/><img src="{{ RACE_IMAGE }}" alt="" />&nbsp;{% else %}&nbsp;{% endif %}
             </dd>
         </dl>
         <dl>
-            <dt><label for="player_class_id">{L_CLASS}:</label></dt>
+            <dt><label for="player_class_id">{{ lang('CLASS') }}:</label></dt>
             <dd>
                 <select id="player_class_id" name="player_class_id" class="input">
-                    <!-- BEGIN class_row -->
-                    <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
-                    <!-- END class_row -->
+                    {% for class_row in loops.class_row %}
+                    <option value="{{ class_row.VALUE }}"{{ class_row.SELECTED }}>{{ class_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
-                <!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+                {% if S_CLASS_IMAGE_EXISTS %}<br/><img src="{{ CLASS_IMAGE }}" alt="" />{% else %}&nbsp;{% endif %}
             </dd>
         </dl>
 
 
         <dl>
-            <dt><label for="player_role">{L_ROLES}:</label></dt>
+            <dt><label for="player_role">{{ lang('ROLES') }}:</label></dt>
             <dd>
                 <select name="player_role" id="player_role" class="input" >
-                    <!-- BEGIN role_row -->
-                    <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
-                    <!-- END role_row -->
+                    {% for role_row in loops.role_row %}
+                    <option value="{{ role_row.VALUE }}"{{ role_row.SELECTED }}>{{ role_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
             </dd>
         </dl>
 
         <dl>
 
-            <dt><label for="activated">{L_ACTIVE}:</label></dt>
-            <dd><input type="checkbox" class="checkbox" name="activated" id="activated" <!-- IF STATUS_LOCK --> disabled="disabled" <!-- ENDIF --> {STATUS}  />
+            <dt><label for="activated">{{ lang('ACTIVE') }}:</label></dt>
+            <dd><input type="checkbox" class="checkbox" name="activated" id="activated" {% if STATUS_LOCK %} disabled="disabled" {% endif %} {{ STATUS }}  />
 
-                <!-- IF ! S_ADD -->
-                <span style="color:red"> {DEACTIVATE_REASON}</span>
-                <!-- ENDIF -->
+                {% if ! S_ADD %}
+                <span style="color:red"> {{ DEACTIVATE_REASON }}</span>
+                {% endif %}
             </dd>
 
 
         </dl>
 
         <dl>
-            <dt><label for="gender">{L_GENDER}:</label></dt>
+            <dt><label for="gender">{{ lang('GENDER') }}:</label></dt>
             <dd>
-                <input type="radio" id="gender" name="gender"  value="0" {MALE_CHECKED} /> {L_MALE}&nbsp;&nbsp;
-                <input type="radio" name="gender"  value="1" {FEMALE_CHECKED} /> {L_FEMALE}
+                <input type="radio" id="gender" name="gender"  value="0" {{ MALE_CHECKED }} /> {{ lang('MALE') }}&nbsp;&nbsp;
+                <input type="radio" name="gender"  value="1" {{ FEMALE_CHECKED }} /> {{ lang('FEMALE') }}
             </dd>
         </dl>
 
-        <!-- IF S_CAN_HAVE_ARMORY -->
+        {% if S_CAN_HAVE_ARMORY %}
         <dl>
-            <dt><label>{L_ARMORY_URL}:</label></dt>
+            <dt><label>{{ lang('ARMORY_URL') }}:</label></dt>
             <dd>
-                <a href="{PLAYER_URL}" alt="{PLAYER_NAME}">
-                <!-- IF S_PLAYER_PORTRAIT_EXISTS -->
-                <img src="{PLAYER_PORTRAIT}" alt="image" width="64" height="64"></img>
-                <!-- ENDIF -->
+                <a href="{{ PLAYER_URL }}" alt="{{ PLAYER_NAME }}">
+                {% if S_PLAYER_PORTRAIT_EXISTS %}
+                <img src="{{ PLAYER_PORTRAIT }}" alt="image" width="64" height="64"></img>
+                {% endif %}
                 </a>
-                <input type="text" name="player_armorylink" size="80%" maxlength="300" value="{PLAYER_URL}" class="input" />
+                <input type="text" name="player_armorylink" size="80%" maxlength="300" value="{{ PLAYER_URL }}" class="input" />
                 <br/>
             </dd>
         </dl>
-        <!-- ENDIF -->
+        {% endif %}
 
         <dl>
-            <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
+            <dt><label>{{ lang('JOINDATE') }} (YYYY-MM-DD):</label></dt>
 
             <dd>
-                {L_DAY}: <select id="player_joindate_d" name="player_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
-                {L_MONTH}: <select name="player_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select>
-                {L_YEAR}: <select name="player_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
+                {{ lang('DAY') }}: <select id="player_joindate_d" name="player_joindate_d">{{ S_JOINDATE_DAY_OPTIONS }}</select>
+                {{ lang('MONTH') }}: <select name="player_joindate_mo">{{ S_JOINDATE_MONTH_OPTIONS }}</select>
+                {{ lang('YEAR') }}: <select name="player_joindate_y">{{ S_JOINDATE_YEAR_OPTIONS }}</select>
             </dd>
         </dl>
 
         <dl>
-            <dt><label>{L_OUTDATE} (YYYY-MM-DD):</label></dt>
+            <dt><label>{{ lang('OUTDATE') }} (YYYY-MM-DD):</label></dt>
 
             <dd>
-                {L_DAY}: <select id="player_outdate_d" name="player_outdate_d">{S_OUTDATE_DAY_OPTIONS}</select>
-                {L_MONTH}: <select name="player_outdate_mo">{S_OUTDATE_MONTH_OPTIONS}</select>
-                {L_YEAR}: <select name="player_outdate_y">{S_OUTDATE_YEAR_OPTIONS}</select>
+                {{ lang('DAY') }}: <select id="player_outdate_d" name="player_outdate_d">{{ S_OUTDATE_DAY_OPTIONS }}</select>
+                {{ lang('MONTH') }}: <select name="player_outdate_mo">{{ S_OUTDATE_MONTH_OPTIONS }}</select>
+                {{ lang('YEAR') }}: <select name="player_outdate_y">{{ S_OUTDATE_YEAR_OPTIONS }}</select>
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="phpbb_user_id">{L_USERNAME}:</label><br />{L_USERNAME_EXPLAIN}</dt>
+            <dt><label for="phpbb_user_id">{{ lang('USERNAME') }}:</label><br />{{ lang('USERNAME_EXPLAIN') }}</dt>
             <dd>
-                <select id="phpbb_user_id" name="phpbb_user_id">{S_PHPBBUSER_OPTIONS}</select>
+                <select id="phpbb_user_id" name="phpbb_user_id">{{ S_PHPBBUSER_OPTIONS }}</select>
             </dd>
         </dl>
         <dl>
-            <dt><label for="player_comment">{L_COMMENT}:</label></dt>
-            <dd><textarea name="player_comment" id="player_comment" rows="5" cols="30" style="width: 100%" class="input">{PLAYER_COMMENT}</textarea></dd>
+            <dt><label for="player_comment">{{ lang('COMMENT') }}:</label></dt>
+            <dd><textarea name="player_comment" id="player_comment" rows="5" cols="30" style="width: 100%" class="input">{{ PLAYER_COMMENT }}</textarea></dd>
         </dl>
 
 
         <p class="quick">
-            {S_FORM_TOKEN}
-            <input type="hidden" name="hidden_player_region" value="{REGION}" />
-            <input type="hidden" name="hidden_player_id" value="{PLAYER_ID}" />
-            <input type="hidden" name="hidden_player_name" value="{PLAYER_NAME}" />
-            <!-- IF S_ADD -->
-            <input type="submit" name="add" value="{L_ADD_PLAYER}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-            <!-- ELSE -->
-            <input type="submit" name="update" value="{L_UPDATE_PLAYER}" class="button1" />
-            <input type="submit"  name="delete" value="{L_DELETE_PLAYER}" class="button1" />
-            <!-- ENDIF -->
+            {{ S_FORM_TOKEN }}
+            <input type="hidden" name="hidden_player_region" value="{{ REGION }}" />
+            <input type="hidden" name="hidden_player_id" value="{{ PLAYER_ID }}" />
+            <input type="hidden" name="hidden_player_name" value="{{ PLAYER_NAME }}" />
+            {% if S_ADD %}
+            <input type="submit" name="add" value="{{ lang('ADD_PLAYER') }}" class="button1" /> <input type="reset" name="reset" value="{{ lang('RESET') }}" class="button1" />
+            {% else %}
+            <input type="submit" name="update" value="{{ lang('UPDATE_PLAYER') }}" class="button1" />
+            <input type="submit"  name="delete" value="{{ lang('DELETE_PLAYER') }}" class="button1" />
+            {% endif %}
         </p>
     </fieldset>
 
@@ -203,7 +203,7 @@
     {
         if (document.post.player_name.value.length < 2)
         {
-            alert('{LA_MSG_NAME_EMPTY}');
+            alert('{{ lang('MSG_NAME_EMPTY')|escape('js') }}');
             return false;
         }
         return true;
@@ -269,10 +269,10 @@
         xmlhttp = GetXmlHttpObject();
         if (xmlhttp == null)
         {
-            alert("{LA_ALERT_OLDBROWSER}");
+            alert("{{ lang('ALERT_OLDBROWSER')|escape('js') }}");
             return;
         }
-        var strURL="{UA_FINDRANK}&guild="+guildid;
+        var strURL="{{ UA_FINDRANK }}&guild="+guildid;
         xmlhttp.onreadystatechange=stateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
@@ -307,7 +307,7 @@
             }
             else
             {
-                alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+                alert("{{ lang('ALERT_AJAX')|escape('js') }}:\n" + xmlhttp.statusText);
             }
         }
     }
@@ -319,10 +319,10 @@
         xmlhttp = GetXmlHttpObject();
         if (xmlhttp == null)
         {
-            alert("{LA_ALERT_OLDBROWSER}");
+            alert("{{ lang('ALERT_OLDBROWSER')|escape('js') }}");
             return;
         }
-        var strURL="{UA_FINDCLASSRACE}&game_id="+game_id;
+        var strURL="{{ UA_FINDCLASSRACE }}&game_id="+game_id;
         xmlhttp.onreadystatechange=classracestateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
@@ -379,7 +379,7 @@
             }
             else
             {
-                alert("xx {LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+                alert("xx {{ lang('ALERT_AJAX')|escape('js') }}:\n" + xmlhttp.statusText);
             }
         }
     }
@@ -388,6 +388,6 @@
 
     // ]]>
 </script>
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}
 
 

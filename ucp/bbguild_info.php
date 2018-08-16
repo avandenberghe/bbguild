@@ -1,10 +1,10 @@
 <?php
 /**
  * @package bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\ucp;
+namespace avathar\bbguild\ucp;
 
 /**
  * Class bbguild_info
@@ -17,17 +17,17 @@ class bbguild_info
 	public function module()
 	{
 		return array(
-			'filename'    => '\bbdkp\bbguild\ucp\bbguild_module',
+			'filename'    => '\avathar\bbguild\ucp\bbguild_module',
 			'title'        => 'UCP_BBGUILD',
 			'version'    => '2.0.0',
 			'modes'        => array(
 				'char'    => array(
 					'title' => 'UCP_CHARACTERS',
-					'auth' => 'ext_bbdkp/bbguild && acl_u_charclaim',
+					'auth' => 'ext_avathar/bbguild && acl_u_charclaim',
 					'cat' => array('UCP_BBGUILD')),
 				'add'    => array(
 					'title' => 'UCP_CHARACTER_ADD',
-					'auth' => 'ext_bbdkp/bbguild && acl_u_charadd',
+					'auth' => 'ext_avathar/bbguild && acl_u_charadd',
 					'cat' => array('UCP_BBGUILD')),
 			),
 		);

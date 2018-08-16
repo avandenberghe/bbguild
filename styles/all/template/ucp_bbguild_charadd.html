@@ -1,11 +1,11 @@
-<!-- INCLUDE ucp_header.html -->
+{% INCLUDE 'ucp_header.html' %}
 <script type="text/javascript">
     // <![CDATA[
     function check_form()
     {
         if (document.character_add.member_name.value.length < 2)
         {
-            alert('{LA_MSG_NAME_EMPTY}');
+            alert('{{ lang('MSG_NAME_EMPTY')|escape('js') }}');
             return false;
         }
         return true;
@@ -72,10 +72,10 @@
         xmlhttp = GetXmlHttpObject();
         if (xmlhttp == null)
         {
-            alert("{LA_ALERT_OLDBROWSER}");
+            alert("{{ lang('ALERT_OLDBROWSER')|escape('js') }}");
             return;
         }
-        var strURL="{UA_FINDGAMERANK}?guild="+guildid;
+        var strURL="{{ UA_FINDGAMERANK }}?guild="+guildid;
         xmlhttp.onreadystatechange=stateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
@@ -89,10 +89,10 @@
         xmlhttp = GetXmlHttpObject();
         if (xmlhttp == null)
         {
-            alert("{LA_ALERT_OLDBROWSER}");
+            alert("{{ lang('ALERT_OLDBROWSER')|escape('js') }}");
             return;
         }
-        var strURL="{UA_FINDCLASSRACE}?game_id="+game_id;
+        var strURL="{{ UA_FINDCLASSRACE }}?game_id="+game_id;
         xmlhttp.onreadystatechange=classracestateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
@@ -135,7 +135,7 @@
             }
             else
             {
-                alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+                alert("{{ lang('ALERT_AJAX')|escape('js') }}:\n" + xmlhttp.statusText);
             }
         }
     }
@@ -186,198 +186,198 @@
             }
             else
             {
-                alert("{LA_ALERT_AJAX}:\n" + xmlhttp2.statusText);
+                alert("{{ lang('ALERT_AJAX')|escape('js') }}:\n" + xmlhttp2.statusText);
             }
         }
     }
 
     // ]]>
 </script>
-<h2>{L_UCP_DKP_CHARACTER_ADD}</h2>
+<h2>{{ lang('UCP_DKP_CHARACTER_ADD') }}</h2>
 <div class="panel">
     <div class="inner"><span class="corners-top"><span></span></span>
 
-        <form method="post" action="{F_ADD_MEMBER}" name="character_add" onsubmit="return check_form(this)" >
+        <form method="post" action="{{ F_ADD_MEMBER }}" name="character_add" onsubmit="return check_form(this)" >
 
             <fieldset>
 
-                <!-- IF ERROR --><p class="error">{ERROR}</p>
-                <!-- ELSE -->
+                {% if ERROR %}<p class="error">{{ ERROR }}</p>
+                {% else %}
 
-                <!-- IF S_SHOW -->
+                {% if S_SHOW %}
                 <br />
 
                 <dl>
-                    <dt><label for="member_name">{L_NAME}:</label></dt>
-                    <dd><input type="text" name="member_name" id="member_name" size="18" maxlength="30" value="{MEMBER_NAME}" class="input" />
-                        <input type="text" name="member_title" id="member_title" size="23" maxlength="30" value="{MEMBER_TITLE}" class="input" /></dd>
+                    <dt><label for="member_name">{{ lang('NAME') }}:</label></dt>
+                    <dd><input type="text" name="member_name" id="member_name" size="18" maxlength="30" value="{{ MEMBER_NAME }}" class="input" />
+                        <input type="text" name="member_title" id="member_title" size="23" maxlength="30" value="{{ MEMBER_TITLE }}" class="input" /></dd>
                 </dl>
 
                 <dl>
                     <dt>
-                        <label for="region_id">{L_REGION}:</label></dt>
+                        <label for="region_id">{{ lang('REGION') }}:</label></dt>
                     <dd>
                         <select id="region_id" name="region_id" class="input">
-                            <!-- BEGIN region_row -->
-                            <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
-                            <!-- END region_row -->
+                            {% for region_row in loops.region_row %}
+                            <option value="{{ region_row.VALUE }}"{{ region_row.SELECTED }}>{{ region_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </dd>
                 </dl>
                 <dl>
-                    <dt><label for="realm">{L_REALM_NAME}:</label></dt>
-                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
+                    <dt><label for="realm">{{ lang('REALM_NAME') }}:</label></dt>
+                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{{ REALM }}" /></dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
+                    <dt><label for="member_guild_id">{{ lang('GUILD') }}:</label></dt>
                     <dd>
                         <select name="member_guild_id" id="member_guild_id"  class="input" onchange="return GetGameRank(this.value)">
-                            <!-- BEGIN guild_row -->
-                            <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-                            <!-- END guild_row -->
+                            {% for guild_row in loops.guild_row %}
+                            <option value="{{ guild_row.VALUE }}"{{ guild_row.SELECTED }}>{{ guild_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
+                    <dt><label for="member_rank_id">{{ lang('MEMBER_RANK') }}:</label></dt>
                     <dd>
                         <select id="rankselect" name="member_rank_id" id="member_rank_id"  class="input">
-                            <!-- BEGIN rank_row -->
-                            <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
-                            <!-- END rank_row -->
+                            {% for rank_row in loops.rank_row %}
+                            <option value="{{ rank_row.VALUE }}"{{ rank_row.SELECTED }}>{{ rank_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
 
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="game_id">{L_GAME}:</label></dt>
+                    <dt><label for="game_id">{{ lang('GAME') }}:</label></dt>
 
-                    <dd><input type="hidden" name="game_id" id="game_id"  value="{GAME_ID}"  />
-                        &nbsp; <span id="game_id_span">{GAME_ID}</span> &nbsp;
-                     <input readonly type="text" name="game_name" id="game_name" size="50" value="{GAME}" class="input" /></dd>
+                    <dd><input type="hidden" name="game_id" id="game_id"  value="{{ GAME_ID }}"  />
+                        &nbsp; <span id="game_id_span">{{ GAME_ID }}</span> &nbsp;
+                     <input readonly type="text" name="game_name" id="game_name" size="50" value="{{ GAME }}" class="input" /></dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="member_level">{L_LEVEL}:</label></dt>
-                    <dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" />
-                        <a id="levelup"  href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_up.gif" /></a>
-                        <a id="leveldown" href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_down.gif" /></a>
+                    <dt><label for="member_level">{{ lang('LEVEL') }}:</label></dt>
+                    <dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{{ MEMBER_LEVEL }}" class="input" />
+                        <a id="levelup"  href="{{ F_ADD_MEMBER }}" target="_blank"><img src="./adm/images/icon_up.gif" /></a>
+                        <a id="leveldown" href="{{ F_ADD_MEMBER }}" target="_blank"><img src="./adm/images/icon_down.gif" /></a>
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="member_level">{L_ACHIEV}:</label></dt>
-                    <dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{MEMBER_ACHIEV}" class="input" /></dd>
+                    <dt><label for="member_level">{{ lang('ACHIEV') }}:</label></dt>
+                    <dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{{ MEMBER_ACHIEV }}" class="input" /></dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="raceselect">{L_RACE}:</label></dt>
+                    <dt><label for="raceselect">{{ lang('RACE') }}:</label></dt>
                     <dd><select id="raceselect" name="member_race_id" class="input">
-                        <!-- BEGIN race_row -->
-                        <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
-                        <!-- END race_row -->
+                        {% for race_row in loops.race_row %}
+                        <option value="{{ race_row.VALUE }}"{{ race_row.SELECTED }}>{{ race_row.OPTION }}</option>
+                        {% endfor %}
                     </select>
 
-                        <!-- IF S_RACE_IMAGE_EXISTS --> <br/><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF -->
+                        {% if S_RACE_IMAGE_EXISTS %} <br/><img src="{{ RACE_IMAGE }}" alt="" />&nbsp;{% else %}&nbsp;{% endif %}
                     </dd>
                 </dl>
                 <dl>
-                    <dt><label for="member_class_id">{L_CLASS}:</label></dt>
+                    <dt><label for="member_class_id">{{ lang('CLASS') }}:</label></dt>
                     <dd>
                         <select id="classselect" id="member_class_id" name="member_class_id" class="input">
-                            <!-- BEGIN class_row -->
-                            <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
-                            <!-- END class_row -->
+                            {% for class_row in loops.class_row %}
+                            <option value="{{ class_row.VALUE }}"{{ class_row.SELECTED }}>{{ class_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
-                        <!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+                        {% if S_CLASS_IMAGE_EXISTS %}<br/><img src="{{ CLASS_IMAGE }}" alt="" />{% else %}&nbsp;{% endif %}
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="member_role">{L_ROLES}:</label></dt>
+                    <dt><label for="member_role">{{ lang('ROLES') }}:</label></dt>
                     <dd>
                         <select name="member_role" id="member_role" class="input" >
-                            <!-- BEGIN role_row -->
-                            <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
-                            <!-- END role_row -->
+                            {% for role_row in loops.role_row %}
+                            <option value="{{ role_row.VALUE }}"{{ role_row.SELECTED }}>{{ role_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </dd>
                 </dl>
 
 
                 <dl>
-                    <dt><label for="gender">{L_GENDER}:</label></dt>
+                    <dt><label for="gender">{{ lang('GENDER') }}:</label></dt>
                     <dd>
-    <span id="gender"><input type="radio" name="gender" value="0"{MALE_CHECKED} /> {L_MALE}&nbsp;&nbsp;
-    <input type="radio" name="gender" value="1"{FEMALE_CHECKED} /> {L_FEMALE}
+    <span id="gender"><input type="radio" name="gender" value="0"{{ MALE_CHECKED }} /> {{ lang('MALE') }}&nbsp;&nbsp;
+    <input type="radio" name="gender" value="1"{{ FEMALE_CHECKED }} /> {{ lang('FEMALE') }}
      </span>
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label for="activated">{L_ACTIVE}:</label></dt>
-                    <dd><input type="checkbox" class="radio" name="activated" id="activated" value="{MEMBER_ID}" <!-- IF STATUS_LOCK --> disabled="disabled" <!-- ENDIF --> {STATUS} />
-                    <!-- IF ! S_ADD -->
-                    <span style="color:red"> {DEACTIVATE_REASON}</span>
-                    <!-- ENDIF -->
+                    <dt><label for="activated">{{ lang('ACTIVE') }}:</label></dt>
+                    <dd><input type="checkbox" class="radio" name="activated" id="activated" value="{{ MEMBER_ID }}" {% if STATUS_LOCK %} disabled="disabled" {% endif %} {{ STATUS }} />
+                    {% if ! S_ADD %}
+                    <span style="color:red"> {{ DEACTIVATE_REASON }}</span>
+                    {% endif %}
                     </dd>
                 </dl>
 
 
                 <dl>
-                    <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
+                    <dt><label>{{ lang('JOINDATE') }} (YYYY-MM-DD):</label></dt>
 
                     <dd>
-                        {L_DAY}: <select id="member_joindate_d" name="member_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
-                        {L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select>
-                        {L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
+                        {{ lang('DAY') }}: <select id="member_joindate_d" name="member_joindate_d">{{ S_JOINDATE_DAY_OPTIONS }}</select>
+                        {{ lang('MONTH') }}: <select name="member_joindate_mo">{{ S_JOINDATE_MONTH_OPTIONS }}</select>
+                        {{ lang('YEAR') }}: <select name="member_joindate_y">{{ S_JOINDATE_YEAR_OPTIONS }}</select>
                     </dd>
                 </dl>
 
                 <dl>
-                    <dt><label>{L_OUTDATE} (YYYY-MM-DD):</label></dt>
+                    <dt><label>{{ lang('OUTDATE') }} (YYYY-MM-DD):</label></dt>
 
                     <dd>
-                        {L_DAY}: <select id="member_outdate_d" name="member_outdate_d">{S_OUTDATE_DAY_OPTIONS}</select>
-                        {L_MONTH}: <select name="member_outdate_mo">{S_OUTDATE_MONTH_OPTIONS}</select>
-                        {L_YEAR}: <select name="member_outdate_y">{S_OUTDATE_YEAR_OPTIONS}</select>
+                        {{ lang('DAY') }}: <select id="member_outdate_d" name="member_outdate_d">{{ S_OUTDATE_DAY_OPTIONS }}</select>
+                        {{ lang('MONTH') }}: <select name="member_outdate_mo">{{ S_OUTDATE_MONTH_OPTIONS }}</select>
+                        {{ lang('YEAR') }}: <select name="member_outdate_y">{{ S_OUTDATE_YEAR_OPTIONS }}</select>
                     </dd>
                 </dl>
 
 
                 <dl>
-                    <dt><label for="member_comment">{L_COMMENT}:</label></dt>
-                    <dd><textarea name="member_comment" id="member_comment" type="text" rows="5" cols="10" style="width: 80%" class="input">{MEMBER_COMMENT}</textarea></dd>
+                    <dt><label for="member_comment">{{ lang('COMMENT') }}:</label></dt>
+                    <dd><textarea name="member_comment" id="member_comment" type="text" rows="5" cols="10" style="width: 80%" class="input">{{ MEMBER_COMMENT }}</textarea></dd>
 
                 </dl>
-                <input type="hidden" name="hidden_member_id" value="{MEMBER_ID}" />
-                {S_FORM_TOKEN}
+                <input type="hidden" name="hidden_member_id" value="{{ MEMBER_ID }}" />
+                {{ S_FORM_TOKEN }}
                 <dl>
                     <dt></dt>
                     <dd>
-                        <!-- IF ! S_ADD -->
-                        <!-- IF S_CANUPDATE -->
-                        <input type="submit" name="update" value="{L_UPDATE_MEMBER}" class="button1" />
-                        <!-- ENDIF -->
-                        <!-- IF S_CANDELETE -->
-                        <input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="button1" />
-                        <!-- ENDIF -->
-                        <!-- ELSE -->
-                        <input type="submit" name="add" value="{L_ADD_MEMBER}" class="button2" />
-                        <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-                        <!-- ENDIF -->
+                        {% if ! S_ADD %}
+                        {% if S_CANUPDATE %}
+                        <input type="submit" name="update" value="{{ lang('UPDATE_MEMBER') }}" class="button1" />
+                        {% endif %}
+                        {% if S_CANDELETE %}
+                        <input type="submit"  name="delete" value="{{ lang('DELETE_MEMBER') }}" class="button1" />
+                        {% endif %}
+                        {% else %}
+                        <input type="submit" name="add" value="{{ lang('ADD_MEMBER') }}" class="button2" />
+                        <input type="reset" name="reset" value="{{ lang('RESET') }}" class="button1" />
+                        {% endif %}
                     </dd>
                 </dl>
 
-                <!-- ELSE -->
+                {% else %}
 
-                <p class="error">{MAX_CHARS_EXCEEDED} </p><p><br /><br /></p>
-                <!-- ENDIF -->
+                <p class="error">{{ MAX_CHARS_EXCEEDED }} </p><p><br /><br /></p>
+                {% endif %}
 
-                <!-- ENDIF -->
+                {% endif %}
 
             </fieldset>
         </form>
@@ -387,4 +387,4 @@
     </div>
 </div>
 
-<!-- INCLUDE ucp_footer.html -->
+{% INCLUDE 'ucp_footer.html' %}

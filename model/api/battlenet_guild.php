@@ -22,14 +22,14 @@
  *    fields are listed in the subsection titled "Optional Fields".
  */
 
-namespace bbdkp\bbguild\model\api;
+namespace avathar\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\battlenet_resource;
+use avathar\bbguild\model\api\battlenet_resource;
 
 /**
  * Guild resource.
  *
- * @package bbdkp\bbguild\model\api
+* @package avathar\bbguild\model\api
  */
 class battlenet_guild extends battlenet_resource
 {

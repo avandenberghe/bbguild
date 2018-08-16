@@ -3,17 +3,17 @@
  * Guild roster
  *
  * @package   bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\views;
+namespace avathar\bbguild\views;
 
-use bbdkp\bbguild\model\player\player;
+use avathar\bbguild\model\player\player;
 
 /**
  * Class viewroster
  *
- * @package bbdkp\bbguild\views
+* @package avathar\bbguild\views
  */
 class viewroster implements iviews
 {
@@ -24,7 +24,7 @@ class viewroster implements iviews
 	/**
 	 * viewRoster constructor.
 	 *
-	 * @param \bbdkp\bbguild\views\viewnavigation $navigation
+	 * @param \avathar\bbguild\views\viewnavigation $navigation
 	 */
 	public function __construct(viewnavigation $navigation)
 	{
@@ -68,7 +68,7 @@ class viewroster implements iviews
 		}
 		//pagination url
 		$base_url = $this->navigation->helper->route(
-			'bbdkp_bbguild_00',
+			'avathar_bbguild_00',
 			array(
 				'guild_id' => $this->navigation->getGuildId(),
 				'page' => 'roster'

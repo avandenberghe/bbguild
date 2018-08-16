@@ -3,19 +3,19 @@
  * This file holds the Achievement API class
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * Date: 18.04.16
  * Time: 12:10
  *
  */
 
-namespace bbdkp\bbguild\model\games\rpg;
+namespace avathar\bbguild\model\games\rpg;
 
-use bbdkp\bbguild\model\api\battlenet;
-use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\guilds;
+use avathar\bbguild\model\api\battlenet;
+use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\player\guilds;
 
 	/**
 	* This provides data about an individual achievement.
@@ -98,7 +98,7 @@ use bbdkp\bbguild\model\player\guilds;
 	"accountWide": true,
 	"factionId": 2
 	}
- * @package bbdkp\bbguild\model\games\rpg
+* @package avathar\bbguild\model\games\rpg
  */
 class achievement extends admin
 {
@@ -421,7 +421,7 @@ class achievement extends admin
 	/**
 	 * achievement constructor.
 	 *
-	 * @param \bbdkp\bbguild\model\games\game    $game
+	 * @param \avathar\bbguild\model\games\game    $game
 	 * @param int                                $id
 	 */
 	public function __construct(game $game, $id)
@@ -688,8 +688,8 @@ class achievement extends admin
 	 * 6) insert relations if not already exists
 	 * 7) insert ACH-CRI in bb_relations if not already exists
 	 *
-	 * @param \bbdkp\bbguild\model\player\guilds $Guild
-	 * @param \bbdkp\bbguild\model\games\game    $game
+	 * @param \avathar\bbguild\model\player\guilds $Guild
+	 * @param \avathar\bbguild\model\games\game    $game
 	 */
 	public function setAchievements(guilds $Guild, game $game)
 	{
@@ -821,7 +821,7 @@ class achievement extends admin
 	/**
 	 * call achievement endpoint
 	 *
-	 * @param \bbdkp\bbguild\model\player\guilds $Guild
+	 * @param \avathar\bbguild\model\player\guilds $Guild
 	 * @return array|bool
 	 */
 	private function Call_Achievement_API(guilds $Guild)

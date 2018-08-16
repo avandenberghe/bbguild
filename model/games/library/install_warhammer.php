@@ -3,17 +3,17 @@
  * bbguild vanguard install data
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\model\games\library;
+namespace avathar\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\game_install;
+use avathar\bbguild\model\games\library\game_install;
 
 /**
  * Warhammer installer class
  *
- * @package bbdkp\bbguild\controller\games
+* @package avathar\bbguild\controller\games
  */
 class install_warhammer extends game_install
 {

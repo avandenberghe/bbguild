@@ -1,11 +1,11 @@
 <?php
 /**
  * @package bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\event;
+namespace avathar\bbguild\event;
 
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -92,7 +92,7 @@ class main_listener implements EventSubscriberInterface
 	{
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = array(
-			'ext_name' => 'bbdkp/bbguild',
+			'ext_name' => 'avathar/bbguild',
 			'lang_set' => array('common','admin') ,
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
@@ -109,7 +109,7 @@ class main_listener implements EventSubscriberInterface
 		$this->template->assign_vars(
 			array(
 			'U_GUILD'    => $this->helper->route(
-				'bbdkp_bbguild_00',
+				'avathar_bbguild_00',
 				array(
 					'guild_id' => 1,
 					'page' => 'roster'

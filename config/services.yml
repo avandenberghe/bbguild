@@ -1,7 +1,7 @@
 # mapping of services to controller classes
 services:
-    bbdkp.bbguild.controller:
-        class: bbdkp\bbguild\controller\view_controller
+    avathar.bbguild.controller:
+        class: avathar\bbguild\controller\view_controller
         arguments:
             - '@auth'
             - '@config'
@@ -15,8 +15,8 @@ services:
             - '@path_helper'
             - '@ext.manager'
             - '%core.root_path%'
-    bbdkp.bbguild.admin.controller:
-        class: bbdkp\bbguild\controller\admin_controller
+    avathar.bbguild.admin.controller:
+        class: avathar\bbguild\controller\admin_controller
         arguments:
             - '@cache'
             - '@config'
@@ -29,8 +29,8 @@ services:
             - '@ext.manager'
             - '%core.root_path%'
             - '%core.php_ext%'
-    bbdkp.bbguild.listener:
-        class: bbdkp\bbguild\event\main_listener
+    avathar.bbguild.listener:
+        class: avathar\bbguild\event\main_listener
         arguments:
             - '@controller.helper'
             - '@template'

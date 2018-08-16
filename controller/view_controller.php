@@ -1,18 +1,18 @@
 <?php
 /**
  * @package bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\controller;
+namespace avathar\bbguild\controller;
 
-use bbdkp\bbguild\views\viewnavigation;
+use avathar\bbguild\views\viewnavigation;
 
 /**
  * Class view_controller
  *
- * @package bbdkp\bbguild\controller
+* @package avathar\bbguild\controller
  */
 class view_controller
 {
@@ -116,9 +116,9 @@ class view_controller
 		$this->php_ext         = $php_ext;
 		$this->path_helper    = $path_helper;
 		$this->phpbb_extension_manager = $phpbb_extension_manager;
-		$this->ext_path            = $this->phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
+		$this->ext_path            = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
 		$this->ext_path_web        = $this->path_helper->get_web_root_path($this->ext_path);
-		$this->ext_path_images    = $this->ext_path_web . 'ext/bbdkp/bbguild/images/';
+		$this->ext_path_images    = $this->ext_path_web . 'ext/avathar/bbguild/images/';
 		$this->root_path  = $root_path;
 	}
 

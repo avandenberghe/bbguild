@@ -37,14 +37,14 @@ Further development requests, support questions are welcome at our [Support Foru
 ##### Install
 1. Download the latest release.
 2. In the `ext` directory of your phpBB board, create a new directory named `bbdkp` (if it does not already exist).
-3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/bbdkp/bbguild/composer.json).
+3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/avathar/bbguild/composer.json).
 4. Navigate in the ACP to `Customise -> Manage extensions`.
 5. Look for `bbGuild Extension` under the Disabled Extensions list, and click its `Enable` link.
 
 ##### Uninstall
 1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
 2. Look for `bbGuild Extension` under the Enabled Extensions list, and click its `Disable` link.
-3. To permanently uninstall, click `Delete Data` and then delete the `/ext/bbdkp/bbguild` folder.
+3. To permanently uninstall, click `Delete Data` and then delete the `/ext/avathar/bbguild` folder.
 ## Community
 
 Find support and more on 
@@ -52,7 +52,7 @@ Find support and more on
 *	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
 
 ### contribute
-You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbguild/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
 1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbGuild/issues
 2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
 3. Make a pull request.

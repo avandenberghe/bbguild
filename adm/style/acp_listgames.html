@@ -1,4 +1,4 @@
-<!-- INCLUDE overall_header.html -->
+{% INCLUDE 'overall_header.html' %}
 <style>
 
     fieldset dt
@@ -31,73 +31,73 @@
 
 <a name="maincontent"></a>
 
-<h1>{L_ACP_NEWGAME}</h1>
+<h1>{{ lang('ACP_NEWGAME') }}</h1>
 <br />
-<p>{L_ACP_NEWGAME_EXPLAIN} {L_PREINSTALLED}</p>
+<p>{{ lang('ACP_NEWGAME_EXPLAIN') }} {{ lang('PREINSTALLED') }}</p>
 
-<!-- IF S_INSTALLED-->
+{% if S_INSTALLED%}
 <fieldset style="background-color: #EEEEEE">
-    <legend>{L_DEFAULT_GAME}</legend>
+    <legend>{{ lang('DEFAULT_GAME') }}</legend>
     <dl>
         <dt>
-            {L_DEFAULT_GAME}
+            {{ lang('DEFAULT_GAME') }}
         </dt>
         <dd>
-            <form id="acp_listgames" method="post" action="{U_ACTION}">
+            <form id="acp_listgames" method="post" action="{{ U_ACTION }}">
                 <select name="defaultgame" class="input" id="defaultgame">
-                    <!-- BEGIN defaultgame_row -->
-                    <option value="{defaultgame_row.VALUE}"{defaultgame_row.SELECTED}>{defaultgame_row.OPTION}</option>
-                    <!-- END defaultgame_row -->
+                    {% for defaultgame_row in loops.defaultgame_row %}
+                    <option value="{{ defaultgame_row.VALUE }}"{{ defaultgame_row.SELECTED }}>{{ defaultgame_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
-                <input type="submit" name="upddefaultgame" value="{L_CONFIRM}" class="button1" />
+                <input type="submit" name="upddefaultgame" value="{{ lang('CONFIRM') }}" class="button1" />
             </form>
         </dd>
     </dl>
 </fieldset>
-<!-- ENDIF -->
+{% endif %}
 
 <fieldset style="background-color: #EEEEEE">
-    <legend>{L_ADD_GAME}</legend>
-    <!-- IF CANINSTALL == 1 -->
-    <form id="acp_listgames" method="post" action="{U_ACTION}">
+    <legend>{{ lang('ADD_GAME') }}</legend>
+    {% if CANINSTALL == 1 %}
+    <form id="acp_listgames" method="post" action="{{ U_ACTION }}">
         <dl>
-            <dt><label for="ngame_id">{L_ADD_PRECONFIGGAME}:</label></dt>
+            <dt><label for="ngame_id">{{ lang('ADD_PRECONFIGGAME') }}:</label></dt>
             <dd>
                 <select id="ngame_id" name="ngame_id" class="input" >
-                    <!-- BEGIN gamelistrow -->
-                    <option value="{gamelistrow.VALUE}"{gamelistrow.SELECTED}>{gamelistrow.OPTION}</option>
-                    <!-- END gamelistrow -->
+                    {% for gamelistrow in loops.gamelistrow %}
+                    <option value="{{ gamelistrow.VALUE }}"{{ gamelistrow.SELECTED }}>{{ gamelistrow.OPTION }}</option>
+                    {% endfor %}
                 </select>
                 &nbsp;
-                <input type="submit" name="addgame1" value="{L_ADD}" class="button1"/>
-                {S_FORM_TOKEN}
+                <input type="submit" name="addgame1" value="{{ lang('ADD') }}" class="button1"/>
+                {{ S_FORM_TOKEN }}
             </dd>
         </dl>
 
         <dl>
             <dt>
-                <label for="region_id">{L_REGION}:</label></dt>
+                <label for="region_id">{{ lang('REGION') }}:</label></dt>
             <dd>
                 <select id="region_id" name="region_id" class="input">
-                    <!-- BEGIN region_row -->
-                    <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
-                    <!-- END region_row -->
+                    {% for region_row in loops.region_row %}
+                    <option value="{{ region_row.VALUE }}"{{ region_row.SELECTED }}>{{ region_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
             </dd>
         </dl>
 
 
     </form>
-    <!-- ENDIF -->
-    <form id="acp_listgames" method="post" action="{U_ACTION}">
+    {% endif %}
+    <form id="acp_listgames" method="post" action="{{ U_ACTION }}">
 
         <dl>
-            <dt><label for="ngame_id">{L_ADD_CUSTOMGAME}:</label></dt>
+            <dt><label for="ngame_id">{{ lang('ADD_CUSTOMGAME') }}:</label></dt>
             <dd>
                 <input type="text" name="ngame_id" size="10" maxlength="10" value="" class="addgame" />
                 <input type="text" name="ngame_name" size="40" maxlength="255" value="" class="addgame" />
-                <input type="submit" name="addgame2" value="{L_ADD}" class="button1"/>
-                {S_FORM_TOKEN}
+                <input type="submit" name="addgame2" value="{{ lang('ADD') }}" class="button1"/>
+                {{ S_FORM_TOKEN }}
             </dd>
         </dl>
 
@@ -105,48 +105,48 @@
     </form>
 </fieldset>
 
-<!-- IF .gamerow -->
+{% if loops.gamerow|length %}
 <fieldset style="width:80%">
-    <legend>{L_LIST_GAMES}</legend>
+    <legend>{{ lang('LIST_GAMES') }}</legend>
 
     <table width="100%" border="0" cellspacing="1" cellpadding="2">
         <thead>
         <tr>
-            <th style="text-align: center; width:5%"><a href="{U_LIST_GAME}&amp;o={O_ID}">{L_ID}</a></th>
-            <th style="text-align: left; width:15%; white-space: nowrap"><a href="{U_LIST_GAME}&amp;o={O_GAMEID}">{L_GAME_ID}</a></th>
-            <th style="text-align: left; width:50%; white-space: nowrap"><a href="{U_LIST_GAME}&amp;o={O_GAMENAME}">{L_GAME}</a></th>
-            <th style="text-align: center; width:10%; white-space: nowrap">{L_STATUS}</th>
-            <th style="text-align: center; width:10%;">{L_ACTION}</th>
+            <th style="text-align: center; width:5%"><a href="{{ U_LIST_GAME }}&amp;o={{ O_ID }}">{{ lang('ID') }}</a></th>
+            <th style="text-align: left; width:15%; white-space: nowrap"><a href="{{ U_LIST_GAME }}&amp;o={{ O_GAMEID }}">{{ lang('GAME_ID') }}</a></th>
+            <th style="text-align: left; width:50%; white-space: nowrap"><a href="{{ U_LIST_GAME }}&amp;o={{ O_GAMENAME }}">{{ lang('GAME') }}</a></th>
+            <th style="text-align: center; width:10%; white-space: nowrap">{{ lang('STATUS') }}</th>
+            <th style="text-align: center; width:10%;">{{ lang('ACTION') }}</th>
         </tr>
         </thead>
 
         <tbody>
-        <!-- BEGIN gamerow -->
-        <!-- IF gamerow.S_ROW_COUNT is even -->
+        {% for gamerow in loops.gamerow %}
+        {% if gamerow.S_ROW_COUNT is even %}
         <tr class="row1">
-            <!-- ELSE -->
+            {% else %}
         <tr class="row2">
-            <!-- ENDIF -->
-            <td style="text-align: center; width:10%; white-space: nowrap">{gamerow.ID}</td>
-            <td><a href="{gamerow.U_VIEW_GAME}">{gamerow.GAME_ID}</a></td>
-            <td><a href="{gamerow.U_VIEW_GAME}">{gamerow.NAME}</a></td>
-            <td style="text-align: center; width:10%; white-space: nowrap">{gamerow.STATUS}</td>
-            <td style="text-align: center;"><a href="{gamerow.U_VIEW_GAME}">{ICON_EDIT}</a></td>
+            {% endif %}
+            <td style="text-align: center; width:10%; white-space: nowrap">{{ gamerow.ID }}</td>
+            <td><a href="{{ gamerow.U_VIEW_GAME }}">{{ gamerow.GAME_ID }}</a></td>
+            <td><a href="{{ gamerow.U_VIEW_GAME }}">{{ gamerow.NAME }}</a></td>
+            <td style="text-align: center; width:10%; white-space: nowrap">{{ gamerow.STATUS }}</td>
+            <td style="text-align: center;"><a href="{{ gamerow.U_VIEW_GAME }}">{{ ICON_EDIT }}</a></td>
         </tr>
-        <!-- END gamerow -->
+        {% endfor %}
         </tbody>
     </table>
 </fieldset>
 
 
-<!-- ELSE -->
+{% else %}
 
 <div class="errorbox">
-    <h3>{L_ERROR}</h3>
-    <p>{L_ERROR_NOGAMES}</p>
+    <h3>{{ lang('ERROR') }}</h3>
+    <p>{{ lang('ERROR_NOGAMES') }}</p>
 </div>
 
-<!-- ENDIF -->
+{% endif %}
 
 <script type="text/javascript">
     //<![CDATA[
@@ -154,17 +154,17 @@
     {
         if (document.getElementById('game_name').value.length < 2)
         {
-            alert('{LA_FV_REQUIRED_GAME_NAME}');
+            alert('{{ lang('FV_REQUIRED_GAME_NAME')|escape('js') }}');
             return false;
         }
         if (document.getElementById('game_id').value.length < 2)
         {
-            alert('{LA_FV_REQUIRED_GAME_ID}');
+            alert('{{ lang('FV_REQUIRED_GAME_ID')|escape('js') }}');
             return false;
         }
         return true;
     }
     //]]>
 </script>
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}
 

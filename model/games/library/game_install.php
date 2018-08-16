@@ -3,24 +3,24 @@
  * abstract class aGameInstall
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\model\games\library;
+namespace avathar\bbguild\model\games\library;
 
 /**
  * @ignore
  */
-use bbdkp\bbguild\model\games\rpg\classes;
-use bbdkp\bbguild\model\games\rpg\faction;
-use bbdkp\bbguild\model\games\rpg\races;
-use bbdkp\bbguild\model\games\rpg\roles;
+use avathar\bbguild\model\games\rpg\classes;
+use avathar\bbguild\model\games\rpg\faction;
+use avathar\bbguild\model\games\rpg\races;
+use avathar\bbguild\model\games\rpg\roles;
 
 /**
  * Game interface
  * this abstract class is the framework for all game installers
  *
- * @package bbdkp\bbguild\model\games\library
+* @package avathar\bbguild\model\games\library
  */
 abstract class game_install
 {

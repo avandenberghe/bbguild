@@ -12,7 +12,7 @@
  * @link      https://github.com/bbDKP
  */
 
-namespace bbdkp\bbguild\model\api;
+namespace avathar\bbguild\model\api;
 
 /**
  * Battle.net WoW API PHP SDK
@@ -118,27 +118,27 @@ class battlenet
 		switch ($this->api)
 		{
 		case 'realm':
-			$this->Realm = new \bbdkp\bbguild\model\api\battlenet_realm($this->cache,$region, $this->cacheTtl);
+			$this->Realm = new \avathar\bbguild\model\api\battlenet_realm($this->cache,$region, $this->cacheTtl);
 			$this->Realm->apikey = $apikey;
 			$this->Realm->locale = $locale;
 			$this->Realm->privkey = $privkey;
 
 			break;
 		case 'guild':
-			$this->guild          = new \bbdkp\bbguild\model\api\battlenet_guild($this->cache,$region, $this->cacheTtl);
+			$this->guild          = new \avathar\bbguild\model\api\battlenet_guild($this->cache,$region, $this->cacheTtl);
 			$this->guild->apikey  = $apikey;
 			$this->guild->locale  = $locale;
 			$this->guild->privkey = $privkey;
 			break;
 		case 'character':
-			$this->character          = new \bbdkp\bbguild\model\api\battlenet_character($this->cache,$region, $this->cacheTtl);
+			$this->character          = new \avathar\bbguild\model\api\battlenet_character($this->cache,$region, $this->cacheTtl);
 			$this->character->apikey  = $apikey;
 			$this->character->locale  = $locale;
 			$this->character->privkey = $privkey;
 			break;
 
 		case 'achievement':
-			$this->achievement          = new \bbdkp\bbguild\model\api\battlenet_achievement($this->cache,$region, $this->cacheTtl);
+			$this->achievement          = new \avathar\bbguild\model\api\battlenet_achievement($this->cache,$region, $this->cacheTtl);
 			$this->achievement->apikey  = $apikey;
 			$this->achievement->locale  = $locale;
 			$this->achievement->privkey = $privkey;

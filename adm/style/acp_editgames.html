@@ -1,5 +1,5 @@
-<!-- INCLUDE overall_header.html -->
-<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+{% INCLUDE 'overall_header.html' %}
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
 <script  type="text/javascript">
     //<![CDATA[
     function check_form()
@@ -8,100 +8,100 @@
     }
     //]]>
 </script>
-<h1>{EDITGAME}</h1>
-<p>{L_ACP_EDITGAME_EXPLAIN}</p>
+<h1>{{ EDITGAME }}</h1>
+<p>{{ lang('ACP_EDITGAME_EXPLAIN') }}</p>
 
-<form id="acp_editgames2" method="post" action="{U_ACTION}">
-    <input type="hidden" name="{URI_GAME}" value="{GAME_ID}" />
+<form id="acp_editgames2" method="post" action="{{ U_ACTION }}">
+    <input type="hidden" name="{{ URI_GAME }}" value="{{ GAME_ID }}" />
     <fieldset>
-        <legend>{L_GAME}</legend>
+        <legend>{{ lang('GAME') }}</legend>
 
-        <p>{L_ACP_GAME_EXPLAIN}</p>
+        <p>{{ lang('ACP_GAME_EXPLAIN') }}</p>
 
         <dl>
-            <dt><label for="gamereset">{L_ACP_GAME_RESET}</label></dt>
-            <dd><input class="button1" id="gamereset" name="gamereset" type="submit" value="{L_RESET}" /></dd>
+            <dt><label for="gamereset">{{ lang('ACP_GAME_RESET') }}</label></dt>
+            <dd><input class="button1" id="gamereset" name="gamereset" type="submit" value="{{ lang('RESET') }}" /></dd>
         </dl>
         <dl>
-            <dt><label for="gamedelete">{L_ACP_GAME_DELETE}</label></dt>
-            <dd><input class="button1" id="gamedelete" name="gamedelete" type="submit" value="{L_DELETE}" /></dd>
+            <dt><label for="gamedelete">{{ lang('ACP_GAME_DELETE') }}</label></dt>
+            <dd><input class="button1" id="gamedelete" name="gamedelete" type="submit" value="{{ lang('DELETE') }}" /></dd>
         </dl>
 
     </fieldset>
 
     <fieldset>
-        <legend>{L_ACP_GAMESETTINGS}</legend>
+        <legend>{{ lang('ACP_GAMESETTINGS') }}</legend>
         <dl>
-            <dt><label for="game_name">{L_GAME}:</label>{L_GAME_NAME_EXPLAIN}</dt>
-            <dd><input class="medium" type="text" name="game_name" id="game_name" value="{GAME_NAME}" /><br />
+            <dt><label for="game_name">{{ lang('GAME') }}:</label>{{ lang('GAME_NAME_EXPLAIN') }}</dt>
+            <dd><input class="medium" type="text" name="game_name" id="game_name" value="{{ GAME_NAME }}" /><br />
             </dd>
         </dl>
 
 
         <dl>
-            <dt><label for="imagename">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
-            <dd><input class="medium" type="text" name="imagename" id="imagename" value="{GAMEIMAGE}" /><br />
-                <!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEPATH}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
+            <dt><label for="imagename">{{ lang('CLASS_IMAGE') }}:</label>{{ GAMEIMAGEEXPLAIN }}</dt>
+            <dd><input class="medium" type="text" name="imagename" id="imagename" value="{{ GAMEIMAGE }}" /><br />
+                {% if S_GAMEIMAGE_EXISTS %}<img src="{{ GAMEPATH }}" alt="{{ GAMEIMAGE }}" />{% endif %}
             </dd>
         </dl>
 
         <dl>
             <dt>
-                <label for="region_id">{L_REGION}:</label></dt>
+                <label for="region_id">{{ lang('REGION') }}:</label></dt>
             <dd>
                 <select id="region_id" name="region_id" class="input">
-                    <!-- BEGIN region_row -->
-                    <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
-                    <!-- END region_row -->
+                    {% for region_row in loops.region_row %}
+                    <option value="{{ region_row.VALUE }}"{{ region_row.SELECTED }}>{{ region_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
             </dd>
         </dl>
 
-        <!-- IF ISWOW -->
+        {% if ISWOW %}
         <dl>
-            <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_EXPLAIN}</dt>
+            <dt><label for="enable_armory">{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_EXPLAIN') }}</dt>
             <dd>
-                <input type="radio" id="enable_armory" name="enable_armory" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
-                <input type="radio" name="enable_armory" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
+                <input type="radio" id="enable_armory" name="enable_armory" value="1"{% if F_ENABLEARMORY == 1 %} checked="checked"{% endif %} /> {{ lang('ON') }}&nbsp;&nbsp;
+                <input type="radio" name="enable_armory" value="0"{% if F_ENABLEARMORY == 0 %} checked="checked"{% endif %} /> {{ lang('OFF') }}
             </dd>
         </dl>
 
         <dl>
-            <dt><label for="apikey">{L_WOWAPIKEY}:</label><br /><span>{L_WOWAPIKEY_EXPLAIN} </span></dt>
-            <dd><input name="apikey" type="text" id="apikey" size="60" maxlength="100" value="{APIKEY}"/></dd>
+            <dt><label for="apikey">{{ lang('WOWAPIKEY') }}:</label><br /><span>{{ lang('WOWAPIKEY_EXPLAIN') }} </span></dt>
+            <dd><input name="apikey" type="text" id="apikey" size="60" maxlength="100" value="{{ APIKEY }}"/></dd>
         </dl>
 
         <dl>
-            <dt><label for="privkey">{L_WOWPRIVKEY}:</label><br /><span>{L_WOWPRIVKEY_EXPLAIN} </span></dt>
-            <dd><input name="privkey" type="text" id="privkey" size="60" maxlength="100" value="{PRIVKEY}"/></dd>
+            <dt><label for="privkey">{{ lang('WOWPRIVKEY') }}:</label><br /><span>{{ lang('WOWPRIVKEY_EXPLAIN') }} </span></dt>
+            <dd><input name="privkey" type="text" id="privkey" size="60" maxlength="100" value="{{ PRIVKEY }}"/></dd>
         </dl>
 
         <dl>
-            <dt><label for="apilocale">{L_WOWAPILOCALE}:</label><br /><span>{L_WOWAPILOCALE_EXPLAIN} </span></dt>
+            <dt><label for="apilocale">{{ lang('WOWAPILOCALE') }}:</label><br /><span>{{ lang('WOWAPILOCALE_EXPLAIN') }} </span></dt>
             <dd>
                 <select id="apilocale" name="apilocale" class="input">
-                    <!-- BEGIN apilocale_row -->
-                    <option value="{apilocale_row.VALUE}"{apilocale_row.SELECTED}>{apilocale_row.OPTION}</option>
-                    <!-- END apilocale_row -->
+                    {% for apilocale_row in loops.apilocale_row %}
+                    <option value="{{ apilocale_row.VALUE }}"{{ apilocale_row.SELECTED }}>{{ apilocale_row.OPTION }}</option>
+                    {% endfor %}
                 </select>
             </dd>
         </dl>
 
-        <!-- ENDIF -->
+        {% endif %}
         
         <dl>
-            <dt><label for="bossbaseurl">{L_BOSSBASEURL}:</label><br /><span>{L_BOSSBASEURL_EXPLAIN} <a href="{BOSSBASEURL}">{BOSSBASEURL}</a></span></dt>
-            <dd><input name="bossbaseurl" type="text" id="bossbaseurl" size="60" maxlength="100" value="{BOSSBASEURL}"/></dd>
+            <dt><label for="bossbaseurl">{{ lang('BOSSBASEURL') }}:</label><br /><span>{{ lang('BOSSBASEURL_EXPLAIN') }} <a href="{{ BOSSBASEURL }}">{{ BOSSBASEURL }}</a></span></dt>
+            <dd><input name="bossbaseurl" type="text" id="bossbaseurl" size="60" maxlength="100" value="{{ BOSSBASEURL }}"/></dd>
         </dl>
 
         <dl>
-            <dt><label for="zonebaseurl">{L_ZONEBASEURL}:</label><br /><span>{L_ZONEBASEURL_EXPLAIN} <a href="{ZONEBASEURL}">{ZONEBASEURL}</a> </span></dt>
-            <dd><input name="zonebaseurl" type="text" id="zonebaseurl" size="60" maxlength="100" value="{ZONEBASEURL}"/></dd>
+            <dt><label for="zonebaseurl">{{ lang('ZONEBASEURL') }}:</label><br /><span>{{ lang('ZONEBASEURL_EXPLAIN') }} <a href="{{ ZONEBASEURL }}">{{ ZONEBASEURL }}</a> </span></dt>
+            <dd><input name="zonebaseurl" type="text" id="zonebaseurl" size="60" maxlength="100" value="{{ ZONEBASEURL }}"/></dd>
         </dl>
 
 
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-            <input class="button2" name="gamesettings" type="submit" value="{L_SUBMIT}" />
+        <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_BEGIN }};">
+            <input class="button2" name="gamesettings" type="submit" value="{{ lang('SUBMIT') }}" />
         </fieldset>
 
 
@@ -109,180 +109,180 @@
     </fieldset>
 
     <fieldset>
-        <legend>{L_ACP_LISTFACTION}</legend>
+        <legend>{{ lang('ACP_LISTFACTION') }}</legend>
 
-        <p>{L_ACP_LISTFACTIONS_EXPLAIN}</p>
+        <p>{{ lang('ACP_LISTFACTIONS_EXPLAIN') }}</p>
 
-        <!-- IF .faction_row -->
+        {% if loops.faction_row|length %}
         <table width="50%" cellspacing="1">
 
             <thead>
             <tr>
-                <th style="text-align:left; width: 10%">{L_FACTIONID}</th>
-                <th style="text-align:left; width: 70%">{L_FACTION}</th>
-                <th style="text-align:center; width: 5%">{L_ACTION}</th>
+                <th style="text-align:left; width: 10%">{{ lang('FACTIONID') }}</th>
+                <th style="text-align:left; width: 70%">{{ lang('FACTION') }}</th>
+                <th style="text-align:center; width: 5%">{{ lang('ACTION') }}</th>
             </tr>
             </thead>
             <tbody>
-            <!-- BEGIN faction_row -->
-            <!-- IF faction_row.S_ROW_COUNT is even -->
+            {% for faction_row in loops.faction_row %}
+            {% if faction_row.S_ROW_COUNT is even %}
             <tr class="row1">
-                <!-- ELSE -->
+                {% else %}
             <tr class="row2">
-                <!-- ENDIF -->
-                <td>{faction_row.FACTIONID}</td>
-                <td>{faction_row.FACTIONNAME}</td>
-                <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a>
-                <a href="{faction_row.U_EDIT}">{ICON_EDIT}</a></td>
+                {% endif %}
+                <td>{{ faction_row.FACTIONID }}</td>
+                <td>{{ faction_row.FACTIONNAME }}</td>
+                <td><a href="{{ faction_row.U_DELETE }}">{{ ICON_DELETE }}</a>
+                <a href="{{ faction_row.U_EDIT }}">{{ ICON_EDIT }}</a></td>
             </tr>
-            <!-- END faction_row -->
+            {% endfor %}
             <tr>
-                <th colspan="4" class="footer">{LISTFACTION_FOOTCOUNT}</th>
+                <th colspan="4" class="footer">{{ LISTFACTION_FOOTCOUNT }}</th>
             </tr>
             </tbody>
         </table>
-        <!-- ENDIF -->
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-            {S_FORM_TOKEN}
-            <input class="button2" name="showfactionadd" type="submit" value="{L_ACP_BBGUILD_FACTION_ADD}" />
+        {% endif %}
+        <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_BEGIN }};">
+            {{ S_FORM_TOKEN }}
+            <input class="button2" name="showfactionadd" type="submit" value="{{ lang('ACP_BBGUILD_FACTION_ADD') }}" />
         </fieldset>
 
     </fieldset>
     <fieldset>
-        <legend>{L_ACP_LISTRACE}</legend>
-        <p>{L_ACP_LISTRACE_EXPLAIN}</p>
+        <legend>{{ lang('ACP_LISTRACE') }}</legend>
+        <p>{{ lang('ACP_LISTRACE_EXPLAIN') }}</p>
 
-        <!-- IF .race_row -->
+        {% if loops.race_row|length %}
         <table cellspacing="1">
             <thead>
             <tr>
-                <th style="text-align: left; width: 10%"><a href="{U_ADD_GAMES}&amp;o={O_RACEID}&amp;">{L_RACEID}</a></th>
-                <th style="text-align: left; width: 25%"><a href="{U_ADD_GAMES}&amp;o={O_RACENAME}&amp;">{L_RACE}</a></th>
-                <th style="text-align: left; width: 15%">{L_MALE}</th>
-                <th style="text-align: left; width: 15%">{L_FEMALE}</th>
-                <th style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o={O_FACTIONNAME}&amp;">{L_FACTION}</a></th>
-                <th style="text-align: center; width: 5%">{L_ACTION}</th>
+                <th style="text-align: left; width: 10%"><a href="{{ U_ADD_GAMES }}&amp;o={{ O_RACEID }}&amp;">{{ lang('RACEID') }}</a></th>
+                <th style="text-align: left; width: 25%"><a href="{{ U_ADD_GAMES }}&amp;o={{ O_RACENAME }}&amp;">{{ lang('RACE') }}</a></th>
+                <th style="text-align: left; width: 15%">{{ lang('MALE') }}</th>
+                <th style="text-align: left; width: 15%">{{ lang('FEMALE') }}</th>
+                <th style="text-align: left; width: 15%"><a href="{{ U_ADD_GAMES }}&amp;o={{ O_FACTIONNAME }}&amp;">{{ lang('FACTION') }}</a></th>
+                <th style="text-align: center; width: 5%">{{ lang('ACTION') }}</th>
             </tr>
             </thead>
             <tbody>
-            <!-- BEGIN race_row -->
-            <!-- IF race_row.S_ROW_COUNT is even -->
+            {% for race_row in loops.race_row %}
+            {% if race_row.S_ROW_COUNT is even %}
             <tr class="row1">
-                <!-- ELSE -->
+                {% else %}
             <tr class="row2">
-                <!-- ENDIF -->
-                <td>{race_row.RACEID}</td>
-                <td><a href="{race_row.U_EDIT}">{race_row.RACENAME}</a></td>
-                <td><!-- IF race_row.S_RACE_IMAGE_M_EXISTS -->  <img style="vertical-align: middle;" src="{race_row.RACE_IMAGE_M}" alt="{race_row.RACE_IMAGE_M}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-                <td><!-- IF race_row.S_RACE_IMAGE_F_EXISTS -->  <img style="vertical-align: middle;" src="{race_row.RACE_IMAGE_F}" alt="{race_row.RACE_IMAGE_F}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-                <td>{race_row.FACTIONNAME}</td>
+                {% endif %}
+                <td>{{ race_row.RACEID }}</td>
+                <td><a href="{{ race_row.U_EDIT }}">{{ race_row.RACENAME }}</a></td>
+                <td>{% if race_row.S_RACE_IMAGE_M_EXISTS %}  <img style="vertical-align: middle;" src="{{ race_row.RACE_IMAGE_M }}" alt="{{ race_row.RACE_IMAGE_M }}" />  {% else %}{{ lang('NO_IMAGE') }}{% endif %} </td>
+                <td>{% if race_row.S_RACE_IMAGE_F_EXISTS %}  <img style="vertical-align: middle;" src="{{ race_row.RACE_IMAGE_F }}" alt="{{ race_row.RACE_IMAGE_F }}" />  {% else %}{{ lang('NO_IMAGE') }}{% endif %} </td>
+                <td>{{ race_row.FACTIONNAME }}</td>
                 <td  style="white-space: nowrap;">
-                    <a href="{race_row.U_DELETE}">{ICON_DELETE}</a>
-                    <a href="{race_row.U_EDIT}">{ICON_EDIT}</a>
+                    <a href="{{ race_row.U_DELETE }}">{{ ICON_DELETE }}</a>
+                    <a href="{{ race_row.U_EDIT }}">{{ ICON_EDIT }}</a>
                 </td>
             </tr>
-            <!-- END race_row -->
+            {% endfor %}
             <tr>
-                <th colspan="6" class="footer">{LISTRACE_FOOTCOUNT}</th>
+                <th colspan="6" class="footer">{{ LISTRACE_FOOTCOUNT }}</th>
             </tr>
             </tbody>
         </table>
-        <!-- ENDIF -->
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-            <input class="button2" name="showraceadd" type="submit" value="{L_ACP_BBGUILD_RACE_ADD}" />
+        {% endif %}
+        <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_BEGIN }};">
+            <input class="button2" name="showraceadd" type="submit" value="{{ lang('ACP_BBGUILD_RACE_ADD') }}" />
         </fieldset>
 
     </fieldset>
 
-    <fieldset><legend>{L_ROLES}</legend>
-        <p>{L_ACP_ROLES_EXPLAIN}</p>
+    <fieldset><legend>{{ lang('ROLES') }}</legend>
+        <p>{{ lang('ACP_ROLES_EXPLAIN') }}</p>
 
-        <!-- IF .role_row -->
+        {% if loops.role_row|length %}
         <table cellspacing="1">
             <thead>
             <tr>
-                <th style="text-align:left; vertical-align: middle; width:5%">{L_ID}</th>
-                <th style="text-align:left; vertical-align: middle;width:28%">{L_ROLE}</th>
-                <th style="text-align:left; vertical-align: middle;width:18%">{L_ROLE_COLOR}</th>
-                <th style="text-align:left; vertical-align: middle;width:22%">{L_ROLE_ICON}</th>
-                <th style="text-align:left; vertical-align: middle; width:22%">{L_ROLE_CAT_ICON}</th>
-                <th style="text-align:center; vertical-align: middle; width:5%">{L_ACTION}</th>
+                <th style="text-align:left; vertical-align: middle; width:5%">{{ lang('ID') }}</th>
+                <th style="text-align:left; vertical-align: middle;width:28%">{{ lang('ROLE') }}</th>
+                <th style="text-align:left; vertical-align: middle;width:18%">{{ lang('ROLE_COLOR') }}</th>
+                <th style="text-align:left; vertical-align: middle;width:22%">{{ lang('ROLE_ICON') }}</th>
+                <th style="text-align:left; vertical-align: middle; width:22%">{{ lang('ROLE_CAT_ICON') }}</th>
+                <th style="text-align:center; vertical-align: middle; width:5%">{{ lang('ACTION') }}</th>
             </tr>
             </thead>
             <tbody>
-            <!-- BEGIN role_row -->
-            <!-- IF role_row.S_ROW_COUNT is even -->
+            {% for role_row in loops.role_row %}
+            {% if role_row.S_ROW_COUNT is even %}
             <tr class="row1">
-                <!-- ELSE -->
+                {% else %}
             <tr class="row2">
-                <!-- ENDIF -->
-                <td>{role_row.ROLE_ID}</td>
-                <td>{role_row.ROLE_NAME}</td>
-                <td style="background-color: {role_row.ROLE_COLOR}">{role_row.ROLE_COLOR}</td>
-                <td><!-- IF role_row.S_ROLE_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_ICON}" alt="image" /><!-- ELSE -->{role_row.ROLE_ICON}<!-- ENDIF --></td>
-                <td><!-- IF role_row.S_ROLE_CAT_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_CAT_ICON}" alt="image" /><!-- ELSE -->{role_row.U_ROLE_CAT_ICON}<!-- ENDIF --></td>
-                <td><a href="{role_row.U_DELETE}">{ICON_DELETE}</a><a href="{role_row.U_EDIT}">{ICON_EDIT}</a></td>
+                {% endif %}
+                <td>{{ role_row.ROLE_ID }}</td>
+                <td>{{ role_row.ROLE_NAME }}</td>
+                <td style="background-color: {{ role_row.ROLE_COLOR }}">{{ role_row.ROLE_COLOR }}</td>
+                <td>{% if role_row.S_ROLE_ICON_EXISTS %}&nbsp;<img style="vertical-align: middle;" src="{{ role_row.U_ROLE_ICON }}" alt="image" />{% else %}{{ role_row.ROLE_ICON }}{% endif %}</td>
+                <td>{% if role_row.S_ROLE_CAT_ICON_EXISTS %}&nbsp;<img style="vertical-align: middle;" src="{{ role_row.U_ROLE_CAT_ICON }}" alt="image" />{% else %}{{ role_row.U_ROLE_CAT_ICON }}{% endif %}</td>
+                <td><a href="{{ role_row.U_DELETE }}">{{ ICON_DELETE }}</a><a href="{{ role_row.U_EDIT }}">{{ ICON_EDIT }}</a></td>
             </tr>
-            <!-- END role_row -->
+            {% endfor %}
 
             <tr>
-                <th colspan="6" class="footer">{LISTROLES_FOOTCOUNT}</th>
+                <th colspan="6" class="footer">{{ LISTROLES_FOOTCOUNT }}</th>
             </tr>
             </tbody>
         </table>
-        <!-- ENDIF -->
-        <fieldset class="quick" style="float:{S_CONTENT_FLOW_BEGIN};">
-            {S_FORM_TOKEN}
-            <input class="button2" name="showrolesadd" type="submit" value="{L_ADD_ROLE}" />
+        {% endif %}
+        <fieldset class="quick" style="float:{{ S_CONTENT_FLOW_BEGIN }};">
+            {{ S_FORM_TOKEN }}
+            <input class="button2" name="showrolesadd" type="submit" value="{{ lang('ADD_ROLE') }}" />
         </fieldset>
 
     </fieldset>
 
 
     <fieldset>
-        <legend>{L_ACP_LISTCLASS}</legend>
-        <p>{L_ACP_LISTCLASS_EXPLAIN}</p>
+        <legend>{{ lang('ACP_LISTCLASS') }}</legend>
+        <p>{{ lang('ACP_LISTCLASS_EXPLAIN') }}</p>
 
-        <!-- IF .class_row -->
+        {% if loops.class_row|length %}
         <table cellspacing="1">
             <thead>
             <tr>
-                <th  style="text-align: left; width: 5%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSID}">{L_CLASSID}</a></th>
-                <th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASS}</a></th>
-                <th  style="text-align: left; width: 10%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASSIMAGE}</a></th>
-                <th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSARMOR}">{L_CLASSARMOR}</a></th>
-                <th  style="text-align: left; width: 5%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSMIN}">{L_CLASSMIN}</a></th>
-                <th  style="text-align: left; width: 5%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSMAX}">{L_CLASSMAX}</a></th>
-                <th  style="text-align: center; width: 5%">{L_ACTION}</th>
+                <th  style="text-align: left; width: 5%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSID }}">{{ lang('CLASSID') }}</a></th>
+                <th  style="text-align: left; width: 15%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSNAME }}">{{ lang('CLASS') }}</a></th>
+                <th  style="text-align: left; width: 10%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSNAME }}">{{ lang('CLASSIMAGE') }}</a></th>
+                <th  style="text-align: left; width: 15%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSARMOR }}">{{ lang('CLASSARMOR') }}</a></th>
+                <th  style="text-align: left; width: 5%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSMIN }}">{{ lang('CLASSMIN') }}</a></th>
+                <th  style="text-align: left; width: 5%"><a href="{{ U_ADD_GAMES }}&amp;o1={{ O_CLASSMAX }}">{{ lang('CLASSMAX') }}</a></th>
+                <th  style="text-align: center; width: 5%">{{ lang('ACTION') }}</th>
             </tr>
             </thead>
             <tbody>
-            <!-- BEGIN class_row -->
-            <!-- IF class_row.S_ROW_COUNT is even -->
+            {% for class_row in loops.class_row %}
+            {% if class_row.S_ROW_COUNT is even %}
             <tr class="row1">
-                <!-- ELSE -->
+                {% else %}
             <tr class="row2">
-                <!-- ENDIF -->
-                <td>{class_row.CLASSID}</td>
-                <td style="background-color: {class_row.COLORCODE}"><strong><a href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></strong></td>
-                <td><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img style="vertical-align: middle;" src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --></td>
-                <td>{class_row.CLASSARMOR}</td>
-                <td>{class_row.CLASSMIN}</td>
-                <td>{class_row.CLASSMAX}</td>
+                {% endif %}
+                <td>{{ class_row.CLASSID }}</td>
+                <td style="background-color: {{ class_row.COLORCODE }}"><strong><a href="{{ class_row.U_EDIT }}">{{ class_row.CLASSNAME }}</a></strong></td>
+                <td>{% if class_row.S_CLASS_IMAGE_EXISTS %}  <img style="vertical-align: middle;" src="{{ class_row.CLASSIMAGE }}" alt="{{ class_row.CLASSNAME }}" />  {% else %}{{ lang('NO_IMAGE') }}{% endif %}</td>
+                <td>{{ class_row.CLASSARMOR }}</td>
+                <td>{{ class_row.CLASSMIN }}</td>
+                <td>{{ class_row.CLASSMAX }}</td>
                 <td style="white-space: nowrap">
-                    <a href="{class_row.U_DELETE}">{ICON_DELETE}</a>
-                    <a href="{class_row.U_EDIT}">{ICON_EDIT}</a></td>
+                    <a href="{{ class_row.U_DELETE }}">{{ ICON_DELETE }}</a>
+                    <a href="{{ class_row.U_EDIT }}">{{ ICON_EDIT }}</a></td>
             </tr>
-            <!-- END class_row -->
+            {% endfor %}
             <tr>
-                <th colspan="7" class="footer">{LISTCLASS_FOOTCOUNT}</th>
+                <th colspan="7" class="footer">{{ LISTCLASS_FOOTCOUNT }}</th>
             </tr>
             </tbody>
         </table>
-        <!-- ENDIF -->
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-            <input class="button2" name="showclassadd" type="submit" value="{L_ACP_BBGUILD_CLASS_ADD}" />
+        {% endif %}
+        <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_BEGIN }};">
+            <input class="button2" name="showclassadd" type="submit" value="{{ lang('ACP_BBGUILD_CLASS_ADD') }}" />
         </fieldset>
     </fieldset>
 </form>
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}

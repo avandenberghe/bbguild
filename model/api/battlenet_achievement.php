@@ -9,9 +9,9 @@
  * @link      https://github.com/bbDKP
  */
 
-namespace bbdkp\bbguild\model\api;
+namespace avathar\bbguild\model\api;
 
-use bbdkp\bbguild\model\api\battlenet_resource;
+use avathar\bbguild\model\api\battlenet_resource;
 
 /**
  * Realm resource.

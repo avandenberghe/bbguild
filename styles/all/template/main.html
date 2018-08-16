@@ -1,32 +1,32 @@
-<!-- INCLUDE overall_header.html -->
+{% INCLUDE 'overall_header.html' %}
 <div class="bbguildouter">
     <div id="bbguildwelcome">
 
      <div class="profile-sidebar-anchor">
-            <!-- INCLUDE sidemenu.html -->
+            {% INCLUDE 'sidemenu.html' %}
         </div>
 
         <div class="profile-contents">
-            <!-- IF S_ERROR -->
-            <h2>{ERROR_MESSAGE}</h2>
-            <!-- ENDIF -->
+            {% if S_ERROR %}
+            <h2>{{ ERROR_MESSAGE }}</h2>
+            {% endif %}
 
-            <!-- IF S_DISPLAY_ROSTERGRID -->
-            <!-- INCLUDE view/rostergrid.html -->
-            <!-- ENDIF -->
-            <!-- IF S_DISPLAY_ROSTERLISTING -->
-            <!-- INCLUDE view/rosterlisting.html -->
-            <!-- ENDIF -->
+            {% if S_DISPLAY_ROSTERGRID %}
+            {% INCLUDE 'view/rostergrid.html' %}
+            {% endif %}
+            {% if S_DISPLAY_ROSTERLISTING %}
+            {% INCLUDE 'view/rosterlisting.html' %}
+            {% endif %}
 
-            <!-- IF S_DISPLAY_WELCOME -->
-            <!-- INCLUDE view/welcome.html -->
-            <!-- ENDIF -->
+            {% if S_DISPLAY_WELCOME %}
+            {% INCLUDE 'view/welcome.html' %}
+            {% endif %}
 
-            <!-- IF S_DISPLAY_WOWACHIEVEMENTS -->
-            <!-- INCLUDE view/achievements.html -->
-            <!-- ENDIF -->
+            {% if S_DISPLAY_WOWACHIEVEMENTS %}
+            {% INCLUDE 'view/achievements.html' %}
+            {% endif %}
         </div>
         <span class="clear"></span>
     </div>
 </div>
-            <!-- INCLUDE overall_footer.html -->
+            {% INCLUDE 'overall_footer.html' %}

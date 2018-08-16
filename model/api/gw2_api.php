@@ -1,6 +1,6 @@
 <?php
 
-namespace bbdkp\bbguild\model\api;
+namespace avathar\bbguild\model\api;
 
 /**
  * LICENSE: Permission is hereby granted, free of charge, to any person

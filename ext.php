@@ -2,19 +2,19 @@
 /**
  *
  * @package bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace bbdkp\bbguild;
+namespace avathar\bbguild;
 
 use phpbb\extension\base;
 
 /**
  * Class ext
  *
- * @package bbdkp\bbguild
+* @package avathar\bbguild
  */
 class ext extends base
 {
@@ -28,7 +28,7 @@ class ext extends base
 	{
 		$condition = array();
 		$config = $this->container->get('config');
-		$condition['phpbb'] = phpbb_version_compare($config['version'], '3.1.3', '>=');
+		$condition['phpbb'] = phpbb_version_compare($config['version'], '3.2.0', '>=');
 		$condition['php'] = version_compare(PHP_VERSION , '5.4.39', '>=') ? 1: 0;
 		$condition['gd'] = extension_loaded('gd');
 		$condition['curl'] = extension_loaded('curl');
@@ -45,6 +45,7 @@ class ext extends base
 		}
 		return true;
 	}
+}
 
 	/**
 	 * override enable step
@@ -58,7 +59,6 @@ class ext extends base
 	 * @return	mixed				Returns false after last step, otherwise
 	 *								temporary state which is passed as an
 	 *								argument to the next step
-	 */
 	public function enable_step($old_state)
 	{
 		global $user, $config;
@@ -66,5 +66,4 @@ class ext extends base
 
 		return parent::enable_step($old_state);
 	}
-
-}
+	 */

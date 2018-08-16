@@ -1,4 +1,4 @@
-<!-- INCLUDE overall_header.html -->
+{% INCLUDE 'overall_header.html' %}
 <style>
     fieldset dt
     {
@@ -10,21 +10,21 @@
         margin-left: 25%;
     }
 </style>
-<span><h1>{L_TITLE}</h1></span>
+<span><h1>{{ lang('TITLE') }}</h1></span>
 <div>
-    <form id="listachievements" method="post" action="{F_PLAYERS_LIST}">
+    <form id="listachievements" method="post" action="{{ F_PLAYERS_LIST }}">
 
         <fieldset style="background-color: #EEEEEE">
             <dl>
-                <dt><label for="achievement_guild_id">{L_GUILD}:</label></dt>
+                <dt><label for="achievement_guild_id">{{ lang('GUILD') }}:</label></dt>
                 <dd>
                     <div style="display: table;">
-                        <div style="width:50%; float: left"><a href="{U_VIEW_GUILD}"><img style="width:80px; height:80px" src="{GUILD_EMBLEM}" alt="" /></a></div>
+                        <div style="width:50%; float: left"><a href="{{ U_VIEW_GUILD }}"><img style="width:80px; height:80px" src="{{ GUILD_EMBLEM }}" alt="" /></a></div>
                         <div style="width:50%; vertical-align: middle; display: table-cell;">
                             <select id="achievement_guild_id" name="achievement_guild_id" class="input" onchange="javascript:form.submit();" >
-                                <!-- BEGIN guild_row -->
-                                <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-                                <!-- END guild_row -->
+                                {% for guild_row in loops.guild_row %}
+                                <option value="{{ guild_row.VALUE }}"{{ guild_row.SELECTED }}>{{ guild_row.OPTION }}</option>
+                                {% endfor %}
                             </select>
 
                         </div>
@@ -33,112 +33,112 @@
                 </dd>
             </dl>
             <dl>
-                <dt><label for="player_guild_id">{L_FILTER}:</label></dt>
+                <dt><label for="player_guild_id">{{ lang('FILTER') }}:</label></dt>
                 <dd>
                     <fieldset class="submit-buttons" style="  text-align: left;">
-                    <input type="submit" name="achievaddmanual"  value="{L_ADD_ACHIEVEMENT_MANUAL}" class="button1" />
+                    <input type="submit" name="achievaddmanual"  value="{{ lang('ADD_ACHIEVEMENT_MANUAL') }}" class="button1" />
                     </fieldset>
                 </dd>
             </dl>
             <dl>
-                <dt><label for="player_guild_id">{L_FILTER}:</label></dt>
+                <dt><label for="player_guild_id">{{ lang('FILTER') }}:</label></dt>
                 <dd>
                     <fieldset class="submit-buttons" style="  text-align: left;">
-                    <input type="submit" name="achievaddapi"  value="{L_ADD_ACHIEVEMENT_API}" class="button1" />
+                    <input type="submit" name="achievaddapi"  value="{{ lang('ADD_ACHIEVEMENT_API') }}" class="button1" />
                     </fieldset>
                 </dd>
             </dl>
         </fieldset>
 
 
-        <!-- IF .achievement_row -->
+        {% if loops.achievement_row|length %}
         <div class="pagination">
-            <!-- IF .pagination -->
-            <!-- INCLUDE pagination.html -->
-            <!-- ELSE -->
-            {PAGE_NUMBER}
-            <!-- ENDIF -->
+            {% if loops.pagination|length %}
+            {% INCLUDE 'pagination.html' %}
+            {% else %}
+            {{ PAGE_NUMBER }}
+            {% endif %}
         </div>
 
         <table class="table1 responsive" width="100%" border="0" cellspacing="1" cellpadding="2">
             <thead>
             <tr>
-                <th style="text-align:left; width:3%"><a href="{O_ID}">{L_ID}</a></th>
-                <th style="text-align:left; width:20%"><a href="{O_NAME}">{L_NAME}</a></th>
-                <th style="text-align:left; width:15%; white-space: nowrap;"><a href="{O_CLASS}">{L_RACE}/{L_CLASS}</a></th>
-                <th style="text-align:left; width:5%; white-space: nowrap;"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
-                <th style="text-align:left; width:10%"><a href="{O_USERNAME}">{L_USERNAME}</a></th>
-                <th style="text-align:left; width:10%"><a href="{O_RANK}">{L_RANK}</a></th>
-                <th style="text-align:left; width:15%"><a href="{O_LAST_UPDATE}">{L_LAST_UPDATE}</a></th>
-                <th style="text-align:center; width:6%">{L_EDIT}</th>
-                <th style="text-align:center; width:6%">{L_DELETE}
-  	        <span class="small"><a href="#" onclick="marklist('listplayers', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br />
-	        <a href="#" onclick="marklist('listplayers', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
+                <th style="text-align:left; width:3%"><a href="{{ O_ID }}">{{ lang('ID') }}</a></th>
+                <th style="text-align:left; width:20%"><a href="{{ O_NAME }}">{{ lang('NAME') }}</a></th>
+                <th style="text-align:left; width:15%; white-space: nowrap;"><a href="{{ O_CLASS }}">{{ lang('RACE') }}/{{ lang('CLASS') }}</a></th>
+                <th style="text-align:left; width:5%; white-space: nowrap;"><a href="{{ O_LEVEL }}">{{ lang('LEVEL') }}</a></th>
+                <th style="text-align:left; width:10%"><a href="{{ O_USERNAME }}">{{ lang('USERNAME') }}</a></th>
+                <th style="text-align:left; width:10%"><a href="{{ O_RANK }}">{{ lang('RANK') }}</a></th>
+                <th style="text-align:left; width:15%"><a href="{{ O_LAST_UPDATE }}">{{ lang('LAST_UPDATE') }}</a></th>
+                <th style="text-align:center; width:6%">{{ lang('EDIT') }}</th>
+                <th style="text-align:center; width:6%">{{ lang('DELETE') }}
+  	        <span class="small"><a href="#" onclick="marklist('listplayers', 'delete_id', true); return false;">{{ lang('MARK_ALL') }}</a> <br />
+	        <a href="#" onclick="marklist('listplayers', 'delete_id', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
                 </th>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <th colspan="10" class="footer">{LISTPLAYERS_FOOTCOUNT}</th>
+                <th colspan="10" class="footer">{{ LISTPLAYERS_FOOTCOUNT }}</th>
             </tr>
             </tfoot>
             <tbody>
-            <!-- BEGIN achievements_row_ -->
-            <!-- IF achievements_row_.S_ROW_COUNT is even -->
+            {% for achievements_row_ in loops.achievements_row_ %}
+            {% if achievements_row_.S_ROW_COUNT is even %}
             <tr class="row1">
-                <!-- ELSEIF achievements_row_.S_ROW_COUNT is not even -->
+                {% elseif achievements_row_.S_ROW_COUNT is not even %}
             <tr class="row2">
-                <!-- ENDIF -->
+                {% endif %}
 
-                <!-- IF achievements_row_.S_READONLY  == 1 -->
+                {% if achievements_row_.S_READONLY  == 1 %}
             <tr class="highlight">
-                <!-- ENDIF -->
-                <td style="text-align:center;"><input type="checkbox" class="radio" name="activate_id[{achievements_row_.ID}]" value="{achievements_row_.ID}" {achievements_row_.STATUS} /></td>
+                {% endif %}
+                <td style="text-align:center;"><input type="checkbox" class="radio" name="activate_id[{{ achievements_row_.ID }}]" value="{{ achievements_row_.ID }}" {{ achievements_row_.STATUS }} /></td>
 
-                <td style="text-align:center;">{achievements_row_.ID}</td>
-                <td class="row2" style="text-align:left;" ><a style="color:{achievements_row_.COLORCODE}"  href="{achievements_row_.U_VIEW_PLAYER}"><strong>{achievements_row_.NAME}</strong></a></td>
-                <td style="text-align:left;" ><!-- IF achievements_row_.S_RACE_IMAGE_EXISTS --><img src="{achievements_row_.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF achievements_row_.S_CLASS_IMAGE_EXISTS --><img src="{achievements_row_.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{achievements_row_.COLORCODE}" >{achievements_row_.CLASS}</span></td>
-                <td style="text-align:center;" >{achievements_row_.LEVEL}</td>
-                <td style="text-align:left;" ><a href="{achievements_row_.U_VIEW_USER}">{achievements_row_.USERNAME}</a></td>
-                <td style="text-align:left;" >{achievements_row_.RANK}</td>
-                <td style="text-align:left;" >{achievements_row_.LAST_UPDATE}</td>
+                <td style="text-align:center;">{{ achievements_row_.ID }}</td>
+                <td class="row2" style="text-align:left;" ><a style="color:{{ achievements_row_.COLORCODE }}"  href="{{ achievements_row_.U_VIEW_PLAYER }}"><strong>{{ achievements_row_.NAME }}</strong></a></td>
+                <td style="text-align:left;" >{% if achievements_row_.S_RACE_IMAGE_EXISTS %}<img src="{{ achievements_row_.RACE_IMAGE }}" alt="" />&nbsp;{% else %}&nbsp;{% endif %}{% if achievements_row_.S_CLASS_IMAGE_EXISTS %}<img src="{{ achievements_row_.CLASS_IMAGE }}" alt="" />{% else %}&nbsp;{% endif %}&nbsp;<span style="color:{{ achievements_row_.COLORCODE }}" >{{ achievements_row_.CLASS }}</span></td>
+                <td style="text-align:center;" >{{ achievements_row_.LEVEL }}</td>
+                <td style="text-align:left;" ><a href="{{ achievements_row_.U_VIEW_USER }}">{{ achievements_row_.USERNAME }}</a></td>
+                <td style="text-align:left;" >{{ achievements_row_.RANK }}</td>
+                <td style="text-align:left;" >{{ achievements_row_.LAST_UPDATE }}</td>
                 <td style="text-align:center; white-space: nowrap;">
-                    <a href="{achievements_row_.U_VIEW_PLAYER}">{ICON_EDIT}</a>
+                    <a href="{{ achievements_row_.U_VIEW_PLAYER }}">{{ ICON_EDIT }}</a>
                 </td>
                 <td style="text-align:center; white-space: nowrap;">
 
-                    <input type="checkbox" class="radio" name="delete_id[{achievements_row_.ID}]" value="1" {achievements_row_.DELETED} />
-                    <!-- IF achievements_row_.S_READONLY == 0 --> <a href="{achievements_row_.U_DELETE_PLAYER}">{ICON_DELETE}</a> <!-- ENDIF -->
+                    <input type="checkbox" class="radio" name="delete_id[{{ achievements_row_.ID }}]" value="1" {{ achievements_row_.DELETED }} />
+                    {% if achievements_row_.S_READONLY == 0 %} <a href="{{ achievements_row_.U_DELETE_PLAYER }}">{{ ICON_DELETE }}</a> {% endif %}
                 </td>
             </tr>
-            <!-- END achievements_row_ -->
+            {% endfor %}
             <tr class="highlight">
                 <td style="text-align:center;"><input class="button2" name="deactivate"
-                    type="submit" value="{L_UPDATE}" title="{L_CHANGE_STATUS}" {L_TOGGLE_ACTIVE} /></td>
+                    type="submit" value="{{ lang('UPDATE') }}" title="{{ lang('CHANGE_STATUS') }}" {{ lang('TOGGLE_ACTIVE') }} /></td>
                 <td colspan="8"></td>
                 <td style="text-align:center;"> <input class="button2" name="delete" type="submit"
-                                                       value="{L_DELETE_SELECTED_PLAYERS}" title="{L_MASS_DELETE_CHAR}"/></td>
+                                                       value="{{ lang('DELETE_SELECTED_PLAYERS') }}" title="{{ lang('MASS_DELETE_CHAR') }}"/></td>
             </tr>
 
             </tbody>
         </table>
 
         <div class="pagination">
-            <!-- IF .pagination -->
-            <!-- INCLUDE pagination.html -->
-            <!-- ELSE -->
-            {PAGE_NUMBER}
-            <!-- ENDIF -->
+            {% if loops.pagination|length %}
+            {% INCLUDE 'pagination.html' %}
+            {% else %}
+            {{ PAGE_NUMBER }}
+            {% endif %}
         </div>
 
-        <!-- ELSE -->
+        {% else %}
 
         <div class="warningbox">
-            <h3>{L_WARNING}</h3>
-            <p>{L_WARNING_NOACHIEVEMENTS}</p>
+            <h3>{{ lang('WARNING') }}</h3>
+            <p>{{ lang('WARNING_NOACHIEVEMENTS') }}</p>
         </div>
 
-        <!-- ENDIF -->
+        {% endif %}
     </form>
 </div>
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}

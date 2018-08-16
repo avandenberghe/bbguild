@@ -6,7 +6,7 @@
  * @copyright 2015 bbDKP <https://github.com/bbDKP>
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\migrations;
+namespace avathar\bbguild\migrations;
 
 use phpbb\db\migration\migration;
 
@@ -24,7 +24,7 @@ class release_2_0_0_m05_mod extends migration
 	 */
 	static public function depends_on()
 	{
-		return array('\bbdkp\bbguild\migrations\release_2_0_0_m04_permissions');
+		return array('\avathar\bbguild\migrations\release_2_0_0_m04_permissions');
 	}
 
 	/**
@@ -48,7 +48,7 @@ class release_2_0_0_m05_mod extends migration
 				'acp',
 				'ACP_BBGUILD_MAINPAGE',
 				array(
-					'module_basename' => '\bbdkp\bbguild\acp\main_module',
+					'module_basename' => '\avathar\bbguild\acp\main_module',
 					'modes'           => array('panel', 'config', 'logs'),
 				)
 			)),
@@ -56,7 +56,7 @@ class release_2_0_0_m05_mod extends migration
 				'acp',
 				'ACP_BBGUILD_MAINPAGE',
 				array(
-					'module_basename' => '\bbdkp\bbguild\acp\game_module',
+					'module_basename' => '\avathar\bbguild\acp\game_module',
 					'modes'           => array('listgames', 'editgames', 'addfaction', 'addrace', 'addclass', 'addrole'),
 				)
 			)),
@@ -64,7 +64,7 @@ class release_2_0_0_m05_mod extends migration
 				'acp',
 				'ACP_BBGUILD_PLAYER',
 				array(
-					'module_basename' => '\bbdkp\bbguild\acp\guild_module',
+					'module_basename' => '\avathar\bbguild\acp\guild_module',
 					'modes'           => array('addguild', 'editguild', 'listguilds'),
 				)
 			)),
@@ -72,13 +72,13 @@ class release_2_0_0_m05_mod extends migration
 				'acp',
 				'ACP_BBGUILD_PLAYER',
 				array(
-					'module_basename' => '\bbdkp\bbguild\acp\player_module',
+					'module_basename' => '\avathar\bbguild\acp\player_module',
 					'modes'           => array('addplayer', 'listplayers') ,
 				)
 			)),
 			array('module.add', array(
 				'ucp', 'UCP_BBGUILD', array(
-					'module_basename' => '\bbdkp\bbguild\ucp\bbguild_module',
+					'module_basename' => '\avathar\bbguild\ucp\bbguild_module',
 					'modes'           => array('char', 'add') ,
 				)
 			)),
@@ -86,7 +86,7 @@ class release_2_0_0_m05_mod extends migration
 				'acp',
 				'ACP_BBGUILD_PLAYER',
 				array(
-					'module_basename' => '\bbdkp\bbguild\acp\achievement_module',
+					'module_basename' => '\avathar\bbguild\acp\achievement_module',
 					'modes'           => array('addachievement', 'listachievements'),
 				)
 			)),

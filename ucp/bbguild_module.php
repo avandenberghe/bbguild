@@ -3,22 +3,22 @@
  * bbGuild ucp class file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\ucp;
+namespace avathar\bbguild\ucp;
 
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\player\ranks;
-use bbdkp\bbguild\model\player\player;
-use bbdkp\bbguild\model\games\rpg\roles;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\player\guilds;
+use avathar\bbguild\model\player\ranks;
+use avathar\bbguild\model\player\player;
+use avathar\bbguild\model\games\rpg\roles;
 
 /**
  * Class bbguild_module
  *
- * @package bbdkp\bbguild\acp
+* @package avathar\bbguild\acp
  */
 class bbguild_module extends admin
 {
@@ -120,7 +120,7 @@ class bbguild_module extends admin
 		$mode = ($mode == '' ? 'characters' :$mode);
 
 		// GET processing logic
-		$form_key = 'bbdkp/bbguild';
+		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);
 
 		switch ($this->mode)
@@ -135,7 +135,7 @@ class bbguild_module extends admin
 				$player = new player();
 				if ($submit)
 				{
-					if (!check_form_key('bbdkp/bbguild'))
+					if (!check_form_key('avathar/bbguild'))
 					{
 						trigger_error('FORM_INVALID');
 					}

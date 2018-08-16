@@ -1,34 +1,35 @@
 {
-  "name": "bbdkp/bbguild",
+  "name": "avathar/bbguild",
   "type": "phpbb-extension",
-  "description": "bbGuild Extension for phpBB 3.1. bbGuild is a Guild Manager for your phpBB3 Bulletin board. Features : Integration of Game, Guild management facilities; Clean report screens, Player, Roster, ACP and UCP modules. Games supported : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard, EverQuest I/II,  Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor, Lineage 2, TERA, FFXIV and Custom Game. Languages supported : English, French, German, Italian. Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  There will be a number of extension plugins, DKP Manager, Raidtracker, bbTips, Apply, Bossprogress, Raidplanner. Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or on IRC channel #bbDKP on Freenode",
-  "homepage": "https://github.com/bbdkp/bbguild",
-  "version": "2.0.0-a7",
-  "time": "2016-09-16",
+  "description": "bbGuild Extension for phpBB 3.2. bbGuild is a Guild Manager for your phpBB3 Bulletin board. Features : Integration of Game, Guild management facilities; Clean report screens, Player, Roster, ACP and UCP modules. Games supported : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard, EverQuest I/II,  Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor, Lineage 2, TERA, FFXIV and Custom Game. Languages supported : English, French, German, Italian. Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  There will be a number of extension plugins, DKP Manager, Raidtracker, bbTips, Apply, Bossprogress, Raidplanner. Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or on IRC channel #bbDKP on Freenode",
+  "homepage": "https://github.com/sajaki/bbguild",
+  "version": "2.0.0-a8",
+  "time": "2018-08-16",
   "license": "GPL-2.0",
   "authors": [{
     "name": "Andreas Vandenberghe (Sajaki)",
     "email": "sajaki9@gmail.com",
-    "homepage": "http://www.avathar.be",
+    "homepage": "https://www.avathar.be",
     "role": "Developer"
   }],
   "require": {
-    "php": ">=5.4.39"
+    "php": ">=5.4.39",
+    "composer/installers": "~1.0"
   },
   "require-dev": {
-    "phpbb/epv": "dev-master",
-    "squizlabs/php_codesniffer": "2.*"
+    "phpbb/epv": "dev-master"
   },
   "extra": {
     "display-name": "bbGuild",
     "soft-require":
     {
-      "phpbb/phpbb": ">=3.1.0"
+      "phpbb/phpbb": ">=3.2.0"
     },
     "version-check": {
       "host": "www.avathar.be",
       "directory": "/versioncheck",
-      "filename": "bbguild.json"
+      "filename": "bbguild.json",
+      "ssl": true
     }
 
   }

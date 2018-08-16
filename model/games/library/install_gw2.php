@@ -3,17 +3,17 @@
  * bbguild Guildwars2 install data
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\model\games\library;
+namespace avathar\bbguild\model\games\library;
 
-use bbdkp\bbguild\model\games\library\game_install;
+use avathar\bbguild\model\games\library\game_install;
 
 /**
  * Guildwars2 Installer Class
  *
- * @package bbdkp\bbguild\model\games\library
+* @package avathar\bbguild\model\games\library
  */
 class install_gw2 extends game_install
 {
@@ -29,7 +29,7 @@ class install_gw2 extends game_install
 		global  $cache, $db;
 
 		//https://wiki.guildwars2.com/wiki/API:1/guild_details
-		$gw2api = new \bbdkp\bbguild\model\api\gw2_api($cache);
+		$gw2api = new \avathar\bbguild\model\api\gw2_api($cache);
 
 		$guild = $gw2api->getGuildDetails(array('guild_id' => '75FD83CF-0C45-4834-BC4C-097F93A487AF',
 				  'guild_name' => 'Veterans Of Lions Arch'),3600);

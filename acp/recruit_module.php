@@ -3,21 +3,21 @@
  * Recruitment ACP file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\acp;
+namespace avathar\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\games\rpg\roles;
-use bbdkp\bbguild\model\player\recruitment;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\player\guilds;
+use avathar\bbguild\model\games\rpg\roles;
+use avathar\bbguild\model\player\recruitment;
 
 /**
  * Class recruit_module
  *
- * @package bbdkp\bbguild\acp
+* @package avathar\bbguild\acp
  */
 class recruit_module extends admin
 {
@@ -88,8 +88,8 @@ class recruit_module extends admin
 
 		parent::__construct();
 		$this->tpl_name = 'dkp/acp_' . $mode;
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
-		$form_key = 'bbdkp/bbguild';
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
+		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);
 
 		//css trigger
@@ -126,11 +126,11 @@ class recruit_module extends admin
 			array(
 				'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
 				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-recruit_module&amp;mode=editrecruit'),
-				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=listguilds'),
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=editrecruit'),
+				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds'),
 			)
 		);
 
@@ -227,7 +227,7 @@ class recruit_module extends admin
 				if ($add || $update)
 				{
 
-					if (!check_form_key('bbdkp/bbguild'))
+					if (!check_form_key('avathar/bbguild'))
 					{
 						trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 					}

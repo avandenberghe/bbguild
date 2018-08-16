@@ -3,13 +3,13 @@
  * Game clas file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\model\games;
+namespace avathar\bbguild\model\games;
 
-use bbdkp\bbguild\model\games\library\install_custom;
+use avathar\bbguild\model\games\library\install_custom;
 
 /**
  * Games
@@ -381,7 +381,7 @@ class game
 	public function __construct()
 	{
 		global $user, $phpbb_extension_manager;
-		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
+		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
 
 		$this->preinstalled_games = array (
 			'aion'     => $user->lang['AION'],
@@ -440,7 +440,7 @@ class game
 			//game id is one of the preinstallable games
 			$this->name= $this->preinstalled_games[$this->game_id];
 			//build name of the namespaced game installer class
-			$classname = '\bbdkp\bbguild\model\games\library\install_' . $this->game_id;
+			$classname = '\avathar\bbguild\model\games\library\install_' . $this->game_id;
 			$installgame = new $classname;
 
 			//call the game installer
@@ -504,19 +504,19 @@ class game
 		if (array_key_exists($this->game_id, $this->preinstalled_games))
 		{
 			//fetch installer
-			if (!class_exists('\bbdkp\bbguild\model\games\library\install_' . $this->game_id))
+			if (!class_exists('\avathar\bbguild\model\games\library\install_' . $this->game_id))
 			{
 				include $this->ext_path .'model/games/library/install_' . $this->game_id . '.' . $phpEx;
 			}
-			$gameclassname = '\bbdkp\bbguild\model\games\library\install_' . $this->game_id;
+			$gameclassname = '\avathar\bbguild\model\games\library\install_' . $this->game_id;
 		}
 		else
 		{
-			if (!class_exists('\bbdkp\bbguild\model\games\library\install_custom'))
+			if (!class_exists('\avathar\bbguild\model\games\library\install_custom'))
 			{
 				include $this->ext_path .'model/games/library/install_custom.' . $phpEx;
 			}
-			$gameclassname = '\bbdkp\bbguild\model\games\library\install_custom';
+			$gameclassname = '\avathar\bbguild\model\games\library\install_custom';
 		}
 
 		//is bossprogress installed ?

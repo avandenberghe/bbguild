@@ -3,18 +3,18 @@
  * achievements module
  *
  * @package   bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-namespace bbdkp\bbguild\views;
+namespace avathar\bbguild\views;
 
-use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\games\rpg\achievement;
+use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\rpg\achievement;
 
 /**
  * Class viewachievements
  *
- * @package bbdkp\bbguild\views
+* @package avathar\bbguild\views
  */
 class viewachievements implements iviews
 {
@@ -26,7 +26,7 @@ class viewachievements implements iviews
 	/**
 	 * viewachievements constructor.
 	 *
-	 * @param \bbdkp\bbguild\views\viewnavigation $navigation
+	 * @param \avathar\bbguild\views\viewnavigation $navigation
 	 */
 	public function __construct(viewnavigation $navigation)
 	{

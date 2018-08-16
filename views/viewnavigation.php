@@ -3,14 +3,14 @@
  * left front navigation block
  *
  * @package   bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\views;
+namespace avathar\bbguild\views;
 
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\guilds;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\player\guilds;
 use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
@@ -22,7 +22,7 @@ use phpbb\template\template;
 /**
  * Class viewNavigation
  *
- * @package bbdkp\bbguild\views
+* @package avathar\bbguild\views
  */
 class viewnavigation extends admin implements iviews
 {
@@ -330,21 +330,21 @@ class viewnavigation extends admin implements iviews
 				// Form values
 				'S_GUILDDROPDOWN'    => count($this->guildlist) > 1 ? true : false,
 				'U_WELCOME'           => $this->helper->route(
-					'bbdkp_bbguild_00',
+					'avathar_bbguild_00',
 					array(
 						'guild_id' => $this->guild_id,
 						'page' => 'welcome'
 					)
 				),
 				'U_ROSTER'           => $this->helper->route(
-					'bbdkp_bbguild_00',
+					'avathar_bbguild_00',
 					array(
 						'guild_id' => $this->guild_id,
 						'page' => 'roster'
 					)
 				),
 				'U_ACHIEVEMENTS'           => $this->helper->route(
-					'bbdkp_bbguild_00',
+					'avathar_bbguild_00',
 					array(
 						'guild_id' => $this->guild_id,
 						'page' => 'achievements'

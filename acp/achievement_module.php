@@ -3,23 +3,23 @@
  * achievement acp file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @author    Sajaki
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\acp;
+namespace avathar\bbguild\acp;
 
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\games\rpg\achievement;
-use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\games\rpg\faction;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\player\guilds;
+use avathar\bbguild\model\games\rpg\achievement;
+use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\rpg\faction;
 
 /**
  * This class manages player general info
  * @todo finish this module
- * @package bbdkp\bbguild\acp
+* @package avathar\bbguild\acp
  */
 class achievement_module extends admin
 {
@@ -89,7 +89,7 @@ class achievement_module extends admin
 		$this->auth=$auth;
 		parent::__construct();
 
-		$form_key = 'bbdkp/bbguild';
+		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);
 		$this->tpl_name   = 'acp_' . $mode;
 
@@ -105,7 +105,7 @@ class achievement_module extends admin
 			)
 		);
 
-		$this->moduleurl = 'i=-bbdkp-bbguild-acp-achievement_module&amp;';
+		$this->moduleurl = 'i=-avathar-bbguild-acp-achievement_module&amp;';
 
 		switch ($mode)
 		{
@@ -155,7 +155,7 @@ class achievement_module extends admin
 
 				if ($add || $update)
 				{
-					if (! check_form_key('bbdkp/bbguild'))
+					if (! check_form_key('avathar/bbguild'))
 					{
 						trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
 					}
@@ -201,8 +201,8 @@ class achievement_module extends admin
 	/**
 	 * List achievements
 	 *
-	 * @param \bbdkp\bbguild\model\player\guilds $Guild
-	 * @internal param \bbdkp\bbguild\model\player\guilds $guild
+	 * @param \avathar\bbguild\model\player\guilds $Guild
+	 * @internal param \avathar\bbguild\model\player\guilds $guild
 	 */
 	private function BuildTemplateListAchievements(guilds $Guild)
 	{
@@ -227,7 +227,7 @@ class achievement_module extends admin
 		$GuildAchievements = $this->achievement->get_tracked_achievements($start, $Guild->guildid, 0);
 		$footcount_text   = sprintf($this->user->lang['ACHIEV_FOOTCOUNT'], $GuildAchievements[2]);
 
-		$modulename = 'i=-bbdkp-bbguild-acp-achievement_module&amp;mode=list_achievements';
+		$modulename = 'i=-avathar-bbguild-acp-achievement_module&amp;mode=list_achievements';
 		$pagination = $this->phpbb_container->get('pagination');
 		$pagination_url = append_sid(
 			"{$phpbb_admin_path}index.$phpEx",
@@ -272,7 +272,7 @@ class achievement_module extends admin
 				'L_TITLE'               => $this->user->lang['ACP_LISTACHIEV'],
 				'GUILD_EMBLEM'          => $this->guild->getEmblempath(),
 				'GUILD_NAME'            => $this->guild->getName(),
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-bbdkp-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $this->guild->getGuildid()),
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $this->guild->getGuildid()),
 			)
 		);
 
@@ -283,7 +283,7 @@ class achievement_module extends admin
 	/***
 	 * get a guild from pulldown
 	 *
-	 * @return \bbdkp\bbguild\model\player\guilds
+	 * @return \avathar\bbguild\model\player\guilds
 	 */
 	private function GetGuild()
 	{
@@ -411,7 +411,7 @@ class achievement_module extends admin
 	/**
 	 *
 	 * function to batch delete achievements, called from listing
-	 * @param \bbdkp\bbguild\model\player\guilds $Guild
+	 * @param \avathar\bbguild\model\player\guilds $Guild
 	 *
 	 */
 	private function achievement_batch_delete(guilds $Guild)
@@ -421,7 +421,7 @@ class achievement_module extends admin
 
 	/**
 	 * load guild achievements from API
-	 * @param \bbdkp\bbguild\model\player\guilds $Guild
+	 * @param \avathar\bbguild\model\player\guilds $Guild
 	 */
 	private function LoadAPIGuildachievements(guilds $Guild)
 	{

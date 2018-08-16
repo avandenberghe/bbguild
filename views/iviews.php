@@ -3,16 +3,16 @@
  * view classes interface
  *
  * @package   bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\views;
+namespace avathar\bbguild\views;
 
 /**
  * Interface iviews
  *
- * @package bbdkp\bbguild\views
+* @package avathar\bbguild\views
  */
 interface iviews
 {

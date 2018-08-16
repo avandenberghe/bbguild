@@ -1,13 +1,13 @@
 <?php
 /**
  * @package bbguild
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\controller;
+namespace avathar\bbguild\controller;
 
-use bbdkp\bbguild\model\player\player;
+use avathar\bbguild\model\player\player;
 use phpbb\cache\service;
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -72,7 +72,7 @@ class admin_controller
 	 * @param  manager          $ext_manager Extension manager object
 	 * @param  string           $root_path   phpBB root path
 	 * @param  string           $php_ext     phpEx
-	 * @return \bbdkp\bbguild\controller\admin_controller
+	 * @return \avathar\bbguild\controller\admin_controller
 	 * @access public
 	 */
 	public function __construct(
@@ -100,7 +100,7 @@ class admin_controller
 		$this->user = $user;
 		$this->ext_manager     = $ext_manager;
 		$this->php_ext = $php_ext;
-		$this->ext_path = $this->ext_manager->get_extension_path('bbdkp/bbguild', true);
+		$this->ext_path = $this->ext_manager->get_extension_path('avathar/bbguild', true);
 	}
 
 	/**

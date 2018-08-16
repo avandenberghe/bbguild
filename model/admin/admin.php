@@ -3,16 +3,16 @@
  * bbGuild Admin class file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\model\admin;
+namespace avathar\bbguild\model\admin;
 
-use bbdkp\bbguild\model\games\game;
+use avathar\bbguild\model\games\game;
 use phpbb\extension\metadata_manager;
 use phpbb\version_helper;
-use bbdkp\bbguild\model\admin\log;
+use avathar\bbguild\model\admin\log;
 use phpbb\file_downloader;
 
 /**
@@ -58,8 +58,8 @@ class admin
 	public function __construct()
 	{
 		global $user, $phpEx, $phpbb_extension_manager;
-		$this->ext_path = $phpbb_extension_manager->get_extension_path('bbdkp/bbguild', true);
-		$user->add_lang_ext('bbdkp/bbguild', array('admin','common'));
+		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+		$user->add_lang_ext('avathar/bbguild', array('admin','common'));
 		include_once $this->ext_path . 'model/admin/constants.' . $phpEx;
 
 		$this->languagecodes = array(

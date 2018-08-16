@@ -3,21 +3,21 @@
  * Player class file
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\model\player;
+namespace avathar\bbguild\model\player;
 
-use bbdkp\bbguild\model\admin\admin;
-use bbdkp\bbguild\model\games\game;
-use bbdkp\bbguild\model\player\guilds;
-use bbdkp\bbguild\model\api\battlenet;
+use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\player\guilds;
+use avathar\bbguild\model\api\battlenet;
 
 /**
  * manages player creation
  *
- * @package  bbdkp\bbguild\model\player
+ * @package  avathar\bbguild\model\player
  * @property array $playerdata
  * @property int $game_id
  * @property int $player_id

@@ -3,11 +3,11 @@
  * bbDKP database installer
  *
  * @package   bbguild v2.0
- * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @copyright 2018 avathar.be
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace bbdkp\bbguild\migrations;
+namespace avathar\bbguild\migrations;
 
 use phpbb\db\migration\migration;
 
@@ -28,7 +28,7 @@ class release_2_0_0_m03_config extends migration
 	 */
 	static public function depends_on()
 	{
-		return array('\bbdkp\bbguild\migrations\release_2_0_0_m02_data');
+		return array('\avathar\bbguild\migrations\release_2_0_0_m02_data');
 	}
 
 	/**

@@ -1,7 +1,7 @@
-<!-- INCLUDE overall_header.html -->
-<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
-<h1>{L_ACP_ADDRECRUITS}</h1>
-<p>{L_ACP_LISTRECRUITS_EXPLAIN}</p>
+{% INCLUDE 'overall_header.html' %}
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+<h1>{{ lang('ACP_ADDRECRUITS') }}</h1>
+<p>{{ lang('ACP_LISTRECRUITS_EXPLAIN') }}</p>
 <style>
     fieldset dt
     {
@@ -13,21 +13,21 @@
         margin-left: 25%;
     }
 </style>
-<form method="post" action="{U_RECRUITLIST}" id="listguild">
+<form method="post" action="{{ U_RECRUITLIST }}" id="listguild">
 
     <fieldset style="background-color: #EEEEEE">
         <dl>
             <dt>
-                <label>{L_GUILD}:</label>
+                <label>{{ lang('GUILD') }}:</label>
             </dt>
             <dd>
                 <div style="display: table;">
-                    <div style="width:50%; float: left"><a href="{U_VIEW_GUILD}"><img style="width:80px; height:80px" src="{GUILD_EMBLEM}" alt="" /></a></div>
+                    <div style="width:50%; float: left"><a href="{{ U_VIEW_GUILD }}"><img style="width:80px; height:80px" src="{{ GUILD_EMBLEM }}" alt="" /></a></div>
                     <div style="width:50%; vertical-align: middle; display: table-cell;">
                         <select name="guild_id" class="input" id="defaultguild" onchange="javascript:form.submit();" >
-                            <!-- BEGIN guild_row -->
-                            <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-                            <!-- END guild_row -->
+                            {% for guild_row in loops.guild_row %}
+                            <option value="{{ guild_row.VALUE }}"{{ guild_row.SELECTED }}>{{ guild_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
@@ -39,114 +39,114 @@
 <div id="advanced00">
     <div class="permissions-category">
         <ul>
-            <li class="permissions-preset-yes"><a href="{U_RECRUITLIST}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_LISTRECRUITS}</span></a></li>
-            <li class="permissions-preset-yes never activetab "><a href="{U_ADDRECRUIT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_ADDRECRUITS}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_RECRUITLIST }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_LISTRECRUITS') }}</span></a></li>
+            <li class="permissions-preset-yes never activetab "><a href="{{ U_ADDRECRUIT }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_ADDRECRUITS') }}</span></a></li>
         </ul>
     </div>
 
     <div class="permissions-panel" id="options001">
         <span class="corners-top"><span></span></span>
-        <form method="post" action="{U_ADDRECRUIT}" id="addrecruit">
+        <form method="post" action="{{ U_ADDRECRUIT }}" id="addrecruit">
 
             <fieldset style="margin:10px; background-color: #EEEEEE">
                 <dl>
                     <dt>
-                        <label>{L_ROLE}:</label>
+                        <label>{{ lang('ROLE') }}:</label>
                     </dt>
                     <dd>
                         <select name="role" id="role" class="input" >
-                            <!-- BEGIN role_row -->
-                            <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
-                            <!-- END role_row -->
+                            {% for role_row in loops.role_row %}
+                            <option value="{{ role_row.VALUE }}"{{ role_row.SELECTED }}>{{ role_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </dd>
                 </dl>
                 <dl>
                     <dt>
-                        <label>{L_CLASS}:</label>
+                        <label>{{ lang('CLASS') }}:</label>
                     </dt>
                     <dd>
                         <select id="class_id" name="class_id" class="input">
-                            <!-- BEGIN class_row -->
-                            <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
-                            <!-- END class_row -->
+                            {% for class_row in loops.class_row %}
+                            <option value="{{ class_row.VALUE }}"{{ class_row.SELECTED }}>{{ class_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
-                        <!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+                        {% if S_CLASS_IMAGE_EXISTS %}<br/><img src="{{ CLASS_IMAGE }}" alt="" />{% else %}&nbsp;{% endif %}
                     </dd>
                 </dl>
                 <dl>
                     <dt>
-                        <label>{L_POSITIONS}:</label>
+                        <label>{{ lang('POSITIONS') }}:</label>
                     </dt>
-                    <dd><input type="text" id="numpositions" name="numpositions" size="5" maxlength="2" value="{NUMPOSITIONS}" class="input" />
-                        <a id="numpositionsup"  href="{U_ADDRECRUIT}" target="_blank"><img src="./images/icon_up.gif" /></a>
-                        <a id="numpositionsdown" href="{U_ADDRECRUIT}" target="_blank"><img src="./images/icon_down.gif" /></a>
+                    <dd><input type="text" id="numpositions" name="numpositions" size="5" maxlength="2" value="{{ NUMPOSITIONS }}" class="input" />
+                        <a id="numpositionsup"  href="{{ U_ADDRECRUIT }}" target="_blank"><img src="./images/icon_up.gif" /></a>
+                        <a id="numpositionsdown" href="{{ U_ADDRECRUIT }}" target="_blank"><img src="./images/icon_down.gif" /></a>
 
                     </dd>
                 </dl>
                 <dl>
-                    <dt><label for="recruit_level">{L_LEVEL}:</label></dt>
-                    <dd><input type="text" name="recruit_level" id="recruit_level" size="5" maxlength="3" value="{RECRUIT_LEVEL}" class="input" />
-                        <a id="levelup"  href="{U_ADDRECRUIT}" target="_blank"><img src="./images/icon_up.gif" /></a>
-                        <a id="leveldown" href="{U_ADDRECRUIT}" target="_blank"><img src="./images/icon_down.gif" /></a>
+                    <dt><label for="recruit_level">{{ lang('LEVEL') }}:</label></dt>
+                    <dd><input type="text" name="recruit_level" id="recruit_level" size="5" maxlength="3" value="{{ RECRUIT_LEVEL }}" class="input" />
+                        <a id="levelup"  href="{{ U_ADDRECRUIT }}" target="_blank"><img src="./images/icon_up.gif" /></a>
+                        <a id="leveldown" href="{{ U_ADDRECRUIT }}" target="_blank"><img src="./images/icon_down.gif" /></a>
                     </dd>
                 </dl>
 
-                <!-- IF S_UPDATE -->
+                {% if S_UPDATE %}
                 <dl>
                     <dt>
-                        <label>{L_APPLICANTS}:</label>
+                        <label>{{ lang('APPLICANTS') }}:</label>
                     </dt>
 
-                    <dd><input type="text" name="applicants" id="applicants" size="5" maxlength="3" value="{APPLICANTS}" class="input" /></dd>
+                    <dd><input type="text" name="applicants" id="applicants" size="5" maxlength="3" value="{{ APPLICANTS }}" class="input" /></dd>
 
                 </dl>
-                <!-- ENDIF -->
+                {% endif %}
 
-                <!-- IF APPLY_INSTALLED  == 1 -->
+                {% if APPLY_INSTALLED  == 1 %}
                 <dl>
                     <dt>
-                        <label>{L_APPLY} {L_TEMPLATE}:</label>
+                        <label>{{ lang('APPLY') }} {{ lang('TEMPLATE') }}:</label>
                     </dt>
                     <dd>
                         <select id="applytemplateid" name="applytemplateid" class="input">
-                            <!-- BEGIN applytemplates_row -->
-                            <option value="{applytemplates_row.VALUE}"{applytemplates_row.SELECTED}>{applytemplates_row.OPTION}</option>
-                            <!-- END applytemplates_row -->
+                            {% for applytemplates_row in loops.applytemplates_row %}
+                            <option value="{{ applytemplates_row.VALUE }}"{{ applytemplates_row.SELECTED }}>{{ applytemplates_row.OPTION }}</option>
+                            {% endfor %}
                         </select>
                     </dd>
                 </dl>
-                <!-- ENDIF -->
+                {% endif %}
 
 
                 <dl>
                     <dt>
-                        <label>{L_STATUS}:</label>
+                        <label>{{ lang('STATUS') }}:</label>
                     </dt>
-                    <dd><input type="checkbox" class="checkbox" name="recruitstatus" id="recruitstatus" {RECSTATUS}  /> {RECRUIT_STATUS}
+                    <dd><input type="checkbox" class="checkbox" name="recruitstatus" id="recruitstatus" {{ RECSTATUS }}  /> {{ RECRUIT_STATUS }}
                     </dd>
 
                 </dl>
                 <dl>
                     <dt>
-                        <label>{L_NOTE}:</label>
+                        <label>{{ lang('NOTE') }}:</label>
                     </dt>
-                    <dd><textarea name="note" id="note" rows="5" cols="30" style="width: 100%" class="input">{NOTE}</textarea></dd>
+                    <dd><textarea name="note" id="note" rows="5" cols="30" style="width: 100%" class="input">{{ NOTE }}</textarea></dd>
                 </dl>
 
 
 
                 <p class="quick">
-                    {S_FORM_TOKEN}
-                    <input type="hidden" name="hidden_recruit_id" value="{RECRUIT_ID}" />
-                    <!-- IF S_ADD -->
-                    <input type="submit" name="add" value="{L_ADD}" class="button1" />
-                    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-                    <!-- ENDIF -->
-                    <!-- IF S_UPDATE -->
-                    <input type="submit" name="update" value="{L_UPDATE}" class="button1" />
-                    <input type="submit"  name="delete" value="{L_DELETE}" class="button1" />
-                    <!-- ENDIF -->
+                    {{ S_FORM_TOKEN }}
+                    <input type="hidden" name="hidden_recruit_id" value="{{ RECRUIT_ID }}" />
+                    {% if S_ADD %}
+                    <input type="submit" name="add" value="{{ lang('ADD') }}" class="button1" />
+                    <input type="reset" name="reset" value="{{ lang('RESET') }}" class="button1" />
+                    {% endif %}
+                    {% if S_UPDATE %}
+                    <input type="submit" name="update" value="{{ lang('UPDATE') }}" class="button1" />
+                    <input type="submit"  name="delete" value="{{ lang('DELETE') }}" class="button1" />
+                    {% endif %}
                 </p>
 
 
@@ -201,5 +201,5 @@
 
 </script>
 
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}
 
