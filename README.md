@@ -7,7 +7,7 @@ bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally
 
 Please note that bbGuild is pre-Alpha software and is not intended for live installations. Use at your own risk.
 
-[![Build Status](https://api.travis-ci.org/sajaki/bbguild.svg)](https://travis-ci.org/sajaki/bbguild)
+[![Build Status](https://api.travis-ci.org/Sajaki/bbguild.svg)](https://travis-ci.org/Sajaki/bbguild)
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 Features : 
@@ -53,7 +53,7 @@ Find support and more on
 
 ### contribute
 You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
-1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbGuild/issues
+1. [Create a ticket (unless there already is one)] : https://github.com/Sajaki/bbGuild/issues
 2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
 3. Make a pull request.
 
