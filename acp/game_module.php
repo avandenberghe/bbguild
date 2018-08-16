@@ -211,7 +211,6 @@ class game_module extends admin
 
 				$this->showgame($editgame);
 				$this->page_title = 'ACP_ADDGAME';
-				
 				break;
 
 			case 'addrole' :
@@ -1318,7 +1317,7 @@ class game_module extends admin
 			$this->EditRole($role, $editgame);
 		}
 	}
-	
+
 	private function show_addfaction()
 	{
 		$faction           = new faction($this->request->variable('game_id', $this->request->variable('hidden_game_id', '')));
@@ -1336,7 +1335,7 @@ class game_module extends admin
 			$this->EditFaction($faction, $editgame);
 		}
 	}
-	
+
 	private function show_addrace()
 	{
 		$raceadd    = $this->request->is_set_post('add');
@@ -1357,7 +1356,7 @@ class game_module extends admin
 		}
 		$this->page_title = 'ACP_LISTGAME';
 	}
-	
+
 	private function show_addclass()
 	{
 		$classadd    = $this->request->is_set_post('add');

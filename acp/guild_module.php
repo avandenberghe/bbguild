@@ -568,7 +568,6 @@ class guild_module extends admin
 
 	}//end BuildTemplateEditGuildRanks()
 
-
 	/**
 	 * list the guilds
 	 */
@@ -678,7 +677,7 @@ class guild_module extends admin
 		$this->page_title = 'ACP_LISTGUILDS';
 
 	}
-	
+
 	/**
 	 * @param $config
 	 */
@@ -764,7 +763,7 @@ class guild_module extends admin
 		);
 		$this->page_title = $this->user->lang['ACP_ADDGUILD'];
 	}
-	
+
 	/**
 	 * @param $phpbb_admin_path
 	 * @param $phpEx
@@ -773,7 +772,6 @@ class guild_module extends admin
 	private function show_editguildranks($updateguild)
 	{
 		global $phpbb_admin_path, $phpEx;
-		
 		$updaterank = $this->request->is_set_post('updaterank');
 		$deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
 		$addrank    = $this->request->is_set_post('addrank');

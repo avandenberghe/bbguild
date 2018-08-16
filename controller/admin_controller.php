@@ -107,7 +107,7 @@ class admin_controller
 	 * returns GameFaction json list based on ajax call given game_id
 	 * used in guild acp & player acp
 	 *
-     * @internal string $game_id must be string values from game table
+	 * @internal string $game_id must be string values from game table
 	 * @return JsonResponse
 	 */
 	public function getfaction()
