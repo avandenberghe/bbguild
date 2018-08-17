@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
-namespace avathar\bbguild\constants;
+namespace avathar\bbguild\model\admin;
 
 class constants {
 	const BBGUILD_VERSION = '2.0.0-a8';

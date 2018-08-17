@@ -20,6 +20,10 @@ use avathar\bbguild\model\player\guilds;
  */
 class ranks extends guilds
 {
+
+	public $bb_ranks_table;
+	public $bb_players_table;
+
 	/**
 	 * Name of rank
 	*
@@ -58,13 +62,17 @@ class ranks extends guilds
 	public $RankSuffix;
 
 	/**
-	 * rank class constructor
-	 *
+	 * ranks constructor.
+	 * @param string $bb_players_table
+	 * @param string $bb_ranks_table
 	 * @param int $RankGuild
 	 * @param int $RankId
 	 */
-	public function __construct($RankGuild, $RankId = 0)
+	public function __construct($bb_players_table, $bb_ranks_table, $RankGuild, $RankId = 0)
 	{
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_ranks_table = $bb_ranks_table;
+
 		if (($RankGuild >= 0 && $RankId = 0) or ($RankGuild == 0 && $RankId = 99) )
 		{
 			$this->RankGuild=$RankGuild;
@@ -89,7 +97,7 @@ class ranks extends guilds
 	{
 		global $db;
 		$sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
-    			FROM ' . PLAYER_RANKS_TABLE . '
+    			FROM ' . $this->bb_ranks_table . '
     			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->RankGuild;
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
@@ -110,7 +118,7 @@ class ranks extends guilds
 	{
 		global $user, $db, $cache;
 
-		$cache->destroy('sql', PLAYER_RANKS_TABLE);
+		$cache->destroy('sql', $this->bb_ranks_table);
 
 		if ($this->RankName == '')
 		{
@@ -123,7 +131,7 @@ class ranks extends guilds
 			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
 
-		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . '
+		$sql = 'DELETE FROM ' . $this->bb_ranks_table . '
                    	WHERE rank_id = ' . (int) $this->RankId . '
                    	AND guild_id = ' . (int) $this->RankGuild;
 		$db->sql_query($sql);
@@ -139,7 +147,7 @@ class ranks extends guilds
 			'guild_id' => (int) $this->RankGuild)
 		);
 		// insert new rank
-		$db->sql_query('INSERT INTO ' . PLAYER_RANKS_TABLE . $query);
+		$db->sql_query('INSERT INTO ' . $this->bb_ranks_table . $query);
 
 		// log the action
 		$log_action = array(
@@ -176,7 +184,7 @@ class ranks extends guilds
 		if (! $override)
 		{
 			// check if rank is used
-			$sql = 'SELECT count(*) as rankcount FROM ' . PLAYER_TABLE . ' WHERE
+			$sql = 'SELECT count(*) as rankcount FROM ' . $this->bb_players_table . ' WHERE
             		 player_rank_id   = ' . (int) $this->RankId . ' and
             		 player_guild_id =  ' . (int) $this->RankGuild;
 			$result = $db->sql_query($sql);
@@ -187,7 +195,7 @@ class ranks extends guilds
 		}
 
 		// hardcoded exclusion of ranks 90/99
-		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
+		$sql = 'DELETE FROM ' . $this->bb_ranks_table . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
 		$this->RankId . ' and guild_id = ' . $this->RankGuild;
 		$db->sql_query($sql);
 
@@ -231,7 +239,7 @@ class ranks extends guilds
 		'rank_suffix' => $this->RankSuffix
 		);
 
-		$sql = 'UPDATE ' . PLAYER_RANKS_TABLE . '
+		$sql = 'UPDATE ' . $this->bb_ranks_table . '
 			SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 			WHERE rank_id=' . (int) $old_rank->RankId . '
 			AND guild_id = ' . (int) $old_rank->RankGuild;
@@ -269,7 +277,7 @@ class ranks extends guilds
 	{
 		global $db;
 		// rank 99 is the out-rank
-		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . PLAYER_RANKS_TABLE . '
+		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . $this->bb_ranks_table . '
 	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 
@@ -284,7 +292,7 @@ class ranks extends guilds
 	{
 		global $db;
 
-		$sql = 'SELECT count(*) as countm FROM ' . PLAYER_TABLE . '
+		$sql = 'SELECT count(*) as countm FROM ' . $this->bb_players_table . '
 			WHERE player_rank_id = ' . $this->RankId . ' and player_guild_id = ' . $this->RankGuild;
 		$result = $db->sql_query($sql);
 		$countm = (int) $db->sql_fetchfield('countm');
@@ -321,7 +329,7 @@ class ranks extends guilds
 		ksort($newranks);
 
 		/* GET OLD RANKS */
-		$sql = ' select rank_id from ' . PLAYER_RANKS_TABLE . ' WHERE
+		$sql = ' select rank_id from ' . $this->bb_ranks_table . ' WHERE
 				 guild_id =  ' . (int) $guild_id . ' and rank_id < 90 order by rank_id ASC';
 		$result = $db->sql_query($sql);
 		$oldranks = array ();

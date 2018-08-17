@@ -10,14 +10,14 @@
 namespace avathar\bbguild\views;
 
 use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\player\guilds;
 use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
 use phpbb\pagination;
 use phpbb\request\request;
-use phpbb\user;
-use phpbb\template\template;
+use avathar\bbguild\controller;
 
 /**
  * Class viewNavigation
@@ -31,6 +31,11 @@ class viewnavigation extends admin implements iviews
 	* @var request
 	*/
 	public $request;
+
+	/**
+	 * @var \avathar\bbguild\controller\view_controller
+	 */
+	public $view_controller;
 
 	/**
 	* @var \phpbb\user
@@ -269,54 +274,34 @@ class viewnavigation extends admin implements iviews
 		return $this->level2;
 	}
 
-
 	/**
 	 * viewNavigation constructor.
 	 *
-	 * @param $page
-	 * @param request          $request
-	 * @param user             $user
-	 * @param template         $template
-	 * @param driver_interface $db
-	 * @param config           $config
-	 * @param helper           $helper
-	 * @param pagination       $pagination
-	 * @param $ext_path
-	 * @param $ext_path_web
-	 * @param $ext_path_images
-	 * @param $root_path
-	 * @param $guild_id
+	 * @param string $page
+	 * @param $view_controller
+	 * @param string $guild_id
 	 */
 	public function __construct(
 		$page,
-		request $request,
-		user $user,
-		template $template,
-		driver_interface $db,
-		config $config,
-		helper $helper,
-		pagination $pagination,
-		$ext_path,
-		$ext_path_web,
-		$ext_path_images,
-		$root_path,
+		$view_controller,
 		$guild_id
 	)
 	{
 
 		parent::__construct();
-		$this->request = $request;
-		$this->config = $config;
-		$this->user = $user;
-		$this->page = $page;
-		$this->template = $template;
-		$this->db = $db;
-		$this->helper = $helper;
-		$this->pagination = $pagination;
-		$this->ext_path = $ext_path;
-		$this->ext_path_web = $ext_path_web;
-		$this->ext_path_images = $ext_path_images;
-		$this->root_path  = $root_path;
+		$this->view_controller = $view_controller;
+		$this->request = $this->view_controller->request;
+		$this->config = $this->view_controller->config;
+		$this->user = $this->view_controller->user;
+		$this->page = $this->view_controller->page;
+		$this->template = $this->view_controller->template;
+		$this->db = $this->view_controller->db;
+		$this->helper = $this->view_controller->helper;
+		$this->pagination = $this->view_controller->pagination;
+		$this->ext_path = $this->view_controller->ext_path;
+		$this->ext_path_web = $this->view_controller->ext_path_web;
+		$this->ext_path_images = $this->view_controller->ext_path_images;
+		$this->root_path  = $this->view_controller->root_path;
 		$this->guild_id = $guild_id;
 
 		$this->build_navigation();
@@ -376,8 +361,7 @@ class viewnavigation extends admin implements iviews
 
 	private function build_navigation()
 	{
-
-		$this->guild_id = $this->request->variable(URI_GUILD, $this->request->variable('hidden_guild_id', $this->guild_id));
+		$this->guild_id = $this->request->variable(constants::URI_GUILD, $this->request->variable('hidden_guild_id', $this->guild_id));
 		$this->guildlist = $this->get_guildinfo();
 		$this->build_roster_navigation();
 	}
@@ -389,14 +373,23 @@ class viewnavigation extends admin implements iviews
 	 */
 	private function get_guildinfo()
 	{
-		$this->guild = new guilds();
+		$this->guild = new guilds( $this->view_controller->bb_players_table,
+			$this->view_controller->bb_ranks_table,
+			$this->view_controller->bb_classes_table,
+			$this->view_controller->bb_races_table,
+			$this->view_controller->bb_language_table,
+			$this->view_controller->bb_guild_table,
+			$this->view_controller->bb_factions_table,
+			$this->guild_id );
+
 		$guildlist = $this->guild->guildlist(1);
+
 		if (count($guildlist) > 0)
 		{
 			//loop the guilds
 			foreach ($guildlist as $g)
 			{
-				if ($this->guild_id==0)
+				if ($this->guild_id == 0)
 				{
 					//if there is a default guild
 					if ($g['guilddefault'] == 1)
@@ -447,9 +440,9 @@ class viewnavigation extends admin implements iviews
 	{
 
 		$this->show_all = ( $this->request->variable('show', $this->request->variable('hidden_show', '')) == $this->user->lang['ALL']) ? true : false;
-		$this->race_id =  $this->request->variable('race_id', 0);
-		$this->level1 =  $this->request->variable('level1', 0);
-		$this->level2 =  $this->request->variable('level2', 200);
+		$this->race_id = $this->request->variable('race_id', 0);
+		$this->level1 = $this->request->variable('level1', 0);
+		$this->level2 = $this->request->variable('level2', 200);
 		$this->filter = $this->request->variable('filter', $this->user->lang['ALL']);
 
 		$this->query_by_armor = false;
@@ -480,7 +473,7 @@ class viewnavigation extends admin implements iviews
 
 
 	/**
-	 * Armor listing
+	 * generate Armor listing
 	 */
 	private function armor()
 	{
@@ -489,7 +482,7 @@ class viewnavigation extends admin implements iviews
 		$filtervalues['separator1'] = '--------';
 
 		// generic armor list
-		$sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
+		$sql = 'SELECT class_armor_type FROM ' . $this->view_controller->bb_classes_table . ' GROUP BY class_armor_type';
 		$result = $this->db->sql_query($sql);
 		while ( $row = $this->db->sql_fetchrow($result) )
 		{
@@ -503,9 +496,9 @@ class viewnavigation extends admin implements iviews
 		$sql_array = array(
 			'SELECT'    =>     '  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode ',
 			'FROM'      => array(
-				CLASS_TABLE     => 'c',
-				BB_LANGUAGE        => 'l',
-				PLAYER_TABLE    => 'i',
+				$this->view_controller->bb_classes_table	=> 'c',
+				$this->view_controller->bb_language_table	=> 'l',
+				$this->view_controller->bb_players_table    => 'i',
 			),
 			'WHERE'        => " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
 				 		AND l.language= '" . $this->config['bbguild_lang'] . "' AND l.attribute = 'class'
@@ -541,6 +534,4 @@ class viewnavigation extends admin implements iviews
 		}
 
 	}
-
-
 }

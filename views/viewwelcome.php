@@ -131,7 +131,7 @@ class viewwelcome implements iviews
 		global $db;
 
 		$text='';
-		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . MOTD_TABLE;
+		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . $this->navigation->view_controller->bb_motd_table;
 		$result = $db->sql_query($sql);
 		while ( $row = $db->sql_fetchrow($result) )
 		{

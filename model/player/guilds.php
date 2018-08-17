@@ -50,6 +50,15 @@ use avathar\bbguild\model\games\game;
  */
 class guilds extends admin
 {
+
+	public $bb_players_table;
+	public $bb_ranks_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_language_table;
+	public $bb_guild_table;
+	public $bb_factions_table;
+
 	/**
 	 * guild game id
 	 *
@@ -731,16 +740,30 @@ class guilds extends admin
 	// pulling guild achievements from api is met by the achievements class
 
 	/**
-	 * guild class constructor
-	 *
+	 * guilds constructor.
+	 * @param string $bb_players_table
+	 * @param string $bb_ranks_table
+	 * @param string $bb_classes_table
+	 * @param string $bb_races_table
+	 * @param string $bb_language_table
+	 * @param string $bb_guild_table
+	 * @param string $bb_factions_table
 	 * @param int $guild_id
 	 */
-	public function __construct($guild_id = 0)
+	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $guild_id = 0)
 	{
 		global $user;
 		parent::__construct();
+
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_ranks_table = $bb_ranks_table;
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_races_table = $bb_races_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_guild_table = $bb_guild_table;
+		$this->bb_factions_table = $bb_factions_table;
 		$this->guildid = $guild_id;
-		if ($guild_id>0)
+		if ($guild_id > 0)
 		{
 			$this->get_guild();
 		}
@@ -895,7 +918,7 @@ class guilds extends admin
 			)
 		);
 
-		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+		$db->sql_query('UPDATE ' . $this->bb_guild_table . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 		if (in_array('members', $params, true))
 		{
 			$this->playerdata = $data['members'];
@@ -929,11 +952,11 @@ class guilds extends admin
 		{
 			trigger_error($user->lang['ERROR_GUILDEMPTY'], E_USER_WARNING);
 		}
-		$cache->destroy('sql', GUILD_TABLE);
+		$cache->destroy('sql', $this->bb_guild_table);
 
 		// check existing guild-realmname
 		$result = $db->sql_query(
-			'SELECT count(*) as evcount from ' . GUILD_TABLE . "
+			'SELECT count(*) as evcount from ' . $this->bb_guild_table . "
 			WHERE id !=0 AND UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 			AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'"
 		);
@@ -944,7 +967,7 @@ class guilds extends admin
 			trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 		}
 
-		$result = $db->sql_query('SELECT MAX(id) as id FROM ' . GUILD_TABLE);
+		$result = $db->sql_query('SELECT MAX(id) as id FROM ' . $this->bb_guild_table);
 		$row = $db->sql_fetchrow($result);
 		$this->guildid = (int) $row['id'] + 1;
 		$query = $db->sql_build_array(
@@ -973,7 +996,7 @@ class guilds extends admin
 			)
 		);
 
-		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
+		$db->sql_query('INSERT INTO ' . $this->bb_guild_table . $query);
 
 		$newrank = new ranks($this->guildid);
 		// add guildleader rank
@@ -1011,14 +1034,14 @@ class guilds extends admin
 	{
 		global $user, $cache, $db;
 
-		$cache->destroy('sql', GUILD_TABLE);
+		$cache->destroy('sql', $this->bb_guild_table);
 
 		// check if already exists
 		if ($this->name != $old_guild->name || $this->realm != $old_guild->realm)
 		{
 			// check existing guild-realmname
 			$result = $db->sql_query(
-				'SELECT count(*) as evcount from ' . GUILD_TABLE . "
+				'SELECT count(*) as evcount from ' . $this->bb_guild_table . "
 				WHERE UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 				AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'"
 			);
@@ -1056,7 +1079,7 @@ class guilds extends admin
 			)
 		);
 
-		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+		$db->sql_query('UPDATE ' . $this->bb_guild_table . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 		return true;
 	}
 
@@ -1069,11 +1092,11 @@ class guilds extends admin
 	public function update_guilddefault($id)
 	{
 		global $cache, $db;
-		$cache->destroy('sql', GUILD_TABLE);
-		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
+		$cache->destroy('sql', $this->bb_guild_table);
+		$sql = 'UPDATE ' . $this->bb_guild_table . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
 		$db->sql_query($sql);
 
-		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
+		$sql = 'UPDATE ' . $this->bb_guild_table . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
 		$db->sql_query($sql);
 	}
 
@@ -1088,9 +1111,9 @@ class guilds extends admin
 		{
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
 		}
-		$cache->destroy('sql', GUILD_TABLE);
+		$cache->destroy('sql', $this->bb_guild_table);
 		// check if guild has players
-		$sql = 'SELECT COUNT(*) as mcount FROM ' . PLAYER_TABLE . '
+		$sql = 'SELECT COUNT(*) as mcount FROM ' . $this->bb_players_table . '
            WHERE player_guild_id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
 		if ((int) $db->sql_fetchfield('mcount') >= 1)
@@ -1099,10 +1122,10 @@ class guilds extends admin
 		}
 		$db->sql_freeresult($result);
 
-		$sql = 'DELETE FROM ' . PLAYER_RANKS_TABLE . ' WHERE guild_id = ' .  $this->guildid;
+		$sql = 'DELETE FROM ' . $this->bb_ranks_table . ' WHERE guild_id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
+		$sql = 'DELETE FROM ' . $this->bb_guild_table . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
 		$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
@@ -1324,8 +1347,8 @@ class guilds extends admin
 				g.achievementpoints, g.level, g.battlegroup, g.guildarmoryurl,
 				g.emblemurl, g.min_armory, g.rec_status, g.guilddefault, g.armory_enabled, g.armoryresult, g.recruitforum,
 				g.faction, f.faction_name
-				FROM ' . GUILD_TABLE . ' g
-				INNER JOIN '  . FACTION_TABLE . ' f ON f.game_id=g.game_id and f.faction_id=g.faction
+				FROM ' . $this->bb_guild_table . ' g
+				INNER JOIN '  . $this->bb_factions_table . ' f ON f.game_id=g.game_id and f.faction_id=g.faction
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql, 604800);
 
@@ -1383,12 +1406,12 @@ class guilds extends admin
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
 								 c.colorcode , c.imagename, a.image_female, a.image_male' ,
 			'FROM' => array(
-				PLAYER_TABLE => 'm' ,
-				PLAYER_RANKS_TABLE => 'r' ,
-				CLASS_TABLE => 'c' ,
-				RACE_TABLE => 'a' ,
-				BB_LANGUAGE => 'l' ,
-				GUILD_TABLE => 'g') ,
+				$this->bb_players_table  => 'm' ,
+				$this->bb_ranks_table  => 'r' ,
+				$this->bb_classes_table  => 'c' ,
+				$this->bb_races_table => 'a' ,
+				$this->bb_language_table => 'l' ,
+				$this->bb_guild_table => 'g') ,
 			'LEFT_JOIN' => array(
 				array(
 					'FROM' => array(
@@ -1462,11 +1485,11 @@ class guilds extends admin
 		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
 		$sql .= ' Count(m.player_class_id) AS classcount ';
-		$sql .= ' FROM  ' . CLASS_TABLE . ' c ';
-		$sql .= ' INNER JOIN ' . GUILD_TABLE . ' g ON c.game_id = g.game_id ';
-		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . PLAYER_TABLE . ' WHERE player_level >= ' . $this->min_armory . ') m';
+		$sql .= ' FROM  ' . $this->bb_classes_table . ' c ';
+		$sql .= ' INNER JOIN ' . $this->bb_guild_table . ' g ON c.game_id = g.game_id ';
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . $this->bb_players_table . ' WHERE player_level >= ' . $this->min_armory . ') m';
 		$sql .= '   ON m.game_id = c.game_id  AND m.player_class_id = c.class_id  ';
-		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
+		$sql .= ' INNER JOIN ' . $this->bb_language_table . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
 		$sql .= " AND l.language = '" . $config['bbguild_lang']."' AND l.attribute = 'class' ";
 		$sql .= ' AND g.id =  ' . $this->guildid;
@@ -1496,12 +1519,12 @@ class guilds extends admin
 		$sql_array = array(
 			'SELECT' => 'count(*) as playercount ' ,
 			'FROM' => array(
-				PLAYER_TABLE => 'm' ,
-				PLAYER_RANKS_TABLE => 'r' ,
-				CLASS_TABLE => 'c' ,
-				RACE_TABLE => 'a' ,
-				BB_LANGUAGE => 'l' ,
-				GUILD_TABLE => 'g') ,
+				$this->bb_players_table => 'm' ,
+				$this->bb_ranks_table => 'r' ,
+				$this->bb_classes_table => 'c' ,
+				$this->bb_races_table => 'a' ,
+				$this->bb_language_table => 'l' ,
+				$this->bb_guild_table => 'g') ,
 			'LEFT_JOIN' => array(
 				array(
 					'FROM' => array(
@@ -1533,7 +1556,7 @@ class guilds extends admin
 	private function maxrank()
 	{
 		global $db;
-		$sql = 'select max(rank_id) AS rank_id from ' . PLAYER_RANKS_TABLE . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
+		$sql = 'select max(rank_id) AS rank_id from ' . $this->bb_players_table . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
 		$result = $db->sql_query($sql);
 		$defaultrank_id = (int) $db->sql_fetchfield('rank_id', false, $result);
 		$db->sql_freeresult($result);
@@ -1552,11 +1575,11 @@ class guilds extends admin
 		$sql_array = array(
 			'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.player_id) as playercount, max(b.rank_id) as joinrank ' ,
 			'FROM' => array(
-				GUILD_TABLE => 'a' ,
-				PLAYER_RANKS_TABLE => 'b' ,),
+				$this->bb_guild_table => 'a' ,
+				$this->bb_ranks_table => 'b' ,),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(PLAYER_TABLE => 'c'),
+					'FROM'  => array($this->bb_players_table => 'c'),
 					'ON'    => 'a.id = c.player_guild_id '
 				)
 			),

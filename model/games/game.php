@@ -20,6 +20,11 @@ use avathar\bbguild\model\games\library\install_custom;
  */
 class game
 {
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_language_table;
+	public $bb_factions_table;
+	public $bb_game_table;
 
 	/**
 	 * primary key in games table
@@ -378,10 +383,16 @@ class game
 	/**
 	 * Game class constructor
 	 */
-	public function __construct()
+	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table)
 	{
 		global $user, $phpbb_extension_manager;
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_races_table = $bb_races_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_game_table = $bb_game_table;
 
 		$this->preinstalled_games = array (
 			'aion'     => $user->lang['AION'],
@@ -552,7 +563,7 @@ class game
 		global $db;
 		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled,
  				bossbaseurl, zonebaseurl, apikey, apilocale, privkey, region
-    			FROM ' . BBGAMES_TABLE . "
+    			FROM ' . $this->bb_game_table . "
     			WHERE game_id = '" . $this->game_id . "'";
 
 		$result = $db->sql_query($sql);
@@ -597,11 +608,11 @@ class game
 			)
 		);
 
-		$sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
+		$sql = 'UPDATE ' . $this->bb_game_table . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', BBGAMES_TABLE);
+		$cache->destroy('sql', $this->bb_game_table);
 	}
 
 	/**
@@ -614,9 +625,9 @@ class game
 		global $db;
 
 		$sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
-		$sql .= ' FROM ' . BBGAMES_TABLE . '  g';
-		$sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
-		$sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
+		$sql .= ' FROM ' . $this->bb_game_table . '  g';
+		$sql .= ' INNER JOIN '. $this->bb_races_table . ' r ON r.game_id = g.game_id';
+		$sql .= ' INNER JOIN  ' . $this->bb_classes_table . ' c ON c.game_id= g.game_id';
 		$sql .= ' GROUP BY g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' ORDER BY g.game_id';
 		// cache for 1 days
@@ -639,7 +650,7 @@ class game
 	{
 		global $db;
 		$gamelist = array();
-		$sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl, region FROM ' . BBGAMES_TABLE . ' ORDER BY ' . $order;
+		$sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl, region FROM ' . $this->bb_game_table . ' ORDER BY ' . $order;
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{

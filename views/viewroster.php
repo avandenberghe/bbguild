@@ -9,6 +9,7 @@
 namespace avathar\bbguild\views;
 
 use avathar\bbguild\model\player\player;
+use avathar\bbguild\model\admin\constants;
 
 /**
  * Class viewroster
@@ -40,7 +41,14 @@ class viewroster implements iviews
 		$this->tpl = 'main.html';
 		$classes = array();
 
-		$players = new player;
+		$players = new player($this->navigation->view_controller->bb_players_table,
+			$this->navigation->view_controller->bb_ranks_table,
+			$this->navigation->view_controller->bb_classes_table,
+			$this->navigation->view_controller->bb_races_table,
+			$this->navigation->view_controller->bb_language_table,
+			$this->navigation->view_controller->bb_guild_table,
+			$this->navigation->view_controller->bb_factions_table
+		);
 		$players->game_id = $this->navigation->getGameId();
 
 		$start = $this->navigation->request->variable('start', 0);
@@ -112,7 +120,7 @@ class viewroster implements iviews
 
 		$title = $this->navigation->user->lang['GUILDROSTER'];
 
-		// full rendered page source that will be output on the screen.
+		// full rendered page source that will put output on the screen.
 		$this->response = $this->navigation->helper->render($this->tpl, $title);
 
 	}
@@ -199,11 +207,11 @@ class viewroster implements iviews
 				$this->navigation->template->assign_vars(
 					array(
 						'ROSTERPAGINATION' => $rosterpagination,
-						'U_LIST_PLAYERS0'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][0],
-						'U_LIST_PLAYERS1'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][1],
-						'U_LIST_PLAYERS2'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][2],
-						'U_LIST_PLAYERS3'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][3],
-						'U_LIST_PLAYERS4'  => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][4],
+						'U_LIST_PLAYERS0'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][0],
+						'U_LIST_PLAYERS1'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][1],
+						'U_LIST_PLAYERS2'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][2],
+						'U_LIST_PLAYERS3'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][3],
+						'U_LIST_PLAYERS4'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][4],
 					)
 				);
 			}
@@ -272,12 +280,12 @@ class viewroster implements iviews
 			array(
 				'ROSTERPAGINATION' => $rosterpagination,
 				'PAGE_NUMBER'      => $this->navigation->pagination->on_page($characters[2], $this->navigation->config['bbguild_user_llimit'], $start),
-				'O_NAME'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][0],
-				'O_CLASS'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][2],
-				'O_RANK'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][3],
-				'O_LEVEL'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][4],
-				'O_PHPBB'          => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][5],
-				'O_ACHI'           => $base_url . '?' . URI_ORDER . '=' . $characters[1]['uri'][6]
+				'O_NAME'           => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][0],
+				'O_CLASS'          => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][2],
+				'O_RANK'           => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][3],
+				'O_LEVEL'          => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][4],
+				'O_PHPBB'          => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][5],
+				'O_ACHI'           => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][6]
 			)
 		);
 		// add template constants

@@ -5,6 +5,7 @@ parameters:
     avathar.bbguild.tables.bb_guild: '%core.table_prefix%bb_guild'
     avathar.bbguild.tables.bb_players: '%core.table_prefix%bb_players'
     avathar.bbguild.tables.bb_classes: '%core.table_prefix%bb_classes'
+    avathar.bbguild.tables.bb_races: '%core.table_prefix%bb_races'
     avathar.bbguild.tables.bb_gameroles: '%core.table_prefix%bb_gameroles'
     avathar.bbguild.tables.bb_factions: '%core.table_prefix%bb_factions'
     avathar.bbguild.tables.bb_language: '%core.table_prefix%bb_language'

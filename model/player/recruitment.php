@@ -21,6 +21,14 @@ use avathar\bbguild\model\games\rpg\roles;
 class recruitment extends roles
 {
 
+	public $bb_gameroles_table;
+	public $bb_guild_table;
+	public $bb_recruit_table;
+	public $bb_language_table;
+	public $bb_classes_table;
+	public $bb_players_table;
+	public $bb_ranks_table;
+
 	/**
 	 * primary key
 	 */
@@ -250,12 +258,28 @@ class recruitment extends roles
 		$this->applytemplate_id = $applytemplate_id;
 	}
 
-
 	/**
-	 * Recruitment class constructor
+	 * recruitment constructor.
+	 * @param string $bb_gameroles_table
+	 * @param string $bb_guild_table
+	 * @param string $bb_recruit_table
+	 * @param string $bb_language_table
+	 * @param string $bb_classes_table
+	 * @param string $bb_players_table
+	 * @param string $bb_ranks_table
 	 */
-	public function __construct()
+	public function __construct($bb_gameroles_table, $bb_guild_table, $bb_recruit_table, $bb_language_table, $bb_classes_table,
+								$bb_players_table, $bb_ranks_table )
 	{
+
+		$this->bb_ranks_table = $bb_ranks_table;
+		$this->bb_guild_table = $bb_guild_table;
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_gameroles_table = $bb_gameroles_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_recruit_table = $bb_recruit_table;
+
 		global $user;
 		$this->recruitstatus = array(
 			0 => $user->lang['CLOSED'],
@@ -284,10 +308,10 @@ class recruitment extends roles
                 u.applicants, u.status, u.last_update, u.note, u.level,
                 r.role_color, r.role_icon, role_cat_icon, l.name as role_name ',
 			'FROM'     => array(
-				BBRECRUIT_TABLE   => 'u',
-				GUILD_TABLE       => 'g',
-				BB_GAMEROLE_TABLE => 'r',
-				BB_LANGUAGE       => 'l',
+				$this->bb_recruit_table   => 'u',
+				$this->bb_guild_table       => 'g',
+				$this->bb_gameroles_table => 'r',
+				$this->bb_language_table       => 'l',
 			),
 			'WHERE'    => " 1=1
                 AND u.guild_id = g.id
@@ -348,7 +372,7 @@ class recruitment extends roles
 			'applytemplate_id' => $this->applytemplate_id,
 			)
 		);
-		$db->sql_query('INSERT INTO ' . BBRECRUIT_TABLE . $query);
+		$db->sql_query('INSERT INTO ' . $this->bb_recruit_table . $query);
 		return 1;
 	}
 
@@ -372,7 +396,7 @@ class recruitment extends roles
 			'applytemplate_id' => $this->applytemplate_id,
 			)
 		);
-		$db->sql_query('UPDATE ' . BBRECRUIT_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
+		$db->sql_query('UPDATE ' . $this->bb_recruit_table . ' SET ' . $query . ' WHERE id = ' . $this->id);
 	}
 
 	/**
@@ -381,7 +405,7 @@ class recruitment extends roles
 	public function delete_role()
 	{
 		global $db;
-		$sql = 'DELETE FROM ' . BBRECRUIT_TABLE . ' WHERE id = ' . $this->id;
+		$sql = 'DELETE FROM ' . $this->bb_recruit_table . ' WHERE id = ' . $this->id;
 		$db->sql_query($sql);
 	}
 
@@ -404,16 +428,16 @@ class recruitment extends roles
                  ',
 
 			'FROM'     => array(
-				BBRECRUIT_TABLE   => 'u',
-				GUILD_TABLE       => 'g',
-				BB_GAMEROLE_TABLE => 'r',
-				CLASS_TABLE       => 'c',
-				BB_LANGUAGE       => 'r1',
+				$this->bb_recruit_table   => 'u',
+				$this->bb_guild_table       => 'g',
+				$this->bb_gameroles_table => 'r',
+				$this->bb_classes_table       => 'c',
+				$this->bb_language_table       => 'r1',
 			),
 
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(BB_LANGUAGE => 'c1'),
+					'FROM'  => array($this->bb_language_table => 'c1'),
 					'ON'    => "c.game_id=c1.game_id AND c1.attribute_id = c.class_id  AND c1.language = '" . $config['bbguild_lang'] . "' and c1.attribute='class'",
 				)
 			),
@@ -425,7 +449,7 @@ class recruitment extends roles
                 AND r1.attribute = 'role'
                 AND r.game_id = r1.game_id AND r1.attribute_id = r.role_id  AND r1.language = '" . $config['bbguild_lang'] . "' and r1.attribute='role'
                 AND c.class_id > 0 AND c.class_id = u.class_id AND c.game_id = g.game_id
-                AND g.id =  " . $this->guild_id,
+                AND g.id =  " . (int) $this->guild_id,
 			'ORDER_BY' => 'c.game_id, c.class_id '
 		);
 
@@ -450,8 +474,8 @@ class recruitment extends roles
 		$sql_array = array(
 		'SELECT'   => ' g.id, g.name, g.emblemurl, rec_status, recruitforum  ',
 			'FROM'     => array(
-				GUILD_TABLE     => 'g',
-				BBRECRUIT_TABLE => 'r'),
+				$this->bb_guild_table     => 'g',
+				$this->bb_recruit_table => 'r'),
 			'WHERE'    => 'r.guild_id = g.id ',
 			'GROUP_BY' => ' g.name ',
 			'ORDER_BY' => ' g.name ');

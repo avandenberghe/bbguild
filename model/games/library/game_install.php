@@ -31,6 +31,29 @@ abstract class game_install
 
 	private $gamename;
 
+	public $bb_games_table;
+	public $bb_logs_table;
+	public $bb_ranks_table;
+	public $bb_guild_table;
+	public $bb_players_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_gameroles_table;
+	public $bb_factions_table;
+	public $bb_language_table;
+	public $bb_motd_table;
+	public $bb_recruit_table;
+	public $bb_achievement_track_table;
+	public $bb_achievement_table;
+	public $bb_achievement_rewards_table;
+	public $bb_criteria_track_table;
+	public $bb_achievement_criteria_table;
+	public $bb_relations_table;
+	public $bb_bosstable;
+	public $bb_zonetable;
+	public $bb_news;
+	public $bb_plugins;
+
 	/**
 	 * @return string
 	 */
@@ -57,9 +80,56 @@ abstract class game_install
 	 * @param $zonebaseurl
 	 * @param $region
 	 */
-	public final function install($game_id, $gamename, $bossbaseurl, $zonebaseurl, $region)
+	public final function install($bb_games_table,
+								  $bb_logs_table,
+								  $bb_ranks_table,
+								  $bb_guild_table,
+								  $bb_players_table,
+								  $bb_classes_table,
+								  $bb_races_table,
+								  $bb_gameroles_table,
+								  $bb_factions_table,
+								  $bb_language_table,
+								  $bb_motd_table,
+								  $bb_recruit_table,
+								  $bb_achievement_track_table,
+								  $bb_achievement_table,
+								  $bb_achievement_rewards_table,
+								  $bb_criteria_track_table,
+								  $bb_achievement_criteria_table,
+								  $bb_relations_table,
+								  $bb_bosstable,
+								  $bb_zonetable,
+								  $bb_news,
+								  $bb_plugins,
+								  $game_id, $gamename, $bossbaseurl, $zonebaseurl, $region)
 	{
 		global $cache, $db;
+
+		$this->bb_games_table = $bb_games_table;
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_races_table = $bb_races_table;
+
+		$this->bb_logs_table = $bb_logs_table;
+		$this->bb_ranks_table = $bb_ranks_table;
+		$this->bb_guild_table = $bb_guild_table;
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_gameroles_table = $bb_gameroles_table;
+		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_motd_table = $bb_motd_table;
+		$this->bb_recruit_table = $bb_recruit_table;
+		$this->bb_achievement_track_table = $bb_achievement_track_table;
+		$this->bb_achievement_table = $bb_achievement_table;
+		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;
+		$this->bb_criteria_track_table = $bb_criteria_track_table;
+		$this->bb_achievement_criteria_table = $bb_achievement_criteria_table;
+		$this->bb_relations_table = $bb_relations_table;
+		$this->bb_bosstable = $bb_bosstable;
+		$this->bb_zonetable =  $bb_zonetable;
+		$this->bb_news = $bb_news;
+		$this->bb_plugins = $bb_plugins;
+
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
 		$this->bossbaseurl = $bossbaseurl;
@@ -83,16 +153,16 @@ abstract class game_install
 		'region' => $region
 		);
 
-		$sql = 'INSERT INTO ' . BBGAMES_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
+		$sql = 'INSERT INTO ' . $this->bb_games_table . ' ' . $db->sql_build_array('INSERT', $data);
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', BBGAMES_TABLE);
-		$cache->destroy('sql', CLASS_TABLE);
-		$cache->destroy('sql', BB_LANGUAGE);
+		$cache->destroy('sql', $this->bb_games_table);
+		$cache->destroy('sql', $this->bb_classes_table);
+		$cache->destroy('sql', $this->bb_language_table);
 		$cache->destroy('sql', RACE_TABLE);
 		$cache->destroy('sql', PLAYER_TABLE);
-		$cache->destroy('sql', BB_GAMEROLE_TABLE);
+		$cache->destroy('sql', $this->bb_gameroles_table );
 
 	}
 
@@ -125,14 +195,14 @@ abstract class game_install
 		$roles->game_id = $this->game_id;
 		$roles->delete_all_roles();
 
-		$sql = 'DELETE FROM ' . BBGAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
+		$sql = 'DELETE FROM ' . $this->bb_games_table . " WHERE game_id = '" .   $this->game_id . "'";
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
 
-		$cache->destroy('sql', BBGAMES_TABLE);
-		$cache->destroy('sql', CLASS_TABLE);
-		$cache->destroy('sql', BB_LANGUAGE);
+		$cache->destroy('sql', $this->bb_games_table);
+		$cache->destroy('sql', $this->bb_classes_table);
+		$cache->destroy('sql', $this->bb_language_table);
 		$cache->destroy('sql', RACE_TABLE);
 		$cache->destroy('sql', PLAYER_TABLE);
 	}
@@ -168,8 +238,8 @@ abstract class game_install
 
 		global $db;
 
-		$db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
-		$db->sql_query('DELETE FROM ' .  BB_LANGUAGE . " WHERE attribute_id < 3 and  attribute = 'role' and game_id = '" . $this->game_id  . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_gameroles_table  . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_language_table . " WHERE attribute_id < 3 and  attribute = 'role' and game_id = '" . $this->game_id  . "'");
 
 		$sql_ary = array(
 			array(
@@ -194,7 +264,7 @@ abstract class game_install
 				'role_icon'           => 'tank_icon',
 			),
 		);
-		$db->sql_multi_insert(BB_GAMEROLE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_gameroles_table , $sql_ary);
 
 		//english
 		$sql_ary = array(
@@ -307,6 +377,6 @@ abstract class game_install
 				'name_short'        => 'Tank',
 			),
 		);
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 	}
 }

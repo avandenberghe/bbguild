@@ -16,62 +16,85 @@ use avathar\bbguild\views\viewnavigation;
  */
 class view_controller
 {
+	public $bb_games_table;
+	public $bb_logs_table;
+	public $bb_ranks_table;
+	public $bb_guild_table;
+	public $bb_players_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_gameroles_table;
+	public $bb_factions_table;
+	public $bb_language_table;
+	public $bb_motd_table;
+	public $bb_recruit_table;
+	public $bb_achievement_track_table;
+	public $bb_achievement_table;
+	public $bb_achievement_rewards_table;
+	public $bb_criteria_track_table;
+	public $bb_achievement_criteria_table;
+	public $bb_relations_table;
+	public $bb_bosstable;
+	public $bb_zonetable;
+	public $bb_news;
+	public $bb_plugins;
+
 	/**
 	 * @var \phpbb\auth\auth
 	 */
-	protected $auth;
+	public $auth;
 	/**
 	 * @var \phpbb\config\config
 	 */
-	protected $config;
+	public $config;
 	/**
 	 * @var \phpbb\controller\helper
 	 */
-	protected $helper;
+	public $helper;
 	/**
 	 * @var \phpbb\template\template
 	 */
-	protected $template;
+	public $template;
 	/**
 	 * @var \phpbb\db\driver\driver_interface
 	 */
-	protected $db;
+	public $db;
 	/**
 	 * @var \phpbb\request\request
 	 */
-	protected $request;
+	public $request;
 	/**
 	 * @var \phpbb\user
 	 */
-	protected $user;
+	public $user;
 	/**
 	 * @var string
 	 */
-	protected $phpEx;
+	public $phpEx;
 	/**
 	 * @var \phpbb\pagination
 	 */
-	protected $pagination;
+	public $pagination;
 	/**
 	 * @var \phpbb\extension\manager
 	 */
-	protected $phpbb_extension_manager;
+	public $phpbb_extension_manager;
 	/**
 	 * @var string
 	 */
-	protected $ext_path;
+	public $ext_path;
 	/**
 	 * @var string
 	 */
-	protected $ext_path_web;
+	public $ext_path_web;
 	/**
 	 * @var string
 	 */
-	protected $ext_path_images;
+	public $ext_path_images;
 	/**
 	 * @var string
 	 */
-	protected $root_path;
+	public $root_path;
 
 	/**
 	 * view_controller constructor.
@@ -94,6 +117,7 @@ class view_controller
 	 * @param  string           $bb_guild_table	name of guild table
 	 * @param  string           $bb_players_table	name of players table
 	 * @param  string           $bb_classes_table	name of classes table
+	 * @param  string           $bb races_table		name of races table
 	 * @param  string           $bb_gameroles_table	name of roles table
 	 * @param  string           $bb_factions_table	name of factions table
 	 * @param  string           $bb_language_table	name of language table
@@ -129,6 +153,7 @@ class view_controller
 		$bb_guild_table,
 		$bb_players_table,
 		$bb_classes_table,
+		$bb_races_table,
 		$bb_gameroles_table,
 		$bb_factions_table,
 		$bb_language_table,
@@ -168,6 +193,7 @@ class view_controller
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_races_table = $bb_races_table;
 		$this->bb_gameroles_table = $bb_gameroles_table;
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_language_table = $bb_language_table;
@@ -199,13 +225,9 @@ class view_controller
 	{
 		if (in_array($page, $this->valid_views))
 		{
-			$Navigation = new viewnavigation(
-				$page, $this->request, $this->user,
-				$this->template, $this->db, $this->config, $this->helper, $this->pagination, $this->ext_path,
-				$this->ext_path_web, $this->ext_path_images, $this->root_path, $guild_id
-			);
+			$navigation = new viewnavigation($page, $this, $guild_id);
 			$viewtype = "\\bbdkp\\bbguild\\views\\view". $page;
-			$view = new $viewtype($Navigation);
+			$view = new $viewtype($navigation, $this);
 			$response = $view->response;
 			return $response;
 		}

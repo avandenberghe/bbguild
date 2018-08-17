@@ -25,6 +25,30 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class admin_controller
 {
 
+
+	public $bb_games_table;
+	public $bb_logs_table;
+	public $bb_ranks_table;
+	public $bb_guild_table;
+	public $bb_players_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_gameroles_table;
+	public $bb_factions_table;
+	public $bb_language_table;
+	public $bb_motd_table;
+	public $bb_recruit_table;
+	public $bb_achievement_track_table;
+	public $bb_achievement_table;
+	public $bb_achievement_rewards_table;
+	public $bb_criteria_track_table;
+	public $bb_achievement_criteria_table;
+	public $bb_relations_table;
+	public $bb_bosstable;
+	public $bb_zonetable;
+	public $bb_news;
+	public $bb_plugins;
+
 	/*** @var service */
 	protected $cache;
 
@@ -78,6 +102,7 @@ class admin_controller
 	 * @param  string           $bb_guild_table	name of guild table
 	 * @param  string           $bb_players_table	name of players table
 	 * @param  string           $bb_classes_table	name of classes table
+	 * @param  string           $bb races_table	name of races table
 	 * @param  string           $bb_gameroles_table	name of roles table
 	 * @param  string           $bb_factions_table	name of factions table
 	 * @param  string           $bb_language_table	name of language table
@@ -114,6 +139,7 @@ class admin_controller
 		$bb_guild_table,
 		$bb_players_table,
 		$bb_classes_table,
+		$bb_races_table,
 		$bb_gameroles_table,
 		$bb_factions_table,
 		$bb_language_table,
@@ -149,6 +175,7 @@ class admin_controller
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_races_table = $bb_races_table;
 		$this->bb_gameroles_table = $bb_gameroles_table;
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_language_table = $bb_language_table;
@@ -206,8 +233,7 @@ class admin_controller
 	public function getguildrank()
 	{
 		global $table_prefix;
-		define('PLAYER_RANKS_TABLE',        $table_prefix . 'bb_ranks');
-		define('GUILD_TABLE',               $table_prefix . 'bb_guild');
+
 		$guild_id =  $this->request->variable('guild_id', '', true);
 
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
@@ -267,9 +293,6 @@ class admin_controller
 	public function getclassrace()
 	{
 		global $table_prefix;
-		define('RACE_TABLE',                $table_prefix . 'bb_races');
-		define('BB_LANGUAGE',               $table_prefix . 'bb_language');
-		define('CLASS_TABLE',               $table_prefix . 'bb_classes');
 		$game_id  =  $this->request->variable('game_id', '', true);
 
 		$sql_array = array(
