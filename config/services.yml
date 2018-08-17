@@ -40,18 +40,17 @@ services:
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
             - '%avathar.bbguild.tables.bb_plugins%'
-    avathar.bbguild.admin.controller:
-        class: avathar\bbguild\controller\admin_controller
+    avathar.bbguild.admin.main:
+        class: avathar\bbguild\controller\admin_main
         arguments:
-            - '@cache'
             - '@config'
             - '@dbal.conn'
+            - '@language'
+            - '@log'
             - '@pagination'
-            - '@controller.helper'
             - '@request'
             - '@template'
             - '@user'
-            - '@ext.manager'
             - '%core.root_path%'
             - '%core.php_ext%'
             - '%avathar.bbguild.tables.bb_games%'

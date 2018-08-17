@@ -21,7 +21,7 @@ use avathar\bbguild\model\games\rpg\faction;
  * @todo finish this module
 * @package avathar\bbguild\acp
  */
-class achievement_module extends admin
+class achievement_module
 {
 	/**
 	 * trigger link
@@ -87,7 +87,7 @@ class achievement_module extends admin
 		$this->db=$db;
 		$this->phpbb_container = $phpbb_container;
 		$this->auth=$auth;
-		parent::__construct();
+
 
 		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);

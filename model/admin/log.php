@@ -16,6 +16,7 @@ namespace avathar\bbguild\model\admin;
  */
 class log
 {
+	public $bb_logs_table;
 
 	/**
 	 * number of logs
@@ -437,9 +438,9 @@ class log
 	/**
 	 * SINGLETON CLASS !
 	 */
-	private function __construct()
+	private function __construct($bb_logs_table)
 	{
-
+		$this->bb_logs_table = $bb_logs_table;
 	}
 
 	/**
@@ -453,7 +454,7 @@ class log
 		global $db;
 		$sql_array = array(
 			'SELECT'     => 'l.*, u.username, u.user_id, u.user_colour' ,
-			'FROM'         =>     array(BBLOGS_TABLE => 'l') ,
+			'FROM'         =>     array($this->bb_logs_table => 'l') ,
 			'LEFT_JOIN' => array(
 				array(
 					'FROM' => array(USERS_TABLE => 'u') ,
@@ -486,7 +487,7 @@ class log
 	 * @param  array $values
 	 * @return boolean
 	 */
-	public static function log_insert(array $values)
+	public function log_insert(array $values)
 	{
 		global $db, $user;
 		/**
@@ -585,7 +586,7 @@ class log
 				}
 			}
 			$query = $db->sql_build_array('INSERT', $values);
-			$sql = 'INSERT INTO ' . BBLOGS_TABLE . $query;
+			$sql = 'INSERT INTO ' . $this->bb_logs_table . $query;
 			$db->sql_query($sql);
 			return true;
 		}
@@ -604,7 +605,7 @@ class log
 		global $db;
 
 		//they hit yes
-		$sql = 'DELETE FROM ' . BBLOGS_TABLE . ' WHERE 1=1 ';
+		$sql = 'DELETE FROM ' . $this->bb_logs_table . ' WHERE 1=1 ';
 		$sql_in = array();
 		foreach ($marked as $mark)
 		{
@@ -635,7 +636,7 @@ class log
 		$sql_array = array(
 		'SELECT' => 'l.*, u.username, u.user_colour ' ,
 		'FROM' => array(
-		BBLOGS_TABLE => 'l' ,
+			$this->bb_logs_table => 'l' ,
 		USERS_TABLE => 'u') ,
 		'WHERE' => 'u.user_id=l.log_userid');
 
@@ -676,7 +677,7 @@ class log
 		{
 			$sql_array['ORDER_BY'] = 'log_id DESC';
 			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query_limit($sql, USER_LLIMIT, $start);
+			$result = $db->sql_query_limit($sql, constants::USER_LLIMIT, $start);
 		}
 
 		$outlog = array();
@@ -736,7 +737,7 @@ class log
 	private function logcount()
 	{
 		global $db;
-		$sql6 = 'SELECT count(*) as log_count FROM ' . BBLOGS_TABLE;
+		$sql6 = 'SELECT count(*) as log_count FROM ' . $this->bb_logs_table;
 		$result6 = $db->sql_query($sql6);
 		$this->total_logs = (int) $db->sql_fetchfield('log_count');
 		$db->sql_freeresult($result6);

@@ -19,7 +19,7 @@ use avathar\bbguild\model\player\recruitment;
  *
 * @package avathar\bbguild\acp
  */
-class recruit_module extends admin
+class recruit_module
 {
 	/**
 	 * url action
@@ -86,7 +86,7 @@ class recruit_module extends admin
 		$this->user=$user;
 		$this->db=$db;
 
-		parent::__construct();
+
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
 		$form_key = 'avathar/bbguild';

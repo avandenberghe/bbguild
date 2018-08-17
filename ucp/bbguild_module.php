@@ -20,7 +20,7 @@ use avathar\bbguild\model\games\rpg\roles;
  *
 * @package avathar\bbguild\acp
  */
-class bbguild_module extends admin
+class bbguild_module
 {
 	/**
 	 * @var string
@@ -91,7 +91,7 @@ class bbguild_module extends admin
 
 		$this->pagination = $phpbb_container->get('pagination');
 
-		parent::__construct();
+
 	}
 
 	/**

@@ -19,7 +19,7 @@ use avathar\bbguild\model\games\rpg\roles;
  *
 * @package avathar\bbguild\acp
  */
-class game_module extends admin
+class game_module
 {
 	/**
 	 * link in trigger window
@@ -67,7 +67,7 @@ class game_module extends admin
 
 		global $user, $template, $phpbb_admin_path, $phpEx, $config;
 		global $phpbb_container, $request, $auth;
-		parent::__construct();
+
 
 		// Get an instance of the admin controller
 		$admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');

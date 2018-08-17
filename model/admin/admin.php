@@ -22,6 +22,7 @@ use phpbb\file_downloader;
  */
 class admin
 {
+	public $bb_plugins;
 
 	/**
 	 * bbguild timestamp
@@ -55,9 +56,10 @@ class admin
 	/**
 	 * Admin class constructor
 	 */
-	public function __construct()
+	public function __construct($bb_plugins)
 	{
 		global $user, $phpEx, $phpbb_extension_manager;
+		$this->bb_plugins = $bb_plugins;
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
 		$user->add_lang_ext('avathar/bbguild', array('admin','common'));
 		include_once $this->ext_path . 'model/admin/constants.' . $phpEx;
@@ -197,11 +199,11 @@ class admin
 		if ($plugins === false || $force_update)
 		{
 			$plugins = array();
-			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
+			$sql = 'SELECT name, value, version, installdate FROM ' . $this->bb_plugins . ' ORDER BY installdate DESC ';
 			$result = $db->sql_query($sql);
 			while ($row = $db->sql_fetchrow($result))
 			{
-				$data = $this->curl(BBGUILD_VERSIONURL . $row['name'] .'.json', false, false, false);
+				$data = $this->curl(constants::BBGUILD_VERSIONURL . $row['name'] .'.json', false, false, false);
 				$response = $data['response'];
 				$latest_version = json_decode($response, true);
 				$latest_version_a = $latest_version['stable']['3.1']['current'];
@@ -241,7 +243,7 @@ class admin
 		//if update is forced or cache expired then make the call to refresh latest productversion
 		if ($latest_version_a === false || $force_update)
 		{
-			$data = $this->curl(BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
+			$data = $this->curl(constants::BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
 			if (0 === count($data) )
 			{
 				$cache->destroy('latest_bbguild');
@@ -298,7 +300,7 @@ class admin
 	 * @param  string     $defaultorder
 	 * @return mixed
 	 */
-	public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
+	public final function switch_order($sort_order, $arg = constants::URI_ORDER, $defaultorder = '0.0')
 	{
 		global $request;
 		$uri_order = $request->variable($arg, $defaultorder);

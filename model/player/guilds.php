@@ -14,41 +14,10 @@ use avathar\bbguild\model\api\battlenet;
 use avathar\bbguild\model\games\game;
 
 /**
- * Manages Guild creation
- *
- * @package  avathar\bbguild\model\player
- * @property int $game_id
- * @property int $guildid
- * @property string $name
- * @property string $realm
- * @property string $region
- * @property int $achievements
- * @property int $playercount
- * @property int $startdate
- * @property int $showroster
- * @property int $min_armory
- * @property int $recstatus
- * @property int $guilddefault
- * @property int $aionlegionid
- * @property int $aionserverid
- * @property int $achievementpoints
- * @property int $level
- * @property string $emblempath
- * @property array $emblem
- * @property string $battlegroup
- * @property string $guildarmoryurl
- * @property array $playerdata
- * @property int $faction
- * @property string $factionname
- * @property array $possible_recstatus
- * @property boolean $armory_enabled
- * @property int $raidtrackerrank
- * @property int $applyrank
- * @property string $armoryresult
- * @property int $recruitforum
- * @property array $guildnews
+ * Class guilds
+ * @package avathar\bbguild\model\player
  */
-class guilds extends admin
+class guilds
 {
 
 	public $bb_players_table;
@@ -753,7 +722,6 @@ class guilds extends admin
 	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $guild_id = 0)
 	{
 		global $user;
-		parent::__construct();
 
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_ranks_table = $bb_ranks_table;

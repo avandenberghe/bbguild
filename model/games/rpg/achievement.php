@@ -100,7 +100,7 @@ use avathar\bbguild\model\player\guilds;
 	}
 * @package avathar\bbguild\model\games\rpg
  */
-class achievement extends admin
+class achievement
 {
 	public $bb_achievement_track_table;
 	public $bb_achievement_table;
@@ -458,7 +458,7 @@ class achievement extends admin
 	$bb_achievement_rewards_table, $bb_criteria_track_table, $bb_achievement_criteria_table,
 	$bb_relations_table)
 	{
-		parent::__construct();
+
 
 		$this->bb_achievement_track_table = $bb_achievement_track_table;
 		$this->bb_achievement_table = $bb_achievement_table;

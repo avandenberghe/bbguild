@@ -23,7 +23,7 @@ use phpbb\request\request;
  *
 * @package avathar\bbguild\views
  */
-class viewnavigation extends admin implements iviews
+class viewnavigation implements iviews
 {
 
 	/**
@@ -96,6 +96,8 @@ class viewnavigation extends admin implements iviews
 	 */
 	public $guild_id;
 
+	public  $page;
+
 	/**
 	 * game id
 	 *
@@ -160,7 +162,6 @@ class viewnavigation extends admin implements iviews
 	private $level1;
 	private $level2;
 
-	private $page;
 
 	/**
 	 * @type guilds
@@ -286,13 +287,11 @@ class viewnavigation extends admin implements iviews
 		$guild_id
 	)
 	{
-
-		parent::__construct();
 		$this->view_controller = $view_controller;
 		$this->request = $this->view_controller->request;
 		$this->config = $this->view_controller->config;
 		$this->user = $this->view_controller->user;
-		$this->page = $this->view_controller->page;
+		$this->page = $page;
 		$this->template = $this->view_controller->template;
 		$this->db = $this->view_controller->db;
 		$this->helper = $this->view_controller->helper;

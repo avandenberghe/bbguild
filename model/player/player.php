@@ -58,7 +58,7 @@ use avathar\bbguild\model\api\battlenet;
  * @property array $guildplayerlist
  * @property array $guildlist
  */
-class player extends admin
+class player
 {
 
 	public $bb_players_table;
@@ -988,7 +988,7 @@ class player extends admin
 	 */
 	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $player_id = 0, $guildlist = null)
 	{
-		parent::__construct();
+
 
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_ranks_table = $bb_ranks_table;

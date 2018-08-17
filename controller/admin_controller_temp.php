@@ -22,10 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Admin controller
  */
-class admin_controller
+class admin_controller_temp
 {
-
-
 	public $bb_games_table;
 	public $bb_logs_table;
 	public $bb_ranks_table;
@@ -202,11 +200,8 @@ class admin_controller
 	 */
 	public function getfaction()
 	{
-		global $table_prefix;
-		define('FACTION_TABLE',             $table_prefix . 'bb_factions');
-
 		$game_id =  $this->request->variable('game_id', '', true);
-		$sql = 'SELECT faction_id, faction_name FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "' order by faction_id";
+		$sql = 'SELECT faction_id, faction_name FROM ' . $this->bb_factions_table . " where game_id = '" . $game_id . "' order by faction_id";
 		$result = $this->db->sql_query($sql);
 
 		$data =array();
@@ -232,12 +227,10 @@ class admin_controller
 	 */
 	public function getguildrank()
 	{
-		global $table_prefix;
-
 		$guild_id =  $this->request->variable('guild_id', '', true);
 
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
-		FROM ' . PLAYER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
+		FROM ' . $this->bb_ranks_table . ' a, ' . $this->bb_guild_table. ' b WHERE a.rank_hide = 0 and
 		a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
 
 		$result = $this->db->sql_query($sql);
@@ -292,14 +285,14 @@ class admin_controller
 	*/
 	public function getclassrace()
 	{
-		global $table_prefix;
+
 		$game_id  =  $this->request->variable('game_id', '', true);
 
 		$sql_array = array(
 		'SELECT'    =>    '  r.race_id, l.name as race_name ',
 		'FROM'        => array(
-		RACE_TABLE        => 'r',
-		BB_LANGUAGE        => 'l',
+			$this->bb_races_table        => 'r',
+			$this->bb_language_table     => 'l',
 		),
 		'WHERE'        => " r.race_id = l.attribute_id
 					AND r.game_id = '" . $game_id . "'
@@ -324,8 +317,8 @@ class admin_controller
 		$sql_array = array(
 		'SELECT'    =>    ' c.class_id, l.name as class_name ',
 		'FROM'        => array(
-		CLASS_TABLE        => 'c',
-		BB_LANGUAGE        => 'l',
+			$this->bb_classes_table        => 'c',
+			$this->bb_language_table        => 'l',
 		),
 		'WHERE'        => " l.game_id = c.game_id AND c.game_id = '" . $game_id . "'
 			AND l.attribute_id = c.class_id  AND l.language= '" . $this->config['bbdkp_lang'] . "' AND l.attribute = 'class' ",

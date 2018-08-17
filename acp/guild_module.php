@@ -20,7 +20,7 @@ use avathar\bbguild\model\player\ranks;
  *
  * @package bbguild
  */
-class guild_module extends admin
+class guild_module
 {
 	/* @var string */
 	public $u_action;
@@ -78,7 +78,7 @@ class guild_module extends admin
 		$this->helper = $phpbb_container->get('controller.helper');
 		$this->factionroute =  $this->helper->route('avathar_bbguild_01', array());
 
-		parent::__construct();
+
 		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);
 		$this->tpl_name   = 'acp_'.$mode;

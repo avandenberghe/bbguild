@@ -15,6 +15,11 @@ namespace avathar\bbguild\model\games\rpg;
  */
 class roles
 {
+	public $bb_gameroles_table;
+	public $bb_language_table;
+	public $bb_games_table;
+	public $bb_classes_table;
+
 	/**
 	 * the game_id (unique key)
 	 *
@@ -68,8 +73,13 @@ class roles
 	/**
 	 * Role constructor
 	 */
-	public function __construct()
+	public function __construct($bb_gameroles_table, $bb_language_table, $bb_games_table, $bb_classes_table)
 	{
+		$this->bb_gameroles_table = $bb_gameroles_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_games_table = $bb_games_table;
+		$this->bb_classes_table = $bb_classes_table;
+
 		$this->role_pkid = 0;
 		$this->role_id = 0;
 		$this->rolename = '';
@@ -88,7 +98,7 @@ class roles
 		$sql_array = array (
 			'SELECT' => ' r.role_pkid, r.game_id, r.role_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color ',
 			'FROM' => array (
-				BB_GAMEROLE_TABLE => 'r', BB_LANGUAGE => 'l' ),
+				$this->bb_gameroles_table => 'r', $this->bb_language_table => 'l' ),
 			'WHERE' => " r.role_id = l.attribute_id
 							AND l.attribute='role'
 							AND l.game_id = '" . $this->game_id . "'
@@ -118,7 +128,7 @@ class roles
 	{
 		global $user, $db, $config, $cache;
 
-		$sql = 'SELECT max(role_id) + 1 AS new_role_id FROM ' . BB_GAMEROLE_TABLE . ' WHERE ' .
+		$sql = 'SELECT max(role_id) + 1 AS new_role_id FROM ' . $this->bb_gameroles_table . ' WHERE ' .
 			" game_id = '" . $this->game_id . "'";
 		$resultc = $db->sql_query($sql);
 
@@ -134,7 +144,7 @@ class roles
 
 		$db->sql_transaction('begin');
 
-		$sql = 'INSERT INTO ' . BB_GAMEROLE_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
+		$sql = 'INSERT INTO ' . $this->bb_gameroles_table . ' ' . $db->sql_build_array('INSERT', $data);
 		$db->sql_query($sql);
 
 		$names = array (
@@ -145,11 +155,11 @@ class roles
 			'name' => ( string ) $this->rolename,
 			'name_short' => ( string ) $this->rolename );
 
-		$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
+		$sql = 'INSERT INTO ' . $this->bb_language_table  . ' ' . $db->sql_build_array('INSERT', $names);
 		$db->sql_query($sql);
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', BB_LANGUAGE);
-		$cache->destroy('sql', BB_GAMEROLE_TABLE);
+		$cache->destroy('sql', $this->bb_language_table );
+		$cache->destroy('sql', $this->bb_gameroles_table);
 	}
 
 	/**
@@ -170,7 +180,7 @@ class roles
 
 		$db->sql_transaction('begin');
 
-		$sql = 'UPDATE ' . BB_GAMEROLE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . '
+		$sql = 'UPDATE ' . $this->bb_gameroles_table . ' SET ' . $db->sql_build_array('UPDATE', $data) . '
 			    WHERE role_pkid = ' . $this->role_pkid;
 
 		$db->sql_query($sql);
@@ -181,15 +191,15 @@ class roles
 			'name' => ( string ) $this->rolename,
 			'name_short' => ( string ) $this->rolename);
 
-		$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array('UPDATE', $names) . '
+		$sql = 'UPDATE ' . $this->bb_language_table  . ' SET ' . $db->sql_build_array('UPDATE', $names) . '
              WHERE attribute_id = ' . $oldrole->role_id . " AND attribute='role'
              AND language= '" . $config['bbguild_lang'] . "' AND game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
 
-		$cache->destroy('sql', BB_LANGUAGE);
-		$cache->destroy('sql', BB_GAMEROLE_TABLE);
+		$cache->destroy('sql', $this->bb_language_table );
+		$cache->destroy('sql', $this->bb_gameroles_table);
 
 	}
 
@@ -203,16 +213,16 @@ class roles
 
 		$db->sql_transaction('begin');
 
-		$sql = 'DELETE FROM ' . BB_GAMEROLE_TABLE . ' WHERE role_id  = ' . $this->role_id . " and game_id = '" . $this->game_id . "'";
+		$sql = 'DELETE FROM ' . $this->bb_gameroles_tabl . ' WHERE role_id  = ' . $this->role_id . " and game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbguild_lang'] . "' AND attribute = 'role'
+		$sql = 'DELETE FROM ' . $this->bb_language_table  . " WHERE language= '" . $config['bbguild_lang'] . "' AND attribute = 'role'
                 and attribute_id= " . $this->role_id . " and game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', CLASS_TABLE);
-		$cache->destroy('sql', BB_LANGUAGE);
+		$cache->destroy('sql', $this->bb_classes_table);
+		$cache->destroy('sql', $this->bb_language_table );
 	}
 
 	/**
@@ -222,14 +232,14 @@ class roles
 	{
 		global $db, $cache;
 
-		$sql = 'DELETE FROM ' . BB_GAMEROLE_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
+		$sql = 'DELETE FROM ' . $this->bb_gameroles_table . " WHERE game_id = '" .   $this->game_id . "'"  ;
 		$db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE attribute = 'role' AND game_id = '" . $this->game_id . "'";
+		$sql = 'DELETE FROM ' . $this->bb_language_table  . " WHERE attribute = 'role' AND game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
-		$cache->destroy('sql', BB_GAMEROLE_TABLE);
-		$cache->destroy('sql', BB_LANGUAGE);
+		$cache->destroy('sql', $this->bb_gameroles_table);
+		$cache->destroy('sql', $this->bb_language_table );
 	}
 
 	/**
@@ -245,9 +255,9 @@ class roles
 		$sql_array = array (
 			'SELECT' => ' r.game_id, r.role_pkid, r.role_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color, g.game_name ',
 			'FROM' => array (
-				BB_GAMEROLE_TABLE => 'r',
-				BB_LANGUAGE => 'l',
-				BBGAMES_TABLE => 'g' ),
+				$this->bb_gameroles_table => 'r',
+				$this->bb_language_table  => 'l',
+				$this->bb_games_table => 'g' ),
 			'WHERE' => " r.role_id = l.attribute_id AND r.game_id = g.game_id
                             AND r.game_id = l.game_id AND l.game_id = '" . $db->sql_escape($this->game_id) . "'
 							AND l.attribute='role' AND l.language= '" . $config['bbguild_lang'] . "'",

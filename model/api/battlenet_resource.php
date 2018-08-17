@@ -21,7 +21,7 @@ use avathar\bbguild\model\admin\admin;
  *
  *   @package bbguild
  */
-abstract class battlenet_resource extends admin
+abstract class battlenet_resource
 {
 
 	/**

@@ -18,6 +18,8 @@ namespace avathar\bbguild\model\games\rpg;
  */
 class faction
 {
+	public $bb_factions_table;
+
 	/**
 	 * game id
 	  *
@@ -61,6 +63,7 @@ class faction
 	public function __get($fieldName)
 	{
 		global $user;
+
 		if (property_exists($this, $fieldName))
 		{
 			return $this->$fieldName;
@@ -103,8 +106,10 @@ class faction
 	 *
 	 * @param $game_id
 	 */
-	public function __construct($game_id)
+	public function __construct($game_id, $bb_factions_table)
 	{
+		$this->bb_factions_table = $bb_factions_table;
+
 		$this->game_id=$game_id;
 		$this->get();
 	}
@@ -116,7 +121,7 @@ class faction
 	{
 		global $db;
 		$sql = 'SELECT game_id, f_index, faction_id, faction_name, faction_hide
-    			FROM ' . FACTION_TABLE . '
+    			FROM ' . $this->bb_factions_table . '
     			WHERE f_index = ' . (int) $this->faction_id . " and game_id = '" . $this->game_id . "'";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
@@ -136,7 +141,7 @@ class faction
 	{
 		global $db, $cache;
 
-		$sql = 'SELECT max(faction_id) as faction_id FROM ' . FACTION_TABLE . "
+		$sql = 'SELECT max(faction_id) as faction_id FROM ' . $this->bb_factions_table . "
 				WHERE game_id = '" . $this->game_id . "' ";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
@@ -151,11 +156,11 @@ class faction
 
 		$db->sql_transaction('begin');
 
-		$sql = 'INSERT INTO ' . FACTION_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
+		$sql = 'INSERT INTO ' . $this->bb_factions_table . ' ' . $db->sql_build_array('INSERT', $data);
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', FACTION_TABLE);
+		$cache->destroy('sql', $this->bb_factions_table);
 	}
 
 
@@ -174,11 +179,11 @@ class faction
 
 		$db->sql_transaction('begin');
 
-		$sql = 'UPDATE ' . FACTION_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE faction_id = ' . $this->faction_id . " AND game_id = '" . $this->game_id . "'";
+		$sql = 'UPDATE ' . $this->bb_factions_table . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE faction_id = ' . $this->faction_id . " AND game_id = '" . $this->game_id . "'";
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
-		$cache->destroy('sql', FACTION_TABLE);
+		$cache->destroy('sql', $this->bb_factions_table);
 	}
 
 
@@ -193,7 +198,7 @@ class faction
 		$sql_array = array (
 		'SELECT' => ' count(*) AS factioncount  ',
 		'FROM' => array (
-		 RACE_TABLE => 'r', FACTION_TABLE => 'f' ),
+		 RACE_TABLE => 'r', $this->bb_factions_table => 'f' ),
 		'WHERE' => "r.race_faction_id = f.faction_id 
 				AND f.game_id = '" . $this->game_id . "'
 				AND f.f_index =  " . $this->faction_id );
@@ -204,9 +209,9 @@ class faction
 
 		if ($factioncount == 0)
 		{
-			$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $this->faction_id . " AND game_id = '" .   $this->game_id . "'"  ;
+			$sql = 'DELETE FROM ' . $this->bb_factions_table . ' WHERE f_index =' . $this->faction_id . " AND game_id = '" .   $this->game_id . "'"  ;
 			$db->sql_query($sql);
-			$cache->destroy('sql', FACTION_TABLE);
+			$cache->destroy('sql', $this->bb_factions_table);
 		}
 		else
 		{
@@ -220,9 +225,9 @@ class faction
 	public function delete_all_factions()
 	{
 		global $db, $cache;
-		$sql = 'DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
+		$sql = 'DELETE FROM ' . $this->bb_factions_table . " WHERE game_id = '" .   $this->game_id . "'"  ;
 		$db->sql_query($sql);
-		$cache->destroy('sql', FACTION_TABLE);
+		$cache->destroy('sql', $this->bb_factions_table);
 	}
 
 	/**
@@ -235,7 +240,7 @@ class faction
 		global $db;
 		$sql_array = array (
 		'SELECT' => ' f.game_id, f.f_index, f.faction_id, f.faction_name, f.faction_hide ',
-		'FROM' => array (FACTION_TABLE => 'f' ),
+		'FROM' => array ($this->bb_factions_table => 'f' ),
 		'WHERE' => " f.game_id = '" . $this->game_id . "'",
 		'ORDER_BY' => 'faction_id ASC ' );
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -252,7 +257,4 @@ class faction
 		return $fa;
 
 	}
-
-
-
 }
