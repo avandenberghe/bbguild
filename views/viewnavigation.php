@@ -17,7 +17,6 @@ use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
 use phpbb\pagination;
 use phpbb\request\request;
-use avathar\bbguild\controller;
 
 /**
  * Class viewNavigation
@@ -278,7 +277,7 @@ class viewnavigation extends admin implements iviews
 	 * viewNavigation constructor.
 	 *
 	 * @param string $page
-	 * @param $view_controller
+	 * @param \avathar\bbguild\controller\view_controller $view_controller
 	 * @param string $guild_id
 	 */
 	public function __construct(
