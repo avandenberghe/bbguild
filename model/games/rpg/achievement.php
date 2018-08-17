@@ -102,6 +102,31 @@ use avathar\bbguild\model\player\guilds;
  */
 class achievement extends admin
 {
+	public $bb_achievement_track_table;
+	public $bb_achievement_table;
+	public $bb_achievement_rewards_table;
+	public $bb_criteria_track_table;
+	public $bb_achievement_criteria_table;
+	public $bb_relations_table;
+
+	public $bb_games_table;
+	public $bb_logs_table;
+	public $bb_ranks_table;
+	public $bb_guild_table;
+	public $bb_players_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_gameroles_table;
+	public $bb_factions_table;
+	public $bb_language_table;
+	public $bb_motd_table;
+	public $bb_recruit_table;
+	public $bb_bosstable;
+	public $bb_zonetable;
+	public $bb_news;
+	public $bb_plugins;
+
+
 	/**
 	 * achievement id
 	 * bb_achievement
@@ -417,16 +442,31 @@ class achievement extends admin
 		return $this;
 	}
 
-	/*************************************/
 	/**
 	 * achievement constructor.
+	 * @param \avathar\bbguild\model\games\game $game
+	 * @param int $id
+	 * @param string $bb_achievement_track_table
+	 * @param string $bb_achievement_table
+	 * @param string $bb_achievement_rewards_table
+	 * @param string $bb_criteria_track_table
+	 * @param string $bb_achievement_criteria_table
+	 * @param string $bb_relations_table
 	 *
-	 * @param \avathar\bbguild\model\games\game    $game
-	 * @param int                                $id
 	 */
-	public function __construct(game $game, $id)
+	public function __construct(game $game, $id, $bb_achievement_track_table, $bb_achievement_table,
+	$bb_achievement_rewards_table, $bb_criteria_track_table, $bb_achievement_criteria_table,
+	$bb_relations_table)
 	{
 		parent::__construct();
+
+		$this->bb_achievement_track_table = $bb_achievement_track_table;
+		$this->bb_achievement_table = $bb_achievement_table;
+		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;
+		$this->bb_criteria_track_table = $bb_criteria_track_table;
+		$this->bb_achievement_criteria_table = $bb_achievement_criteria_table;
+		$this->bb_relations_table = $bb_relations_table;
+
 		$this->game_id = $game->game_id;
 		$this->game = $game;
 		$this->id = $id;
@@ -465,28 +505,28 @@ class achievement extends admin
 			ct.criteria_timestamp,
 			ct.criteria_created ',
 			'FROM' => array (
-				ACHIEVEMENT_TABLE => 'a',
-				ACHIEVEMENT_TRACK_TABLE => 'ac',
+				$this->bb_achievement_table => 'a',
+				$this->bb_achievement_track_table => 'ac',
 			),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(BB_RELATIONS_TABLE => 'r2'),
+					'FROM'  => array($this->bb_relations_table => 'r2'),
 					'ON'    => "  a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' " ,
 				),
 				array(
-					'FROM'  => array(ACHIEVEMENT_REWARDS_TABLE => 'w'),
+					'FROM'  => array($this->bb_achievement_rewards_table => 'w'),
 					'ON'    => " w.rewards_item_id = r2.rel_value " ,
 				),
 				array(
-					'FROM'  => array(BB_RELATIONS_TABLE => 'r1'),
+					'FROM'  => array($this->bb_relations_table => 'r1'),
 					'ON'    => " a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " ,
 				),
 				array(
-					'FROM'  => array(ACHIEVEMENT_CRITERIA_TABLE => 'c'),
+					'FROM'  => array($this->bb_achievement_criteria_table => 'c'),
 					'ON'    => " c.criteria_id = r1.rel_value " ,
 				),
 				array(
-					'FROM'  => array(CRITERIA_TRACK_TABLE => 'ct'),
+					'FROM'  => array($this->bb_criteria_track_table => 'ct'),
 					'ON'    => " ct.criteria_id = c.criteria_id AND ( ct.guild_id = 1 OR ct.player_id = 0) " ,
 				)),
 			'WHERE' =>  '1=1 AND a.id = ' . (int) $this->id . " AND a.game_id = '". $this->game_id . "'" ,
@@ -589,28 +629,28 @@ class achievement extends admin
 			ct.criteria_timestamp,
 			ct.criteria_created ',
 			'FROM' => array (
-				ACHIEVEMENT_TABLE => 'a',
-				ACHIEVEMENT_TRACK_TABLE => 'ac',
+				$this->bb_achievement_table => 'a',
+				$this->bb_achievement_track_table => 'ac',
 				),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(BB_RELATIONS_TABLE => 'r2'),
+					'FROM'  => array($this->bb_relations_table => 'r2'),
 					'ON'    => "  a.id = r2.att_value AND r2.attribute_id = 'ACH' AND r2.rel_attr_id = 'REW' " ,
 				),
 				array(
-					'FROM'  => array(ACHIEVEMENT_REWARDS_TABLE => 'w'),
+					'FROM'  => array($this->bb_achievement_rewards_table => 'w'),
 					'ON'    => " w.rewards_item_id = r2.rel_value " ,
 				),
 				array(
-					'FROM'  => array(BB_RELATIONS_TABLE => 'r1'),
+					'FROM'  => array($this->bb_relations_table => 'r1'),
 					'ON'    => " a.id = r1.att_value AND r1.attribute_id = 'ACH' AND r1.rel_attr_id = 'CRI' " ,
 				),
 				array(
-					'FROM'  => array(ACHIEVEMENT_CRITERIA_TABLE => 'c'),
+					'FROM'  => array($this->bb_achievement_criteria_table => 'c'),
 					'ON'    => " c.criteria_id = r1.rel_value " ,
 				),
 				array(
-					'FROM'  => array(CRITERIA_TRACK_TABLE => 'ct'),
+					'FROM'  => array($this->bb_criteria_track_table => 'ct'),
 					'ON'    => " ct.criteria_id = c.criteria_id AND ( ct.guild_id = 1 OR ct.player_id = 0) " ,
 				)),
 			'WHERE' =>  '1=1 AND (ac.guild_id = ' . $guild_id .' OR ac.player_id= ' . $player_id . ") AND a.game_id = '". $this->game_id . "'" ,
@@ -698,22 +738,22 @@ class achievement extends admin
 		$achievement = array();
 
 		/**** achievement track *****/
-		$sql = 'DELETE FROM ' . ACHIEVEMENT_TRACK_TABLE . ' WHERE guild_id = ' . $Guild->guildid;
+		$sql = 'DELETE FROM ' . $this->bb_achievement_track_table . ' WHERE guild_id = ' . $Guild->guildid;
 		$db->sql_query($sql);
 		/**** criteria track *****/
-		$sql = 'DELETE FROM ' . CRITERIA_TRACK_TABLE . ' WHERE guild_id = ' . $Guild->guildid;
+		$sql = 'DELETE FROM ' . $this->bb_criteria_track_table . ' WHERE guild_id = ' . $Guild->guildid;
 		$db->sql_query($sql);
 		/**** achievement  *****/
-		$sql = 'DELETE FROM ' . ACHIEVEMENT_TABLE . ' WHERE 1 <> 1 ';
+		$sql = 'DELETE FROM ' . $this->bb_achievement_table . ' WHERE 1 <> 1 ';
 		$db->sql_query($sql);
 		/**** achievement rewards *****/
-		$sql = 'DELETE FROM ' . ACHIEVEMENT_REWARDS_TABLE . ' WHERE 1 = 1 ';
+		$sql = 'DELETE FROM ' . $this->bb_achievement_rewards_table . ' WHERE 1 = 1 ';
 		$db->sql_query($sql);
 		/**** achievement criteria *****/
-		$sql = 'DELETE FROM ' . ACHIEVEMENT_CRITERIA_TABLE . ' WHERE  1 = 1 ';
+		$sql = 'DELETE FROM ' . $this->bb_achievement_criteria_table . ' WHERE  1 = 1 ';
 		$db->sql_query($sql);
 		/**** relations *****/
-		$sql = 'DELETE FROM ' . BB_RELATIONS_TABLE . ' WHERE 1 = 1' ;
+		$sql = 'DELETE FROM ' . $this->bb_relations_table . ' WHERE 1 = 1' ;
 		$db->sql_query($sql);
 
 		//call Guild API for achievements endpoint
@@ -756,7 +796,7 @@ class achievement extends admin
 				'achievements_completed' => $achi['timestamp'],
 			);
 		}
-		$db->sql_multi_insert(ACHIEVEMENT_TRACK_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_achievement_track_table, $sql_ary);
 
 		$criteria = array();
 		foreach ($data['achievements']['criteria'] as $id => $criteria_id)
@@ -783,11 +823,11 @@ class achievement extends admin
 		$sql_array = array (
 			'SELECT' => ' t.achievement_id ',
 			'FROM' => array (
-				ACHIEVEMENT_TRACK_TABLE => 't',
+				$this->bb_achievement_track_table => 't',
 			),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(ACHIEVEMENT_TABLE => 's'),
+					'FROM'  => array($this->bb_achievement_table => 's'),
 					'ON'    => ' s.id = t.achievement_id ',
 				)),
 			'WHERE' =>  ' t.guild_id = ' . $Guild->guildid . ' AND s.id is NULL ',
@@ -887,7 +927,7 @@ class achievement extends admin
 			'reward'        => $this->reward
 		);
 
-		$db->sql_query('INSERT INTO ' . ACHIEVEMENT_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+		$db->sql_query('INSERT INTO ' . $this->bb_achievement_table . ' ' . $db->sql_build_array('INSERT', $sql_ary));
 	}
 
 	/**
@@ -920,7 +960,7 @@ class achievement extends admin
 				'icon'              => $rewardItems['icon'],
 				'quality'           => $rewardItems['quality'],
 			);
-			$db->sql_query('DELETE FROM ' . ACHIEVEMENT_REWARDS_TABLE . ' WHERE rewards_item_id =  ' . $rewardItems['id']);
+			$db->sql_query('DELETE FROM ' . $this->bb_achievement_rewards_table . ' WHERE rewards_item_id =  ' . $rewardItems['id']);
 
 			$sql_ary2[] = array(
 				'attribute_id'  => 'ACH',
@@ -929,17 +969,17 @@ class achievement extends admin
 				'rel_value'     => $rewardItems['id'],
 			);
 
-			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'REW' and att_value= '" . $data['id'] . "' and rel_value = '".  $rewardItems['id'] ."' " );
+			$db->sql_query('DELETE FROM ' . $this->bb_relations_table . " WHERE attribute_id =  'ACH' and rel_attr_id = 'REW' and att_value= '" . $data['id'] . "' and rel_value = '".  $rewardItems['id'] ."' " );
 		}
 
 		if (count($sql_ary1) > 0)
 		{
-			$db->sql_multi_insert(ACHIEVEMENT_REWARDS_TABLE, $sql_ary1);
+			$db->sql_multi_insert($this->bb_achievement_rewards_table, $sql_ary1);
 		}
 
 		if (count($sql_ary2) > 0)
 		{
-			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary2);
+			$db->sql_multi_insert($this->bb_relations_table, $sql_ary2);
 		}
 
 	}
@@ -968,7 +1008,7 @@ class achievement extends admin
 				'max'           => $criterium['max'],
 			);
 
-			$db->sql_query('DELETE FROM ' . ACHIEVEMENT_CRITERIA_TABLE . ' WHERE criteria_id =  ' . $criterium['id']);
+			$db->sql_query('DELETE FROM ' . $this->bb_achievement_criteria_table . ' WHERE criteria_id =  ' . $criterium['id']);
 
 			$sql_ary4[] = array(
 				'attribute_id'  => 'ACH',
@@ -977,17 +1017,17 @@ class achievement extends admin
 				'rel_value'     => $criterium['id'],
 			);
 
-			$db->sql_query('DELETE FROM ' . BB_RELATIONS_TABLE . " WHERE attribute_id =  'ACH' and rel_attr_id = 'CRI' and att_value= '" . $data['id'] . "' and rel_value = '".  $criterium['id'] ."' " );
+			$db->sql_query('DELETE FROM ' . $this->bb_relations_table . " WHERE attribute_id =  'ACH' and rel_attr_id = 'CRI' and att_value= '" . $data['id'] . "' and rel_value = '".  $criterium['id'] ."' " );
 		}
 
 		if (count($sql_ary3) > 0)
 		{
-			$db->sql_multi_insert(ACHIEVEMENT_CRITERIA_TABLE, $sql_ary3);
+			$db->sql_multi_insert($this->bb_achievement_criteria_table, $sql_ary3);
 		}
 
 		if (count($sql_ary4) > 0)
 		{
-			$db->sql_multi_insert(BB_RELATIONS_TABLE, $sql_ary4);
+			$db->sql_multi_insert($this->bb_relations_table, $sql_ary4);
 		}
 	}
 
