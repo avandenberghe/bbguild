@@ -28,11 +28,11 @@ class install_aion extends game_install
 		global $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table  . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id, 'faction_id' => 1, 'faction_name' => 'Light' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'faction_id' => 2, 'faction_name' => 'Darkness' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table , $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -45,7 +45,7 @@ class install_aion extends game_install
 		global $db;
 
 		// class general
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		// sub classes, excluding the original 4 classes, which are irrelevant endgame
 		$sql_ary[] = array('game_id' => $this->game_id, 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_unknown' );
@@ -57,11 +57,11 @@ class install_aion extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_cleric' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_gladiator' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_templar' );
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		//language table (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " where game_id = '" . $this->game_id . "' and attribute = 'class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . " where game_id = '" . $this->game_id . "' and attribute = 'class' ");
 
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -106,7 +106,7 @@ class install_aion extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Gladiatore' ,  'name_short' =>  'Gladiatore' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Templare' ,  'name_short' =>  'Templare' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -119,15 +119,15 @@ class install_aion extends game_install
 	{
 		global $db;
 		// races (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . RACE_TABLE . "  where game_id = '" . $this->game_id . "' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_races_table . "  where game_id = '" . $this->game_id . "' ");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'aion_elyos', 'image_male' => 'aion_elyos'  );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 2, 'race_faction_id' => 2, 'image_female' => 'aion_asmodian',  'image_male' => 'aion_asmodian' );
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
 		//language table (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" . $this->game_id . "' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" . $this->game_id . "' and attribute = 'race' ");
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Asmodian' ,  'name_short' =>  'Asmodian' );
@@ -140,7 +140,7 @@ class install_aion extends game_install
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'Elisiani' ,  'name_short' =>  'Elisiani' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 2, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'Asmodiani' , 'name_short' =>  'Asmodiani' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

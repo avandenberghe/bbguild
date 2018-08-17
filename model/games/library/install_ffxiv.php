@@ -30,12 +30,12 @@ class install_ffxiv extends game_install
 		global  $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" .$this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '" .$this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Limsa Lominsa: The Maelstrom' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Gridania: The Order of the Twin Adder' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 3, 'faction_name' => 'Ul’dah: The Immortal Flames' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -48,7 +48,7 @@ class install_ffxiv extends game_install
 		global  $db;
 
 		// class :
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '" .$this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '" .$this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 0, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_unknown' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_archer' );
@@ -67,11 +67,11 @@ class install_ffxiv extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_arcanist' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_summoner' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_scholar' );
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		// Language table
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" .$this->game_id . "' and attribute='class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" .$this->game_id . "' and attribute='class' ");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Archer' ,  'name_short' =>  'Archer' );
@@ -126,7 +126,7 @@ class install_ffxiv extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 14, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Arcanist' ,  'name_short' =>  'Arcanist' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 15, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Summoner' ,  'name_short' =>  'Summoner' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 16, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Scholar' ,  'name_short' =>  'Scholar' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -137,7 +137,7 @@ class install_ffxiv extends game_install
 	protected function install_races()
 	{
 		global  $db;
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '" .$this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '" .$this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'race_id' => 1, 'race_faction_id' => 3, 'image_female' => '',  'image_male' => '' ); //Unknown
 		$sql_ary[] = array('game_id' => $this->game_id,'race_id' => 2, 'race_faction_id' => 1, 'image_female' => 'ffxiv_roegadyn_female',  'image_male' => 'ffxiv_roegadyn_male' ); //Roegadyn
@@ -145,10 +145,10 @@ class install_ffxiv extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id,'race_id' => 4, 'race_faction_id' => 2, 'image_female' => 'ffxiv_elezen_female',  'image_male' => 'ffxiv_elezen_male' ); ///Elezen
 		$sql_ary[] = array('game_id' => $this->game_id,'race_id' => 5, 'race_faction_id' => 2, 'image_female' => 'ffxiv_lalafell_female',  'image_male' => 'ffxiv_lalafell_male' ); //Lalafell
 		$sql_ary[] = array('game_id' => $this->game_id,'race_id' => 6, 'race_faction_id' => 3, 'image_female' => 'ffxiv_miqote_female',  'image_male' => 'ffxiv_miqote_male' ); //Miqo'te
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 
 		// Language table
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" .$this->game_id . "' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" .$this->game_id . "' and attribute='race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -171,7 +171,7 @@ class install_ffxiv extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Elezen' ,  'name_short' =>  'Elezen' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Lalafell' ,  'name_short' =>  'Lalafell' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Miqo’te' ,  'name_short' =>  'Miqo’te' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

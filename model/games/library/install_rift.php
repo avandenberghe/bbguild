@@ -27,12 +27,12 @@ class install_rift extends game_install
 	{
 		global $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Guardians' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Defiant' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 3, 'faction_name' => 'NPC' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -44,7 +44,7 @@ class install_rift extends game_install
 	protected function install_classes()
 	{
 		global $db;
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array();
 
 		// class general
@@ -90,10 +90,10 @@ class install_rift extends game_install
 		//     $sql_ary[] = array('game_id' => $this->game_id,'class_id' => 31, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#69CCF0', 'imagename' => 'rift_dominator' );
 		//     $sql_ary[] = array('game_id' => $this->game_id,'class_id' => 32, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#9482C9', 'imagename' => 'rift_chloromancer' );
 
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute='class'   ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute='class'   ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 
@@ -140,7 +140,7 @@ class install_rift extends game_install
 		// 	$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 30, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
 		// 	$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 31, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dominator' ,  'name_short' =>  'Dominator' );
 		// 	$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 32, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Chloromancer' ,  'name_short' =>  'Chloromancer' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -152,7 +152,7 @@ class install_rift extends game_install
 	{
 		global $db;
 		// races
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '".$this->game_id."'");
 		$sql_ary = array ();
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'rift_dwarf_female',  'image_male' => 'rift_dwarf_male'  ); //dwarf
@@ -161,10 +161,10 @@ class install_rift extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 4, 'race_faction_id' => 2 , 'image_female' => 'rift_bahmi_female',  'image_male' => 'rift_bahmi_male' ) ; //Bahmi
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'rift_eth_female',  'image_male' => 'rift_eth_male' ); //eth
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'rift_kelari_female',  'image_male' => 'rift_kelari_male' ); //kelari
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute = 'race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -175,7 +175,7 @@ class install_rift extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Eth' , 'name_short' =>  'Eth' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Kelari' ,  'name_short' =>  'Kelari' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

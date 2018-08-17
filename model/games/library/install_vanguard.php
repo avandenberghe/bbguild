@@ -28,12 +28,12 @@ class install_vanguard extends game_install
 
 		global  $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Thestra' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Kojan' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 3, 'faction_name' => 'Qalia' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -45,7 +45,7 @@ class install_vanguard extends game_install
 		global  $db;
 
 		// class :
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50,  'colorcode' =>  '#999', 'imagename' => 'vanguard_unknown');
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50,  'colorcode' =>  '#FF0044', 'imagename' => 'vanguard_bard' );
@@ -63,10 +63,10 @@ class install_vanguard extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50,  'colorcode' =>  '#CC00BB', 'imagename' => 'vanguard_sorcerer' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 15, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50,  'colorcode' =>  '#CC9933', 'imagename' => 'vanguard_warrior' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 16, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50,  'colorcode' =>  '#33FF00',  'imagename' => 'vanguard_shaman' );
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' and attribute='class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  WHERE game_id = '" . $this->game_id . "' and attribute='class' ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Bard' ,  'name_short' =>  'Bard' );
@@ -84,7 +84,7 @@ class install_vanguard extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 14, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Sorcerer' ,  'name_short' =>  'Sorcerer' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 15, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 16, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Shaman' ,  'name_short' =>  'Shaman' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -96,7 +96,7 @@ class install_vanguard extends game_install
 	{
 		global  $db;
 		// races
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'vanguard_thestran',  'image_male' => 'vanguard_thestran'  ); //Thestran Human
@@ -118,10 +118,10 @@ class install_vanguard extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 17, 'race_faction_id' => 3 , 'image_female' => 'vanguard_kurashasa',  'image_male' => 'vanguard_kurashasa' ); //Kurashasa
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 18, 'race_faction_id' => 3 , 'image_female' => 'vanguard_mordebi',  'image_male' => 'vanguard_mordebi' ); //Mordebi Human
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 19, 'race_faction_id' => 3 , 'image_female' => 'vanguard_varan',  'image_male' => 'vanguard_varan' ); //Varanthari
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  WHERE game_id = '" . $this->game_id . "' and attribute='race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Thestran Human' ,  'name_short' =>  'Thestran Human' );
@@ -143,7 +143,7 @@ class install_vanguard extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 17, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Kurashasa' ,  'name_short' =>  'Kurashasa' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 18, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Mordebi Human' ,  'name_short' =>  'Mordebi Human' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 19, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Varanthari' ,  'name_short' =>  'Varanthari' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

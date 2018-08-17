@@ -110,13 +110,14 @@ abstract class game_install
 		$this->bb_classes_table = $bb_classes_table;
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_races_table = $bb_races_table;
+		$this->bb_players_table = $bb_players_table;
+
+		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_gameroles_table = $bb_gameroles_table;
 
 		$this->bb_logs_table = $bb_logs_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 		$this->bb_guild_table = $bb_guild_table;
-		$this->bb_players_table = $bb_players_table;
-		$this->bb_gameroles_table = $bb_gameroles_table;
-		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_motd_table = $bb_motd_table;
 		$this->bb_recruit_table = $bb_recruit_table;
 		$this->bb_achievement_track_table = $bb_achievement_track_table;
@@ -160,8 +161,8 @@ abstract class game_install
 		$cache->destroy('sql', $this->bb_games_table);
 		$cache->destroy('sql', $this->bb_classes_table);
 		$cache->destroy('sql', $this->bb_language_table);
-		$cache->destroy('sql', RACE_TABLE);
-		$cache->destroy('sql', PLAYER_TABLE);
+		$cache->destroy('sql', $this->bb_races_table);
+		$cache->destroy('sql', $this->bb_players_table);
 		$cache->destroy('sql', $this->bb_gameroles_table );
 
 	}
@@ -203,8 +204,8 @@ abstract class game_install
 		$cache->destroy('sql', $this->bb_games_table);
 		$cache->destroy('sql', $this->bb_classes_table);
 		$cache->destroy('sql', $this->bb_language_table);
-		$cache->destroy('sql', RACE_TABLE);
-		$cache->destroy('sql', PLAYER_TABLE);
+		$cache->destroy('sql', $this->bb_races_table);
+		$cache->destroy('sql', $this->bb_players_table);
 	}
 
 	/**

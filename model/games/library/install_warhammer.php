@@ -28,11 +28,11 @@ class install_warhammer extends game_install
 		global  $db;
 		// factions
 		unset($sql_ary);
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Order' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Destruction' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 	}
 
 	/**
@@ -42,7 +42,7 @@ class install_warhammer extends game_install
 	{
 		global  $db;
 
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id, 'class_id' => 0, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#999', 'imagename' => 'warhammer_unknown' );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,   'colorcode' =>  '#FF0044','imagename' => 'warhammer_witch_Elf'  );
@@ -65,9 +65,9 @@ class install_warhammer extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'colorcode' =>  '#CC9933', 'imagename' => 'warhammer_swordmaster'  );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#FF0044', 'imagename' => 'warhammer_shadow_warrior'  );
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#FF0044', 'imagename' => 'warhammer_white_lion'  );
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' AND attribute='class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  WHERE game_id = '" . $this->game_id . "' AND attribute='class' ");
 		unset($sql_ary);
 
 		$sql_ary = array();
@@ -159,7 +159,7 @@ class install_warhammer extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 19, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Shadow Warrior' ,  'name_short' =>  'Shadow Warrior' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 20, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'White Lion' ,  'name_short' =>  'White Lion' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -171,7 +171,7 @@ class install_warhammer extends game_install
 
 		global  $db;
 
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'warhammer_dwarf',  'image_male' => 'warhammer_dwarf'  ); //Dwarf
@@ -181,9 +181,9 @@ class install_warhammer extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'warhammer_chaos',  'image_male' => 'warhammer_chaos' ); //chaos
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'warhammer_greenskin',  'image_male' => 'warhammer_greenskin' ); //Greenskins
 
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' AND attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  WHERE game_id = '" . $this->game_id . "' AND attribute = 'race' ");
 		unset($sql_ary);
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Dwarf' ,  'name_short' =>  'Dwarf' );
@@ -217,7 +217,7 @@ class install_warhammer extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 5, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'Chaos' ,  'name_short' =>  'Chaos' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 6, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'Greenskins' ,  'name_short' =>  'Greenskins' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 	}
 

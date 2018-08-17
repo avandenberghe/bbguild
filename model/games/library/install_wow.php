@@ -27,11 +27,11 @@ class install_wow extends game_install
 	{
 		global $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " WHERE game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id ,'faction_id' => 1, 'faction_name' => 'Alliance' );
 		$sql_ary[] = array ('game_id' => $this->game_id ,'faction_id' => 2, 'faction_name' => 'Horde' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -44,7 +44,7 @@ class install_wow extends game_install
 
 		// classes
 		// note class 10 does not exist
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'wow'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " WHERE game_id = 'wow'");
 		$sql_ary = array ();
 		$sql_ary[] = array ('game_id' => $this->game_id , 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 110 , 'colorcode' =>  '#c69b6d', 'imagename' => 'wow_warrior');
@@ -59,11 +59,11 @@ class install_wow extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 110 , 'colorcode' =>  '#c41e3b',  'imagename' => 'wow_death_knight');
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 110 ,  'colorcode' =>  '#00ffba', 'imagename' => 'wow_monk');
 		$sql_ary[] = array ('game_id' => $this->game_id ,'class_id' => 12, 'class_armor_type' => 'LEATHER', 'class_min_level' => 98, 'class_max_level' => 110 ,  'colorcode' =>  '#A330C3', 'imagename' => 'wow_demon_hunter');
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		// languages
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " WHERE game_id = '". $this->game_id . "' AND attribute='class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . " WHERE game_id = '". $this->game_id . "' AND attribute='class' ");
 
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -125,7 +125,7 @@ class install_wow extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 10, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Monaco' ,  'name_short' =>  'Monaco' );
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 12, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Cacciatore di Demoni' ,  'name_short' =>  'Cacciatore di Demoni' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -137,7 +137,7 @@ class install_wow extends game_install
 	{
 		global $db;
 		// races
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . " WHERE game_id = '" . $this->game_id . "' ");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . " WHERE game_id = '" . $this->game_id . "' ");
 		$sql_ary = array ();
 		$sql_ary[] = array ('game_id' => $this->game_id ,'race_id' => 0, 'race_faction_id' => 0, 'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id ,'race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'wow_human_female',  'image_male' => 'wow_human_male'  ); //Human
@@ -154,10 +154,10 @@ class install_wow extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id ,'race_id' => 22, 'race_faction_id' => 1 , 'image_female' => 'wow_worgen_female',  'image_male' => 'wow_worgen_male' ); //Worgen
 		$sql_ary[] = array ('game_id' => $this->game_id ,'race_id' => 25, 'race_faction_id' => 1 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren alliance
 		$sql_ary[] = array ('game_id' => $this->game_id ,'race_id' => 26, 'race_faction_id' => 2 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren Horde
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " WHERE game_id = '" . $this->game_id . "' AND attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . " WHERE game_id = '" . $this->game_id . "' AND attribute = 'race' ");
 
 		//races in en
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -227,7 +227,7 @@ class install_wow extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 25, 'language' => 'it' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alleanza' ,  'name_short' =>  'Pandaren Alleanza' );
 		$sql_ary[] = array('game_id' => $this->game_id , 'attribute_id' => 26, 'language' => 'it' , 'attribute' =>  'race' , 'name' =>  'Pandaren Orda' ,  'name_short' =>  'Pandaren Orda' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

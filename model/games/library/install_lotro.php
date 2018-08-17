@@ -28,11 +28,11 @@ class install_lotro extends game_install
 		global  $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Free Peoples' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Servants of the Eye' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -43,7 +43,7 @@ class install_lotro extends game_install
 	{
 		global  $db;
 
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 
 		// class :
@@ -64,10 +64,10 @@ class install_lotro extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 24, 'class_armor_type' => 'PLATE' , 'class_min_level' => 75 , 'class_max_level'  => 75, 'colorcode' =>  '#CC9933',  'imagename' => 'lotro_warleader');
 		$sql_ary[] = array('game_id' => $this->game_id,'class_id' => 25, 'class_armor_type' => 'MAIL' , 'class_min_level' => 75 , 'class_max_level'  => 75, 'colorcode' =>  '#FF0044',  'imagename' => 'lotro_stalker');
 
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" . $this->game_id . "' and attribute='class'  ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" . $this->game_id . "' and attribute='class'  ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Burglar' ,  'name_short' =>  'Burglar' );
@@ -137,7 +137,7 @@ class install_lotro extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 24, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Warleader' ,  'name_short' =>  'Warleader' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 25, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Stalker' ,  'name_short' =>  'Stalker' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -150,7 +150,7 @@ class install_lotro extends game_install
 		global  $db;
 
 		// races
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1,  'image_female' => 'lotro_unknown',  'image_male' => 'lotro_unknown'  ); //Unknown
 
@@ -180,10 +180,10 @@ class install_lotro extends game_install
 
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 50, 'race_faction_id' => 2,  'image_female' => 'lotro_monster',  'image_male' => 'lotro_monster'  ); //Unknown
 
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" . $this->game_id . "' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" . $this->game_id . "' and attribute = 'race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -271,7 +271,7 @@ class install_lotro extends game_install
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 45, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'White Mountain Dwarf' ,  'name_short' =>  'White Mountain' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 50, 'language' =>  'it' , 'attribute' =>  'race' , 'name' =>  'Servant of the Eye' ,  'name_short' =>  'Servant of the Eye' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

@@ -28,10 +28,10 @@ class install_tera extends game_install
 	{
 		global $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Tera' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -43,7 +43,7 @@ class install_tera extends game_install
 	{
 		global $db;
 		// classes
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array ();
 		$sql_ary[] = array ('game_id' => $this->game_id, 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#999', 'imagename' => 'tera_unknown');
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#00CC66', 'imagename' => 'tera_archer');
@@ -54,11 +54,11 @@ class install_tera extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id, 'class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#FFFF33',  'imagename' => 'tera_slayer');
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#0077BB',  'imagename' => 'tera_sorcerer');
 		$sql_ary[] = array ('game_id' => $this->game_id, 'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#FF9900',  'imagename' => 'tera_warrior');
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		// Dictionary
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute = 'class'  ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute = 'class'  ");
 		$sql_ary = array ();
 		//
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -70,7 +70,7 @@ class install_tera extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Slayer' ,  'name_short' =>  'Slayer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Sorcerer' ,  'name_short' =>  'Sorcerer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -81,7 +81,7 @@ class install_tera extends game_install
 	protected function install_races()
 	{
 		global $db;
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '".$this->game_id."'");
 		$sql_ary = array ();
 		//Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1, 'image_female' => ' ', 'image_male' => ' '  );
@@ -92,11 +92,11 @@ class install_tera extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'tera_highelf_female',  'image_male' => 'tera_highelf_male' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 6, 'race_faction_id' => 1, 'image_female' => 'tera_human_female',  'image_male' => 'tera_human_male'  );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 7, 'race_faction_id' => 1, 'image_female' => 'tera_popori_male',  'image_male' => 'tera_popori_male' );
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
 		// Dictionary
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute = 'race' ");
 		$sql_ary = array ();
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'T7-01' );
@@ -108,7 +108,7 @@ class install_tera extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Human' ,  'name_short' =>  'Human' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Popori' ,  'name_short' =>  'Popori' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}

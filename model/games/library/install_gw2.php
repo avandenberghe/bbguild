@@ -35,11 +35,11 @@ class install_gw2 extends game_install
 				  'guild_name' => 'Veterans Of Lions Arch'),3600);
 
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Tyria' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Zaithan' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -51,7 +51,7 @@ class install_gw2 extends game_install
 		global  $db;
 
 		// professions
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '" . $this->game_id . "'");
 		$sql_ary = array ();
 		//**Soldiers**
 		$sql_ary[] = array ('game_id' => $this->game_id, 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#A9ABA0', 'imagename' => 'gw2_unknown');
@@ -75,11 +75,11 @@ class install_gw2 extends game_install
 		// Revenant
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 9, 'class_faction_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#B1574C',  'imagename' => 'gw2_revenant');
 
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		// Dictionary
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '" . $this->game_id . "' and attribute = 'class'  ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '" . $this->game_id . "' and attribute = 'class'  ");
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
@@ -126,7 +126,7 @@ class install_gw2 extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' =>  'it' , 'attribute' =>  'class' , 'name' =>  'Revenant' ,  'name_short' =>  'Revenant' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -138,7 +138,7 @@ class install_gw2 extends game_install
 	{
 		global  $db;
 
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '" . $this->game_id . "'");
 		$sql_ary = array ();
 		//Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1, 'image_female' => 'gw2_unknown', 'image_male' => 'gw2_unknown'  );
@@ -147,10 +147,10 @@ class install_gw2 extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 3, 'race_faction_id' => 1, 'image_female' => 'gw2_charr',  'image_male' => 'gw2_charr' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 4, 'race_faction_id' => 1, 'image_female' => 'gw2_asura',  'image_male' => 'gw2_asura' ) ;
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'gw2_human',  'image_male' => 'gw2_human'  );
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  WHERE game_id = '" . $this->game_id . "' and attribute='race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -181,7 +181,7 @@ class install_gw2 extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 4, 'language' => 'it' , 'attribute' =>  'race' , 'name' =>  'Asura' ,  'name_short' =>  'Asura' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 5, 'language' => 'it' , 'attribute' =>  'race' , 'name' =>  'Umani' ,  'name_short' =>  'Umani' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
@@ -195,8 +195,8 @@ class install_gw2 extends game_install
 	{
 		global $db;
 
-		$db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
-		$db->sql_query('DELETE FROM ' .  BB_LANGUAGE . " WHERE attribute_id < 3 and  attribute = 'role' and game_id = '" . $this->game_id  . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_gameroles_table . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_language_table . " WHERE attribute_id < 3 and  attribute = 'role' and game_id = '" . $this->game_id  . "'");
 
 		$sql_ary = array(
 			array(
@@ -221,7 +221,7 @@ class install_gw2 extends game_install
 				'role_icon'           => 'tank_icon',
 			),
 		);
-		$db->sql_multi_insert(BB_GAMEROLE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_gameroles_table, $sql_ary);
 
 		$sql_ary = array(
 			array(
@@ -333,6 +333,6 @@ class install_gw2 extends game_install
 				'name_short'        => 'Controllo',
 			),
 		);
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 	}
 }

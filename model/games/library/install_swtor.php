@@ -27,13 +27,13 @@ class install_swtor extends game_install
 	{
 		global $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_factions_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array();
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Galactic Republic' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Jedi Order' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 3, 'faction_name' => 'Sith Empire' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'faction_id' => 4, 'faction_name' => 'Sith Lords' );
-		$db->sql_multi_insert(FACTION_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_factions_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -44,7 +44,7 @@ class install_swtor extends game_install
 	{
 		global $db;
 		// note subclasses not done
-		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' . $this->bb_classes_table . " where game_id = '".$this->game_id."'");
 		$sql_ary = array ();
 		$sql_ary[] = array ('game_id' => $this->game_id, 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 55 , 'colorcode' =>  '#999', 'imagename' => 'swtor_unknown');
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 55 , 'colorcode' =>  '#66CCFF', 'imagename' => 'swtor_trooper');
@@ -55,11 +55,11 @@ class install_swtor extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 6, 'class_faction_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 55 , 'colorcode' =>  '#FF6600',  'imagename' => 'swtor_warrior');
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 7, 'class_faction_id' => 3, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 55 , 'colorcode' =>  '#996699',  'imagename' => 'swtor_agent');
 		$sql_ary[] = array ('game_id' => $this->game_id,'class_id' => 8, 'class_faction_id' => 4, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 55 , 'colorcode' =>  '#660033',  'imagename' => 'swtor_inquisitor');
-		$db->sql_multi_insert(CLASS_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_classes_table, $sql_ary);
 		unset($sql_ary);
 
 		// Dictionary
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute  = 'class' ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute  = 'class' ");
 		$sql_ary = array ();
 		//
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'T7-01' );
@@ -92,7 +92,7 @@ class install_swtor extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur de Primes' ,  'name_short' =>  'Chasseur' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Agent Imperial' ,  'name_short' =>  'Agent' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 	}
 
@@ -104,7 +104,7 @@ class install_swtor extends game_install
 		global $db;
 
 		// species source : http://starwars.wikia.com/wiki/Star_Wars:_The_Old_Republic
-		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = '".$this->game_id."'");
+		$db->sql_query('DELETE FROM ' .  $this->bb_races_table . "  where game_id = '".$this->game_id."'");
 		$sql_ary = array ();
 		//Unknown
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 0, 'race_faction_id' => 1, 'image_female' => ' ',  'image_male' => ' '  );
@@ -118,11 +118,11 @@ class install_swtor extends game_install
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 8, 'race_faction_id' => 3, 'image_female' => 'swtor_redsith_female',  'image_male' => 'swtor_redsith_male' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 9, 'race_faction_id' => 3, 'image_female' => 'swtor_cathar_female',  'image_male' => 'swtor_cathar_male' );
 		$sql_ary[] = array ('game_id' => $this->game_id,'race_id' => 10, 'race_faction_id' => 3, 'image_female' => 'swtor_cyborg_female',  'image_male' => 'swtor_cyborg_male' );
-		$db->sql_multi_insert(RACE_TABLE, $sql_ary);
+		$db->sql_multi_insert($this->bb_races_table, $sql_ary);
 		unset($sql_ary);
 
 		// Dictionary
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = '".$this->game_id."' and attribute in('race') ");
+		$db->sql_query('DELETE FROM ' . $this->bb_language_table . "  where game_id = '".$this->game_id."' and attribute in('race') ");
 		$sql_ary = array ();
 
 		// species
@@ -162,7 +162,7 @@ class install_swtor extends game_install
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 10, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
 
-		$db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+		$db->sql_multi_insert($this->bb_language_table, $sql_ary);
 		unset($sql_ary);
 
 	}
