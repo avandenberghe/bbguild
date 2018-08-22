@@ -10,7 +10,7 @@
 namespace avathar\bbguild\model\admin;
 
 /**
- * Singleton bbDKP Logging class
+ * Singleton Logging class
  *
  * @package bbguild
  */
@@ -185,7 +185,7 @@ class log
 	const GAME_ADDED = 36;
 	/**
 	 * a game was deleted
-*/
+	*/
 	const GAME_DELETED = 37;
 	/**
 	 * settings were updated
@@ -265,7 +265,7 @@ class log
 	const  BATTLENET_ACCOUNT_INACTIVE = 56;
 
 	/**
-	 * A key-value list of built-in log types that cannot be overridden
+	 * logging key-values
 	*
 	 * @var array
 	 */
@@ -402,6 +402,14 @@ class log
 	);
 
 	/**
+	 * SINGLETON CLASS !
+	 */
+	private function __construct($bb_logs_table)
+	{
+		$this->bb_logs_table = $bb_logs_table;
+	}
+
+	/**
 	 * Call this method to get singleton log instance
 	*
 	 * @return log
@@ -435,13 +443,6 @@ class log
 		trigger_error($user->lang['ERROR'], E_USER_ERROR);
 	}
 
-	/**
-	 * SINGLETON CLASS !
-	 */
-	private function __construct($bb_logs_table)
-	{
-		$this->bb_logs_table = $bb_logs_table;
-	}
 
 	/**
 	 * get this log entry
@@ -491,12 +492,12 @@ class log
 	{
 		global $db, $user;
 		/**
-		 * log_id    int(11)        UNSIGNED    No        auto_increment
-		 * log_date    int(11)            No    0
-		 * log_type    varchar(255)    utf8_bin        No
+		 * log_id        int(11)        UNSIGNED    No        auto_increment
+		 * log_date      int(11)            No    0
+		 * log_type      varchar(255)    utf8_bin        No
 		 * log_action    text    utf8_bin        No
-		 * log_ipaddress    varchar(15)    utf8_bin        No
-		 * log_sid    varchar(32)    utf8_bin        No
+		 * log_ipaddress varchar(15)    utf8_bin        No
+		 * log_sid       varchar(32)    utf8_bin        No
 		 * log_result    varchar(255)    utf8_bin        No
 		 * log_userid    mediumint(8)    UNSIGNED    No    0
 		 */

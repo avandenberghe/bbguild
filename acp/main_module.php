@@ -33,7 +33,7 @@ class main_module
 
         // Requests
         $action = $request->variable('action', '');
-        $category_id = $request->variable('category_id', 0);
+        $admin_main->main();
 
         // Make the $u_action url available in the admin controller
         $admin_main->set_page_url($this->u_action);
@@ -47,7 +47,7 @@ class main_module
                 $this->page_title = $lang->lang('ACP_BBGUILD_MAINPAGE');
 
                 // Load the display options handle in the admin controller
-                $admin_main->display_panel();
+                $admin_main->DisplayPanel();
                 break;
 
             case 'config':

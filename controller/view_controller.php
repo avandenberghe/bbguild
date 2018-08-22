@@ -8,6 +8,7 @@
 namespace avathar\bbguild\controller;
 
 use avathar\bbguild\views\viewnavigation;
+use avathar\bbguild\model\games\game;
 
 /**
  * Class view_controller
@@ -39,10 +40,7 @@ class view_controller
 	public $bb_news;
 	public $bb_plugins;
 
-	/**
-	 * @var \phpbb\auth\auth
-	 */
-	public $auth;
+
 	/**
 	 * @var \phpbb\config\config
 	 */
@@ -95,6 +93,22 @@ class view_controller
 	 * @var string
 	 */
 	public $root_path;
+	/**
+	 * @var array
+	 */
+	public $games;
+
+	/**
+	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
+	 * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
+	 *
+	 * @var array
+	 */
+	public $languagecodes;
+
+
+	private $valid_views = array('roster', 'welcome', 'achievements');
+	//private $valid_views = array('news', 'roster', 'standings', 'welcome', 'stats', 'player', 'raids');
 
 	/**
 	 * view_controller constructor.
@@ -102,15 +116,16 @@ class view_controller
 	 * @param \phpbb\auth\auth                  $auth
 	 * @param \phpbb\config\config              $config
 	 * @param \phpbb\controller\helper          $helper
-	 * @param \phpbb\template\template          $template
+	 * @param $php_ext
+	 * @param $root_path
 	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\extension\manager          $phpbb_extension_manager
+	 * @param \phpbb\language\language          $language
+	 * @param \phpbb\pagination                 $pagination
+	 * @param \phpbb\path_helper                $path_helper
+	 * @param \phpbb\template\template          $template
 	 * @param \phpbb\request\request            $request
 	 * @param \phpbb\user                       $user
-	 * @param \phpbb\pagination                 $pagination
-	 * @param $php_ext
-	 * @param \phpbb\path_helper                $path_helper
-	 * @param \phpbb\extension\manager          $phpbb_extension_manager
-	 * @param $root_path
 	 * @param  string           $bb_games_table	name of game table
 	 * @param  string           $bb_logs_table	name of logging table
 	 * @param  string           $bb_ranks_table	name of ranks table
@@ -138,15 +153,16 @@ class view_controller
 		\phpbb\auth\auth $auth,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\template\template $template,
+		$php_ext,
+		$root_path,
 		\phpbb\db\driver\driver_interface $db,
+		\phpbb\extension\manager $phpbb_extension_manager,
+		\phpbb\language\language $language,
+		\phpbb\pagination $pagination,
+		\phpbb\path_helper $path_helper,
+		\phpbb\template\template $template,
 		\phpbb\request\request $request,
 		\phpbb\user $user,
-		\phpbb\pagination $pagination,
-		$php_ext,
-		\phpbb\path_helper $path_helper,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		$root_path,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -173,20 +189,21 @@ class view_controller
 	{
 
 		$this->auth         = $auth;
-		$this->config         = $config;
-		$this->helper         = $helper;
-		$this->template     = $template;
+		$this->config       = $config;
+		$this->helper       = $helper;
+		$this->php_ext      = $php_ext;
+		$this->root_path  	= $root_path;
 		$this->db           = $db;
-		$this->request      = $request;
-		$this->user         = $user;
-		$this->pagination     = $pagination;
-		$this->php_ext         = $php_ext;
-		$this->path_helper    = $path_helper;
 		$this->phpbb_extension_manager = $phpbb_extension_manager;
 		$this->ext_path            = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
-		$this->ext_path_web        = $this->path_helper->get_web_root_path($this->ext_path);
+		$this->language         = $language;
+		$this->pagination     = $pagination;
+		$this->path_helper    = $path_helper;
+		$this->ext_path_web        = $this->path_helper->get_web_root_path();
 		$this->ext_path_images    = $this->ext_path_web . 'ext/avathar/bbguild/images/';
-		$this->root_path  = $root_path;
+		$this->template     = $template;
+		$this->request      = $request;
+		$this->user         = $user;
 		$this->bb_games_table = $bb_games_table;
 		$this->bb_logs_table = $bb_logs_table;
 		$this->bb_ranks_table = $bb_ranks_table;
@@ -209,10 +226,19 @@ class view_controller
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
 		$this->bb_plugins = $bb_plugins;
-	}
 
-	private $valid_views = array('roster', 'welcome', 'achievements');
-	//private $valid_views = array('news', 'roster', 'standings', 'welcome', 'stats', 'player', 'raids');
+		$this->languagecodes = array(
+			'de' => $user->lang['LANG_DE'],
+			'en' => $user->lang['LANG_EN'],
+			'fr' => $user->lang['LANG_FR'],
+			'it' => $user->lang['LANG_IT']
+		);
+
+		$listgames = new game($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_games_table );
+		$this->games = $listgames->games;
+		unset($listgames);
+
+	}
 
 	/**
 	 * View factory
@@ -221,7 +247,7 @@ class view_controller
 	 * @param  $page
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function handleguild($guild_id, $page)
+	public function handleview($guild_id, $page)
 	{
 		if (in_array($page, $this->valid_views))
 		{
@@ -233,12 +259,11 @@ class view_controller
 		}
 		else
 		{
-			if (isset($this->user->lang['NOVIEW']))
+			$alert=$this->language->lang('NOVIEW');
+			if (isset($alert))
 			{
-				trigger_error(sprintf($this->user->lang['NOVIEW'], $page));
+				trigger_error(sprintf($alert, $page));
 			}
 		}
-
 	}
-
 }

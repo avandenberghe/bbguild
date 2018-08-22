@@ -22,16 +22,26 @@ use phpbb\user;
  */
 class admin_main
 {
+	/**
+	 * @var \phpbb\auth\auth
+	 */
+	public $auth;
+	/** @var \phpbb\cache\driver\driver_interface */
+	protected $cache;
+	/** @var \phpbb\config\config */
 	protected $config;
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\language\language */
 	protected $language;
-	/** @var log phpBB log object */
+	/** @var \phpbb\log\log */
 	protected $log;
 	protected $pagination;
-	/** @var request phpBB request object */
+	/** @var \phpbb\request\request */
 	protected $request;
-	/** @var template phpBB template object */
+	/** @var \phpbb\template\template */
 	protected $template;
-	/** @var user phpBB user object */
+	/** @var \phpbb\user */
 	protected $user;
 	/** @var string phpBB root path */
 	protected $root_path;
@@ -67,7 +77,10 @@ class admin_main
 
 	/**
 	 * admin_main constructor.
+	 * @param \phpbb\auth\auth                  $auth
+	 * @param \phpbb\cache\driver\driver_interface  $cache
 	 * @param config $config
+	 * @param \phpbb\db\driver\driver_interface     $db
 	 * @param language $language
 	 * @param log $log
 	 * @param pagination $pagination
@@ -99,7 +112,8 @@ class admin_main
 	 * @param string $bb_news
 	 * @param string $bb_plugins
 	 */
-	public function __construct(config $config, language $language, log $log, pagination $pagination, request $request, template $template, user $user, $phpbb_root_path, $phpEx,
+	public function __construct(\phpbb\auth\auth $auth,
+		\phpbb\cache\driver\driver_interface $cache, config $config, \phpbb\db\driver\driver_interface $db, language $language, log $log, pagination $pagination, request $request, template $template, user $user, $phpbb_root_path, $phpEx,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -147,7 +161,10 @@ class admin_main
 		$this->bb_news = $bb_news;
 		$this->bb_plugins = $bb_plugins;
 
+		$this->auth = $auth;
+		$this->cache = $cache;
 		$this->config = $config;
+		$this->db = $db;
 		$this->log = $log;
 		$this->log->set_log_table($this->bb_logs_table);
 		$this->pagination = $pagination;
@@ -156,7 +173,6 @@ class admin_main
 		$this->user = $user;
 		$this->root_path = $phpbb_root_path;
 		$this->php_ext = $phpEx;
-
 	}
 
 	/**
@@ -166,58 +182,233 @@ class admin_main
 	 */
 	public function main()
 	{
-		$this->form_key = 'acp_topic_prefixes';
+		$this->form_key = 'avathar/bbguild';
 		add_form_key($this->form_key);
 
-		$action = $this->request->variable('action', '');
-		$prefix_id = $this->request->variable('prefix_id', 0);
-		$this->set_forum_id($this->request->variable('forum_id', 0));
-
-		switch ($action)
+		if (! $this->auth->acl_get('a_bbguild'))
 		{
-			case 'add':
-				$this->add_prefix();
-			break;
-
-			case 'edit':
-			case 'delete':
-				$this->{$action . '_prefix'}($prefix_id);
-			break;
-
-			case 'move_up':
-			case 'move_down':
-				$this->move_prefix($prefix_id, str_replace('move_', '', $action));
-			break;
+			trigger_error($this->language->lang('NOAUTH_A_CONFIG_MAN'));
 		}
 
-		$this->display_settings();
+		//css trigger
+		$this->template->assign_vars(
+			array (
+				'S_BBGUILD' => true,
+			)
+		);
+
+	}
+
+	public function DisplayPanel()
+	{
+		// get inactive players
+		$sql = 'SELECT count(*) as player_count FROM ' . $this->bb_players_table . " WHERE player_status='0'";
+		$result = $this->db->sql_query($sql);
+		$total_players_inactive = (int) $this->db->sql_fetchfield('player_count');
+
+		//get the active players
+		$sql = 'SELECT count(*) as player_count FROM ' . $this->bb_players_table . " WHERE player_status='1'";
+		$result = $this->db->sql_query($sql);
+		$total_players_active = (int) $this->db->sql_fetchfield('player_count');
+
+		// active player kpi
+		$total_players = $total_players_active . ' / ' . $total_players_inactive;
+
+		//number of guilds
+		$sql = 'SELECT count(*) as guild_count  FROM ' . $this->bb_guild_table;
+		$result = $this->db->sql_query($sql);
+		$total_guildcount = (int) $this->db->sql_fetchfield('guild_count');
+
+		//start date
+		$bbguild_started = '';
+		if ($this->config['bbguild_eqdkp_start'] != 0)
+		{
+			$bbguild_started = date($this->config['bbguild_date_format'], $this->config['bbguild_eqdkp_start']);
+		}
+
+		$latest_version_info = $this->productversion($this->request->variable('versioncheck_force', false));
+		if ($latest_version_info === false)
+		{
+			$this->template->assign_var('S_VERSIONCHECK_FAIL', true);
+		}
+		else
+		{
+			if (phpbb_version_compare($latest_version_info, BBGUILD_VERSION, '='))
+			{
+				$this->template->assign_vars(
+					array(
+						'S_VERSION_UP_TO_DATE'    => true,
+					)
+				);
+			}
+			else if (phpbb_version_compare($latest_version_info, BBGUILD_VERSION, '>'))
+			{
+				// you have an old version
+				$this->template->assign_vars(
+					array(
+						'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->user->lang['NOT_UP_TO_DATE_TITLE'], 'bbGuild'),
+						'S_PRERELEASE'    => false,
+						'BBGUILD_LATESTVERSION' => $latest_version_info,
+						'BBGUILDVERSION' => $this->user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
+						'UPDATEINSTR' => $this->user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $this->user->lang['WEBURL'] . '">' . $this->user->lang['DOWNLOAD'] . '</a>')
+				);
+
+			}
+			else
+			{
+				// you have a prerelease or development version
+				$this->template->assign_vars(
+					array(
+						'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->user->lang['PRELELEASE_TITLE'], 'bbGuild'),
+						'BBGUILD_LATESTVERSION' => $latest_version_info,
+						'S_PRERELEASE'    => true,
+						'BBGUILDVERSION' => $this->user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
+						'UPDATEINSTR' => $this->user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $this->user->lang['WEBURL'] . '">' . $this->user->lang['DOWNLOAD'] . '</a>')
+				);
+			}
+		}
+
+		// read verbose log
+		$logs = log::Instance();
+		$listlogs = $logs->read_log('', false, true, '', '');
+		if (isset($listlogs))
+		{
+			foreach ($listlogs as $key => $log)
+			{
+				$this->template->assign_block_vars(
+					'actions_row', array(
+						'U_VIEW_LOG'     => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id']) ,
+						'LOGDATE'         => $log['datestamp'],
+						'ACTION'         => $log['log_line'],
+					)
+				);
+			}
+		}
+
+		//LOOP PLUGINS TABLE
+		$plugins_installed = 0;
+		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
+		foreach ($plugin_versioninfo as $pname => $pdetails)
+		{
+			$a = phpbb_version_compare(trim($pdetails['latest']), $pdetails['version'], '<=');
+			$this->template->assign_block_vars(
+				'plugin_row', array(
+					'PLUGINNAME'     => ucwords($pdetails['name']) ,
+					'VERSION'         => $pdetails['version'] ,
+					'ISUPTODATE'    => phpbb_version_compare(trim($pdetails['latest']), $pdetails['version'], '<=') ,
+					'LATESTVERSION' => $pdetails['latest'] ,
+					'UPDATEINSTR'     => '<a href="' . BBDKP_PLUGINURL . '">' . $this->user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
+					'INSTALLDATE'     => $pdetails['installdate'],
+				)
+			);
+			$plugins_installed +=1;
+		}
+
+		$this->template->assign_vars(
+			array(
+				'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
+				'NUMBER_OF_PLAYERS' => $total_players ,
+				'NUMBER_OF_GUILDS' => $total_guildcount ,
+				'BBGUILD_STARTED' => $bbguild_started,
+				'BBGUILD_VERSION'    => BBGUILD_VERSION,
+				'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-main_module&amp;mode=panel&amp;versioncheck_force=1'),
+				'GAMES_INSTALLED' => count($this->games) > 0 ? implode(', ', $this->games) : $this->user->lang['NA'],
+				'PLUGINS_INSTALLED' => $plugins_installed,
+			)
+		);
+
+
 	}
 
 	/**
-	 * Display topic prefix settings
 	 *
-	 * @return void
+	 * @param  bool $force_update Ignores cached data. Defaults to false.
+	 * @param  bool $warn_fail    Trigger a warning if obtaining the latest version information fails. Defaults to false.
+	 * @param  int  $ttl          Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+	 * @return bool
 	 */
-	public function display_settings()
+	public function productversion($force_update = false, $warn_fail = false, $ttl = 86400)
 	{
-		foreach ($this->manager->get_prefixes($this->forum_id) as $prefix)
+		global $user, $cache;
+
+		//get latest productversion from cache
+		$latest_version_a = $cache->get('latest_bbguild');
+
+		//if update is forced or cache expired then make the call to refresh latest productversion
+		if ($latest_version_a === false || $force_update)
 		{
-			$this->template->assign_block_vars('prefixes', [
-				'PREFIX_TAG'		=> $prefix['prefix_tag'],
-				'PREFIX_ENABLED'	=> (int) $prefix['prefix_enabled'],
-				'U_EDIT'			=> "{$this->u_action}&amp;action=edit&amp;prefix_id=" . $prefix['prefix_id'] . '&amp;forum_id=' . $this->forum_id . '&amp;hash=' . generate_link_hash('edit' . $prefix['prefix_id']),
-				'U_DELETE'			=> "{$this->u_action}&amp;action=delete&amp;prefix_id=" . $prefix['prefix_id'] . '&amp;forum_id=' . $this->forum_id,
-				'U_MOVE_UP'			=> "{$this->u_action}&amp;action=move_up&amp;prefix_id=" . $prefix['prefix_id'] . '&amp;forum_id=' . $this->forum_id . '&amp;hash=' . generate_link_hash('up' . $prefix['prefix_id']),
-				'U_MOVE_DOWN'		=> "{$this->u_action}&amp;action=move_down&amp;prefix_id=" . $prefix['prefix_id'] . '&amp;forum_id=' . $this->forum_id . '&amp;hash=' . generate_link_hash('down' . $prefix['prefix_id']),
-			]);
+			$data = $this->curl(constants::BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
+			if (0 === count($data) )
+			{
+				$cache->destroy('latest_bbguild');
+				if ($warn_fail)
+				{
+					trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
+				}
+				return false;
+			}
+
+			$response = $data['response'];
+			$latest_version = json_decode($response, true);
+			$latest_version_a = $latest_version['stable']['2.0']['current'];
+
+			//put this info in the cache
+			$cache->put('latest_bbguild', $latest_version_a, $ttl);
 		}
 
-		$this->template->assign_vars([
-			'S_FORUM_OPTIONS'	=> make_forum_select($this->forum_id, false, false, true),
-			'FORUM_ID'			=> $this->forum_id,
-			'U_ACTION'			=> $this->u_action,
-		]);
+		return $latest_version_a;
 	}
+
+	/**
+	 * retrieve latest version
+	 *
+	 * @param  bool $force_update Ignores cached data. Defaults to false.
+	 * @param  int  $ttl          Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+	 * @return bool
+	 */
+	public final function version_check($meta_data, $force_update = false, $ttl = 86400)
+	{
+		global  $phpbb_extension_manager, $path_helper;
+
+		$pemfile = '';
+		$versionurl = ($meta_data['extra']['version-check']['ssl'] == '1' ? 'https://': 'http://') .
+			$meta_data['extra']['version-check']['host'].$meta_data['extra']['version-check']['directory'].'/'.$meta_data['extra']['version-check']['filename'];
+		$ssl = $meta_data['extra']['version-check']['ssl'] == '1' ? true: false;
+		if ($ssl)
+		{
+			//https://davidwalsh.name/php-ssl-curl-error
+			$pemfile = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
+			if (!(file_exists($pemfile) && is_readable($pemfile)))
+			{
+				$ssl = false;
+			}
+		}
+
+		//get latest productversion from cache
+		$latest_version = $this->cache->get('bbg_versioncheck');
+
+		//if update is forced or cache expired then make the call to refresh latest productversion
+		if ($latest_version === false || $force_update)
+		{
+			$data = parent::curl($versionurl, $pemfile, $ssl, false, false, false);
+			if (0 === count($data) )
+			{
+				$cache->destroy('recenttopics_versioncheck');
+				return false;
+			}
+
+			$response = $data['response'];
+			$latest_version = json_decode($response, true);
+			$latest_version = $latest_version['stable']['3.2']['current'];
+
+			//put this info in the cache
+			$cache->put('recenttopics_versioncheck', $latest_version, $ttl);
+
+		}
+
+		return $latest_version;
+	}
+
 
 	/**
 	 * Add a prefix
@@ -235,95 +426,8 @@ class admin_main
 
 			$tag = $this->request->variable('prefix_tag', '', true);
 			$prefix = $this->manager->add_prefix($tag, $this->forum_id);
-			$this->log->set_log_table()
+
 			$this->log($prefix['prefix_tag'], 'ACP_LOG_PREFIX_ADDED');
-		}
-	}
-
-	/**
-	 * Edit a prefix
-	 *
-	 * @param int $prefix_id The prefix identifier to edit
-	 * @return void
-	 */
-	public function edit_prefix($prefix_id)
-	{
-		if (!$this->check_hash('edit' . $prefix_id))
-		{
-			$this->trigger_message('FORM_INVALID', E_USER_WARNING);
-		}
-
-		try
-		{
-			$prefix = $this->manager->get_prefix($prefix_id);
-			$this->manager->update_prefix($prefix['prefix_id'], ['prefix_enabled' => !$prefix['prefix_enabled']]);
-		}
-		catch (\OutOfBoundsException $e)
-		{
-			$this->trigger_message($e->getMessage(), E_USER_WARNING);
-		}
-	}
-
-	/**
-	 * Delete a prefix
-	 *
-	 * @param int $prefix_id The prefix identifier to delete
-	 * @return void
-	 */
-	public function delete_prefix($prefix_id)
-	{
-		if (confirm_box(true))
-		{
-			try
-			{
-				$prefix = $this->manager->get_prefix($prefix_id);
-				$this->manager->delete_prefix($prefix['prefix_id']);
-				$this->log($prefix['prefix_tag'], 'ACP_LOG_PREFIX_DELETED');
-			}
-			catch (\OutOfBoundsException $e)
-			{
-				$this->trigger_message($e->getMessage(), E_USER_WARNING);
-			}
-
-			$this->trigger_message('TOPIC_PREFIX_DELETED');
-		}
-
-		confirm_box(false, $this->user->lang('DELETE_TOPIC_PREFIX_CONFIRM'), build_hidden_fields([
-			'mode'		=> 'manage',
-			'action'	=> 'delete',
-			'prefix_id'	=> $prefix_id,
-			'forum_id'	=> $this->forum_id,
-		]));
-	}
-
-	/**
-	 * Move a prefix up/down
-	 *
-	 * @param int    $prefix_id The prefix identifier to move
-	 * @param string $direction The direction (up|down)
-	 * @param int    $amount    The amount of places to move (default: 1)
-	 * @return void
-	 */
-	public function move_prefix($prefix_id, $direction, $amount = 1)
-	{
-		if (!$this->check_hash($direction . $prefix_id))
-		{
-			$this->trigger_message('FORM_INVALID', E_USER_WARNING);
-		}
-
-		try
-		{
-			$this->manager->move_prefix($prefix_id, $direction, $amount);
-		}
-		catch (\OutOfBoundsException $e)
-		{
-			$this->trigger_message($e->getMessage(), E_USER_WARNING);
-		}
-
-		if ($this->request->is_ajax())
-		{
-			$json_response = new \phpbb\json_response;
-			$json_response->send(['success' => true]);
 		}
 	}
 
@@ -340,42 +444,19 @@ class admin_main
 	}
 
 	/**
-	 * Set forum ID
+	 * Set page url
 	 *
-	 * @param int $forum_id Forum identifier
-	 * @return main_controller
-	 */
-	public function set_forum_id($forum_id)
-	{
-		$this->forum_id = $forum_id;
-		return $this;
-	}
-
-	/**
-	 * Check link hash helper
-	 *
-	 * @param string $hash A hashed string
-	 * @return bool True if hash matches, false if not
-	 */
-	protected function check_hash($hash)
-	{
-		return check_link_hash($this->request->variable('hash', ''), $hash);
-	}
-
-	/**
-	 * Trigger a message and back link for error/success dialogs
-	 *
-	 * @param string $message A language key
-	 * @param int    $error   Error type constant, optional
+	 * @param string $u_action Custom form action
 	 * @return void
+	 * @access public
 	 */
-	protected function trigger_message($message = '', $error = E_USER_NOTICE)
+	public function set_page_url($u_action)
 	{
-		trigger_error($this->user->lang($message) . adm_back_link("{$this->u_action}&amp;forum_id={$this->forum_id}"), $error);
+		$this->u_action = $u_action;
 	}
 
 	/**
-	 * Helper for logging topic prefix admin actions
+	 * Logging helper
 	 *
 	 * @param string $tag     The topic prefix tag
 	 * @param string $message The log action language key
@@ -383,26 +464,15 @@ class admin_main
 	 */
 	protected function log($tag, $message)
 	{
-		$forum_data = $this->get_forum_info($this->forum_id);
 
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $message, time(), [$tag, $forum_data['forum_name']]);
+		$this->log->add(
+			'admin',
+			$this->user->data['user_id'],
+			$this->user->ip,
+			$message,
+			time(),
+			[$tag, $forum_data['forum_name']]
+		);
 	}
 
-	/**
-	 * Get a forum's information
-	 *
-	 * @param int $forum_id
-	 * @return mixed Array with the current row, false, if the row does not exist
-	 */
-	protected function get_forum_info($forum_id)
-	{
-		if (!class_exists('acp_forums'))
-		{
-			include $this->root_path . 'includes/acp/acp_forums.' . $this->php_ext;
-		}
-
-		$acp_forums = new \acp_forums();
-
-		return $acp_forums->get_forum_info($forum_id);
-	}
 }

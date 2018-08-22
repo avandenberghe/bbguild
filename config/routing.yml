@@ -1,7 +1,7 @@
 # ext/avathar/bbguild/config/routing.yml
 avathar_bbguild_00:
     path: /guild/{page}/{guild_id}
-    defaults: { _controller: avathar.bbguild.controller:handleguild , guild_id: 1, page: "welcome" }
+    defaults: { _controller: avathar.bbguild.controller:handleview , guild_id: 1, page: "welcome" }
     requirements:
         guild_id: \d*
         page: welcome|roster|achievements
