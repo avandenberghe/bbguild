@@ -33,7 +33,7 @@ class main_module
 
         // Requests
         $action = $request->variable('action', '');
-        $admin_main->main();
+        $admin_main->handle();
 
         // Make the $u_action url available in the admin controller
         $admin_main->set_page_url($this->u_action);

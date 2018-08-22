@@ -9,6 +9,8 @@
 
 namespace avathar\bbguild\model\admin;
 
+use avathar\bbguild\model\admin\constants;
+
 /**
  * Singleton Logging class
  *
@@ -17,6 +19,7 @@ namespace avathar\bbguild\model\admin;
 class log
 {
 	public $bb_logs_table;
+	protected $db;
 
 	/**
 	 * number of logs
@@ -24,308 +27,69 @@ class log
 	 * @var int
 	 */
 	protected $total_logs;
-	/**
-	 * @return int
-	 */
-	public function getTotalLogs()
-	{
-		return $this->logcount();
-	}
-
-	/**
-	 * refers to this instance of the logging class
-	 *
-	 * @var log
-	 */
-	private static $instance;
-
-	/**
-	 * dkp system added
-	 */
-	const DKPSYS_ADDED = 1;
-	/**
-	 * dkp system updated
-	 */
-	const DKPSYS_UPDATED = 2;
-	/**
-	 * dkp system deleted
-	 */
-	const DKPSYS_DELETED = 3;
-	/**
-	 * event added
-	 */
-	const EVENT_ADDED = 4;
-	/**
-	 * event updated
-	 */
-	const EVENT_UPDATED = 5;
-	/**
-	 * event deleted
-	 */
-	const EVENT_DELETED = 6;
-	/**
-	 * history transferred
-	 */
-	const HISTORY_TRANSFER = 7;
-	/**
-	 * individual adjustment added
-	 */
-	const INDIVADJ_ADDED = 8;
-	/**
-	 * individual adjustment updated
-	 */
-	const INDIVADJ_UPDATED = 9;
-	/**
-	 * individual adjustment deleted
-	 */
-	const INDIVADJ_DELETED = 10;
-	/**
-	 * item added
-	 */
-	const ITEM_ADDED = 11;
-	/**
-	 * item updated
-	 */
-	const ITEM_UPDATED = 12;
-	/**
-	 * item deleted
-	 */
-	const ITEM_DELETED= 13;
-	/**
-	 * new player was added
-	 */
-	const PLAYER_ADDED = 14;
-	/**
-	 * player file was updated
-	 */
-	const PLAYER_UPDATED = 15;
-	/**
-	 * player was removed
-	 */
-	const PLAYER_DELETED = 16;
-	/**
-	 * rank was added
-	 */
-	const RANK_ADDED = 17;
-	/**
-	 * rank was updated
-	 */
-	const RANK_UPDATED = 18;
-	/**
-	 * rank was deleted
-	 */
-	const RANK_DELETED = 19;
-	/**
-	 * news was added
-	 */
-	const NEWS_ADDED = 20;
-	/**
-	 * news was updated
-	 */
-	const NEWS_UPDATED = 21;
-	/**
-	 * news was deleted
-	 */
-	const NEWS_DELETED = 22;
-	/**
-	 * a new raid was added
-	 */
-	const RAID_ADDED = 23;
-	/**
-	 * raid was updated
-	 */
-	const RAID_UPDATED = 24;
-	/**
-	 * raid was deleted
-	 */
-	const RAID_DELETED = 25;
-	/**
-	 * an action was completed
-	 */
-	const ACTION_DELETED = 26;
-	/**
-	 * raidtracker config was updated
-	 */
-	const RT_CONFIG_UPDATED = 27;
-	/**
-	 * the decay was synchronised
-	 */
-	const DECAYSYNC = 28;
-	/**
-	 * decay was switched off
-	 */
-	const DECAYOFF = 29;
-	/**
-	 * zero sum dkp was synced
-	 */
-	const ZSYNC = 30;
-	/**
-	 * dkp was synchronised
-	 */
-	const DKPSYNC = 31;
-	/**
-	 * default pool was changed
-	 */
-	const DEFAULT_DKP_CHANGED = 32;
-	/**
-	 * new guild was added
-	 */
-	const GUILD_ADDED = 33;
-	/**
-	 * new player points account was opened
-	 */
-	const PLAYERDKP_UPDATED = 34;
-	/**
-	 * points account was deleted
-	 */
-	const PLAYERDKP_DELETED = 35;
-	/**
-	 * a game was added
-	 */
-	const GAME_ADDED = 36;
-	/**
-	 * a game was deleted
-	*/
-	const GAME_DELETED = 37;
-	/**
-	 * settings were updated
-	 */
-	const SETTINGS_CHANGED = 38;
-	/**
-	 * portal settings were changed
-	 */
-	const PORTAL_CHANGED = 39;
-	/**
-	 * a faction was deleted
-	 */
-	const FACTION_DELETED = 40;
-	/**
-	 * bbguild logs were purged
-	 */
-	const LOG_DELETED = 41;
-	/**
-	 * a faction was added
-	 */
-	const FACTION_ADDED = 42;
-	/**
-	 * a race was added
-	 */
-	const RACE_ADDED = 43;
-	/**
-	 * a race was deleted
-	 */
-	const RACE_DELETED = 44;
-	/**
-	 * a class was added
-	 */
-	const CLASS_ADDED = 45;
-	/**
-	 * a class was deleted
-	 */
-	const CLASS_DELETED = 46;
-	/**
-	 * a race was updated
-	 */
-	const RACE_UPDATED = 47;
-	/**
-	 * a class was updated
-	 */
-	const CLASS_UPDATED = 48;
-	/**
-	 * a previously inactive player was reactivated
-	 */
-	const PLAYER_DEACTIVATED = 49;
-	/**
-	 * a guild was updated
-	 */
-	const GUILD_UPDATED = 50;
-	/**
-	 * battle.NET is down
-	 */
-	const ARMORY_DOWN = 51;
-	/**
-	 * a faction was updated
-	 */
-	const FACTION_UPDATED = 52;
-	/**
-	 * A role was added
-	 */
-	const ROLE_ADDED = 53;
-	/**
-	 * a role was updated
-	 */
-	const ROLE_UPDATED = 54;
-	/**
-	 * a role was updated
-	 */
-	const ROLE_DELETED = 55;
-	/**
-	 * inactive account
-	 */
-	const  BATTLENET_ACCOUNT_INACTIVE = 56;
 
 	/**
 	 * logging key-values
 	*
 	 * @var array
 	 */
-	public static $valid_action_types = array(
-		self::DKPSYS_ADDED => 'DKPSYS_ADDED' ,
-		self::DKPSYS_UPDATED => 'DKPSYS_UPDATED' ,
-		self::DKPSYS_DELETED =>'DKPSYS_DELETED' ,
-		self::EVENT_ADDED =>'EVENT_ADDED' ,
-		self::EVENT_UPDATED =>'EVENT_UPDATED' ,
-		self::EVENT_DELETED =>'EVENT_DELETED' ,
-		self::HISTORY_TRANSFER =>'HISTORY_TRANSFER' ,
-		self::INDIVADJ_ADDED =>'INDIVADJ_ADDED' ,
-		self::INDIVADJ_UPDATED =>'INDIVADJ_UPDATED' ,
-		self::INDIVADJ_DELETED =>'INDIVADJ_DELETED' ,
-		self::ITEM_ADDED =>'ITEM_ADDED' ,
-		self::ITEM_UPDATED =>'ITEM_UPDATED' ,
-		self::CLASS_UPDATED =>'ITEM_DELETED' ,
-		self::PLAYER_ADDED =>'PLAYER_ADDED' ,
-		self::PLAYER_UPDATED =>'PLAYER_UPDATED' ,
-		self::PLAYER_DELETED =>'PLAYER_DELETED' ,
-		self::RANK_ADDED =>'RANK_ADDED' ,
-		self::RANK_UPDATED =>'RANK_UPDATED' ,
-		self::RANK_DELETED =>'RANK_DELETED' ,
-		self::NEWS_ADDED =>'NEWS_ADDED' ,
-		self::NEWS_UPDATED =>'NEWS_UPDATED' ,
-		self::NEWS_DELETED =>'NEWS_DELETED' ,
-		self::RAID_ADDED =>'RAID_ADDED' ,
-		self::RAID_UPDATED =>'RAID_UPDATED' ,
-		self::RAID_DELETED =>'RAID_DELETED' ,
-		self::ACTION_DELETED =>'ACTION_DELETED' ,
-		self::RT_CONFIG_UPDATED =>'RT_CONFIG_UPDATED' ,
-		self::DECAYSYNC =>'DECAYSYNC' ,
-		self::DECAYOFF =>'DECAYOFF' ,
-		self::ZSYNC =>'ZSYNC' ,
-		self::DKPSYNC =>'DKPSYNC' ,
-		self::DEFAULT_DKP_CHANGED =>'DEFAULT_DKP_CHANGED' ,
-		self::GUILD_ADDED =>'GUILD_ADDED' ,
-		self::PLAYERDKP_UPDATED =>'PLAYERDKP_UPDATED' ,
-		self::CLASS_UPDATED =>'PLAYERDKP_DELETED',
-		self::GAME_ADDED => 'GAME_ADDED',
-		self::GAME_DELETED => 'GAME_DELETED',
-		self::SETTINGS_CHANGED => 'SETTINGS_CHANGED',
-		self::PORTAL_CHANGED => 'PORTAL_CHANGED',
-		self::FACTION_DELETED => 'FACTION_DELETED',
-		self::LOG_DELETED => 'LOG_DELETED',
-		self::FACTION_ADDED => 'FACTION_ADDED',
-		self::RACE_ADDED => 'RACE_ADDED',
-		self::RACE_DELETED => 'RACE_DELETED',
-		self::CLASS_ADDED => 'CLASS_ADDED',
-		self::CLASS_DELETED => 'CLASS_DELETED',
-		self::RACE_UPDATED => 'RACE_UPDATED',
-		self::CLASS_UPDATED => 'CLASS_UPDATED',
-		self::PLAYER_DEACTIVATED => 'PLAYER_DEACTIVATED',
-		self::GUILD_UPDATED => 'GUILD_UPDATED',
-		self::ARMORY_DOWN => 'ARMORY_DOWN',
-		self::FACTION_UPDATED => 'FACTION_UPDATED',
-		self::ROLE_ADDED => 'ROLE_ADDED',
-		self::ROLE_UPDATED => 'ROLE_UPDATED',
-		self::ROLE_DELETED => 'ROLE_DELETED',
-		self::BATTLENET_ACCOUNT_INACTIVE => 'BATTLENET_ACCOUNT_INACTIVE',
+	public  $valid_action_types = array(
+		constants::DKPSYS_ADDED => 'DKPSYS_ADDED' ,
+		constants::DKPSYS_UPDATED => 'DKPSYS_UPDATED' ,
+		constants::DKPSYS_DELETED =>'DKPSYS_DELETED' ,
+		constants::EVENT_ADDED =>'EVENT_ADDED' ,
+		constants::EVENT_UPDATED =>'EVENT_UPDATED' ,
+		constants::EVENT_DELETED =>'EVENT_DELETED' ,
+		constants::HISTORY_TRANSFER =>'HISTORY_TRANSFER' ,
+		constants::INDIVADJ_ADDED =>'INDIVADJ_ADDED' ,
+		constants::INDIVADJ_UPDATED =>'INDIVADJ_UPDATED' ,
+		constants::INDIVADJ_DELETED =>'INDIVADJ_DELETED' ,
+		constants::ITEM_ADDED =>'ITEM_ADDED' ,
+		constants::ITEM_UPDATED =>'ITEM_UPDATED' ,
+		constants::CLASS_UPDATED =>'ITEM_DELETED' ,
+		constants::PLAYER_ADDED =>'PLAYER_ADDED' ,
+		constants::PLAYER_UPDATED =>'PLAYER_UPDATED' ,
+		constants::PLAYER_DELETED =>'PLAYER_DELETED' ,
+		constants::RANK_ADDED =>'RANK_ADDED' ,
+		constants::RANK_UPDATED =>'RANK_UPDATED' ,
+		constants::RANK_DELETED =>'RANK_DELETED' ,
+		constants::NEWS_ADDED =>'NEWS_ADDED' ,
+		constants::NEWS_UPDATED =>'NEWS_UPDATED' ,
+		constants::NEWS_DELETED =>'NEWS_DELETED' ,
+		constants::RAID_ADDED =>'RAID_ADDED' ,
+		constants::RAID_UPDATED =>'RAID_UPDATED' ,
+		constants::RAID_DELETED =>'RAID_DELETED' ,
+		constants::ACTION_DELETED =>'ACTION_DELETED' ,
+		constants::RT_CONFIG_UPDATED =>'RT_CONFIG_UPDATED' ,
+		constants::DECAYSYNC =>'DECAYSYNC' ,
+		constants::DECAYOFF =>'DECAYOFF' ,
+		constants::ZSYNC =>'ZSYNC' ,
+		constants::DKPSYNC =>'DKPSYNC' ,
+		constants::DEFAULT_DKP_CHANGED =>'DEFAULT_DKP_CHANGED' ,
+		constants::GUILD_ADDED =>'GUILD_ADDED' ,
+		constants::PLAYERDKP_UPDATED =>'PLAYERDKP_UPDATED' ,
+		constants::CLASS_UPDATED =>'PLAYERDKP_DELETED',
+		constants::GAME_ADDED => 'GAME_ADDED',
+		constants::GAME_DELETED => 'GAME_DELETED',
+		constants::SETTINGS_CHANGED => 'SETTINGS_CHANGED',
+		constants::PORTAL_CHANGED => 'PORTAL_CHANGED',
+		constants::FACTION_DELETED => 'FACTION_DELETED',
+		constants::LOG_DELETED => 'LOG_DELETED',
+		constants::FACTION_ADDED => 'FACTION_ADDED',
+		constants::RACE_ADDED => 'RACE_ADDED',
+		constants::RACE_DELETED => 'RACE_DELETED',
+		constants::CLASS_ADDED => 'CLASS_ADDED',
+		constants::CLASS_DELETED => 'CLASS_DELETED',
+		constants::RACE_UPDATED => 'RACE_UPDATED',
+		constants::CLASS_UPDATED => 'CLASS_UPDATED',
+		constants::PLAYER_DEACTIVATED => 'PLAYER_DEACTIVATED',
+		constants::GUILD_UPDATED => 'GUILD_UPDATED',
+		constants::ARMORY_DOWN => 'ARMORY_DOWN',
+		constants::FACTION_UPDATED => 'FACTION_UPDATED',
+		constants::ROLE_ADDED => 'ROLE_ADDED',
+		constants::ROLE_UPDATED => 'ROLE_UPDATED',
+		constants::ROLE_DELETED => 'ROLE_DELETED',
+		constants::BATTLENET_ACCOUNT_INACTIVE => 'BATTLENET_ACCOUNT_INACTIVE',
 	);
 
 	/**
@@ -334,7 +98,7 @@ class log
 	*
 	 * @var array
 	 */
-	private static $valid_tags = array(
+	private $valid_tags = array(
 				'L_NAME' ,
 				'L_EARNED_BEFORE' ,
 				'L_EARNED_AFTER' ,
@@ -401,48 +165,19 @@ class log
 
 	);
 
-	/**
-	 * SINGLETON CLASS !
-	 */
-	private function __construct($bb_logs_table)
+	public function __construct($bb_logs_table, \phpbb\db\driver\driver_interface $db)
 	{
 		$this->bb_logs_table = $bb_logs_table;
+		$this->db = $db;
 	}
 
 	/**
-	 * Call this method to get singleton log instance
-	*
-	 * @return log
+	 * @return int
 	 */
-	public static function Instance()
+	public function getTotalLogs()
 	{
-		if (!isset(self::$instance))
-		{
-			$className = __CLASS__;
-			self::$instance = new $className;
-		}
-		return self::$instance;
+		return $this->logcount();
 	}
-
-	/**
-	 * Cloning class is blocked
-	 */
-	public function __clone()
-	{
-		//cloning not allowed
-		global $user;
-		trigger_error($user->lang['ERROR'], E_USER_ERROR);
-	}
-
-	/**
-	 * cannot deserialise
-	 */
-	public function __wakeup()
-	{
-		global $user;
-		trigger_error($user->lang['ERROR'], E_USER_ERROR);
-	}
-
 
 	/**
 	 * get this log entry
@@ -452,7 +187,6 @@ class log
 	 */
 	public function get_logentry($log_id)
 	{
-		global $db;
 		$sql_array = array(
 			'SELECT'     => 'l.*, u.username, u.user_id, u.user_colour' ,
 			'FROM'         =>     array($this->bb_logs_table => 'l') ,
@@ -461,10 +195,10 @@ class log
 					'FROM' => array(USERS_TABLE => 'u') ,
 					'ON' => 'u.user_id=l.log_userid')) ,
 			'WHERE' => 'log_id=' . (int) $log_id);
-		$total_sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($total_sql);
-		$log = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+		$total_sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($total_sql);
+		$log = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
 		$log['colouruser'] = get_username_string('full', $log['user_id'], $log['username'], $log['user_colour']);
 
 		$log['log_type'] = str_replace('L_ACTION_', '', $log['log_type']);
@@ -490,7 +224,7 @@ class log
 	 */
 	public function log_insert(array $values)
 	{
-		global $db, $user;
+		global $user;
 		/**
 		 * log_id        int(11)        UNSIGNED    No        auto_increment
 		 * log_date      int(11)            No    0
@@ -538,10 +272,10 @@ class log
 				{
 				case 'log_type':
 					$log_type = str_replace('L_ACTION_', '', $values['log_type']);
-					if (!in_array($log_type,  (array) self::$valid_action_types))
+					if (!in_array($log_type,  (array) $this->valid_action_types))
 					{
 						$log_type = str_replace('L_ERROR_', '', $values['log_type']);
-						if (!in_array($log_type,  (array) self::$valid_action_types))
+						if (!in_array($log_type,  (array) $this->valid_action_types))
 						{
 							//wrong logging type, can't log
 							return false;
@@ -557,7 +291,7 @@ class log
 						//check tags but skip the header
 						if ($key != 'header')
 						{
-							if (!in_array($key, (array) self::$valid_tags))
+							if (!in_array($key, (array) $this->valid_tags))
 							{
 								//wrong logging type
 								$key = 'L_WRONG_KEY';
@@ -586,9 +320,9 @@ class log
 					break;
 				}
 			}
-			$query = $db->sql_build_array('INSERT', $values);
+			$query = $this->db->sql_build_array('INSERT', $values);
 			$sql = 'INSERT INTO ' . $this->bb_logs_table . $query;
-			$db->sql_query($sql);
+			$this->db->sql_query($sql);
 			return true;
 		}
 		return false;
@@ -603,8 +337,6 @@ class log
 	 */
 	public function delete_log($marked)
 	{
-		global $db;
-
 		//they hit yes
 		$sql = 'DELETE FROM ' . $this->bb_logs_table . ' WHERE 1=1 ';
 		$sql_in = array();
@@ -612,8 +344,8 @@ class log
 		{
 			$sql_in[] = $mark;
 		}
-		$sql .= ' AND ' . $db->sql_in_set('log_id', $sql_in);
-		$db->sql_query($sql);
+		$sql .= ' AND ' . $this->db->sql_in_set('log_id', $sql_in);
+		$this->db->sql_query($sql);
 
 		return $sql_in;
 
@@ -632,7 +364,7 @@ class log
 	 */
 	public function read_log($order = '', $search = false, $verbose = false, $search_term = '', $start = '')
 	{
-		global $user, $db;
+		global $user;
 
 		$sql_array = array(
 		'SELECT' => 'l.*, u.username, u.user_colour ' ,
@@ -646,21 +378,21 @@ class log
 		{
 
 			// Check if it's a valid log type
-			if (in_array($search_term, self::$valid_action_types))
+			if (in_array($search_term, $this->valid_action_types))
 			{
 				$sql_array['WHERE'] = " u.user_id=l.log_userid
-                    AND ( l.log_type='" . $db->sql_escape('L_ACTION_' . $search_term) . "'
-                          OR  l.log_type='" . $db->sql_escape('L_ERROR_' . $search_term) . "')";
+                    AND ( l.log_type='" . $this->db->sql_escape('L_ACTION_' . $search_term) . "'
+                    OR  l.log_type='" . $this->db->sql_escape('L_ERROR_' . $search_term) . "')";
 			}
 			// Check it's an IP
 			else if (preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $search_term))
 			{
-				$sql_array['WHERE'] = "  u.user_id=l.log_userid AND l.log_ipaddress='" . $db->sql_escape($search_term) . "'";
+				$sql_array['WHERE'] = "  u.user_id=l.log_userid AND l.log_ipaddress='" . $this->db->sql_escape($search_term) . "'";
 			}
 			// Still going? It's a username
 			else if ($search_term != '')
 			{
-				$sql_array['WHERE'] = " u.user_id=l.log_userid AND u.user_id='" . $db->sql_escape($search_term) . "'";
+				$sql_array['WHERE'] = " u.user_id=l.log_userid AND u.user_id='" . $this->db->sql_escape($search_term) . "'";
 			}
 			else
 			{
@@ -671,18 +403,18 @@ class log
 		if ($verbose == false)
 		{
 			$sql_array['ORDER_BY'] = $order;
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query_limit($sql, 30);
+			$sql = $this->db->sql_build_query('SELECT', $sql_array);
+			$result = $this->db->sql_query_limit($sql, 30);
 		}
 		else
 		{
 			$sql_array['ORDER_BY'] = 'log_id DESC';
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query_limit($sql, constants::USER_LLIMIT, $start);
+			$sql = $this->db->sql_build_query('SELECT', $sql_array);
+			$result = $this->db->sql_query_limit($sql, constants::USER_LLIMIT, $start);
 		}
 
 		$outlog = array();
-		while ($row = $db->sql_fetchrow($result))
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$log = $this->getxmltag($row['log_action']);
 			$log_type = str_replace('L_ACTION_', '', $row['log_type']);
@@ -720,11 +452,11 @@ class log
 		global $user;
 		if ($verbose)
 		{
-			return $user->lang['VLOG_' . self::$valid_action_types[constant("self::$value")]];
+			return $user->lang['VLOG_' . $value];
 		}
 		else
 		{
-			return $user->lang['ACTION_' . self::$valid_action_types[constant("self::$value")]];
+			return $user->lang['ACTION_' . $value];
 		}
 
 	}
@@ -737,11 +469,10 @@ class log
 	 */
 	private function logcount()
 	{
-		global $db;
 		$sql6 = 'SELECT count(*) as log_count FROM ' . $this->bb_logs_table;
-		$result6 = $db->sql_query($sql6);
-		$this->total_logs = (int) $db->sql_fetchfield('log_count');
-		$db->sql_freeresult($result6);
+		$result6 = $this->db->sql_query($sql6);
+		$this->total_logs = (int) $this->db->sql_fetchfield('log_count');
+		$this->db->sql_freeresult($result6);
 		unset($result6);
 		return $this->total_logs;
 
@@ -993,7 +724,7 @@ class log
 		$array_temp = (array) @simplexml_load_string($haystack);
 		foreach ($array_temp as $tag => $value)
 		{
-			if (in_array($tag, self::$valid_tags))
+			if (in_array($tag, $this->valid_tags))
 			{
 				$found[$tag] = $value;
 			}

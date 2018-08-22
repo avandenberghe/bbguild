@@ -10,7 +10,7 @@
 
 namespace avathar\bbguild\model\admin;
 
-class admin
+class curl
 {
 	/**
 	 * connects to remote site and gets xml or html using Curl
@@ -22,7 +22,7 @@ class admin
 	 * @param bool $json
 	 * @return array
 	 */
-	public final function curl($url, $pemfile, $ssl = false, $return_Server_Response_Header = false, $loud = true, $json = true)
+	public function curl($url, $pemfile, $ssl = false, $return_Server_Response_Header = false, $loud = true, $json = true)
 	{
 		global $phpbb_container, $user;
 

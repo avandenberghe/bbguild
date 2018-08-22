@@ -162,25 +162,6 @@ class main_module
 					}
 				}
 
-				//LOOP PLUGINS TABLE
-				$plugins_installed = 0;
-				$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
-				foreach ($plugin_versioninfo as $pname => $pdetails)
-				{
-					$a = phpbb_version_compare(trim($pdetails['latest']), $pdetails['version'], '<=');
-					$this->template->assign_block_vars(
-						'plugin_row', array(
-							'PLUGINNAME'     => ucwords($pdetails['name']) ,
-							'VERSION'         => $pdetails['version'] ,
-							'ISUPTODATE'    => phpbb_version_compare(trim($pdetails['latest']), $pdetails['version'], '<=') ,
-							'LATESTVERSION' => $pdetails['latest'] ,
-							'UPDATEINSTR'     => '<a href="' . BBDKP_PLUGINURL . '">' . $this->user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
-							'INSTALLDATE'     => $pdetails['installdate'],
-						)
-					);
-					$plugins_installed +=1;
-				}
-
 				$this->template->assign_vars(
 					array(
 						'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
