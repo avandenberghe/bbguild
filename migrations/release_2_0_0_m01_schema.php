@@ -43,12 +43,6 @@ class release_2_0_0_m01_schema extends migration
 		return array('\phpbb\db\migration\data\v310\gold');
 	}
 
-	public function effectively_installed()
-	{
-		$this->GetTablenames();
-		return $this->db_tools->sql_table_exists($this->achievement_rewards_table);
-	}
-
 	/**
 	 * Add the bbguild table schema to the database:
 	 *

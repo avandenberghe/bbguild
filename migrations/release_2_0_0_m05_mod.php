@@ -27,6 +27,12 @@ class release_2_0_0_m05_mod extends migration
 		return array('\avathar\bbguild\migrations\release_2_0_0_m04_permissions');
 	}
 
+
+	public function effectively_installed()
+	{
+		return isset($this->config['bbguild_version']) && version_compare($this->config['bbguild_version'], '2.0.0', '>=');
+	}
+
 	/**
 	 * Add or update data in the database
 	 *

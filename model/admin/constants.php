@@ -8,8 +8,9 @@
 namespace avathar\bbguild\model\admin;
 
 class constants {
-	const BBGUILD_VERSION = '2.0.0-a9';
+
 	const BBGUILD_VERSIONURL = 'https://www.avathar.be/versioncheck/';
+
 	const URI_LOG = 'log';
 	const URI_NAME = 'name';
 	const URI_NAMEID = 'player_id';

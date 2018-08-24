@@ -119,28 +119,6 @@ class util
 		return substr($string, 0, $pos);
 	}
 
-	/**
-	 * makes an entry in the bbguild log table
-	 * log_action is an xml containing the log
-	 *
-	 * log_id    int(11)        UNSIGNED    No        auto_increment
-	 * log_date    int(11)            No    0
-	 * log_type    varchar(255)    utf8_bin        No
-	 * log_action    text    utf8_bin        No
-	 * log_ipaddress    varchar(15)    utf8_bin        No
-	 * log_sid    varchar(32)    utf8_bin        No
-	 * log_result    varchar(255)    utf8_bin        No
-	 * log_userid    mediumint(8)    UNSIGNED    No    0
-	 *
-	 * @param array $values
-	 * @return bool
-	 */
-	public final function log_insert($values = array())
-	{
-		$logs = log::Instance();
-		return $logs->log_insert($values);
-
-	}
 }
 
 

@@ -65,13 +65,21 @@ class admin_main
 	/** @var string Form key used for form validation */
 	protected $form_key;
 	/** @var string Custom form action */
-	protected $u_action;
+	public $u_action;
 
 	/* @var \avathar\bbguild\model\admin\curl curl class */
 	public $curl;
 
 	/* @var \avathar\bbguild\model\admin\log logging class */
 	public $bbguildlog;
+
+	/**
+	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
+	 * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
+	 *
+	 * @var array
+	 */
+	public $languagecodes;
 
 	public $bb_games_table;
 	public $bb_logs_table;
@@ -219,6 +227,14 @@ class admin_main
 		$this->adm_relative_path = $adm_relative_path;
 		$this->php_ext = $phpEx;
 		$this->curl = $curl;
+
+
+		$this->languagecodes = array(
+			'de' => $this->language->lang('LANG_DE'),
+			'en' => $this->language->lang('LANG_EN'),
+			'fr' => $this->language->lang('LANG_FR'),
+			'it' => $this->language->lang('LANG_IT'),
+		);
 	}
 
 	/**
@@ -228,8 +244,6 @@ class admin_main
 	 */
 	public function handle()
 	{
-		$this->form_key = 'avathar/bbguild';
-		add_form_key($this->form_key);
 
 		if (! $this->auth->acl_get('a_bbguild'))
 		{
@@ -271,14 +285,21 @@ class admin_main
 			$bbguild_started = date($this->config['bbguild_date_format'], $this->config['bbguild_eqdkp_start']);
 		}
 
-		$latest_version_info = $this->productversion($this->request->variable('versioncheck_force', false));
-		if ($latest_version_info === false)
+		//version check
+
+		$ext_meta_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('avathar/bbguild', $this->template);
+		$meta_data  = $ext_meta_manager->get_metadata();
+		$ext_version  = $meta_data['version'];
+
+		$latest_version_info = $this->version_check($meta_data, $this->request->variable('versioncheck_force', false));
+		echo $ext_version;
+		if ($latest_version_info == false)
 		{
 			$this->template->assign_var('S_VERSIONCHECK_FAIL', true);
 		}
 		else
 		{
-			if (phpbb_version_compare($latest_version_info, constants::BBGUILD_VERSION, '='))
+			if (phpbb_version_compare($latest_version_info, $this->config['bbguild_version'], '='))
 			{
 				$this->template->assign_vars(
 					array(
@@ -286,7 +307,7 @@ class admin_main
 					)
 				);
 			}
-			else if (phpbb_version_compare($latest_version_info, constants::BBGUILD_VERSION, '>'))
+			else if (phpbb_version_compare($latest_version_info, $this->config['bbguild_version'] , '>'))
 			{
 				// you have an old version
 				$this->template->assign_vars(
@@ -294,13 +315,13 @@ class admin_main
 						'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->language->lang('NOT_UP_TO_DATE_TITLE'), 'bbGuild'),
 						'S_PRERELEASE'    => false,
 						'BBGUILD_LATESTVERSION' => $latest_version_info,
-						'BBGUILDVERSION' => $this->language->lang('BBGUILD_YOURVERSION') . constants::BBGUILD_VERSION ,
+						'BBGUILDVERSION' => $this->language->lang('BBGUILD_YOURVERSION') . $this->config['bbguild_version']  ,
 						'UPDATEINSTR' => $this->language->lang('BBGUILD_LATESTVERSION') . $latest_version_info . ', <a href="' .
 							$this->language->lang('WEBURL') . '">' . $this->language->lang('DOWNLOAD') . '</a>')
 				);
 
 			}
-			else
+			else if (phpbb_version_compare($latest_version_info, $this->config['bbguild_version'] , '<'))
 			{
 				// you have a prerelease or development version
 				$this->template->assign_vars(
@@ -308,7 +329,7 @@ class admin_main
 						'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->language->lang('PRELELEASE_TITLE'), 'bbGuild'),
 						'BBGUILD_LATESTVERSION' => $latest_version_info,
 						'S_PRERELEASE'    => true,
-						'BBGUILDVERSION' => $this->language->lang('BBGUILD_YOURVERSION') . constants::BBGUILD_VERSION ,
+						'BBGUILDVERSION' => $this->language->lang('BBGUILD_YOURVERSION') . $this->config['bbguild_version']  ,
 						'UPDATEINSTR' => $this->language->lang('BBGUILD_LATESTVERSION') . $latest_version_info . ', <a href="' . $this->language->lang('WEBURL') . '">' . $this->language->lang('DOWNLOAD') . '</a>')
 				);
 			}
@@ -337,12 +358,13 @@ class admin_main
 
 		$this->template->assign_vars(
 			array(
+				'U_ACTION'           => $this->u_action,
 				'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
 				'NUMBER_OF_PLAYERS' => $total_players ,
 				'NUMBER_OF_GUILDS' => $total_guildcount ,
 				'BBGUILD_STARTED' => $bbguild_started,
-				'BBGUILD_VERSION'    => constants::BBGUILD_VERSION,
-				'U_VERSIONCHECK_FORCE' => append_sid("{$this->adm_relative_path}index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=panel&amp;versioncheck_force=1'),
+				'BBGUILD_VERSION'    => $this->config['bbguild_version'] ,
+				'U_VERSIONCHECK_FORCE' => append_sid($this->u_action . '&amp;versioncheck_force=1'),
 				'GAMES_INSTALLED' => count($games) > 0 ? implode(', ', $games) : $this->user->lang['NA'],
 			)
 		);
@@ -350,44 +372,106 @@ class admin_main
 
 	}
 
+
 	/**
-	 *
-	 * @param  bool $force_update Ignores cached data. Defaults to false.
-	 * @param  bool $warn_fail    Trigger a warning if obtaining the latest version information fails. Defaults to false.
-	 * @param  int  $ttl          Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
-	 * @return bool
+	 * display current configuration
 	 */
-	public function productversion($force_update = false, $warn_fail = false, $ttl = 86400)
+	public function display_config()
 	{
-		global $cache;
 
-		//get latest productversion from cache
-		$version = $cache->get('latest_bbguild');
-
-		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($version === false || $force_update)
+		$s_lang_options = '';
+		foreach ($this->languagecodes as $lang => $langname)
 		{
-			$data = $this->curl->curl(constants::BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
-			if (0 === count($data) )
-			{
-				$cache->destroy('latest_bbguild');
-				if ($warn_fail)
-				{
-					trigger_error($this->language->lang('VERSION_NOTONLINE'), E_USER_WARNING);
-				}
-				return false;
-			}
-
-			$response = $data['response'];
-			$latest_version = json_decode($response, true);
-			$version = $latest_version['stable']['2.0']['current'];
-
-			//put this info in the cache
-			$cache->put('latest_bbguild', $version, $ttl);
+			$selected = ($this->config['bbguild_lang'] == $lang) ? ' selected="selected"' : '';
+			$s_lang_options .= '<option value="' . $lang . '" ' . $selected . '> ' . $langname . '</option>';
 		}
 
-		return $version;
+		$this->template->assign_block_vars(
+			'hide_row', array(
+				'VALUE' => 'YES',
+				'SELECTED' => ($this->config['bbguild_hide_inactive'] == 1) ? ' selected="selected"' : '' ,
+				'OPTION' => 'YES')
+		);
+
+		$this->template->assign_block_vars(
+			'hide_row', array(
+				'VALUE' => 'NO',
+				'SELECTED' => ($this->config['bbguild_hide_inactive'] == 0) ? ' selected="selected"' : '' ,
+				'OPTION' => 'NO')
+		);
+
+		//roster layout
+		$rosterlayoutlist = array(
+			0 =>  $this->language->lang('ARM_STAND') ,
+			1 =>  $this->language->lang('ARM_CLASS')
+		);
+
+		foreach ($rosterlayoutlist as $lid => $lname)
+		{
+			$this->template->assign_block_vars(
+				'rosterlayout_row', array(
+					'VALUE' => $lid ,
+					'SELECTED' => ($lid == $this->config['bbguild_roster_layout']) ? ' selected="selected"' : '' ,
+					'OPTION' => $lname)
+			);
+		}
+
+		// get welcome msg
+		$sql = 'SELECT motd_msg, bbcode_bitfield, bbcode_uid FROM ' . $this->bb_motd_table;
+		$this->db->sql_query($sql);
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$welcometext = $row['motd_msg'];
+			$bitfield = $row['bbcode_bitfield'];
+			$uid = $row['bbcode_uid'];
+		}
+
+		$textarr = generate_text_for_edit($welcometext, $uid, $bitfield);
+		// number of news and items to show on front page
+		$n_news  = $this->config['bbguild_n_news'];
+		$n_items = $this->config['bbguild_n_items'];
+
+		$this->template->assign_vars(
+			array(
+				'EQDKP_START_DD' => date('d', $this->config['bbguild_eqdkp_start']) ,
+				'EQDKP_START_MM' => date('m', $this->config['bbguild_eqdkp_start']) ,
+				'EQDKP_START_YY' => date('Y', $this->config['bbguild_eqdkp_start']) ,
+				'DATE_FORMAT'   => $this->config['bbguild_date_format'] ,
+				'S_LANG_OPTIONS' => $s_lang_options,
+				'USER_LLIMIT' => $this->config['bbguild_user_llimit'] ,
+				'MAXCHARS' => $this->config['bbguild_maxchars'] ,
+				'MINLEVEL' => $this->config['bbguild_minrosterlvl'],
+				'F_SHOWACHIEV' => $this->config['bbguild_show_achiev'] ,
+				'HIDE_INACTIVE_YES_CHECKED' => ($this->config['bbguild_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
+				'HIDE_INACTIVE_NO_CHECKED' => ($this->config['bbguild_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
+				'SHOW_WELCOME_YES_CHECKED' => ($this->config['bbguild_motd'] == '1') ? 'checked="checked"' : '' ,
+				'SHOW_WELCOME_NO_CHECKED' => ($this->config['bbguild_motd'] == '0') ? 'checked="checked"' : '' ,
+				'WELCOME_MESSAGE' => $textarr['text'] ,
+				'USER_NLIMIT' => $this->config['bbguild_user_nlimit'] ,
+				'U_ADDCONFIG' => append_sid("{$this->adm_relative_path}index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=config&amp;action=addconfig'),
+			)
+		);
+
+		// is gameworld extension installed ?
+		if (isset($config['bbguild_gameworld_version']))
+		{
+			$this->template->assign_vars(
+				array(
+					'S_BP_SHOW' => true ,
+					'SHOW_BOSS_YES_CHECKED' => ($this->config['bbguild_portal_bossprogress'] == '1') ? ' checked="checked"' : '' ,
+					'SHOW_BOSS_NO_CHECKED' => ($this->config['bbguild_portal_bossprogress'] == '0') ? ' checked="checked"' : '')
+			);
+		}
+		else
+		{
+			$this->template->assign_var('S_BP_SHOW', false);
+		}
+
+		add_form_key('acp_dkp');
+		$this->page_title = 'ACP_BBGUILD_CONFIG';
 	}
+
 
 	/**
 	 * retrieve latest version
@@ -398,6 +482,8 @@ class admin_main
 	 */
 	public final function version_check($meta_data, $force_update = false, $ttl = 86400)
 	{
+		global $user, $cache, $phpbb_extension_manager, $path_helper;
+
 		$pemfile = '';
 		$versionurl = ($meta_data['extra']['version-check']['ssl'] == '1' ? 'https://': 'http://') .
 			$meta_data['extra']['version-check']['host'].$meta_data['extra']['version-check']['directory'].'/'.$meta_data['extra']['version-check']['filename'];
@@ -405,7 +491,7 @@ class admin_main
 		if ($ssl)
 		{
 			//https://davidwalsh.name/php-ssl-curl-error
-			$pemfile = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
+			$pemfile = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
 			if (!(file_exists($pemfile) && is_readable($pemfile)))
 			{
 				$ssl = false;
@@ -413,7 +499,7 @@ class admin_main
 		}
 
 		//get latest productversion from cache
-		$latest_version = $this->cache->get('bbguild_versioncheck');
+		$latest_version = $cache->get('bbguild_version_latest');
 
 		//if update is forced or cache expired then make the call to refresh latest productversion
 		if ($latest_version === false || $force_update)
@@ -421,7 +507,7 @@ class admin_main
 			$data = $this->curl->curl($versionurl, $pemfile, $ssl, false, false, false);
 			if (0 === count($data) )
 			{
-				$this->cache->destroy('bbguild_versioncheck');
+				$cache->destroy('bbguild_version_latest');
 				return false;
 			}
 
@@ -430,13 +516,12 @@ class admin_main
 			$latest_version = $latest_version['stable']['3.2']['current'];
 
 			//put this info in the cache
-			$this->cache->put('bbguild_versioncheck', $latest_version, $ttl);
+			$cache->put('bbguild_version_latest', $latest_version, $ttl);
 
 		}
 
 		return $latest_version;
 	}
-
 
 	/**
 	 * Set u_action
@@ -462,24 +547,5 @@ class admin_main
 		$this->u_action = $u_action;
 	}
 
-	/**
-	 * Logging helper
-	 *
-	 * @param string $tag     The topic prefix tag
-	 * @param string $message The log action language key
-	 * @return void
-	protected function log($tag, $message)
-	{
-
-		$this->log->add(
-			'admin',
-			$this->user->data['user_id'],
-			$this->user->ip,
-			$message,
-			time(),
-			[$tag, $forum_data['forum_name']]
-		);
-	}
-	 */
 
 }

@@ -17,7 +17,7 @@ use phpbb\db\migration\migration;
 class release_2_0_0_m03_config extends migration
 {
 
-	protected $bbguild_version = '2.0.0-a8';
+	protected $bbguild_version = '2.0.0-a9';
 
 	/**
 	 * Assign migration file dependencies for this migration
@@ -43,7 +43,7 @@ class release_2_0_0_m03_config extends migration
 			array('config.add', array('bbguild_version', $this->bbguild_version )),
 			array('config.add', array('bbguild_date_format', 'd.m.y')),
 			array('config.add', array('bbguild_default_game', 'wow')),
-			array('config.add', array('bbguild_eqdkp_start', 1447196400)),
+			array('config.add', ['bbguild_eqdkp_start', time()]),
 			// guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
 			array('config.add', array('bbguild_guild_faction', 1)),
 			array('config.add', array('bbguild_hide_inactive', 1)),

@@ -28,6 +28,9 @@ class main_module
         /** @var \phpbb\request\request $request */
         $request = $phpbb_container->get('request');
 
+        $form_key = 'avathar/bbguild';
+        add_form_key($form_key);
+
         // Get an instance of the admin controller
         $admin_main = $phpbb_container->get('avathar.bbguild.admin.main');
 
@@ -38,6 +41,14 @@ class main_module
         // Make the $u_action url available in the admin controller
         $admin_main->set_page_url($this->u_action);
         $this->tpl_name = 'acp_' . $mode;
+
+        if ($request->is_set_post('submit'))
+        {
+            if (!check_form_key($form_key))
+            {
+                trigger_error($lang->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+            }
+        }
 
         // Load the "settings" or "manage" module modes
         switch ($mode)
@@ -54,6 +65,7 @@ class main_module
                 // Set the page title for our ACP page
                 $this->page_title = $lang->lang('ACP_BBGUILD_CONFIG');
                 // Perform any actions submitted by the user
+                echo $action;
                 switch ($action)
                 {
                     case 'updateconfig':
