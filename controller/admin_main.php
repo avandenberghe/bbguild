@@ -65,7 +65,7 @@ class admin_main
 	/** @var string Form key used for form validation */
 	protected $form_key;
 	/** @var string Custom form action */
-	public $u_action;
+	protected $u_action;
 
 	/* @var \avathar\bbguild\model\admin\curl curl class */
 	public $curl;
@@ -228,7 +228,6 @@ class admin_main
 		$this->php_ext = $phpEx;
 		$this->curl = $curl;
 
-
 		$this->languagecodes = array(
 			'de' => $this->language->lang('LANG_DE'),
 			'en' => $this->language->lang('LANG_EN'),
@@ -238,7 +237,7 @@ class admin_main
 	}
 
 	/**
-	 * Main handler, called by the ACP module
+	 * request handler, called by ACP
 	 *
 	 * @return void
 	 */
@@ -249,8 +248,26 @@ class admin_main
 		{
 			trigger_error($this->language->lang('NOAUTH_A_CONFIG_MAN'));
 		}
+		$this->u_action = $this->request->variable('action', '');
 
-		//css trigger
+		switch ($this->request->variable('mode', ''))
+		{
+			case 'config':
+				if ($this->request->is_set_post('submit'))
+				{
+					$this->update_config();
+				}
+				break;
+			case 'logs':
+				$log_id = $this->request->variable(constants::URI_LOG, 0);
+				if ($log_id)
+				{
+					$this->u_action = 'view';
+					$this->viewlog();
+				}
+		}
+
+		//switch css trigger
 		$this->template->assign_vars(
 			array (
 				'S_BBGUILD' => true,
@@ -258,6 +275,9 @@ class admin_main
 		);
 	}
 
+	/**
+	 * display the acp frontpage
+	 */
 	public function DisplayPanel()
 	{
 		// get inactive players
@@ -286,13 +306,11 @@ class admin_main
 		}
 
 		//version check
-
 		$ext_meta_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('avathar/bbguild', $this->template);
 		$meta_data  = $ext_meta_manager->get_metadata();
 		$ext_version  = $meta_data['version'];
 
 		$latest_version_info = $this->version_check($meta_data, $this->request->variable('versioncheck_force', false));
-		echo $ext_version;
 		if ($latest_version_info == false)
 		{
 			$this->template->assign_var('S_VERSIONCHECK_FAIL', true);
@@ -358,7 +376,7 @@ class admin_main
 
 		$this->template->assign_vars(
 			array(
-				'U_ACTION'           => $this->u_action,
+				'U_ACTION' =>  'updateconfig',
 				'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
 				'NUMBER_OF_PLAYERS' => $total_players ,
 				'NUMBER_OF_GUILDS' => $total_guildcount ,
@@ -400,7 +418,7 @@ class admin_main
 				'OPTION' => 'NO')
 		);
 
-		//roster layout
+		//roster layout switch hetween grid and class list
 		$rosterlayoutlist = array(
 			0 =>  $this->language->lang('ARM_STAND') ,
 			1 =>  $this->language->lang('ARM_CLASS')
@@ -417,6 +435,7 @@ class admin_main
 		}
 
 		// get welcome msg
+		$welcometext = $uid = $bitfield = '';
 		$sql = 'SELECT motd_msg, bbcode_bitfield, bbcode_uid FROM ' . $this->bb_motd_table;
 		$this->db->sql_query($sql);
 		$result = $this->db->sql_query($sql);
@@ -449,7 +468,7 @@ class admin_main
 				'SHOW_WELCOME_NO_CHECKED' => ($this->config['bbguild_motd'] == '0') ? 'checked="checked"' : '' ,
 				'WELCOME_MESSAGE' => $textarr['text'] ,
 				'USER_NLIMIT' => $this->config['bbguild_user_nlimit'] ,
-				'U_ADDCONFIG' => append_sid("{$this->adm_relative_path}index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=config&amp;action=addconfig'),
+				'U_ACTION' => $this->u_action,
 			)
 		);
 
@@ -468,8 +487,73 @@ class admin_main
 			$this->template->assign_var('S_BP_SHOW', false);
 		}
 
-		add_form_key('acp_dkp');
+		add_form_key('acp_bbguild');
 		$this->page_title = 'ACP_BBGUILD_CONFIG';
+	}
+
+	/**
+	 *
+	 * save bbguild config
+	 */
+	public function update_config()
+	{
+		if (! check_form_key('acp_bbguild'))
+		{
+			trigger_error($this->lang->lang('FV_FORMVALIDATION'), E_USER_WARNING);
+		}
+
+		$day = $this->request->variable('bbguild_start_dd', 0);
+		$month = $this->request->variable('bbguild_start_mm', 0);
+		$year = $this->request->variable('bbguild_start_yy', 0);
+		$bbguild_start = mktime(0, 0, 0, $month, $day, $year);
+		$this->config->set('bbguild_eqdkp_start', $bbguild_start, true);
+		$this->config->set('bbguild_date_format', $this->request->variable('date_format', ''), true);
+		$this->config->set('bbguild_lang', $this->request->variable('language', 'en'), true);
+		$this->config->set('bbguild_user_nlimit', $this->request->variable('bbguild_user_nlimit', 0), true);
+		$this->config->set('bbguild_user_llimit', $this->request->variable('bbguild_user_llimit', 0), true);
+		$this->config->set('bbguild_maxchars', $this->request->variable('bbguild_maxchars', 2), true);
+		$this->config->set('bbguild_minrosterlvl', $this->request->variable('bbguild_minrosterlvl', 0), true);
+		$this->config->set('bbguild_roster_layout', $this->request->variable('bbguild_roster_layout', 0), true);
+		$this->config->set('bbguild_show_achiev', $this->request->variable('bbguild_show_achiev', 0), true);
+		$this->config->set('bbguild_hide_inactive', $this->request->variable('bbguild_hide_inactive', 0), true);
+		$this->config->set('bbguild_motd', $this->request->variable('show_motd_block', 0), true);
+		$welcometext = $this->request->variable('message_of_the_day', '', true);
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$allow_bbcode = $allow_urls = $allow_smilies = true;
+		generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+
+		$sql = 'UPDATE ' . $this->bb_motd_table . " SET
+						motd_msg = '" . (string) $this->db->sql_escape($welcometext) . "' ,
+						motd_timestamp = " . (int) time() . " ,
+						bbcode_bitfield = 	'" . (string) $bitfield . "' ,
+						bbcode_uid = 		'" . (string) $uid . "'
+						WHERE motd_id = 1";
+		$this->db->sql_query($sql);
+
+		//if the gameworld extension is installed
+		if (isset($this->config['bbguild_gameworld_version']))
+		{
+			$this->config->set('bbguild_portal_bossprogress', $this->request->variable('show_bosspblock', 0), true);
+		}
+
+		// Purge config cache
+		$this->cache->destroy('config');
+
+		//
+		// Logging
+		//
+		$log_action = array(
+			'header' => 'L_ACTION_SETTINGS_CHANGED'     ,
+			'L_SETTINGS' => $this->language->lang('ACTION_SETTINGS_CHANGED'),
+		);
+
+		$this->bbguildlog->log_insert(
+			array(
+				'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
+				'log_action' => $log_action)
+		);
+		trigger_error($this->language->lang('ACTION_SETTINGS_CHANGED') , E_USER_NOTICE);
+
 	}
 
 
@@ -482,8 +566,6 @@ class admin_main
 	 */
 	public final function version_check($meta_data, $force_update = false, $ttl = 86400)
 	{
-		global $user, $cache, $phpbb_extension_manager, $path_helper;
-
 		$pemfile = '';
 		$versionurl = ($meta_data['extra']['version-check']['ssl'] == '1' ? 'https://': 'http://') .
 			$meta_data['extra']['version-check']['host'].$meta_data['extra']['version-check']['directory'].'/'.$meta_data['extra']['version-check']['filename'];
@@ -491,7 +573,7 @@ class admin_main
 		if ($ssl)
 		{
 			//https://davidwalsh.name/php-ssl-curl-error
-			$pemfile = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
+			$pemfile = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
 			if (!(file_exists($pemfile) && is_readable($pemfile)))
 			{
 				$ssl = false;
@@ -499,7 +581,7 @@ class admin_main
 		}
 
 		//get latest productversion from cache
-		$latest_version = $cache->get('bbguild_version_latest');
+		$latest_version = $this->cache->get('bbguild_version_latest');
 
 		//if update is forced or cache expired then make the call to refresh latest productversion
 		if ($latest_version === false || $force_update)
@@ -507,7 +589,7 @@ class admin_main
 			$data = $this->curl->curl($versionurl, $pemfile, $ssl, false, false, false);
 			if (0 === count($data) )
 			{
-				$cache->destroy('bbguild_version_latest');
+				$this->cache->destroy('bbguild_version_latest');
 				return false;
 			}
 
@@ -516,7 +598,7 @@ class admin_main
 			$latest_version = $latest_version['stable']['3.2']['current'];
 
 			//put this info in the cache
-			$cache->put('bbguild_version_latest', $latest_version, $ttl);
+			$this->cache->put('bbguild_version_latest', $latest_version, $ttl);
 
 		}
 
@@ -533,18 +615,6 @@ class admin_main
 	{
 		$this->u_action = $u_action;
 		return $this;
-	}
-
-	/**
-	 * Set page url
-	 *
-	 * @param string $u_action Custom form action
-	 * @return void
-	 * @access public
-	 */
-	public function set_page_url($u_action)
-	{
-		$this->u_action = $u_action;
 	}
 
 

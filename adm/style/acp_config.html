@@ -2,7 +2,7 @@
 
 <h1>{{ lang('GENERAL_SETTINGS') }}</h1>
 <p>{{ lang('ACP_BBGUILD_CONFIG_EXPLAIN') }}</p>
-<form method="post" action="{{ U_ADDCONFIG }}" id="addconfig" >
+<form method="post" action="{{ U_ACTION }}" id="updateconfig" >
     <fieldset>
         <legend>{{ lang('MENU_GENERAL') }}</legend>
 
@@ -103,6 +103,7 @@
     <fieldset>
         <legend>{{ lang('ACP_SUBMIT_CHANGES') }}</legend>
         {{ S_FORM_TOKEN }}
+        {{ S_HIDDEN_FIELDS }}
         <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" /> <input type="reset" name="reset" value="{{ lang('RESET') }}" class="button1" />
     </fieldset>
 </form>

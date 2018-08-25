@@ -22,86 +22,30 @@ class main_module
     {
         global $phpbb_container;
 
-        /** @var \phpbb\language\language $lang */
-        $lang = $phpbb_container->get('language');
-
-        /** @var \phpbb\request\request $request */
-        $request = $phpbb_container->get('request');
-
-        $form_key = 'avathar/bbguild';
-        add_form_key($form_key);
-
         // Get an instance of the admin controller
         $admin_main = $phpbb_container->get('avathar.bbguild.admin.main');
 
-        // Requests
-        $action = $request->variable('action', '');
+        /** @var \phpbb\language\language $lang */
+        $lang = $phpbb_container->get('language');
+
+        // handle requests
+        $admin_main->set_u_action($this->u_action);
         $admin_main->handle();
 
-        // Make the $u_action url available in the admin controller
-        $admin_main->set_page_url($this->u_action);
         $this->tpl_name = 'acp_' . $mode;
 
-        if ($request->is_set_post('submit'))
-        {
-            if (!check_form_key($form_key))
-            {
-                trigger_error($lang->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
-            }
-        }
-
-        // Load the "settings" or "manage" module modes
         switch ($mode)
         {
             case 'panel':
-                // Set the page title for our ACP page
                 $this->page_title = $lang->lang('ACP_BBGUILD_MAINPAGE');
-
-                // Load the display options handle in the admin controller
                 $admin_main->DisplayPanel();
                 break;
-
             case 'config':
-                // Set the page title for our ACP page
                 $this->page_title = $lang->lang('ACP_BBGUILD_CONFIG');
-                // Perform any actions submitted by the user
-                echo $action;
-                switch ($action)
-                {
-                    case 'updateconfig':
-                        // Set the page title for our ACP page
-                        $this->page_title = $lang->lang('ACP_KNOWLEDGEBASE_CREATE_CATEGORY');
-
-                        // Load the add_category handle in the admin controller
-                        $admin_main->add_category();
-
-                        // Return to stop execution of this script
-                        return;
-                        break;
-                }
                 $admin_main->display_config();
                 break;
-
             case 'logs':
-                $log_id = $this->request->variable(constants::URI_LOG, 0);
-                $action = 'list';
-                if ($log_id)
-                {
-                    $action = 'view';
-                }
-
-                switch ($action)
-                {
-                    case 'list':
-                        $admin_main->listlogs();
-                        break;
-                    case 'view':
-                        $admin_main->viewlog();
-                        break;
-                }
-
-
-
+                $admin_main->listlogs();
         }
     }
 }
