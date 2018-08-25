@@ -310,6 +310,15 @@ class admin_main
 			$bbguild_started = date($this->config['bbguild_date_format'], $this->config['bbguild_eqdkp_start']);
 		}
 
+		//get number of games
+		$listgames = new \avathar\bbguild\model\games\game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table );
+		$games = $listgames->games;
+		unset($listgames);
+
+		$sql = 'SELECT count(*) as recruitments_count FROM ' . $this->bb_recruit_table;
+		$result = $this->db->sql_query($sql);
+		$recruitments_count = (int) $this->db->sql_fetchfield('recruitments_count');
+
 		//version check
 		$ext_meta_manager = $this->phpbb_extension_manager->create_extension_metadata_manager('avathar/bbguild', $this->template);
 		$meta_data  = $ext_meta_manager->get_metadata();
@@ -373,10 +382,6 @@ class admin_main
 				);
 			}
 		}
-
-		$listgames = new \avathar\bbguild\model\games\game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table );
-		$games = $listgames->games;
-		unset($listgames);
 
 
 		$this->template->assign_vars(

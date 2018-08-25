@@ -429,7 +429,7 @@ class game
 			'us' => array('en_US', 'pt_BR', 'es_MX')
 		);
 
-		//fill the games array
+		//fill the installed games array
 		$this->games = $this->gamesarray();
 	}
 

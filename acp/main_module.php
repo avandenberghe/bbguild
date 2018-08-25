@@ -10,8 +10,6 @@
 
 namespace avathar\bbguild\acp;
 
-use avathar\bbguild\model\admin\constants;
-
 class main_module
 {
     public $page_title;
