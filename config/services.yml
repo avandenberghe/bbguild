@@ -49,6 +49,10 @@ services:
         arguments:
             - '%avathar.bbguild.tables.bb_logs%'
             - '@dbal.conn'
+    avathar.bbguild.util:
+        class: avathar\bbguild\model\admin\util
+        arguments:
+            - '@request'
     avathar.bbguild.admin.main:
         class: avathar\bbguild\controller\admin_main
         arguments:
@@ -69,6 +73,7 @@ services:
             - '%core.php_ext%'
             - '@avathar.bbguild.curl'
             - '@avathar.bbguild.log'
+            - '@avathar.bbguild.util'
             - '%avathar.bbguild.tables.bb_games%'
             - '%avathar.bbguild.tables.bb_logs%'
             - '%avathar.bbguild.tables.bb_ranks%'

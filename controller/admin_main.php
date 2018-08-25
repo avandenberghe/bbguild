@@ -73,6 +73,9 @@ class admin_main
 	/* @var \avathar\bbguild\model\admin\log logging class */
 	public $bbguildlog;
 
+	/* @var \avathar\bbguild\model\admin\util utility class */
+	public $util;
+
 	/**
 	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
 	 * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
@@ -120,6 +123,7 @@ class admin_main
 	 * @param \phpbb\extension\manager          $phpbb_extension_manager
 	 * @param \avathar\bbguild\model\admin\curl $curl
 	 * @param \avathar\bbguild\model\admin\log $log
+	 * @param \avathar\bbguild\model\admin\util $util
 	 * @param string $phpbb_root_path
 	 * @param string $phpEx
 	 * @param string $bb_games_table
@@ -160,6 +164,7 @@ class admin_main
 		$phpEx,
 		\avathar\bbguild\model\admin\curl $curl,
 		\avathar\bbguild\model\admin\log $bbguildlog,
+		\avathar\bbguild\model\admin\util $util,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -215,6 +220,7 @@ class admin_main
 		$this->log = $log;
 		$this->log->set_log_table($this->bb_logs_table);
 		$this->bbguildlog = $bbguildlog;
+		$this->util = $util;
 		$this->pagination = $pagination;
 		$this->request = $request;
 		$this->template = $template;
@@ -225,6 +231,12 @@ class admin_main
 		$this->ext_path_web = $this->path_helper->get_web_root_path($this->ext_path);
 		$this->root_path = $phpbb_root_path;
 		$this->adm_relative_path = $adm_relative_path;
+
+		/*echo $this->adm_relative_path;
+		echo '<br/>';
+		echo $this->ext_path;
+		*/
+
 		$this->php_ext = $phpEx;
 		$this->curl = $curl;
 
@@ -361,7 +373,7 @@ class admin_main
 			{
 				$this->template->assign_block_vars(
 					'actions_row', array(
-						'U_VIEW_LOG'     => append_sid("{$this->adm_relative_path}index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;' . constants::URI_LOG . '=' . $log['log_id']) ,
+						'U_VIEW_LOG'     => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;' . constants::URI_LOG . '=' . $log['log_id']) ,
 						'LOGDATE'         => $log['datestamp'],
 						'ACTION'         => $log['log_line'],
 					)
@@ -376,20 +388,17 @@ class admin_main
 
 		$this->template->assign_vars(
 			array(
-				'U_ACTION' =>  'updateconfig',
+				'U_ACTION' =>  $this->u_action,
 				'GLYPH' => $this->ext_path . 'adm/images/glyphs/view.gif',
 				'NUMBER_OF_PLAYERS' => $total_players ,
 				'NUMBER_OF_GUILDS' => $total_guildcount ,
 				'BBGUILD_STARTED' => $bbguild_started,
 				'BBGUILD_VERSION'    => $this->config['bbguild_version'] ,
-				'U_VERSIONCHECK_FORCE' => append_sid($this->u_action . '&amp;versioncheck_force=1'),
+				'U_VERSIONCHECK_FORCE' => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=panel&amp;action=versioncheck_force') ,
 				'GAMES_INSTALLED' => count($games) > 0 ? implode(', ', $games) : $this->user->lang['NA'],
 			)
 		);
-
-
 	}
-
 
 	/**
 	 * display current configuration
@@ -552,7 +561,8 @@ class admin_main
 				'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
 				'log_action' => $log_action)
 		);
-		trigger_error($this->language->lang('ACTION_SETTINGS_CHANGED') , E_USER_NOTICE);
+
+		trigger_error($this->language->lang('ACTION_SETTINGS_CHANGED') . adm_back_link($this->u_action) , E_USER_NOTICE);
 
 	}
 
@@ -583,8 +593,8 @@ class admin_main
 		//get latest productversion from cache
 		$latest_version = $this->cache->get('bbguild_version_latest');
 
-		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($latest_version === false || $force_update)
+		//if cache expired or update is forced then make call to refresh latest productversion
+		if ($latest_version == false || $force_update)
 		{
 			$data = $this->curl->curl($versionurl, $pemfile, $ssl, false, false, false);
 			if (0 === count($data) )
@@ -605,6 +615,125 @@ class admin_main
 		return $latest_version;
 	}
 
+
+	/***
+	 * list logs
+	 *
+	 */
+	public function listlogs()
+	{
+		$this->page_title = 'ACP_BBGUILD_LOGS';
+
+		$log_id = $this->request->variable(constants::URI_LOG, 0);
+		$search = $this->request->variable('search', 0);
+
+		$deletemark = ($this->request->is_set_post('delmarked')) ? true : false;
+		$marked = $this->request->variable('mark', array(0));
+		$search_term = $this->request->variable('search', '');
+		$start = $this->request->variable('start', 0);
+
+		if ($deletemark)
+		{
+			//if marked array isnt empty
+			if (is_array($marked) && count($marked))
+			{
+				if (confirm_box(true))
+				{
+					$marked = $this->request->variable('mark', array(0));
+
+					$log_action = array(
+						'header' => 'L_ACTION_LOG_DELETED' ,
+						'L_ADDED_BY' => $this->user->data['username'] ,
+						'L_LOG_ID' => implode(',', $this->bbguildlog->delete_log($marked)));
+
+					$this->bbguildlog->log_insert(
+						array(
+							'log_type' => $log_action['header'] ,
+							'log_action' => $log_action)
+					);
+
+					//redirect to listing
+					$meta_info = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs');
+					meta_refresh(3, $meta_info);
+					$message = '<a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs') . '">' .
+						$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_SUCCESS'), implode($marked));
+					trigger_error($message, E_USER_WARNING);
+				}
+				else
+				{
+					// display confirmation
+					confirm_box(
+						false, $this->user->lang['CONFIRM_DELETE_BBDKPLOG'], build_hidden_fields(
+							array(
+								'delmarked' => true ,
+								'mark'         => $marked)
+						)
+					);
+				}
+				// they hit no
+				$message = '<a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs') . '">' .
+					$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_FAIL'), implode($marked));
+				trigger_error($message, E_USER_WARNING);
+			}
+		}
+
+		$sort_order = array(
+			0 => array('log_id desc' ,'log_id') ,
+			1 => array('log_date desc' ,'log_date') ,
+			2 => array('log_type' ,'log_type desc') ,
+			3 => array('username' ,'username dsec') ,
+			4 => array('log_ipaddress' ,'log_ipaddress desc') ,
+			5 => array('log_result' , 'log_result desc'));
+
+		$current_order = $this->util->switch_order($sort_order);
+		$verbose = true;
+		$listlogs = $this->bbguildlog->read_log($current_order['sql'], $search, $verbose, $search_term, $start);
+
+		foreach ($listlogs as $key => $log)
+		{
+			$this->template->assign_block_vars(
+				'logs_row', array(
+					'ID'            => $log['log_id'],
+					'DATE'          => $log['datestamp'],
+					'TYPE'          => $log['log_type'],
+					'U_VIEW_LOG'    => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;' . constants::URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start) ,
+					'VERBOSE'       => $verbose,
+					'IMGPATH'       => $this->ext_path . 'adm/images/glyphs/view.gif',
+					'USER'          => $log['username'],
+					'ACTION'        => $log['log_line'],
+					'IP'            => $log['log_ipaddress'],
+					'RESULT'        => $log['log_result'],
+					'C_RESULT'      => $log['cssresult'] ,
+					'ENCODED_TYPE'  => urlencode($log['log_type']) ,
+					'ENCODED_USER'  => urlencode($log['username']) ,
+					'ENCODED_IP'    => urlencode($log['log_ipaddress']))
+			);
+		}
+		$logcount = $this->bbguildlog->getTotalLogs();
+
+		$pagination_url = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
+		$this->pagination->generate_template_pagination($pagination_url, 'pagination', 'page', $logcount, constants::USER_LLIMIT, $start);
+
+		$this->template->assign_vars(
+			array(
+				'S_LIST'        => true ,
+				'L_TITLE'       => $this->language->lang('ACP_BBGUILD_LOGS') ,
+				'L_EXPLAIN'     => $this->language->lang('ACP_BBGUILD_LOGS_EXPLAIN') ,
+				'O_DATE'        => $current_order['uri'][0] ,
+				'O_TYPE'        => $current_order['uri'][1] ,
+				'O_USER'        => $current_order['uri'][2] ,
+				'O_IP'          => $current_order['uri'][3] ,
+				'O_RESULT'      => $current_order['uri'][4] ,
+				'U_LOGS'        => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
+				'U_LOGS_SEARCH' => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs'),
+				'CURRENT_ORDER' => $current_order['uri']['current'] ,
+				'START'         => $start ,
+				'VIEWLOGS_FOOTCOUNT' => sprintf($this->language->lang('VIEWLOGS_FOOTCOUNT'), $logcount, constants::USER_LLIMIT) ,
+				'PAGE_NUMBER'   => $this->pagination->on_page($logcount, constants::USER_LLIMIT, $start)
+			)
+		);
+	}
+
 	/**
 	 * Set u_action
 	 *
@@ -616,6 +745,5 @@ class admin_main
 		$this->u_action = $u_action;
 		return $this;
 	}
-
 
 }

@@ -22,12 +22,15 @@ class util
 	 */
 	public $time = 0;
 
+	/** @var \phpbb\request\request */
+	public $request;
+
 	/**
 	 * Admin class constructor
 	 */
-	public function __construct()
+	public function __construct(\phpbb\request\request $request)
 	{
-
+		$this->request = $request;
 	}
 
 	/**
@@ -75,8 +78,8 @@ class util
 	 */
 	public final function switch_order($sort_order, $arg = constants::URI_ORDER, $defaultorder = '0.0')
 	{
-		global $request;
-		$uri_order = $request->variable($arg, $defaultorder);
+
+		$uri_order = $this->request->variable($arg, $defaultorder);
 		$uri_order = explode('.', $uri_order);
 
 		$element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
