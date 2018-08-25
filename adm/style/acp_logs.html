@@ -21,13 +21,13 @@
         <table cellspacing="1">
             <thead>
               <tr>
-                <th style="text-align: left, width:5%, white-space: nowrap"><a href="{{ U_LOGS }}o={{ O_DATE }}">{{ lang('ID') }}</a></th>
+                <th style="text-align: left, width:5%, white-space: nowrap">{{ lang('ID') }}</th>
                 <th style="text-align: left, width:5%, white-space: nowrap" class="rowhead">{{ lang('VIEW_ACTION') }}</th>
-                <th style="text-align: left, width:15%, white-space: nowrap" ><a href="{{ U_LOGS }}o={{ O_DATE }}">{{ lang('DATE') }}</a></th>
-                <th style="text-align: left, width:20%, white-space: nowrap"><a href="{{ U_LOGS }}o={{ O_TYPE }}">{{ lang('TYPE') }}</a></th>
-                <th style="text-align: left, width:15%, white-space: nowrap"><a href="{{ U_LOGS }}o={{ O_USER }}">{{ lang('USER') }}</a></th>
-                <th style="text-align: left, width:10%, white-space: nowrap"><a href="{{ U_LOGS }}o={{ O_IP }}">{{ lang('IP_ADDRESS') }}</a></th>
-                <th style="text-align: left, width:5%, white-space: nowrap"><a href="{{ U_LOGS }}o={{ O_RESULT }}">{{ lang('RESULT') }}</a></th>
+                <th style="text-align: left, width:15%, white-space: nowrap" >{{ lang('DATE') }}</th>
+                <th style="text-align: left, width:20%, white-space: nowrap">{{ lang('TYPE') }}</th>
+                <th style="text-align: left, width:15%, white-space: nowrap">{{ lang('USER') }}</th>
+                <th style="text-align: left, width:10%, white-space: nowrap">{{ lang('IP_ADDRESS') }}</th>
+                <th style="text-align: left, width:5%, white-space: nowrap">{{ lang('RESULT') }}</th>
                 <th>{{ lang('MARK') }}</th>
               </tr>
             </thead>
@@ -36,7 +36,7 @@
           {% if logs_row.S_ROW_COUNT is even %}<tr class="row1">{% else %}<tr class="row2">{% endif %}
             <td>{{ logs_row.ID }}</td>
             <td>
-                    <a href="{{ logs_row.U_VIEW_LOG }}"><img src="{{ logs_row.IMGPATH }}" width="16" height="16" alt="View" /></a>
+                <a href="{{ logs_row.U_VIEW_LOG }}"><img src="{{ logs_row.IMGPATH }}" width="16" height="16" alt="View" /></a>
             </td>
             <td>{{ logs_row.DATE }}</td>
             <td>

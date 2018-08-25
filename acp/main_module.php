@@ -45,6 +45,7 @@ class main_module
                 $admin_main->display_config();
                 break;
             case 'logs':
+                $this->page_title = $lang->lang('ACP_BBGUILD_LOGS');
                 $admin_main->listlogs();
         }
     }
