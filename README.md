@@ -24,7 +24,7 @@ See docs/changelog for upcoming and past changes.
 Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
-2.0.0-a8 2018/08
+2.0.0-a8 2018/08/16 -> please use release build https://github.com/Sajaki/bbguild/archive/alpha8.zip and not branch alpha2
 
 ### Installation
 ##### Requirements
