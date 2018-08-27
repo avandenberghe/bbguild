@@ -11,7 +11,6 @@ namespace avathar\bbguild\model\player;
 
 use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\games\game;
-use avathar\bbguild\model\player\guilds;
 use avathar\bbguild\model\api\battlenet;
 
 /**
@@ -988,8 +987,6 @@ class player
 	 */
 	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $player_id = 0, $guildlist = null)
 	{
-
-
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 		$this->bb_classes_table = $bb_classes_table;

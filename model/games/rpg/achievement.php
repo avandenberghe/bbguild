@@ -14,7 +14,6 @@ namespace avathar\bbguild\model\games\rpg;
 
 use avathar\bbguild\model\api\battlenet;
 use avathar\bbguild\model\games\game;
-use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\player\guilds;
 
 	/**
@@ -458,8 +457,6 @@ class achievement
 	$bb_achievement_rewards_table, $bb_criteria_track_table, $bb_achievement_criteria_table,
 	$bb_relations_table)
 	{
-
-
 		$this->bb_achievement_track_table = $bb_achievement_track_table;
 		$this->bb_achievement_table = $bb_achievement_table;
 		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;

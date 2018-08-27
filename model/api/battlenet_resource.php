@@ -14,8 +14,6 @@
 
 namespace avathar\bbguild\model\api;
 
-use avathar\bbguild\model\admin\admin;
-
 /**
  * Resource skeleton
  *
@@ -23,7 +21,6 @@ use avathar\bbguild\model\admin\admin;
  */
 abstract class battlenet_resource
 {
-
 	/**
 	 * List of region urls
 	 *

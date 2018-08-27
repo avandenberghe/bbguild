@@ -9,7 +9,6 @@
 
 namespace avathar\bbguild\views;
 
-use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\player\guilds;
 use phpbb\config\config;

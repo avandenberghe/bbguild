@@ -42,7 +42,7 @@ class ext extends base
 		$condition['curl'][0] = extension_loaded('curl');
 		$condition['curl'][1] ='curl extension is loaded';
 		$output= '';
-		if($this->result == 0)
+		if ($this->result == 0)
 		{
 			foreach ($condition as $key => $val)
 			{

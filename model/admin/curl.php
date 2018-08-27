@@ -12,6 +12,14 @@ namespace avathar\bbguild\model\admin;
 
 class curl
 {
+	/***
+	 * curl constructor.
+	 */
+	public function __construct()
+	{
+
+	}
+
 	/**
 	 * connects to remote site and gets xml or html using Curl
 	 *
