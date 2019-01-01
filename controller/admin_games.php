@@ -24,6 +24,7 @@ use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\games\rpg\races;
 use avathar\bbguild\model\games\rpg\roles;
 
+use avathar\bbguild\model\admin;
 
 /**
  * Class admin_controller
@@ -257,6 +258,29 @@ class admin_games
 			'fr' => $this->language->lang('LANG_FR'),
 			'it' => $this->language->lang('LANG_IT'),
 		);
+
+
+
+		//get number of games
+		$listgames = new \avathar\bbguild\model\games\game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table );
+		//list installed games
+
+		$sort_order = array(
+			0 => array(    'id' , 'id desc') ,
+			1 => array('game_id' , 'game_id desc') ,
+			2 => array('game_name' , 'game_name desc'));
+
+		$current_order = $util->switch_order($sort_order);
+
+		$this->gamelist = $listgames->list_games($current_order['sql']);
+
+		$installed = array();
+		foreach ($this->gamelist as $game)
+		{
+			$installed[$game['game_id']] = $game['name'];
+		}
+
+
 	}
 
 	/**

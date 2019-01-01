@@ -623,7 +623,7 @@ class game
 	private function gamesarray()
 	{
 		global $db;
-
+		$this->games = array();
 		$sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' FROM ' . $this->bb_game_table . '  g';
 		$sql .= ' INNER JOIN '. $this->bb_races_table . ' r ON r.game_id = g.game_id';

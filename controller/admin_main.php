@@ -281,7 +281,7 @@ class admin_main
 	}
 
 	/**
-	 * display the acp frontpage
+	 * display Addminpanel
 	 */
 	public function DisplayPanel()
 	{
@@ -312,8 +312,7 @@ class admin_main
 
 		//get number of games
 		$listgames = new \avathar\bbguild\model\games\game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table );
-		$games = $listgames->games;
-		unset($listgames);
+
 
 		$sql = 'SELECT count(*) as recruitments_count FROM ' . $this->bb_recruit_table;
 		$result = $this->db->sql_query($sql);
@@ -384,6 +383,9 @@ class admin_main
 		}
 
 
+		$games = $listgames->games;
+		unset($listgames);
+
 		$this->template->assign_vars(
 			array(
 				'U_ACTION' =>  $this->u_action,
@@ -393,13 +395,13 @@ class admin_main
 				'BBGUILD_STARTED' => $bbguild_started,
 				'BBGUILD_VERSION'    => $this->config['bbguild_version'] ,
 				'U_VERSIONCHECK_FORCE' => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=panel&amp;action=versioncheck_force') ,
-				'GAMES_INSTALLED' => count($games) > 0 ? implode(', ', $games) : $this->user->lang['NA'],
+				'GAMES_INSTALLED' =>  (count($games) > 0) ? implode(', ', $games) : $this->user->lang['NA'],
 			)
 		);
 	}
 
 	/**
-	 * display current configuration
+	 * display bbguild settings
 	 */
 	public function display_config()
 	{
@@ -603,7 +605,7 @@ class admin_main
 
 			$response = $data['response'];
 			$latest_version = json_decode($response, true);
-			$latest_version = $latest_version['stable']['3.2']['current'];
+			$latest_version = $latest_version['stable']['2.0']['current'];
 
 			//put this info in the cache
 			$this->cache->put('bbguild_version_latest', $latest_version, $ttl);

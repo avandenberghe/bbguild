@@ -35,14 +35,17 @@ class main_module
         switch ($mode)
         {
             case 'panel':
+                //display Adminpanel
                 $this->page_title = $lang->lang('ACP_BBGUILD_MAINPAGE');
                 $admin_main->DisplayPanel();
                 break;
             case 'config':
+                //display bbguild settings
                 $this->page_title = $lang->lang('ACP_BBGUILD_CONFIG');
                 $admin_main->display_config();
                 break;
             case 'logs':
+                //display vew logs
                 $this->page_title = $lang->lang('ACP_BBGUILD_LOGS');
                 $admin_main->listlogs();
         }
