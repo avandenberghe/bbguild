@@ -52,7 +52,7 @@ Find support and more on
 *	Forums : [https://www.avathar.be/forum](http://www.avathar.be/forum)
 
 ### contribute
-You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/Sajaki/bbguild/graphs/contributors).
 1. [Create a ticket (unless there already is one)] : https://github.com/Sajaki/bbGuild/issues
 2. [Read our Git Contribution Guidelines](https://www.avathar.be/forum/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](https://www.avathar.be/forum/viewtopic.php?f=60&t=1853)
 3. Make a pull request.
