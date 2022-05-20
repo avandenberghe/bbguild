@@ -48,13 +48,12 @@ Further development requests, support questions are welcome at our [Support Foru
 ## Community
 
 Find support and more on 
-*	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
-*	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
+*	Forums : [https://www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
 
 ### contribute
 You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
 1. [Create a ticket (unless there already is one)] : https://github.com/Sajaki/bbGuild/issues
-2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
+2. [Read our Git Contribution Guidelines](http://www.avathar.be/forum/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](https://www.avathar.be/forum/viewtopic.php?f=60&t=1853)
 3. Make a pull request.
 
 ### License
