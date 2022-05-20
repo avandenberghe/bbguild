@@ -3,7 +3,8 @@
 ALPHA VERSION
 
 ### About
-bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008. 2.0 version is rebuild on the Symfony 2 framework for phpBB 3.1. 
+bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008. 
+The 2.0 version is renamed bbGuild and rebuilt on Symfony 2 framework for phpBB 3.2.
 
 Please note that bbGuild is pre-Alpha software and is not intended for live installations. Use at your own risk.
 
@@ -37,7 +38,7 @@ Further development requests, support questions are welcome at our [Support Foru
 ##### Install
 1. Download the latest release.
 2. In the `ext` directory of your phpBB board, create a new directory named `bbdkp` (if it does not already exist).
-3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/avathar/bbguild/composer.json).
+3. Copy the `bbguild` folder to `/ext/bbguild/` (if done correctly, you'll have the main extension class at (your forum root)/ext/avathar/bbguild/composer.json).
 4. Navigate in the ACP to `Customise -> Manage extensions`.
 5. Look for `bbGuild Extension` under the Disabled Extensions list, and click its `Enable` link.
 
@@ -48,7 +49,7 @@ Further development requests, support questions are welcome at our [Support Foru
 ## Community
 
 Find support and more on 
-*	Forums : [https://www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
+*	Forums : [https://www.avathar.be/forum](http://www.avathar.be/forum)
 
 ### contribute
 You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
