@@ -22,7 +22,7 @@ Features :
 
 See docs/changelog for upcoming and past changes. 
 
-Further development requests, support questions are welcome at our [Support Forum](http://www.avathar.be/bbdkp) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
+Further development requests, support questions are welcome at our [Support Forum](https://www.avathar.be/forum) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ### Current
 2.0.0-a8 2018/08/16 -> please use alpha8 build https://github.com/Sajaki/bbguild/archive/alpha8.zip and not unstable branch alpha2 
@@ -54,7 +54,7 @@ Find support and more on
 ### contribute
 You can see all the awesome people contributing to this project [here](https://github.com/avathar/bbguild/graphs/contributors).
 1. [Create a ticket (unless there already is one)] : https://github.com/Sajaki/bbGuild/issues
-2. [Read our Git Contribution Guidelines](http://www.avathar.be/forum/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](https://www.avathar.be/forum/viewtopic.php?f=60&t=1853)
+2. [Read our Git Contribution Guidelines](https://www.avathar.be/forum/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](https://www.avathar.be/forum/viewtopic.php?f=60&t=1853)
 3. Make a pull request.
 
 ### License
