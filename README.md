@@ -15,7 +15,7 @@ Features :
 - Guild Roster
 - Guild News page
 - WoW Armory link
-- DKP Module
+- bbDKP Module
 - ACP and UCP modules. 
 - Games supported : 
 - World of Warcraft, the Lord of the Rings Online, Dark Age of Camelot, Vanguard, EverQuest I/II,  Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor, Lineage 2, TERA, FFXIV and Custom Game. 
