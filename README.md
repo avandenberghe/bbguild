@@ -1,4 +1,4 @@
-[![bbDKP](https://www.avathar.be/bbguild/images/site_logo.png)](http://www.avathar.be/bbdkp)
+[![bbDKP](https://www.avathar.be/forum/images/site_logo.png)](https://www.avathar.be/forum)
 
 ALPHA VERSION
 
