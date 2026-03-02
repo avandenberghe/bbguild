@@ -1,10 +1,11 @@
-1<?php
+<?php
 /**
- * left front navigation block
  *
- * @package   bbguild
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Left front navigation block
  */
 
 namespace avathar\bbguild\views;
@@ -453,7 +454,7 @@ class viewnavigation implements iviews
 			if (array_key_exists($this->filter, $this->armor_type))
 			{
 				// looking for an armor type
-				$this->filter= preg_replace('/ Armor/', '', $this->filter);
+				$this->filter= preg_replace('/ Armor/', '', (string) $this->filter);
 				$this->query_by_armor = true;
 				$this->query_by_class = false;
 			}

@@ -1,10 +1,12 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * Player class file
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\model\player;
@@ -1040,7 +1042,7 @@ class player
 						r.image_female, r.image_male,
 						g.id as guild_id, g.name as guild_name, m.player_realm , g.region' ,
 			'FROM' => array(
-				$this->bb_players_tabl => 'm' ,
+				$this->bb_players_table => 'm' ,
 				$this->bb_classes_table => 'c' ,
 				$this->bb_language_table => 'l1' ,
 				$this->bb_races_table => 'r' ,
@@ -1551,7 +1553,7 @@ class player
 	 * @param game_provider_interface|null $provider Optional game provider with API
 	 * @return integer 1 on success, -1 on failure
 	 */
-	public function Armory_getplayer(game_provider_interface $provider = null)
+	public function Armory_getplayer(?game_provider_interface $provider = null)
 	{
 		global $user, $cache;
 

@@ -1,14 +1,10 @@
 <?php
 /**
- * bbguild ucp language file
  *
- * @author    lucasari
- * @package   phpBB Extension - bbguild
- * @copyright 2011 bbguild
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author    sajaki
- * @link      http://www.avathar.be/bbdkp
- * @version   2.0
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  */
 
 /**

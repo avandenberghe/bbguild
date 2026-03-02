@@ -1,14 +1,13 @@
 <?php
 /**
- * validator
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2011 Arvind Gupta
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
  *
  * Data validation class
  *
- * @author    Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
- * @copyright Arvind Gupta (c) 2011
- * @link      http://www.arvindgupta.co.in
- * @license   You're free to do whatever with this as long as this notice
- *              remains intact.
  */
 namespace sajaki\bbguild\controller\admin;
 
@@ -146,13 +145,13 @@ class validator
 		switch ($rule)
 		{
 			case 'required' :
-				return!(trim($value) == '');
+				return!(trim((string) $value) == '');
 
 			case 'maxlength' :
-				return (strlen($value) <= $parameter);
+				return (strlen((string) $value) <= $parameter);
 
 			case 'minlength' :
-				return (strlen($value) >= $parameter);
+				return (strlen((string) $value) >= $parameter);
 
 			case 'numeric' :
 				return is_numeric($value);
@@ -178,17 +177,17 @@ class validator
                   )
                   (:[0-9]+)?                                # a port (optional)
                   (/?|/\S+)                                 # a /, nothing or a / with something
-                $~ix', $value
+                $~ix', (string) $value
 				);
 
 			case 'email':
-				return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
+				return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', (string) $value);
 
 			case 'hexcode':
 				//Checks if a field is a valid hexadecimal color code (#FFFFFF)
-				return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
+				return preg_match('/(#)?[0-9A-Fa-f]{6}$/', (string) $value);
 			case 'regex':
-				return preg_match($parameter, $value);
+				return preg_match($parameter, (string) $value);
 
 			case 'pass':
 				return true;

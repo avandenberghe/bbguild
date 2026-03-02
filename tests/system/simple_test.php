@@ -1,9 +1,8 @@
 <?php
 /**
  *
- * Topic Prefixes extension for the phpBB Forum Software package.
- *
- * @copyright (c) 2016 phpBB Limited <https://www.phpbb.com>
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */

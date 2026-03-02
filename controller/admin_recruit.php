@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nix
- * Date: 9/11/18
- * Time: 20:40
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  */
 
 namespace avathar\bbguild\controller;

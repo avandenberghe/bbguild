@@ -1,10 +1,12 @@
-<?PHP
+<?php
 /**
- * Game clas file
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Game class file
+ *
  */
 
 namespace avathar\bbguild\model\games;
@@ -389,7 +391,7 @@ class game
 	 * @param string              $bb_game_table
 	 * @param game_registry|null  $game_registry     Optional plugin registry
 	 */
-	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table, game_registry $game_registry = null)
+	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table, ?game_registry $game_registry = null)
 	{
 		global $user, $phpbb_extension_manager, $phpbb_container;
 		if (!isset($phpbb_extension_manager) && isset($phpbb_container)) {

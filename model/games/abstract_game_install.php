@@ -1,14 +1,15 @@
 <?php
 /**
- * Abstract Game Installer
  *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Abstract Game Installer
  * Base class for game installers in the plugin architecture.
  * Implements game_install_interface with the template method pattern.
  * Subclasses must implement install_factions(), install_classes(), install_races().
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\model\games;

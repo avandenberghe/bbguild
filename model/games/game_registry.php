@@ -1,13 +1,14 @@
 <?php
 /**
- * Game Registry
  *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Game Registry
  * Collects all game providers registered via tagged services.
  * Game plugins register by tagging their service with 'bbguild.game_provider'.
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\model\games;

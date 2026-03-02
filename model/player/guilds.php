@@ -1,10 +1,12 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * Guilds class
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\model\player;
@@ -565,12 +567,12 @@ class guilds
 	 * @param game_provider_interface|null $provider Optional game provider with API
 	 * @return bool|array
 	 */
-	public function Call_Guild_API($params, game $game, game_provider_interface $provider = null)
+	public function Call_Guild_API($params, game $game, ?game_provider_interface $provider = null)
 	{
 		global $user, $cache;
 		$data= 0;
 
-		if ( (!$game->getArmoryEnabled()) || trim($game->getApikey()) == '' || trim($game->get_apilocale()) == '')
+		if ( (!$game->getArmoryEnabled()) || trim((string) $game->getApikey()) == '' || trim((string) $game->get_apilocale()) == '')
 		{
 			$this->armoryresult = 'KO';
 			return false;

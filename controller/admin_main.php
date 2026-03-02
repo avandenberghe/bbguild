@@ -1,10 +1,12 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * bbGuild Mainpage ACP
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\controller;
@@ -686,7 +688,7 @@ class admin_main
 				$meta_info = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs');
 				meta_refresh(3, $meta_info);
 				$message = '<a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs') . '">' .
-					$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_SUCCESS'), implode($marked));
+					$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_SUCCESS'), implode(', ', $marked));
 				trigger_error($message, E_USER_WARNING);
 			}
 			else
@@ -702,7 +704,7 @@ class admin_main
 			}
 			// they hit no
 			$message = '<a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-main_module&amp;mode=logs') . '">' .
-				$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_FAIL'), implode($marked));
+				$this->language->lang('RETURN_LOG') . '</a><br />' . sprintf($this->language->lang('ADMIN_LOG_DELETE_FAIL'), implode(', ', $marked));
 			trigger_error($message, E_USER_WARNING);
 		}
 

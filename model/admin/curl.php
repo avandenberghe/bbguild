@@ -1,10 +1,11 @@
 <?php
 /**
- * Curl class
  *
- * @package RecentTopics Extension
- * @copyright (c) 2017 Sajaki
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
  * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Curl class
  *
  */
 

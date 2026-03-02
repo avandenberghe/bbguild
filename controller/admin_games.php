@@ -1,10 +1,12 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * bbGuild Mainpage ACP
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\controller;
@@ -114,6 +116,11 @@ class admin_games
 	 * @var string
 	 */
 	private $gamelist;
+
+	/** @var \phpbb\path_helper */
+	protected $path_helper;
+	public $link;
+	public $page_title;
 
 
 
@@ -318,10 +325,10 @@ class admin_games
 	public function gamelist()
 	{
 		$editgame = new game;
-		$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable('hidden_game_id', ''));
+		$editgame->game_id = $this->request->variable(constants::URI_GAME, $this->request->variable('hidden_game_id', ''));
 		$editgame->get_game();
 
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}") . '"><h3>' . $this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME ."={$editgame->game_id}") . '"><h3>' . $this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
 		$gamereset = $this->request->is_set_post('gamereset');
 		$gamedelete = $this->request->is_set_post('gamedelete');
 		$gamesettings = $this->request->is_set_post('gamesettings');
@@ -343,7 +350,7 @@ class admin_games
 		{
 			$editgame = $this->SaveGameSettings();
 			$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
-			meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . URI_GAME . "={$editgame->game_id}"));
+			meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "={$editgame->game_id}"));
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
 		}
 		else if ($gamedelete)

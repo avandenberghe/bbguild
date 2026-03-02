@@ -1,10 +1,12 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * Faction Class
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\model\games\rpg;
@@ -19,6 +21,7 @@ namespace avathar\bbguild\model\games\rpg;
 class faction
 {
 	public $bb_factions_table;
+	public $bb_races_table;
 
 	/**
 	 * game id
@@ -106,9 +109,10 @@ class faction
 	 *
 	 * @param $game_id
 	 */
-	public function __construct($game_id, $bb_factions_table)
+	public function __construct($game_id, $bb_factions_table, $bb_races_table = '')
 	{
 		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_races_table = $bb_races_table;
 
 		$this->game_id=$game_id;
 		$this->get();
@@ -198,7 +202,7 @@ class faction
 		$sql_array = array (
 		'SELECT' => ' count(*) AS factioncount  ',
 		'FROM' => array (
-		 RACE_TABLE => 'r', $this->bb_factions_table => 'f' ),
+		 $this->bb_races_table => 'r', $this->bb_factions_table => 'f' ),
 		'WHERE' => "r.race_faction_id = f.faction_id 
 				AND f.game_id = '" . $this->game_id . "'
 				AND f.f_index =  " . $this->faction_id );

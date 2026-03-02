@@ -1,15 +1,18 @@
 <?php
 /**
- * Recruitment ACP file
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Recruitment ACP module
+ *
  */
 
 namespace avathar\bbguild\acp;
 
 use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\player\guilds;
 use avathar\bbguild\model\games\rpg\roles;
 use avathar\bbguild\model\player\recruitment;
@@ -59,9 +62,19 @@ class recruit_module
 	 */
 	protected $db;
 
+	/**
+	 * @var \avathar\bbguild\controller\admin_main
+	 */
+	protected $admin_controller;
+
 	public $id;
 	public $mode;
 	public $auth;
+	public $tpl_name;
+	public $page_title;
+	protected $ext_path;
+	protected $games;
+	protected $time;
 
 	/**
 	 *
@@ -77,7 +90,7 @@ class recruit_module
 	public function main($id, $mode)
 	{
 		global $user, $template, $db, $phpbb_admin_path, $phpEx;
-		global $request;
+		global $request, $phpbb_container;
 
 		$this->id = $id;
 		$this->mode = $mode;
@@ -86,6 +99,8 @@ class recruit_module
 		$this->user=$user;
 		$this->db=$db;
 
+		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');
+		$ac = $this->admin_controller;
 
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
@@ -100,15 +115,9 @@ class recruit_module
 		);
 
 		$this->apply_installed = false;
-		$plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
-		if (isset($plugin_versioninfo['apply']))
-		{
-			$this->apply_installed = true;
-		}
-
-		$guild_id = $this->request->variable(URI_GUILD, 1);
-		$Guild = new guilds();
+		$guild_id = $this->request->variable(constants::URI_GUILD, 1);
+		$Guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
 		$guildlist   = $Guild->guildlist(1);
 		foreach ($guildlist as $g)
 		{
@@ -126,9 +135,9 @@ class recruit_module
 			array(
 				'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
 				'GUILD_EMBLEM'          => $Guild->getEmblempath(),
-				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
-				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;' . constants::URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=addrecruit&amp;' . constants::URI_GUILD . '=' . $Guild->getGuildid()),
+				'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit&amp;' . constants::URI_GUILD . '=' . $Guild->getGuildid()),
 				'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=editrecruit'),
 				'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds'),
 			)
@@ -149,7 +158,7 @@ class recruit_module
 			 *************************************/
 			case 'addrecruit':
 
-				$recruit = new recruitment();
+				$recruit = new recruitment($ac->bb_gameroles_table, $ac->bb_guild_table, $ac->bb_recruit_table, $ac->bb_language_table, $ac->bb_classes_table, $ac->bb_players_table, $ac->bb_ranks_table);
 				$recruit->setGuildId($Guild->getGuildid());
 				$recruit->setLastUpdate($this->time);
 				$add = $this->request->is_set_post('add');
@@ -286,7 +295,8 @@ class recruit_module
 			trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
 		}
 
-		$recruits = new recruitment();
+		$ac = $this->admin_controller;
+		$recruits = new recruitment($ac->bb_gameroles_table, $ac->bb_guild_table, $ac->bb_recruit_table, $ac->bb_language_table, $ac->bb_classes_table, $ac->bb_players_table, $ac->bb_ranks_table);
 		$recruits->setGuildId($guild_id);
 		$result   = $recruits->list_recruitments(1);
 		$recruit_count= 0;
@@ -310,8 +320,8 @@ class recruit_module
 					'CLASS_ID'          => $row['class_id'],
 					'CLASS_NAME'        => $row['class_name'],
 					'COLOR_CODE'        => $row['colorcode'],
-					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'CLASS_IMAGE'       => (strlen($row['imagename']) > 1) ? $class_img : '',
+					'S_CLASS_IMAGE_EXISTS' => (strlen((string) $row['imagename']) > 1) ? true : false,
+					'CLASS_IMAGE'       => (strlen((string) $row['imagename']) > 1) ? $class_img : '',
 					'POSITIONS'         => $row['positions'],
 					'APPLICANTS'        => $row['applicants'],
 					'STATUS'            => $row['status'] == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
@@ -343,14 +353,16 @@ class recruit_module
 	{
 		global $config;
 
+		$ac = $this->admin_controller;
+
 		// Class dropdown
 		// reloading is done from ajax to prevent redraw
 		$sql_array = array(
 			'SELECT'   => ' c.class_id, l.name as class_name, c.class_hide,
 									  c.class_min_level, class_max_level, c.class_armor_type, c.imagename ',
 			'FROM'     => array(
-				CLASS_TABLE => 'c',
-				BB_LANGUAGE => 'l'),
+				$ac->bb_classes_table => 'c',
+				$ac->bb_language_table => 'l'),
 			'WHERE'    => " l.game_id = c.game_id  AND c.game_id = '" . $Guild->getGameId() . "'
 					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class' ",
 			'ORDER_BY' => 'l.name asc'
@@ -368,7 +380,7 @@ class recruit_module
 		}
 		$this->db->sql_freeresult($result);
 		// get roles
-		$Roles           = new roles();
+		$Roles           = new roles($ac->bb_gameroles_table, $ac->bb_language_table, $ac->bb_games_table, $ac->bb_classes_table);
 		$Roles->game_id  = $Guild->getGameId();
 		$Roles->guild_id = $Guild->getGuildid();
 		$listroles       = $Roles->list_roles();

@@ -1,15 +1,18 @@
 <?php
 /**
+ *
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  * Guild admin
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
 namespace avathar\bbguild\controller;
 
 use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\game_registry;
 use avathar\bbguild\model\games\rpg\faction;
@@ -294,7 +297,7 @@ class admin_guild
         {
             // delete the rank only if there are no players left
             $rank_id    = $this->request->variable('ranktodelete', 999);
-            $guildid    = $this->request->variable(URI_GUILD, 0);
+            $guildid    = $this->request->variable(constants::URI_GUILD, 0);
             $old_guild  = new guilds($guildid);
             $deleterank = new ranks($guildid, $rank_id);
 
@@ -396,7 +399,7 @@ class admin_guild
                     'GAME'         => $listguild->getGameId(),
                     'PLAYERCOUNT'  => $listguild->getPlayercount(),
                     'SHOW_ROSTER'  => $listguild->getShowroster() == 1 ? 'yes' : 'no',
-                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;'.URI_GUILD.'='.$listguild->getGuildid()),
+                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;'.constants::URI_GUILD.'='.$listguild->getGuildid()),
                 )
             );
         }
@@ -514,7 +517,7 @@ class admin_guild
         $updaterank = $this->request->is_set_post('updaterank');
         $deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
         $addrank    = $this->request->is_set_post('addrank');
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' .
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' .
                 $updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
 
         if (($updaterank || $addrank) && (!check_form_key('avathar/bbguild')))
@@ -552,7 +555,7 @@ class admin_guild
         $submit       = $this->request->is_set_post('updateguild');
         $delete       = $this->request->is_set_post('deleteguild');
         $updatearmory = $this->request->is_set_post('armory');
-        $this->link   = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' .
+        $this->link   = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . constants::URI_GUILD . '=' .
                 $updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
         // POST check
         if ($submit)

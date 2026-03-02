@@ -1,15 +1,18 @@
 <?php
 /**
- * Guild ACP file
  *
- * @package   bbguild v2.0
- * @copyright 2018 avathar.be
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ * Guild ACP module
+ *
  */
 
 namespace avathar\bbguild\acp;
 
 use avathar\bbguild\model\admin\admin;
+use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\player\guilds;
@@ -37,8 +40,13 @@ class guild_module
 	protected $db;
 	/* @var \phpbb\config\config */
 	protected $config;
+	/* @var \phpbb\auth\auth */
+	public $auth;
 	public $id;
 	public $mode;
+	public $tpl_name;
+	public $link;
+	public $page_title;
 
 	protected $factions;
 	/* @var \avathar\bbguild\controller\admin_controller */
@@ -78,6 +86,7 @@ class guild_module
 		$this->phpbb_container = $phpbb_container;
 		$this->game_registry = $phpbb_container->get('avathar.bbguild.game_registry');
 		$this->admin_controller = $this->phpbb_container->get('avathar.bbguild.admin.controller');
+		$ac = $this->admin_controller;
 		$this->helper = $phpbb_container->get('controller.helper');
 		$this->factionroute =  $this->helper->route('avathar_bbguild_01', array());
 
@@ -100,16 +109,16 @@ class guild_module
 
 				break;
 			case 'editguild':
-				$this->url_id = $this->request->variable(URI_GUILD, 0);
-				$updateguild  = new guilds($this->url_id);
+				$this->url_id = $this->request->variable(constants::URI_GUILD, 0);
+				$updateguild  = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $this->url_id);
 
-				$this->game          = new game;
+				$this->game          = new game($ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_factions_table, $ac->bb_games_table);
 				$this->game->game_id = $updateguild->getGameId();
 				$this->game->get_game();
 
 				if ($this->request->is_set_post('playeradd'))
 				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-mm_module&amp;mode=addplayer&amp;'.URI_GUILD. '=' .$this->url_id));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-mm_module&amp;mode=addplayer&amp;'.constants::URI_GUILD. '=' .$this->url_id));
 				}
 
 				$action = $this->request->variable('action', '');

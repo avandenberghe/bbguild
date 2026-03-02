@@ -1,14 +1,10 @@
 <?php
 /**
- * bbguild acp language file for guilds -german
  *
- * @package     phpBB Extension - bbguild
- * @copyright   2010 bbguild <https://github.com/bbGuild>
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author      sajaki
- * @link        http://www.avathar.be/bbdkp
- * @version     2.0
- * @translation various unknown authors, killerpommes
+ * @package bbGuild Extension
+ * @copyright (c) 2018 avathar.be
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
  */
 
 /**
