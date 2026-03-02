@@ -466,7 +466,6 @@ class game
 			'bb_bosstable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_bosstable'),
 			'bb_zonetable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_zonetable'),
 			'bb_news'                       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_news'),
-			'bb_plugins'                    => $phpbb_container->getParameter('avathar.bbguild.tables.bb_plugins'),
 		);
 	}
 

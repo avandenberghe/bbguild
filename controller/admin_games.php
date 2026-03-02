@@ -113,7 +113,6 @@ class admin_games
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
-	public $bb_plugins;
 
 	/**
 	 * partly installed games
@@ -164,7 +163,6 @@ class admin_games
 	 * @param string $bb_bosstable
 	 * @param string $bb_zonetable
 	 * @param string $bb_news
-	 * @param string $bb_plugins
 	 */
 	public function __construct(\phpbb\auth\auth $auth,
 		\phpbb\cache\driver\driver_interface $cache,
@@ -204,8 +202,7 @@ class admin_games
 		$bb_relations_table,
 		$bb_bosstable,
 		$bb_zonetable,
-		$bb_news,
-		$bb_plugins)
+		$bb_news)
 	{
 
 		$this->bb_games_table = $bb_games_table;
@@ -229,7 +226,6 @@ class admin_games
 		$this->bb_bosstable = $bb_bosstable;
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
-		$this->bb_plugins = $bb_plugins;
 
 		$this->auth = $auth;
 		$this->cache = $cache;

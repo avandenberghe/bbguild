@@ -40,7 +40,6 @@ services:
             - '%avathar.bbguild.tables.bb_bosstable%'
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
-            - '%avathar.bbguild.tables.bb_plugins%'
             - '@avathar.bbguild.game_registry'
     avathar.bbguild.curl:
         class: avathar\bbguild\model\admin\curl
@@ -96,7 +95,6 @@ services:
             - '%avathar.bbguild.tables.bb_bosstable%'
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
-            - '%avathar.bbguild.tables.bb_plugins%'
     avathar.bbguild.admin.games:
         class: avathar\bbguild\controller\admin_games
         arguments:
@@ -139,7 +137,6 @@ services:
             - '%avathar.bbguild.tables.bb_bosstable%'
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
-            - '%avathar.bbguild.tables.bb_plugins%'
     avathar.bbguild.game_registry:
         class: avathar\bbguild\model\games\game_registry
         arguments:

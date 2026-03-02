@@ -38,7 +38,6 @@ class view_controller
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
-	public $bb_plugins;
 
 	/** @var \avathar\bbguild\model\games\game_registry */
 	public $game_registry;
@@ -150,7 +149,6 @@ class view_controller
 	 * @param  string           $bb_bosstable	name of boss table
 	 * @param  string           $bb_zonetable	name of zone table
 	 * @param  string           $bb_news	name of news table
-	 * @param  string           $bb_plugins	name of plugin table
 	 * @param  \avathar\bbguild\model\games\game_registry $game_registry
 	 */
 	public function __construct(
@@ -188,7 +186,6 @@ class view_controller
 		$bb_bosstable,
 		$bb_zonetable,
 		$bb_news,
-		$bb_plugins,
 		\avathar\bbguild\model\games\game_registry $game_registry
 	)
 	{
@@ -230,7 +227,6 @@ class view_controller
 		$this->bb_bosstable = $bb_bosstable;
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
-		$this->bb_plugins = $bb_plugins;
 		$this->game_registry = $game_registry;
 
 		$this->languagecodes = array(

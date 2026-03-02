@@ -102,20 +102,6 @@ class guilds
 	 */
 	protected $guilddefault = 1;
 
-	//aion parameters
-	/**
-	 * Aion legion id
-	 *
-	 * @var int
-	 */
-	protected $aionlegionid = 0;
-	/**
-	 * Aion Server id
-	 *
-	 * @var int
-	 */
-	protected $aionserverid = 0;
-
 	//wow parameters
 	/**
 	 * guild achievement points
@@ -314,38 +300,6 @@ class guilds
 	public function setAchievements($achievements)
 	{
 		$this->achievements = (int) $achievements;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAionlegionid()
-	{
-		return $this->aionlegionid;
-	}
-
-	/**
-	 * @param int $aionlegionid
-	 */
-	public function setAionlegionid($aionlegionid)
-	{
-		$this->aionlegionid = (int) $aionlegionid;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAionserverid()
-	{
-		return $this->aionserverid;
-	}
-
-	/**
-	 * @param int $aionserverid
-	 */
-	public function setAionserverid($aionserverid)
-	{
-		$this->aionserverid = (int) $aionserverid;
 	}
 
 	/**
@@ -1008,8 +962,6 @@ class guilds
 				'region' => $this->region ,
 				'battlegroup' => $this->battlegroup,
 				'roster' => $this->showroster,
-				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid,
 				'level' => $this->level,
 				'players' => $this->playercount,
 				'achievementpoints' => $this->achievementpoints,
@@ -1091,8 +1043,6 @@ class guilds
 				'region' => $this->region ,
 				'battlegroup' => $this->battlegroup,
 				'roster' => $this->showroster,
-				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid,
 				'level' => $this->level,
 				'players' => $this->playercount,
 				'achievementpoints' => $this->achievementpoints,

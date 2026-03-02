@@ -123,7 +123,6 @@ class achievement
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
-	public $bb_plugins;
 
 
 	/**

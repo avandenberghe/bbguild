@@ -45,7 +45,6 @@ class admin_controller_temp
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
-	public $bb_plugins;
 
 	/*** @var service */
 	protected $cache;
@@ -115,7 +114,6 @@ class admin_controller_temp
 	 * @param  string           $bb_bosstable	name of boss table
 	 * @param  string           $bb_zonetable	name of zone table
 	 * @param  string           $bb_news	name of news table
-	 * @param  string           $bb_plugins	name of plugin table
 	 * @return \avathar\bbguild\controller\admin_controller
 	 * @access public
 	 */
@@ -151,8 +149,7 @@ class admin_controller_temp
 		$bb_relations_table,
 		$bb_bosstable,
 		$bb_zonetable,
-		$bb_news,
-		$bb_plugins
+		$bb_news
 	)
 	{
 
@@ -188,7 +185,6 @@ class admin_controller_temp
 		$this->bb_bosstable = $bb_bosstable;
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
-		$this->bb_plugins = $bb_plugins;
 	}
 
 	/**
