@@ -12,7 +12,6 @@ namespace avathar\bbguild\model\player;
 use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\game_provider_interface;
-use avathar\bbguild\model\api\battlenet;
 
 /**
  * manages player creation
@@ -1544,14 +1543,13 @@ class player
 
 
 	/**
-	 * fetch info from Armory/API
+	 * Fetch info from game API
 	 *
-	 * When a game provider with an API is available, delegates to
-	 * game_api_interface::fetch_character_data(). Otherwise falls back
-	 * to the legacy Battle.net character API.
+	 * Delegates to game_api_interface::fetch_character_data() when a
+	 * game provider with API support is available.
 	 *
 	 * @param game_provider_interface|null $provider Optional game provider with API
-	 * @return integer
+	 * @return integer 1 on success, -1 on failure
 	 */
 	public function Armory_getplayer(game_provider_interface $provider = null)
 	{
@@ -1566,7 +1564,7 @@ class player
 			return -1;
 		}
 
-		// New path: delegate to game provider's API when available
+		// Delegate to game provider's API
 		if ($provider !== null && $provider->has_api())
 		{
 			$api = $provider->get_api();
@@ -1576,7 +1574,6 @@ class player
 				$this->armoryresult = 'KO';
 				return -1;
 			}
-			// Update player fields from API data
 			$this->player_level = isset($data['level']) ? $data['level'] : $this->player_level;
 			$this->player_race_id = isset($data['race']) ? $data['race'] : $this->player_race_id;
 			$this->player_class_id = isset($data['class']) ? $data['class'] : $this->player_class_id;
@@ -1592,199 +1589,8 @@ class player
 			return 1;
 		}
 
-		// Legacy path: game must have an API (currently only WoW has one in core)
-		if (!$game->getArmoryEnabled() || trim($game->getApikey()) == '')
-		{
-			$this->player_portrait_url = '';
-			$this->deactivate_reason = '';
-			return -1;
-		}
-
-		//Initialising the class
-		/**
-		 * available extra fields :
-		 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
-		 * 'companions','mounts','pets','achievements','progression','pvp','quests'
-		 */
-		$api = new battlenet('character', $this->player_region, $game->getApikey(), $game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
-		$params = array('guild', 'titles', 'talents' );
-
-		$data = $api->character->getCharacter($this->player_name, $this->player_realm, $params);
-		unset($api);
-
-		// if $data == false then there is no character data, so
-		if (!isset($data) || !isset($data['response']))
-		{
-			$this->armoryresult = 'KO';
-			$log_action = array(
-				'header'       => 'L_ERROR_ARMORY_DOWN',
-				'L_UPDATED_BY' => $user->data['username'],
-				'L_GUILD' => $this->name . '-' . $this->realm,
-			);
-
-			$this->log_insert(
-				array(
-					'log_type'   => $log_action['header'],
-					'log_action' => $log_action,
-					'log_result' => 'L_ERROR'
-				)
-			);
-			return -1;
-		}
-
-		$data = $data['response'];
-
-		//if we get error code
-		if (isset($data['code']))
-		{
-			if ($data['code'] == '403')
-			{
-				// even if we have active API account, it may be that Blizzard account is inactive
-				$this->armoryresult = 'KO';
-				$log_action = array(
-					'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
-					'L_UPDATED_BY' => $user->data['username'],
-					'L_GUILD' => $this->name . '-' . $this->realm,
-				);
-
-				$this->log_insert(
-					array(
-						'log_type'   => $log_action['header'],
-						'log_action' => $log_action,
-						'log_result' => 'L_ERROR'
-					)
-				);
-				return -1;
-
-			}
-		}
-
-		if (isset($data['reason']))
-		{
-			//not found in armory
-			$this->player_status = 0;
-			$this->deactivate_reason = 'DEACTIVATED_BY_API';
-			return -1;
-
-		}
-
-		$this->player_level = isset($data['level']) ? $data['level'] : $this->player_level;
-		$this->player_race_id = isset($data['race']) ? $data['race'] : $this->player_race_id;
-		$this->player_class_id = isset($data['class']) ? $data['class'] : $this->player_class_id;
-
-		/*
-         * select the build
-        */
-		$buildid = 0;
-		if (isset($data['talents'][0]) && isset($data['talents'][1]) )
-		{
-			if (isset($data['talents'][0]['selected']))
-			{
-				$buildid = 0;
-			}
-			else if (isset($data['talents'][1]['selected']))
-			{
-				$buildid = 1;
-			}
-		}
-		else if (isset($data['talents'][0]))
-		{
-			$buildid = 0;
-		}
-		else if (isset($data['talents'][1]))
-		{
-			$buildid = 1;
-		}
-
-		$conversion_array = array(
-			'DPS' => 0,
-			'HEALING' => 1,
-			'TANK' => 2,
-		);
-
-		$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'DPS';
-
-		if (isset($role) && in_array($role, $conversion_array))
-		{
-			$this->player_role = $conversion_array[$role];
-		}
-
-		$this->player_gender_id = isset($data['gender']) ? $data['gender'] : $this->player_gender_id;
-		$this->player_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->player_achiev;
-
-		if (isset($data['name']))
-		{
-			$this->player_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->player_region) . 'character/' . $this->player_realm . '/' . $data['name'] . '/simple';
-		}
-
-		if (isset($data['thumbnail']))
-		{
-			$this->player_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->player_region, $this->player_region) . $data['thumbnail'];
-		}
-
-		if (isset($data['realm']))
-		{
-			$this->player_realm = $data['realm'];
-		}
-
-		if (isset($data['guild']))
-		{
-			$found=false;
-			foreach ($this->guildlist as $guild)
-			{
-				if (strtolower($guild['name']) == strtolower($data['guild']['name']))
-				{
-					$this->player_guild_id = $guild['id'];
-					$this->player_guild_name = $guild['name'];
-					$found=true;
-					break;
-				}
-			}
-			if ($found==false)
-			{
-				$this->player_guild_id = 0;
-				$this->player_rank_id = 99;
-			}
-		}
-		else
-		{
-			$this->player_guild_id = 0;
-			$this->player_rank_id = 99;
-		}
-
-		if (isset($data['titles']))
-		{
-			foreach ($data['titles'] as $key => $title)
-			{
-				if (isset($title['selected']))
-				{
-					$this->player_title = $title['name'];
-					break;
-				}
-			}
-		}
-
-		//if the last logged-in date is > 3 months ago then disable the account
-		if (isset($data['lastModified']))
-		{
-			$latest = $data['lastModified'];
-			$diff = \round(\abs(\time() - ($latest/1000)) / 60 / 60 / 24, 2);
-			if ($diff > 90 && $this->player_status == 1)
-			{
-				$this->player_status = 0;
-				$this->deactivate_reason = 'DEACTIVATED_BY_API';
-
-			}
-			if ($diff < 90 && $this->player_status == 0 && $this->deactivate_reason == 'DEACTIVATED_BY_API')
-			{
-				$this->player_status = 1;
-				$this->deactivate_reason = '';
-
-			}
-		}
-
-		return 1;
-
+		// No provider available — cannot fetch character data
+		return -1;
 	}
 
 	/**
@@ -2013,155 +1819,6 @@ class player
 
 		return true;
 	}
-
-	/**
-	 * Process Blizzard Battle.NET Character API data
-	 *
-	 * @param array  $playerdata
-	 * @param int    $guild_id
-	 * @param string $region
-	 * @param int    $min_armory
-	 */
-	public function WoWArmoryUpdate($playerdata, $guild_id, $region, $min_armory)
-	{
-		global $user, $db;
-
-		$player_ids = array();
-		$oldplayers = array();
-		$newplayers = array();
-
-		/* GET OLD RANKS */
-		$sql = ' select player_name, player_id, player_realm FROM ' . $this->bb_players_table . '
-				WHERE player_guild_id =  ' . (int) $guild_id . "
-				AND game_id='wow' order by player_name ASC";
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$oldplayers[] = $row['player_name'] . '-' . $row['player_realm'];
-
-			//this is to find the playerindex when updating
-			$player_ids[bin2hex($row['player_name'] . '-' . $row['player_realm'])] = $row['player_id'];
-
-		}
-		$db->sql_freeresult($result);
-
-		foreach ($playerdata as $mb)
-		{
-			$newplayers[] = $mb['character']['name'] . '-' . $mb['character']['realm'];
-		}
-
-		// get the new players to insert
-		$to_add = array_diff($newplayers, $oldplayers);
-
-		// start transaction
-		$db->sql_transaction('begin');
-
-		foreach ($playerdata as $mb)
-		{
-			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_add) && $mb['character']['level'] >= $min_armory )
-			{
-				if (!isset($mb['character']['realm']))
-				{
-					$realm = 'unknown';
-				}
-				else
-				{
-					$realm = $mb['character']['realm'];
-				}
-
-				if (isset($mb['character']['realm']))
-				{
-					$this->player_realm = $mb['character']['realm'];
-				}
-				$this->game_id ='wow';
-				$this->player_region = $region;
-				$this->player_guild_id = $guild_id;
-				$this->player_rank_id = isset($mb['rank']) ? $mb['rank'] : 1;
-				$this->player_name = $mb['character']['name'];
-				$this->player_level = (int) $mb['character']['level'];
-				$this->player_gender_id = (int) $mb['character']['gender'];
-				$this->player_race_id = (int) $mb['character']['race'];
-				$this->player_class_id = (int) $mb['character']['class'];
-				$this->player_achiev = (int) $mb['character']['achievementPoints'];
-				$this->player_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm . '/' . $this->player_name . '/simple';
-				$this->player_status = 1;
-				$this->player_role = 'NA';
-				$this->player_comment = sprintf($user->lang['ADMIN_ADD_PLAYER_SUCCESS'], $this->player_name, date('F j, Y, g:i a'));
-				$this->player_joindate = $this->time;
-				$this->player_outdate = mktime(0, 0, 0, 12, 31, 2030);
-				$this->player_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
-				$this->player_title = '';
-				if (isset($mb['titles']))
-				{
-					foreach ($mb['titles'] as $key => $title)
-					{
-						if (isset($title['selected']))
-						{
-							$this->player_title = $title['name'];
-						}
-					}
-				}
-				$this->Makeplayer();
-			}
-		}
-
-		// get the players to update
-		$to_update = array_intersect($newplayers, $oldplayers);
-		foreach ($playerdata as $mb)
-		{
-
-			if (!isset($mb['character']['realm']))
-			{
-				$realm = 'unknown';
-			}
-			else
-			{
-				$realm = $mb['character']['realm'];
-			}
-
-			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_update))
-			{
-				$player_id =  (int) $player_ids[bin2hex($mb['character']['name'] . '-' . $mb['character']['realm'])];
-				$this->game_id ='wow';
-				$this->player_region = $region;
-				$this->player_realm = $mb['character']['realm'];
-				$this->player_rank_id = $mb['rank'];
-				$this->player_name = $mb['character']['name'];
-				$this->player_guild_id = $guild_id;
-				$this->player_level = (int) $mb['character']['level'];
-				$this->player_gender_id = (int) $mb['character']['gender'];
-				$this->player_race_id = (int) $mb['character']['race'];
-				$this->player_class_id = (int) $mb['character']['class'];
-				$this->player_achiev = (int) $mb['character']['achievementPoints'];
-				$this->player_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm  . '/' . $this->player_name . '/simple';
-				$this->player_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
-
-				$sql_ary = array (
-					'player_name' => ucwords($this->player_name) ,
-					'player_level' => $this->player_level,
-					'player_race_id' => $this->player_race_id ,
-					'player_realm' => $this->player_realm,
-					'player_region' => $this->player_region,
-					'player_class_id' => $this->player_class_id ,
-					'player_rank_id' => $this->player_rank_id ,
-					'player_guild_id' => $this->player_guild_id ,
-					'player_gender_id' => $this->player_gender_id ,
-					'player_achiev' => $this->player_achiev ,
-					'player_armory_url' => (string) $this->player_armory_url ,
-					'player_portrait_url' => (string) $this->player_portrait_url,
-				);
-
-				$sql = 'UPDATE ' . $this->bb_players_table . '
-						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-						WHERE player_id = ' . $player_id;
-				$db->sql_query($sql);
-			}
-		}
-
-		$db->sql_transaction('commit');
-
-	}
-
 
 	/**
 	 * Enter joindate for guildplayer (query is cached for 1 week !)

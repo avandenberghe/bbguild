@@ -110,6 +110,27 @@ class player_module
 	}
 
 	/**
+	 * Look up the game provider for a given game_id.
+	 *
+	 * @param string $game_id
+	 * @return \avathar\bbguild\model\games\game_provider_interface|null
+	 */
+	private function get_game_provider($game_id)
+	{
+		global $phpbb_container;
+		if (isset($phpbb_container))
+		{
+			try
+			{
+				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
+				return $registry->get($game_id);
+			}
+			catch (\Exception $e) {}
+		}
+		return null;
+	}
+
+	/**
 	 * @param $id
 	 * @param $mode
 	 */
@@ -408,7 +429,7 @@ class player_module
 		//only call armory if it is enabled.
 		if ($newplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
 		{
-			$newplayer->Armory_getplayer();
+			$newplayer->Armory_getplayer($this->get_game_provider($newplayer->game_id));
 		}
 
 		$newplayer->Makeplayer();
@@ -485,7 +506,7 @@ class player_module
 
 		if ($updateplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
 		{
-			$updateplayer->Armory_getplayer();
+			$updateplayer->Armory_getplayer($this->get_game_provider($updateplayer->game_id));
 		}
 
 		$updateplayer->setPlayerStatus($this->request->variable('activated', '') == 'on' ? 1 : 0);
@@ -586,7 +607,7 @@ class player_module
 				{
 					if ($player->getPlayerRankId() < 90)
 					{
-						$player->Armory_getplayer();
+						$player->Armory_getplayer($this->get_game_provider($player->game_id));
 					}
 					$player->Updateplayer($old_player);
 				}

@@ -108,6 +108,27 @@ class bbguild_module
 	}
 
 	/**
+	 * Look up the game provider for a given game_id.
+	 *
+	 * @param string $game_id
+	 * @return \avathar\bbguild\model\games\game_provider_interface|null
+	 */
+	private function get_game_provider($game_id)
+	{
+		global $phpbb_container;
+		if (isset($phpbb_container))
+		{
+			try
+			{
+				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
+				return $registry->get($game_id);
+			}
+			catch (\Exception $e) {}
+		}
+		return null;
+	}
+
+	/**
 	 * bbguild_module constructor.
 	 *
 	 * @param $p_master
@@ -352,7 +373,7 @@ class bbguild_module
 						{
 							// record added.
 							$newplayer->setPlayerComment(sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->getPlayerName()), date('F j, Y, g:i a')));
-							$newplayer->Armory_getplayer();
+							$newplayer->Armory_getplayer($this->get_game_provider($newplayer->game_id));
 							$newplayer->Updateplayer($newplayer);
 							meta_refresh(1, $this->u_action . '&amp;player_id=' . $newplayer->player_id);
 							$success_message = sprintf($this->user->lang['ADMIN_ADD_PLAYER_SUCCESS'], ucwords($newplayer->getPlayerName()), date('F j, Y, g:i a'));
@@ -437,7 +458,7 @@ class bbguild_module
 
 		if ($updateplayer->getPlayerRankId() < 90)
 		{
-			$updateplayer->Armory_getplayer();
+			$updateplayer->Armory_getplayer($this->get_game_provider($updateplayer->game_id));
 		}
 		//override armory status
 		$updateplayer->setPlayerStatus($this->request->variable('activated', 0) > 0 ? 1 : 0);
