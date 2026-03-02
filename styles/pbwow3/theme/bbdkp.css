@@ -55,15 +55,8 @@
     width: 175px;
 }
 
-.profile-wrapper-alliance {
-    background-image: url("./images/sidebar-bg-alliance.png");
+.profile-wrapper {
     width: 200px;
-}
-.profile-wrapper-horde {
-    background-image: url("./images/sidebar-bg-horde.png");
-}
-.profile-wrapper-other {
-    /* need to find other watermark */
 }
 
 .profile-info-anchor, .profile-info {
@@ -160,14 +153,6 @@
     color: #cccccc;
 }
 
-
-.profile-wrapper-alliance .realm, .profile-wrapper-alliance .realm a {
-    color: #0078ff;
-}
-
-.profile-wrapper-horde .realm, .profile-wrapper-horde .realm a {
-    color: #b30000;
-}
 
 .profile-info .realm {
     border-bottom: 0 none;

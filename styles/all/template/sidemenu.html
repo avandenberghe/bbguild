@@ -2,7 +2,7 @@
 <div class="profile-sidebar-outer">
     <div class="profile-sidebar-inner">
         <div class="profile-sidebar-contents">
-            {% if S_DISPLAY_ROSTERGRID or S_DISPLAY_ROSTERLISTING or S_DISPLAY_WOWACHIEVEMENTS %}
+            {% if S_DISPLAY_ROSTERGRID or S_DISPLAY_ROSTERLISTING or S_DISPLAY_ACHIEVEMENTS %}
             <div class="profile-sidebar-tabard">
                 <div class="guild-tabard">
                     <img src="{{ EMBLEM }}" alt="{{ GUILD_NAME }}" />
@@ -11,13 +11,7 @@
             </div>
             {% endif %}
             {% if S_DISPLAY_WELCOME %}
-            {% if S_GUILD_ALLIANCE %}
-            <div class="profile-wrapper-alliance">
-            {% elseif S_GUILD_HORDE %}
-            <div class="profile-wrapper-horde">
-            {% else %}
-            <div class="profile-wrapper-other">
-            {% endif %}
+            <div class="profile-wrapper profile-wrapper-{{ FACTION_CSS }}">
                 <div class="profile-info-anchor profile-guild-info-anchor">
                     <div class="guild-tabard">
                         <div class="tabard-overlay">

@@ -22,9 +22,7 @@
             {% INCLUDE 'view/welcome.html' %}
             {% endif %}
 
-            {% if S_DISPLAY_WOWACHIEVEMENTS %}
-            {% INCLUDE 'view/achievements.html' %}
-            {% endif %}
+            {% EVENT bbguild_main_after_content %}
         </div>
         <span class="clear"></span>
     </div>
