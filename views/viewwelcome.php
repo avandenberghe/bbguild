@@ -48,58 +48,55 @@ class viewwelcome implements iviews
 			$game->game_id = $this->navigation->guild->getGameId();
 			$game->get_game();
 
-			$data = $this->navigation->guild->Call_Guild_API(array('news'), $game );
-			if ($data)
+			// Get the game provider for API calls
+			$game_registry = $this->navigation->view_controller->game_registry;
+			$provider = $game_registry ? $game_registry->get($this->navigation->guild->getGameId()) : null;
+
+			$data = $this->navigation->guild->Call_Guild_API(array('news'), $game, $provider);
+			if ($data && isset($data['news']))
 			{
-				$this->navigation->guild->setGuildnews($data);
-				$newsarr =  $this->navigation->guild->getGuildnews();
-				if (isset($newsarr['news']))
+				$i = 0;
+				foreach ($data['news'] as $id => $news)
 				{
-					$i=0;
-					foreach ($newsarr['news'] as $id => $news)
+					$i++;
+					switch ($news['type'])
 					{
-						$i++;
-						switch ($news['type'])
-						{
-						case 'itemCraft' :
-						case 'itemLoot' :
-							$template->assign_block_vars(
-								'activityfeed', array(
-								'TYPE'      => 'ITEM',
-								'ID'        => $id,
-								'VERB'      => $user->lang('LOOTED'),
-								'CHARACTER' => $news['character'],
-								'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-								'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
-								'CONTEXT'   => $news['context'],
-								//trade-skill, quest-reward, raid-finder, vendor, dungeon-heroic, raid-normal , dungeon-normal
-								)
-							);
-							break;
-						case 'playerAchievement':
-							$template->assign_block_vars(
-								'activityfeed', array(
-								'TYPE'        => 'ACHI',
-								'ID'          => $id,
-								'VERB'        => $user->lang('ACHIEVED'),
-								'CHARACTER'   => $news['character'],
-								'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-								'ACHIEVEMENT' => $news['achievement']['id'],
-								'TITLE'       => $news['achievement']['title'],
-								'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
-								)
-							);
-							break;
+					case 'itemCraft' :
+					case 'itemLoot' :
+						$template->assign_block_vars(
+							'activityfeed', array(
+							'TYPE'      => 'ITEM',
+							'ID'        => $id,
+							'VERB'      => $user->lang('LOOTED'),
+							'CHARACTER' => $news['character'],
+							'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+							'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
+							'CONTEXT'   => $news['context'],
+							)
+						);
+						break;
+					case 'playerAchievement':
+						$template->assign_block_vars(
+							'activityfeed', array(
+							'TYPE'        => 'ACHI',
+							'ID'          => $id,
+							'VERB'        => $user->lang('ACHIEVED'),
+							'CHARACTER'   => $news['character'],
+							'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
+							'ACHIEVEMENT' => $news['achievement']['id'],
+							'TITLE'       => $news['achievement']['title'],
+							'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
+							)
+						);
+						break;
 
-						default:
-							$a=$news['type'];
-							break;
+					default:
+						break;
 
-						}
-						if ($i > 25)
-						{
-							break;
-						}
+					}
+					if ($i > 25)
+					{
+						break;
 					}
 				}
 			}
@@ -115,7 +112,6 @@ class viewwelcome implements iviews
 		);
 		$title = $this->navigation->user->lang['WELCOME'];
 
-		unset($newsarr);
 		// fully rendered page source that will be output on the screen.
 		$this->response = $this->navigation->helper->render($this->tpl, $title);
 

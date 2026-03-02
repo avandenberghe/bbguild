@@ -1,4 +1,4 @@
-<?php
+1<?php
 /**
  * left front navigation block
  *
@@ -347,13 +347,13 @@ class viewnavigation implements iviews
 				'REALM'              => $this->guild->getRealm(),
 				'REGION'             => $this->guild->getRegion(),
 				'PLAYERCOUNT'        => $this->guild->getPlayercount() ,
-				'ARMORY_URL'         => $this->guild->getGuildarmoryurl() ,
+				'ARMORY_URL'         => '',
 				'MIN_ARMORYLEVEL'    => $this->guild->getMinArmory() ,
 				'SHOW_ROSTER'        => $this->guild->getShowroster(),
 				'EMBLEM'             => $this->view_controller->ext_path_images . 'guildemblem/' . basename($this->guild->getEmblempath()),
 				'EMBLEMFILE'         => basename($this->guild->getEmblempath()),
-				'ARMORY'             => $this->guild->getGuildarmoryurl(),
-				'ACHIEV'             => $this->guild->getAchievementpoints(),
+				'ARMORY'             => '',
+				'ACHIEV'             => '',
 				'SHOWALL'            => ($this->show_all) ? $this->user->lang['ALL']: '',
 			)
 		);

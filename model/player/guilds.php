@@ -9,7 +9,6 @@
 
 namespace avathar\bbguild\model\player;
 
-use avathar\bbguild\model\api\battlenet;
 use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\game_api_interface;
 use avathar\bbguild\model\games\game_provider_interface;
@@ -102,43 +101,10 @@ class guilds
 	 */
 	protected $guilddefault = 1;
 
-	//wow parameters
-	/**
-	 * guild achievement points
-	 *
-	 * @var int
-	 */
-	protected $achievementpoints = 0;
-	/**
-	 * guild level
-	 *
-	 * @var int 1-25
-	 */
-	protected $level = 0;
-
 	/**
 	 * guild emblem image path
 	 */
 	protected $emblempath = '';
-
-	/**
-	 * battle net emblem info so we can make the image
-	 *
-	 * @var array
-	 */
-	protected $emblem = array();
-	/**
-	 * guild battlegroup
-	 *
-	 * @var string
-	 */
-	protected $battlegroup = '';
-	/**
-	 * guild armory url
-	 *
-	 * @var string
-	 */
-	protected $guildarmoryurl = '';
 	/**
 	 * guild players
 	 *
@@ -193,13 +159,6 @@ class guilds
 	 * @var int
 	 */
 	protected $recruitforum;
-
-	/**
-	 * guildnews array from battle.NET
-	 *
-	 * @var array
-	 */
-	protected $guildnews;
 
 	/**
 	 * @type string
@@ -273,22 +232,6 @@ class guilds
 	/**
 	 * @return int
 	 */
-	public function getAchievementpoints()
-	{
-		return $this->achievementpoints;
-	}
-
-	/**
-	 * @param int $achievementpoints
-	 */
-	public function setAchievementpoints($achievementpoints)
-	{
-		$this->achievementpoints = $achievementpoints;
-	}
-
-	/**
-	 * @return int
-	 */
 	public function getAchievements()
 	{
 		return $this->achievements;
@@ -348,38 +291,6 @@ class guilds
 	public function setArmoryresult($armoryresult)
 	{
 		$this->armoryresult = (string) $armoryresult;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getBattlegroup()
-	{
-		return $this->battlegroup;
-	}
-
-	/**
-	 * @param string $battlegroup
-	 */
-	public function setBattlegroup($battlegroup)
-	{
-		$this->battlegroup = (string) $battlegroup;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getEmblem()
-	{
-		return $this->emblem;
-	}
-
-	/**
-	 * @param array $emblem
-	 */
-	public function setEmblem($emblem)
-	{
-		$this->emblem = (string) $emblem;
 	}
 
 	/**
@@ -447,22 +358,6 @@ class guilds
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getGuildarmoryurl()
-	{
-		return $this->guildarmoryurl;
-	}
-
-	/**
-	 * @param string $guildarmoryurl
-	 */
-	public function setGuildarmoryurl($guildarmoryurl)
-	{
-		$this->guildarmoryurl = (string) $guildarmoryurl;
-	}
-
-	/**
 	 * @return int
 	 */
 	public function getGuilddefault()
@@ -492,22 +387,6 @@ class guilds
 	public function setGuildid($guildid)
 	{
 		$this->guildid = (int) $guildid;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getLevel()
-	{
-		return $this->level;
-	}
-
-	/**
-	 * @param int $level
-	 */
-	public function setLevel($level)
-	{
-		$this->level = (int) $level;
 	}
 
 	/**
@@ -638,29 +517,6 @@ class guilds
 		$this->recruitforum = $recruitforum;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getGuildnews()
-	{
-		return $this->guildnews;
-	}
-
-	/**
-	 * @param $guildnews
-	 */
-	public function setGuildnews($guildnews)
-	{
-		if ($this->armoryresult == 'KO')
-		{
-			$this->guildnews = array();
-		}
-		else
-		{
-			$this->guildnews = (array) $guildnews;
-		}
-	}
-
 	// pulling guild achievements from api is met by the achievements class
 
 	/**
@@ -727,7 +583,7 @@ class guilds
 			return false;
 		}
 
-		// New path: delegate to game provider's API when available
+		// Delegate to game provider's API
 		if ($provider !== null && $provider->has_api())
 		{
 			$api = $provider->get_api();
@@ -735,12 +591,8 @@ class guilds
 		}
 		else
 		{
-			// Legacy path: direct Battle.net client
-			$api  = new battlenet('guild', $this->region, $game->getApikey(),
-				$game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
-			$data = $api->guild->getGuild($this->name, $this->realm, $params);
-			$data = $data['response'];
-			unset($api);
+			$this->armoryresult = 'KO';
+			return false;
 		}
 
 		if (!isset($data))
@@ -805,15 +657,15 @@ class guilds
 	/**
 	 * Update the guild object from API data.
 	 *
-	 * When a game_provider_interface with an API is given, delegates processing
-	 * to game_api_interface::process_guild_data(). Otherwise falls back to
-	 * the legacy WoW-specific processing.
+	 * Delegates processing to game_api_interface::process_guild_data() and
+	 * saves generic fields to bb_guild. Game-specific fields are persisted
+	 * by calling save_guild_extension() on the provider's API.
 	 *
-	 * @param array $data
-	 * @param       $params
-	 * @param game_provider_interface|null $provider Optional game provider with API
+	 * @param array $data Raw API response
+	 * @param array $params Request parameters (e.g. ['members'])
+	 * @param game_provider_interface $provider Game provider with API
 	 */
-	public function update_guild_battleNet(array $data, $params, game_provider_interface $provider = null)
+	public function update_guild_battleNet(array $data, $params, game_provider_interface $provider)
 	{
 		global $db;
 
@@ -822,98 +674,40 @@ class guilds
 			return;
 		}
 
-		// New path: delegate to game provider's API when available
-		if ($provider !== null && $provider->has_api())
+		if (!$provider->has_api())
 		{
-			$api = $provider->get_api();
-			$processed = $api->process_guild_data($data, $params);
-
-			$this->achievementpoints = isset($processed['achievementpoints']) ? $processed['achievementpoints'] : 0;
-			$this->level = isset($processed['level']) ? $processed['level'] : 0;
-			$this->battlegroup = isset($processed['battlegroup']) ? $processed['battlegroup'] : '';
-			$this->faction = isset($processed['faction']) ? $processed['faction'] : $this->faction;
-			$this->guildarmoryurl = isset($processed['guildarmoryurl']) ? $processed['guildarmoryurl'] : '';
-			$this->emblem = isset($processed['emblem']) ? $processed['emblem'] : '';
-			$this->emblempath = isset($processed['emblempath']) ? $processed['emblempath'] : '';
-			if (isset($processed['playercount']))
-			{
-				$this->playercount = $processed['playercount'];
-			}
-
-			$query = $db->sql_build_array(
-				'UPDATE', array(
-					'achievementpoints' => $this->achievementpoints,
-					'level'             => $this->level,
-					'guildarmoryurl'    => $this->guildarmoryurl,
-					'emblemurl'         => $this->emblempath,
-					'battlegroup'       => $this->battlegroup,
-					'armoryresult'      => $this->armoryresult,
-					'players'           => $this->playercount,
-					'faction'           => $this->faction,
-				)
-			);
-			$db->sql_query('UPDATE ' . $this->bb_guild_table . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-
-			// Let the provider's API handle member sync if 'members' was requested
-			if (in_array('members', $params, true) && isset($data['members']))
-			{
-				$api->sync_guild_members($data['members'], $this->guildid, $this->region, $this->min_armory);
-			}
 			return;
 		}
 
-		// Legacy path: WoW-specific processing
-		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
-		$this->level = isset($data['level']) ? $data['level']: 0;
-		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
+		$api = $provider->get_api();
+		$processed = $api->process_guild_data($data, $params);
 
-		if ($data['side'] == 0)
+		$this->faction = isset($processed['faction']) ? $processed['faction'] : $this->faction;
+		$this->emblempath = isset($processed['emblempath']) ? $processed['emblempath'] : '';
+		if (isset($processed['playercount']))
 		{
-			$this->faction = isset($data['side']) ? (1) : '';
-		} else
-		{
-			$this->faction = isset($data['side']) ? (2) : '';
-		} // bbguild wants Alliance 1 and Horde 2
-
-		$this->guildarmoryurl = '';
-		if (isset($data['name']))
-		{
-			$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+			$this->playercount = $processed['playercount'];
 		}
 
-		$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-
-		$this->emblempath = isset($data['emblem']) ?  $this->create_emblem(): '';
-		if (isset($data['members']))
-		{
-			$this->playercount = count($data['members']);
-		}
-
+		// Save generic guild fields to bb_guild
 		$query = $db->sql_build_array(
 			'UPDATE', array(
-				'achievementpoints' => $this->achievementpoints,
-				'level'             => $this->level,
-				'guildarmoryurl'    => $this->guildarmoryurl,
 				'emblemurl'         => $this->emblempath,
-				'battlegroup'       => $this->battlegroup,
 				'armoryresult'      => $this->armoryresult,
 				'players'           => $this->playercount,
 				'faction'           => $this->faction,
 			)
 		);
-
 		$db->sql_query('UPDATE ' . $this->bb_guild_table . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-		if (in_array('members', $params, true))
-		{
-			$this->playerdata = $data['members'];
-			// update ranks table
-			$rank = new ranks($this->guildid);
-			$rank->WoWRankFix($this->playerdata, $this->guildid);
-			//update player table
-			$mb = new player();
-			$mb->WoWArmoryUpdate($this->playerdata, $this->guildid, $this->region, $this->min_armory);
-		}
 
+		// Let the provider's API persist game-specific guild fields
+		$api->save_guild_extension($this->guildid, $processed);
+
+		// Let the provider's API handle member sync if 'members' was requested
+		if (in_array('members', $params, true) && isset($data['members']))
+		{
+			$api->sync_guild_members($data['members'], $this->guildid, $this->region, $this->min_armory);
+		}
 	}
 
 
@@ -960,12 +754,8 @@ class guilds
 				'name' => $this->name ,
 				'realm' => $this->realm,
 				'region' => $this->region ,
-				'battlegroup' => $this->battlegroup,
 				'roster' => $this->showroster,
-				'level' => $this->level,
 				'players' => $this->playercount,
-				'achievementpoints' => $this->achievementpoints,
-				'guildarmoryurl' => $this->guildarmoryurl,
 				'emblemurl' => $this->emblempath,
 				'game_id' => $this->game_id,
 				'min_armory' => $this->min_armory,
@@ -1041,12 +831,8 @@ class guilds
 				'name' => $this->name ,
 				'realm' => $this->realm,
 				'region' => $this->region ,
-				'battlegroup' => $this->battlegroup,
 				'roster' => $this->showroster,
-				'level' => $this->level,
 				'players' => $this->playercount,
-				'achievementpoints' => $this->achievementpoints,
-				'guildarmoryurl' => $this->guildarmoryurl,
 				'emblemurl' => $this->emblempath,
 				'game_id' => $this->game_id,
 				'min_armory' => $this->min_armory,
@@ -1108,7 +894,7 @@ class guilds
 		$sql = 'DELETE FROM ' . $this->bb_guild_table . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
+		$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region.'_'. $this->realm .'_'. str_replace(' ', '_', $this->name) . '.png';
 
 		if (file_exists($imgfile))
 		{
@@ -1137,184 +923,6 @@ class guilds
 	}
 
 	/**
-	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
-	 *
-	 * @author    Thomas Andersen <acoon@acoon.dk>
-	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
-	 * @param int $width
-	 * @return string
-	 */
-	private function create_emblem($width = 175)
-	{
-		//location to create the file
-		$imgfile = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) . '.png';
-		$outputpath = $this->ext_path . 'images/guildemblem/' .$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name). '.png';
-
-		if (file_exists($imgfile) and $width == imagesx(imagecreatefrompng($imgfile)) and (filemtime($imgfile)+86000) > time())
-		{
-			$finalimg = imagecreatefrompng($imgfile);
-			imagesavealpha($finalimg, true);
-			imagealphablending($finalimg, true);
-		}
-		else
-		{
-			if ($width > 1 and $width < 215)
-			{
-				$height = ($width/215)*230;
-				$finalimg = imagecreatetruecolor($width, $height);
-				$trans_colour = imagecolorallocatealpha($finalimg, 0, 0, 0, 127);
-				imagefill($finalimg, 0, 0, $trans_colour);
-				imagesavealpha($finalimg, true);
-				imagealphablending($finalimg, true);
-			}
-
-			$ring = 'horde';
-			if ($this->faction == 1)
-			{
-				$ring = 'alliance';
-			}
-
-			$imgOut = imagecreatetruecolor(215, 230);
-
-			$emblemURL = $this->ext_path  . 'images/wowapi/emblems/emblem_' .sprintf('%02s', $this->emblem['icon']). '.png';
-			$borderURL = $this->ext_path  . 'images/wowapi/borders/border_' .sprintf('%02s', $this->emblem['border']). '.png';
-			$ringURL = $this->ext_path  . 'images/wowapi/static/ring-' .$ring. '.png';
-			$shadowURL = $this->ext_path  . 'images/wowapi/static/shadow_00.png';
-			$bgURL = $this->ext_path  . 'images/wowapi/static/bg_00.png';
-			$overlayURL = $this->ext_path  . 'images/wowapi//static/overlay_00.png';
-			$hooksURL = $this->ext_path  . 'images/wowapi/static/hooks.png';
-			//$levelURL = $this->ext_path  ."images/wowapi/static/";
-
-			imagesavealpha($imgOut, true);
-			imagealphablending($imgOut, true);
-			$trans_colour = imagecolorallocatealpha($imgOut, 0, 0, 0, 127);
-			imagefill($imgOut, 0, 0, $trans_colour);
-
-			$ring = imagecreatefrompng($ringURL);
-			$ring_size = getimagesize($ringURL);
-
-			$emblem = imagecreatefrompng($emblemURL);
-			$emblem_size = getimagesize($emblemURL);
-			imagelayereffect($emblem, IMG_EFFECT_OVERLAY);
-			$emblemcolor = preg_replace('/^ff/i', '', $this->emblem['iconColor']);
-			$color_r = hexdec(substr($emblemcolor, 0, 2));
-			$color_g = hexdec(substr($emblemcolor, 2, 2));
-			$color_b = hexdec(substr($emblemcolor, 4, 2));
-			imagefilledrectangle($emblem, 0, 0, $emblem_size[0], $emblem_size[1], imagecolorallocatealpha($emblem, $color_r, $color_g, $color_b, 0));
-
-			$border = imagecreatefrompng($borderURL);
-			$border_size = getimagesize($borderURL);
-			imagelayereffect($border, IMG_EFFECT_OVERLAY);
-			$bordercolor = preg_replace('/^ff/i', '', $this->emblem['borderColor']);
-			$color_r = hexdec(substr($bordercolor, 0, 2));
-			$color_g = hexdec(substr($bordercolor, 2, 2));
-			$color_b = hexdec(substr($bordercolor, 4, 2));
-			imagefilledrectangle($border, 0, 0, $border_size[0]+100, $border_size[0]+100, imagecolorallocatealpha($border, $color_r, $color_g, $color_b, 0));
-
-			$shadow = imagecreatefrompng($shadowURL);
-
-			$bg = imagecreatefrompng($bgURL);
-			$bg_size = getimagesize($bgURL);
-			imagelayereffect($bg, IMG_EFFECT_OVERLAY);
-			$bgcolor = preg_replace('/^ff/i', '', $this->emblem['backgroundColor']);
-			$color_r = hexdec(substr($bgcolor, 0, 2));
-			$color_g = hexdec(substr($bgcolor, 2, 2));
-			$color_b = hexdec(substr($bgcolor, 4, 2));
-			imagefilledrectangle($bg, 0, 0, $bg_size[0]+100, $bg_size[0]+100, imagecolorallocatealpha($bg, $color_r, $color_g, $color_b, 0));
-
-			$overlay = imagecreatefrompng($overlayURL);
-			$hooks = imagecreatefrompng($hooksURL);
-
-			$x = 20;
-			$y = 23;
-
-			imagecopy($imgOut, $ring, 0, 0, 0, 0, $ring_size[0], $ring_size[1]);
-
-			$size = getimagesize($shadowURL);
-			imagecopy($imgOut, $shadow, $x, $y, 0, 0, $size[0], $size[1]);
-			imagecopy($imgOut, $bg, $x, $y, 0, 0, $bg_size[0], $bg_size[1]);
-			imagecopy($imgOut, $emblem, $x+17, $y+30, 0, 0, $emblem_size[0], $emblem_size[1]);
-			imagecopy($imgOut, $border, $x+13, $y+15, 0, 0, $border_size[0], $border_size[1]);
-			$size = getimagesize($overlayURL);
-			imagecopy($imgOut, $overlay, $x, $y+2, 0, 0, $size[0], $size[1]);
-			$size = getimagesize($hooksURL);
-			imagecopy($imgOut, $hooks, $x-2, $y, 0, 0, $size[0], $size[1]);
-
-			//Blizzard disabled guild levels
-			/*
-            if ($showlevel)
-            {
-            $level = $this->level;
-            if ($level < 10)
-            {
-            $levelIMG = imagecreatefrompng($levelURL.$level.".png");
-            }
-            else
-            {
-            $digit[1] = substr($level,0,1);
-            $digit[2] = substr($level,1,1);
-            $digit1 = imagecreatefrompng($levelURL.$digit[1].".png");
-            $digit2 = imagecreatefrompng($levelURL.$digit[2].".png");
-            $digitwidth = imagesx($digit1);
-            $digitheight = imagesy($digit1);
-            $levelIMG = imagecreatetruecolor($digitwidth*2,$digitheight);
-            $trans_colour = imagecolorallocatealpha($levelIMG, 0, 0, 0, 127);
-            imagefill($levelIMG, 0, 0, $trans_colour);
-            imagesavealpha($levelIMG,true);
-            imagealphablending($levelIMG, true);
-            // Last image added first because of the shadow need to be behind first digit
-            imagecopy($levelIMG,$digit2,$digitwidth-12,0,0,0, $digitwidth, $digitheight);
-            imagecopy($levelIMG,$digit1,12,0,0,0, $digitwidth, $digitheight);
-            }
-            $size[0] = imagesx($levelIMG);
-            $size[1] = imagesy($levelIMG);
-            $levelemblem = imagecreatefrompng($ringURL);
-            imagesavealpha($levelemblem,true);
-            imagealphablending($levelemblem, true);
-            imagecopy($levelemblem,$levelIMG,(215/2)-($size[0]/2),(215/2)-($size[1]/2),0,0,$size[0],$size[1]);
-            imagecopyresampled($imgOut, $levelemblem, 143, 150,0,0, 215/3, 215/3, 215, 215);
-            }
-            */
-			//endregion
-
-			if ($width > 1 and $width < 215)
-			{
-				imagecopyresampled($finalimg, $imgOut, 0, 0, 0, 0, $width, $height, 215, 230);
-			}
-			else
-			{
-				$finalimg = $imgOut;
-			}
-
-			imagepng($finalimg, $imgfile);
-
-		}
-		return $outputpath;
-	}
-
-	/**
-	 * replace string in utf8 string
-	 *
-	 * @param  $needle
-	 * @param  $replacement
-	 * @param  $haystack
-	 * @return string
-	 */
-	private function mb_str_replace($needle, $replacement, $haystack)
-	{
-		$needle_len = mb_strlen($needle);
-		$pos = mb_strpos($haystack, $needle);
-		while (!($pos ===false))
-		{
-			$front = mb_substr($haystack, 0, $pos);
-			$back  = mb_substr($haystack, $pos + $needle_len);
-			$haystack = $front.$replacement.$back;
-			$pos = mb_strpos($haystack, $needle);
-		}
-		return $haystack;
-	}
-
-	/**
 	 * gets a guild from database
 	 * used in sidebar
 	 * cached for 7 days
@@ -1324,7 +932,6 @@ class guilds
 		global $db;
 
 		$sql = 'SELECT g.id, g.name, g.realm, g.region, g.roster, g.game_id, g.players,
-				g.achievementpoints, g.level, g.battlegroup, g.guildarmoryurl,
 				g.emblemurl, g.min_armory, g.rec_status, g.guilddefault, g.armory_enabled, g.armoryresult, g.recruitforum,
 				g.faction, f.faction_name
 				FROM ' . $this->bb_guild_table . ' g
@@ -1343,10 +950,6 @@ class guilds
 			$this->realm = $row['realm'];
 			$this->region = $row['region'];
 			$this->showroster = $row['roster'];
-			$this->achievementpoints = $row['achievementpoints'];
-			$this->level = $row['level'];
-			$this->battlegroup = $row['battlegroup'];
-			$this->guildarmoryurl = $row['guildarmoryurl'];
 			$this->emblempath = $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];

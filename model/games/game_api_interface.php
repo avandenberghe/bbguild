@@ -84,4 +84,17 @@ interface game_api_interface
 	 * @return bool
 	 */
 	public function requires_api_key(): bool;
+
+	/**
+	 * Persist game-specific guild extension data to the plugin's own table.
+	 *
+	 * Called by guilds::update_guild_battleNet() after saving generic guild
+	 * fields to bb_guild. Each game plugin stores its own fields (e.g. WoW
+	 * stores battlegroup, level, achievementpoints, guildarmoryurl).
+	 *
+	 * @param int   $guild_id  The internal guild ID
+	 * @param array $processed Processed data from process_guild_data()
+	 * @return void
+	 */
+	public function save_guild_extension(int $guild_id, array $processed): void;
 }

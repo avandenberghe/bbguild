@@ -11,6 +11,7 @@ namespace avathar\bbguild\controller;
 
 use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\game_registry;
 use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\player\guilds;
 use avathar\bbguild\model\player\ranks;
@@ -33,6 +34,9 @@ class admin_guild
     protected $user;
     /** @var \phpbb\template\template */
     protected $template;
+
+    /** @var game_registry */
+    protected $game_registry;
 
     public function __construct(
         config $config,
@@ -103,11 +107,6 @@ class admin_guild
         $addguild->setRecstatus($this->request->variable('switchon_recruitment', 0));
         $addguild->setRecruitforum($this->request->variable('recruitforum', 0));
         $addguild->setEmblempath($this->ext_path. 'images/guildemblem/' .$this->request->variable('guild_emblem', '', true));
-        $addguild->setAionlegionid(0);
-        $addguild->setAionserverid(0);
-        $addguild->setAchievementpoints(0);
-        $addguild->setBattlegroup('');
-        $addguild->setLevel(25);
         $addguild->setStartdate(time());
         $addguild->setArmoryresult('KO');
         $addguild->make_guild();
@@ -145,9 +144,6 @@ class admin_guild
         // in the request we expect the file name here including extension, no path
         $updateguild->setEmblempath($this->ext_path. 'images/guildemblem/' .$this->request->variable('guild_emblem', '', true));
 
-        $updateguild->setAionlegionid(0);
-        $updateguild->setAionserverid(0);
-
         if ($updateguild->isArmoryEnabled())
         {
             $this->BattleNetUpdate($updateguild);
@@ -168,10 +164,11 @@ class admin_guild
 
     private function BattleNetUpdate(guilds $updateguild, $parameters = array())
     {
-        $data =  $updateguild->Call_Guild_API($parameters , $this->game);
+        $provider = $this->game_registry->get($updateguild->getGameId());
+        $data =  $updateguild->Call_Guild_API($parameters , $this->game, $provider);
         if ($updateguild->getArmoryresult() == 'OK')
         {
-            $updateguild->update_guild_battleNet($data, $parameters);
+            $updateguild->update_guild_battleNet($data, $parameters, $provider);
         }
     }
 

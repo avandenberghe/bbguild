@@ -51,6 +51,9 @@ class guild_module
 	/* @type game */
 	private $game;
 
+	/** @var \avathar\bbguild\model\games\game_registry */
+	private $game_registry;
+
 	/**
 	 * ACP guild function
 	 *
@@ -73,6 +76,7 @@ class guild_module
 		$this->db       = $db;
 		$this->auth     = $auth;
 		$this->phpbb_container = $phpbb_container;
+		$this->game_registry = $phpbb_container->get('avathar.bbguild.game_registry');
 		$this->admin_controller = $this->phpbb_container->get('avathar.bbguild.admin.controller');
 		$this->helper = $phpbb_container->get('controller.helper');
 		$this->factionroute =  $this->helper->route('avathar_bbguild_01', array());

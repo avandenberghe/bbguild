@@ -26,16 +26,16 @@
                     </div>
                     <div class="profile-info profile-guild-info">
                         <div class="name">
-                            <a href="{{ ARMORY }}">{{ GUILD_NAME }}</a>
+                            {% if ARMORY %}<a href="{{ ARMORY }}">{{ GUILD_NAME }}</a>{% else %}{{ GUILD_NAME }}{% endif %}
                         </div>
                         <div class="under-name">
                             <span class="faction">{{ FACTION_NAME }}</span> {{ lang('GUILD') }}<span class="comma">,</span>
                             <span id="profile-info-realm" class="realm">{{ REGION }}-{{ REALM }}</span><span class="comma">.</span>
                             <span class="members">{{ PLAYERCOUNT }} {{ lang('MEMBERS') }}</span>
                         </div>
-                        <div class="achievements">
+                        {% if ACHIEV %}<div class="achievements">
                             <a href="{{ ARMORY }}">{{ ACHIEV }}</a>
-                        </div>
+                        </div>{% endif %}
                     </div>
                 </div>
             </div>
