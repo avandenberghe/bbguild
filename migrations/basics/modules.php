@@ -57,11 +57,6 @@ class modules extends \phpbb\db\migration\migration
 				'module_basename' => '\avathar\bbguild\acp\player_module',
 				'modes'           => ['addplayer', 'listplayers'],
 			]]],
-			['module.add', ['acp', 'ACP_BBGUILD_PLAYER', [
-				'module_basename' => '\avathar\bbguild\acp\achievement_module',
-				'modes'           => ['addachievement', 'listachievements'],
-			]]],
-
 			// UCP module
 			['module.add', ['ucp', 'UCP_BBGUILD', [
 				'module_basename' => '\avathar\bbguild\ucp\bbguild_module',
@@ -76,9 +71,6 @@ class modules extends \phpbb\db\migration\migration
 			// Remove modules first
 			['module.remove', ['ucp', 'UCP_BBGUILD', [
 				'module_basename' => '\avathar\bbguild\ucp\bbguild_module',
-			]]],
-			['module.remove', ['acp', 'ACP_BBGUILD_PLAYER', [
-				'module_basename' => '\avathar\bbguild\acp\achievement_module',
 			]]],
 			['module.remove', ['acp', 'ACP_BBGUILD_PLAYER', [
 				'module_basename' => '\avathar\bbguild\acp\player_module',

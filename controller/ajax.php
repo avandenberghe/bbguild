@@ -36,12 +36,6 @@ class admin_controller_temp
 	public $bb_language_table;
 	public $bb_motd_table;
 	public $bb_recruit_table;
-	public $bb_achievement_track_table;
-	public $bb_achievement_table;
-	public $bb_achievement_rewards_table;
-	public $bb_criteria_track_table;
-	public $bb_achievement_criteria_table;
-	public $bb_relations_table;
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
@@ -105,12 +99,6 @@ class admin_controller_temp
 	 * @param  string           $bb_language_table	name of language table
 	 * @param  string           $bb_motd_table	name of motd table
 	 * @param  string           $bb_recruit_table	name of recruit table
-	 * @param  string           $bb_achievement_track_table	name of achievement track table
-	 * @param  string           $bb_achievement_table	name of achievement table
-	 * @param  string           $bb_achievement_rewards_table	name of achievement rewards table
-	 * @param  string           $bb_criteria_track_table	name of achievement criteria track table
-	 * @param  string           $bb_achievement_criteria_table	name of achievement criteria table
-	 * @param  string           $bb_relations_table 	name of relations table
 	 * @param  string           $bb_bosstable	name of boss table
 	 * @param  string           $bb_zonetable	name of zone table
 	 * @param  string           $bb_news	name of news table
@@ -141,12 +129,6 @@ class admin_controller_temp
 		$bb_language_table,
 		$bb_motd_table,
 		$bb_recruit_table,
-		$bb_achievement_track_table,
-		$bb_achievement_table,
-		$bb_achievement_rewards_table,
-		$bb_criteria_track_table,
-		$bb_achievement_criteria_table,
-		$bb_relations_table,
 		$bb_bosstable,
 		$bb_zonetable,
 		$bb_news
@@ -176,12 +158,6 @@ class admin_controller_temp
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_motd_table = $bb_motd_table;
 		$this->bb_recruit_table = $bb_recruit_table;
-		$this->bb_achievement_track_table = $bb_achievement_track_table;
-		$this->bb_achievement_table = $bb_achievement_table;
-		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;
-		$this->bb_criteria_track_table = $bb_criteria_track_table;
-		$this->bb_achievement_criteria_table = $bb_achievement_criteria_table;
-		$this->bb_relations_table = $bb_relations_table;
 		$this->bb_bosstable = $bb_bosstable;
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;

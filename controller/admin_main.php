@@ -96,12 +96,6 @@ class admin_main
 	public $bb_language_table;
 	public $bb_motd_table;
 	public $bb_recruit_table;
-	public $bb_achievement_track_table;
-	public $bb_achievement_table;
-	public $bb_achievement_rewards_table;
-	public $bb_criteria_track_table;
-	public $bb_achievement_criteria_table;
-	public $bb_relations_table;
 	public $bb_bosstable;
 	public $bb_zonetable;
 	public $bb_news;
@@ -137,12 +131,6 @@ class admin_main
 	 * @param string $bb_language_table
 	 * @param string $bb_motd_table
 	 * @param string $bb_recruit_table
-	 * @param string $bb_achievement_track_table
-	 * @param string $bb_achievement_table
-	 * @param string $bb_achievement_rewards_table
-	 * @param string $bb_criteria_track_table
-	 * @param string $bb_achievement_criteria_table
-	 * @param string $bb_relations_table
 	 * @param string $bb_bosstable
 	 * @param string $bb_zonetable
 	 * @param string $bb_news
@@ -175,12 +163,6 @@ class admin_main
 		$bb_language_table,
 		$bb_motd_table,
 		$bb_recruit_table,
-		$bb_achievement_track_table,
-		$bb_achievement_table,
-		$bb_achievement_rewards_table,
-		$bb_criteria_track_table,
-		$bb_achievement_criteria_table,
-		$bb_relations_table,
 		$bb_bosstable,
 		$bb_zonetable,
 		$bb_news)
@@ -198,12 +180,6 @@ class admin_main
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_motd_table = $bb_motd_table;
 		$this->bb_recruit_table = $bb_recruit_table;
-		$this->bb_achievement_track_table = $bb_achievement_track_table;
-		$this->bb_achievement_table = $bb_achievement_table;
-		$this->bb_achievement_rewards_table = $bb_achievement_rewards_table;
-		$this->bb_criteria_track_table = $bb_criteria_track_table;
-		$this->bb_achievement_criteria_table = $bb_achievement_criteria_table;
-		$this->bb_relations_table = $bb_relations_table;
 		$this->bb_bosstable = $bb_bosstable;
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
