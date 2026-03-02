@@ -134,7 +134,6 @@ class schema extends \phpbb\db\migration\migration
 						'faction'           => ['UINT', 0],
 					],
 					'PRIMARY_KEY' => ['id'],
-					'KEYS'        => ['UQ01' => ['UNIQUE', ['name', 'id']]],
 				],
 				/* 7 - ranks */
 				$this->player_ranks_table => [
@@ -181,13 +180,13 @@ class schema extends \phpbb\db\migration\migration
 				/* 9 - motd */
 				$this->motd_table => [
 					'COLUMNS' => [
-						'motd_id'         => ['INT:8', null, 'auto_increment'],
+						'motd_id'         => ['UINT', null, 'auto_increment'],
 						'motd_title'      => ['VCHAR_UNI', ''],
 						'motd_msg'        => ['TEXT_UNI', ''],
 						'motd_timestamp'  => ['TIMESTAMP', 0],
 						'bbcode_bitfield' => ['VCHAR:255', ''],
 						'bbcode_uid'      => ['VCHAR:8', ''],
-						'user_id'         => ['INT:8', 0],
+						'user_id'         => ['UINT', 0],
 						'bbcode_options'  => ['UINT', 7],
 					],
 					'PRIMARY_KEY' => 'motd_id',
@@ -214,9 +213,9 @@ class schema extends \phpbb\db\migration\migration
 				/* 11 - game roles */
 				$this->bb_gamerole_table => [
 					'COLUMNS' => [
-						'role_pkid'     => ['INT:8', null, 'auto_increment'],
+						'role_pkid'     => ['UINT', null, 'auto_increment'],
 						'game_id'       => ['VCHAR:10', ''],
-						'role_id'       => ['INT:8', 0],
+						'role_id'       => ['INT', 0],
 						'role_color'    => ['VCHAR', ''],
 						'role_icon'     => ['VCHAR', ''],
 						'role_cat_icon' => ['VCHAR', ''],
@@ -227,9 +226,9 @@ class schema extends \phpbb\db\migration\migration
 				/* 12 - recruitment */
 				$this->bbrecruit_table => [
 					'COLUMNS' => [
-						'id'               => ['INT:8', null, 'auto_increment'],
+						'id'               => ['UINT', null, 'auto_increment'],
 						'guild_id'         => ['USINT', 0],
-						'role_id'          => ['INT:8', 0],
+						'role_id'          => ['INT', 0],
 						'class_id'         => ['UINT', 0],
 						'level'            => ['UINT', 0],
 						'positions'        => ['USINT', 0],

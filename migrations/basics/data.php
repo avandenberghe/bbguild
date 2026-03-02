@@ -78,6 +78,7 @@ class data extends \phpbb\db\migration\container_aware_migration
 				'armory_enabled'    => 0,
 				'armoryresult'      => '',
 				'recruitforum'      => 0,
+			'faction'           => 0,
 			],
 		];
 
@@ -139,7 +140,7 @@ class data extends \phpbb\db\migration\container_aware_migration
 
 		if ($this->db_tools->sql_table_exists($motd_table))
 		{
-			$this->db->sql_query('DELETE FROM ' . $motd_table);
+			$this->db->sql_query('DELETE FROM ' . $motd_table . ' WHERE motd_id = 1');
 		}
 	}
 
