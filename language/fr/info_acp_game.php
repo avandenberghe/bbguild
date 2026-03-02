@@ -30,6 +30,7 @@ $lang = array_merge(
 	'ACP_BBGUILD_GAME'            => 'Factions, Races, Classes',
 	'ACP_BBGUILD_FACTION_ADD'        => 'Ajouter Faction',
 	'ACP_BBGUILD_RACE_ADD'        => 'Ajouter Race',
+	'ACP_BBGUILD_ROLE_ADD'        => 'Ajouter Rôle',
 	'ACP_BBGUILD_CLASS_ADD'        => 'Ajouter Classe',
 	'ACP_BBGUILD_GAME_LIST'        => 'Réglages Jeux',
 	'ACP_BBGUILD_GAME_EDIT'        => 'Edition Jeux',

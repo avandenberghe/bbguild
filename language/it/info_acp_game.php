@@ -31,6 +31,7 @@ $lang = array_merge(
 	'ACP_BBGUILD_GAME'            => 'Impostazioni Giochi',
 	'ACP_BBGUILD_FACTION_ADD'        => 'Aggiungi Fazione',
 	'ACP_BBGUILD_RACE_ADD'        => 'Aggiungi Razza',
+	'ACP_BBGUILD_ROLE_ADD'        => 'Aggiungi Ruolo',
 	'ACP_BBGUILD_CLASS_ADD'        => 'Aggiungi Classe',
 	'ACP_BBGUILD_GAME_LIST'        => 'Lista Giochi',
 	'ACP_BBGUILD_GAME_EDIT'        => 'Edita Gioco',
