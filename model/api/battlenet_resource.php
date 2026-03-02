@@ -4,12 +4,11 @@
  *
  * @package   bbguild v2.0
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author    Andreas Vandenberghe <sajaki9@gmail.com>
+ * @author    Andreas Vandenberghe <sajaki@avathar.be>
  * @author    Chris Saylor
  * @author    Daniel Cannon <daniel@danielcannon.co.uk>
  * @copyright Copyright (c) 2011, 2015 Chris Saylor, Daniel Cannon, Andreas Vandenberghe
  * @link      https://dev.battle.net/
- * @link      https://github.com/bbDKP
  */
 
 namespace avathar\bbguild\model\api;
@@ -132,9 +131,9 @@ abstract class battlenet_resource
 		}
 
 		//check if default locale is allowed given the guild region
-		if (!in_array($this->locale, $this->locales_allowed[$this->region]))
+		if (!isset($this->locales_allowed[$this->region]) || !in_array($this->locale, $this->locales_allowed[$this->region]))
 		{
-			if ($this->region != '')
+			if ($this->region != '' && isset($this->locales_allowed[$this->region]))
 			{
 				//get standard locale for guild region
 				$this->locale = $this->locales_allowed[$this->region][0];
@@ -152,6 +151,10 @@ abstract class battlenet_resource
 		}
 
 		//get base url
+		if (!isset($this->api_url[$this->region]))
+		{
+			trigger_error(sprintf($user->lang['WOWAPI_LOCALE_NOTALLOWED'], $this->region));
+		}
 		$requestUri = $this->api_url[$this->region];
 		$requestUri .= $this->endpoint . '/'. $method;
 

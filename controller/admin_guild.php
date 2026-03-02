@@ -459,8 +459,8 @@ class admin_guild
         $this->game          = new game;
         $this->game->game_id = $addguild->getGameId();
         $this->game->get_game();
-        // reset armory_enabled to false if no API key
-        if ($this->game->game_id == 'wow' && $this->game->getApikey() == '')
+        // reset armory_enabled to false if game has armory but no API key configured
+        if ($this->game->getArmoryEnabled() && trim($this->game->getApikey()) == '')
         {
             $addguild->setArmoryEnabled(false);
         }
@@ -492,13 +492,6 @@ class admin_guild
                 );
             }
         }
-        switch ($this->game->game_id)
-        {
-            case 'gw2':
-                $addguild->setName('Twisted');
-                $addguild->setRealm('Gunnar\'s Hold');
-        }
-
         $this->template->assign_vars(
             array(
                 'U_FACTION'       => $this->factionroute,

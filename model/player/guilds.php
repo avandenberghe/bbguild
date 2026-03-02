@@ -11,6 +11,8 @@ namespace avathar\bbguild\model\player;
 
 use avathar\bbguild\model\api\battlenet;
 use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\game_api_interface;
+use avathar\bbguild\model\games\game_provider_interface;
 
 /**
  * Class guilds
@@ -742,13 +744,18 @@ class guilds
 	}
 
 	/**
-	 * call guild endpoint
+	 * Call guild API endpoint.
+	 *
+	 * When a game_provider_interface with an API is given, delegates to
+	 * game_api_interface::fetch_guild_data(). Otherwise falls back to
+	 * the legacy Battle.net client.
 	 *
 	 * @param array $params
 	 * @param \avathar\bbguild\model\games\game $game
-	 * @return bool
+	 * @param game_provider_interface|null $provider Optional game provider with API
+	 * @return bool|array
 	 */
-	public function Call_Guild_API($params, game $game)
+	public function Call_Guild_API($params, game $game, game_provider_interface $provider = null)
 	{
 		global $user, $cache;
 		$data= 0;
@@ -766,12 +773,22 @@ class guilds
 			return false;
 		}
 
-		//available extra fields for guild endpoint : 'members', 'achievements','news'
-		$api  = new battlenet('guild', $this->region, $game->getApikey(),
-			$game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
-		$data = $api->guild->getGuild($this->name, $this->realm, $params);
-		$data = $data['response'];
-		unset($api);
+		// New path: delegate to game provider's API when available
+		if ($provider !== null && $provider->has_api())
+		{
+			$api = $provider->get_api();
+			$data = $api->fetch_guild_data($this->name, $this->realm, $this->region, $params);
+		}
+		else
+		{
+			// Legacy path: direct Battle.net client
+			$api  = new battlenet('guild', $this->region, $game->getApikey(),
+				$game->get_apilocale(), $game->get_privkey(), $this->ext_path, $cache);
+			$data = $api->guild->getGuild($this->name, $this->realm, $params);
+			$data = $data['response'];
+			unset($api);
+		}
+
 		if (!isset($data))
 		{
 			$this->armoryresult = 'KO';
@@ -832,12 +849,17 @@ class guilds
 	}
 
 	/**
-	 * fetch Battlenet Guild api endpoint and update the guild object
+	 * Update the guild object from API data.
+	 *
+	 * When a game_provider_interface with an API is given, delegates processing
+	 * to game_api_interface::process_guild_data(). Otherwise falls back to
+	 * the legacy WoW-specific processing.
 	 *
 	 * @param array $data
 	 * @param       $params
+	 * @param game_provider_interface|null $provider Optional game provider with API
 	 */
-	public function update_guild_battleNet(array $data, $params)
+	public function update_guild_battleNet(array $data, $params, game_provider_interface $provider = null)
 	{
 		global $db;
 
@@ -846,6 +868,47 @@ class guilds
 			return;
 		}
 
+		// New path: delegate to game provider's API when available
+		if ($provider !== null && $provider->has_api())
+		{
+			$api = $provider->get_api();
+			$processed = $api->process_guild_data($data, $params);
+
+			$this->achievementpoints = isset($processed['achievementpoints']) ? $processed['achievementpoints'] : 0;
+			$this->level = isset($processed['level']) ? $processed['level'] : 0;
+			$this->battlegroup = isset($processed['battlegroup']) ? $processed['battlegroup'] : '';
+			$this->faction = isset($processed['faction']) ? $processed['faction'] : $this->faction;
+			$this->guildarmoryurl = isset($processed['guildarmoryurl']) ? $processed['guildarmoryurl'] : '';
+			$this->emblem = isset($processed['emblem']) ? $processed['emblem'] : '';
+			$this->emblempath = isset($processed['emblempath']) ? $processed['emblempath'] : '';
+			if (isset($processed['playercount']))
+			{
+				$this->playercount = $processed['playercount'];
+			}
+
+			$query = $db->sql_build_array(
+				'UPDATE', array(
+					'achievementpoints' => $this->achievementpoints,
+					'level'             => $this->level,
+					'guildarmoryurl'    => $this->guildarmoryurl,
+					'emblemurl'         => $this->emblempath,
+					'battlegroup'       => $this->battlegroup,
+					'armoryresult'      => $this->armoryresult,
+					'players'           => $this->playercount,
+					'faction'           => $this->faction,
+				)
+			);
+			$db->sql_query('UPDATE ' . $this->bb_guild_table . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+
+			// Let the provider's API handle member sync if 'members' was requested
+			if (in_array('members', $params, true) && isset($data['members']))
+			{
+				$api->sync_guild_members($data['members'], $this->guildid, $this->region, $this->min_armory);
+			}
+			return;
+		}
+
+		// Legacy path: WoW-specific processing
 		$this->achievementpoints = isset($data['achievementPoints']) ? $data['achievementPoints'] : 0;
 		$this->level = isset($data['level']) ? $data['level']: 0;
 		$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';

@@ -302,6 +302,10 @@ class viewnavigation implements iviews
 		$this->guild_id = $guild_id;
 
 		$this->build_navigation();
+
+		// Resolve game-specific images path now that game_id is known
+		$this->ext_path_images = $this->view_controller->get_game_images_web_path($this->game_id);
+
 		$this->buildpage();
 	}
 
@@ -336,9 +340,9 @@ class viewnavigation implements iviews
 				'FACTION_NAME'       => $this->guild->getFactionname(),
 				'GAME_ID'            => $this->guild->getGameId(),
 				'GUILD_ID'           => $this->guild_id,
-				'S_GUILD_ALLIANCE'   => ($this->guild->getGameId() == 'wow' &&  $this->guild->getFaction() == 1) ? true: false,
-				'S_GUILD_HORDE'      => ($this->guild->getGameId() == 'wow' &&  $this->guild->getFaction() == 2) ? true: false,
-				'S_GUILD_OTHER'      => ($this->guild->getGameId() != 'wow') ? true: false,
+				'S_GUILD_ALLIANCE'   => (strtolower((string) $this->guild->getFactionname()) === 'alliance'),
+				'S_GUILD_HORDE'      => (strtolower((string) $this->guild->getFactionname()) === 'horde'),
+				'S_GUILD_OTHER'      => (!in_array(strtolower((string) $this->guild->getFactionname()), ['alliance', 'horde'])),
 				'GUILD_NAME'         => $this->guild->getName(),
 				'REALM'              => $this->guild->getRealm(),
 				'REGION'             => $this->guild->getRegion(),
@@ -346,7 +350,7 @@ class viewnavigation implements iviews
 				'ARMORY_URL'         => $this->guild->getGuildarmoryurl() ,
 				'MIN_ARMORYLEVEL'    => $this->guild->getMinArmory() ,
 				'SHOW_ROSTER'        => $this->guild->getShowroster(),
-				'EMBLEM'             => $this->ext_path_images . 'guildemblem/' . basename($this->guild->getEmblempath()),
+				'EMBLEM'             => $this->view_controller->ext_path_images . 'guildemblem/' . basename($this->guild->getEmblempath()),
 				'EMBLEMFILE'         => basename($this->guild->getEmblempath()),
 				'ARMORY'             => $this->guild->getGuildarmoryurl(),
 				'ACHIEV'             => $this->guild->getAchievementpoints(),

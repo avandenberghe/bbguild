@@ -262,7 +262,7 @@ class achievement_module
 					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", $modulename . '&amp;o=' .
 						$GuildAchievements[1]['uri'][0] . '&amp;' . URI_GUILD . '=' . $Guild->getGuildid()
 					),
-					'PAGE_NUMBER'           => $pagination->on_page($GuildAchievements[0], 15, $start),
+					'PAGE_NUMBER'           => $pagination->on_page($GuildAchievements[2], 15, $start),
 			));
 		}
 

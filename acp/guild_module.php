@@ -82,7 +82,7 @@ class guild_module
 		add_form_key($form_key);
 		$this->tpl_name   = 'acp_'.$mode;
 		$this->link       = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx",
-				'i=-aavathar-bbguild-acp-guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
+				'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
 		$this->page_title = 'ACP_LISTGUILDS';
 
 		switch ($mode)

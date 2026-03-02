@@ -33,10 +33,10 @@ class ext extends base
 		$config = $this->container->get('config');
 		$log = $this->container->get('log');
 		$user = $this->container->get('user');
-		$condition['phpbb'][0] = phpbb_version_compare($config['version'], '3.2.2', '>=');
-		$condition['phpbb'][1] ='phpbb >= 3.2.2';
-		$condition['php'][0] = version_compare(PHP_VERSION , '5.4.39', '>=') ? 1: 0;
-		$condition['php'][1] ='php >= 5.4.39';
+		$condition['phpbb'][0] = phpbb_version_compare($config['version'], '3.3.0', '>=');
+		$condition['phpbb'][1] ='phpbb >= 3.3.0';
+		$condition['php'][0] = version_compare(PHP_VERSION , '7.4.0', '>=') ? 1: 0;
+		$condition['php'][1] ='php >= 7.4.0';
 		$condition['gd'][0] = extension_loaded('gd');
 		$condition['gd'][1] ='gd extension is loaded';
 		$condition['curl'][0] = extension_loaded('curl');

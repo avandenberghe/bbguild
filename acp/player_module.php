@@ -13,6 +13,7 @@ namespace avathar\bbguild\acp;
 use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\player\player;
 use avathar\bbguild\model\player\guilds;
+use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\rpg\roles;
 use avathar\bbguild\model\player\ranks;
 
@@ -64,6 +65,49 @@ class player_module
 	 * @type guilds
 	 */
 	protected $guild;
+
+	/**
+	 * Check if a game has API capability.
+	 *
+	 * Checks the game_registry first, falls back to the game's armory_enabled DB flag.
+	 *
+	 * @param string $game_id
+	 * @return bool
+	 */
+	private function game_has_api($game_id)
+	{
+		global $phpbb_container;
+
+		// Try game registry first
+		if (isset($phpbb_container))
+		{
+			try
+			{
+				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
+				$provider = $registry->get($game_id);
+				if ($provider !== null)
+				{
+					return $provider->has_api();
+				}
+			}
+			catch (\Exception $e)
+			{
+				// Registry not available, fall through
+			}
+		}
+
+		// Fall back to checking the game's armory_enabled flag in DB
+		$game_check = new game(
+			$this->admin_controller->bb_classes_table,
+			$this->admin_controller->bb_races_table,
+			$this->admin_controller->bb_language_table,
+			$this->admin_controller->bb_factions_table,
+			$this->admin_controller->bb_games_table
+		);
+		$game_check->game_id = $game_id;
+		$game_check->get_game();
+		return (bool) $game_check->getArmoryEnabled();
+	}
 
 	/**
 	 * @param $id
@@ -754,7 +798,7 @@ class player_module
 				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-player_module&amp;mode=listplayers&amp;'),
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
 				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $this->guild->getGuildid()),
-				'S_WOW'                 => ($this->guild->getGameId() == 'wow') ? true : false,
+				'S_WOW'                 => $this->game_has_api($this->guild->getGameId()),
 				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
 				'GUILD_EMBLEM'          => $this->guild->getEmblempath(),
 				'GUILD_NAME'            => $this->guild->getName(),
@@ -1042,11 +1086,11 @@ class player_module
 				'MALE_CHECKED'             => ($editplayer->getPlayerGenderId() == '0') ? ' checked="checked"' : '',
 				'FEMALE_CHECKED'           => ($editplayer->getPlayerGenderId() == '1') ? ' checked="checked"' : '',
 				'PLAYER_COMMENT'           => $editplayer->getPlayerComment(),
-				'S_CAN_HAVE_ARMORY'        => $editplayer->game_id == 'wow' || $editplayer->game_id == 'aion' ? true : false,
+				'S_CAN_HAVE_ARMORY'        => $this->game_has_api($editplayer->game_id),
 				'PLAYER_URL'               => $editplayer->getPlayerArmoryUrl(),
 				'PLAYER_PORTRAIT'          => $editplayer->getPlayerPortraitUrl(),
 				'S_PLAYER_PORTRAIT_EXISTS' => (strlen($editplayer->getPlayerPortraitUrl()) > 1) ? true : false,
-				'S_CAN_GENERATE_ARMORY'    => $editplayer->game_id == 'wow' ? true : false,
+				'S_CAN_GENERATE_ARMORY'    => $this->game_has_api($editplayer->game_id),
 				'COLORCODE'                => ($editplayer->getColorcode() == '') ? '#254689' : $editplayer->getColorcode(),
 				'CLASS_IMAGE'              => $editplayer->getClassImage(),
 				'S_CLASS_IMAGE_EXISTS'     => (strlen($editplayer->getClassImage()) > 1) ? true : false,
@@ -1059,7 +1103,7 @@ class player_module
 				'S_OUTDATE_MONTH_OPTIONS'  => $s_playerout_month_options,
 				'S_OUTDATE_YEAR_OPTIONS'   => $s_playerout_year_options,
 				'S_PHPBBUSER_OPTIONS'      => $s_phpbb_user,
-				'TITLE_NAME'               => ($editplayer->game_id == 'wow') ? sprintf($editplayer->getPlayerTitle(), $editplayer->getPlayerName()) : '',
+				'TITLE_NAME'               => (strpos((string) $editplayer->getPlayerTitle(), '%s') !== false) ? sprintf($editplayer->getPlayerTitle(), $editplayer->getPlayerName()) : (string) $editplayer->getPlayerTitle(),
 				// javascript
 				'LA_ALERT_AJAX'            => $this->user->lang['ALERT_AJAX'],
 				'LA_ALERT_OLDBROWSER'      => $this->user->lang['ALERT_OLDBROWSER'],

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(perl:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(do echo:*)",
+      "Bash(cat:*)",
+      "Bash(__NEW_LINE_e9b098c0703ed7d2__ echo:*)",
+      "Bash(cd:*)",
+      "Bash(rm:*)",
+      "Bash(do:*)",
+      "Bash(done)",
+      "Bash(do cp:*)",
+      "Bash(xargs -I{} basename {})"
+    ]
+  }
+}

@@ -15,7 +15,7 @@ avathar_bbguild_02:
         guild_id: \d*
 avathar_bbguild_03:
     path: /getplayerList/{game_id}
-    defaults: { _controller:avathar.bbguild.admin.controller:getplayerList, game_id: "wow"}
+    defaults: { _controller:avathar.bbguild.admin.controller:getplayerList, game_id: ""}
 avathar_bbguild_04:
     path: /getclassrace/{game_id}
-    defaults: { _controller:avathar.bbguild.admin.controller:getclassrace, game_id: "wow"}
+    defaults: { _controller:avathar.bbguild.admin.controller:getclassrace, game_id: ""}

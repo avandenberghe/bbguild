@@ -3,9 +3,9 @@
  * bbguild admin language file (German-Informal)
  *
  * @package     phpBB Extension - bbguild
- * @copyright   2010 bbguild <https://github.com/bbDKP>
+ * @copyright   2010 bbguild
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author      sajaki <sajaki@gmail.com>
+ * @author      sajaki
  * @link        http://www.avathar.be/bbdkp
  * @version     2.0
  * @translation various unknown authors, killerpommes

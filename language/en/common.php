@@ -3,9 +3,9 @@
  * bbguild common language file - [en]
 
  * @package   phpBB Extension - bbguild
- * @copyright 2009 bbguild <https://github.com/bbDKP>
+ * @copyright 2009 bbguild
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author    sajaki <sajaki@gmail.com>
+ * @author    sajaki
  * @link      http://www.avathar.be/bbdkp
  * @version   2.0
  */
@@ -490,7 +490,7 @@ $lang = array_merge(
 	'AUTHNAME' => 'Ippeh',
 	'WEBNAME' =>'Website',
 	'SVNNAME' => 'Repository',
-	'SVNURL' => 'https://github.com/bbDKP',
+	'SVNURL' => 'https://github.com/avandenberghe/bbguild',
 	'WEBURL' => 'http://www.avathar.be/bbdkp',
 	'WOWHEADID' => 'Wowhead id',
 	'AUTHWEB' => 'http://www.avathar.be/bbdkp/',
@@ -522,7 +522,7 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 	'JOB' => 'Job',
 	'DEVLINK' => 'Link',
 	'PROD' => 'bbGuild',
-	'DEVELOPERS' => '<a href=mailto:sajaki9@gmail.com>Sajaki</a>',
+	'DEVELOPERS' => '<a href=mailto:sajaki@avathar.be>Sajaki</a>',
 	'PHPBB' => 'phpBB',
 	'PHPBBGR' => 'phpBB Group',
 	'PHPBBLINK' => 'http://www.phpbb.com',

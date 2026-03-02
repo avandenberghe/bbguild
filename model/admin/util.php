@@ -116,8 +116,8 @@ class util
 	 */
 	public function remove_from_end($string, $stringToRemove)
 	{
-		$stringToRemoveLen = strlen($stringToRemove);
-		$stringLen = strlen($string);
+		$stringToRemoveLen = strlen((string) $stringToRemove);
+		$stringLen = strlen((string) $string);
 		$pos = $stringLen - $stringToRemoveLen;
 		return substr($string, 0, $pos);
 	}

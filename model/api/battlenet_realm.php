@@ -4,12 +4,11 @@
  *
  * @package   bbguild v2.0
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author    Andreas Vandenberghe <sajaki9@gmail.com>
+ * @author    Andreas Vandenberghe <sajaki@avathar.be>
  * @author    Chris Saylor
  * @author    Daniel Cannon <daniel@danielcannon.co.uk>
  * @copyright Copyright (c) 2011, 2015 Chris Saylor, Daniel Cannon, Andreas Vandenberghe
  * @link      https://dev.battle.net/
- * @link      https://github.com/bbDKP
  */
 
 namespace avathar\bbguild\model\api;

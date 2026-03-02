@@ -140,6 +140,13 @@ class game
 	private $ext_path;
 
 	/**
+	 * Game plugin registry (null if not injected)
+	 *
+	 * @var game_registry|null
+	 */
+	private $game_registry;
+
+	/**
 	 * possible regions
 	 *
 	 * @var array
@@ -356,11 +363,21 @@ class game
 
 
 	/**
+	 * Get all installable games: merges legacy preinstalled list with plugin-provided games.
+	 *
 	 * @return array
 	 */
 	public function getPreinstalledGames()
 	{
-		return $this->preinstalled_games;
+		$games = $this->preinstalled_games;
+
+		// Merge in plugin-provided games from the registry
+		if ($this->game_registry !== null)
+		{
+			$games = array_merge($games, $this->game_registry->get_installable_games());
+		}
+
+		return $games;
 	}
 
 	/**
@@ -382,10 +399,20 @@ class game
 
 	/**
 	 * Game class constructor
+	 *
+	 * @param string              $bb_classes_table
+	 * @param string              $bb_races_table
+	 * @param string              $bb_language_table
+	 * @param string              $bb_factions_table
+	 * @param string              $bb_game_table
+	 * @param game_registry|null  $game_registry     Optional plugin registry
 	 */
-	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table)
+	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table, game_registry $game_registry = null)
 	{
-		global $user, $phpbb_extension_manager;
+		global $user, $phpbb_extension_manager, $phpbb_container;
+		if (!isset($phpbb_extension_manager) && isset($phpbb_container)) {
+			$phpbb_extension_manager = $phpbb_container->get('ext.manager');
+		}
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
 
 		$this->bb_classes_table = $bb_classes_table;
@@ -393,6 +420,7 @@ class game
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_game_table = $bb_game_table;
+		$this->game_registry = $game_registry;
 
 		$this->preinstalled_games = array (
 			'aion'     => $user->lang['AION'],
@@ -434,6 +462,51 @@ class game
 	}
 
 	/**
+	 * Get the game registry (may be null if not injected)
+	 *
+	 * @return game_registry|null
+	 */
+	public function getGameRegistry()
+	{
+		return $this->game_registry;
+	}
+
+	/**
+	 * Build an associative array of table names for the new game_install_interface.
+	 *
+	 * @return array
+	 */
+	private function get_table_names()
+	{
+		global $phpbb_container;
+
+		return array(
+			'bb_games_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_games'),
+			'bb_logs_table'                 => $phpbb_container->getParameter('avathar.bbguild.tables.bb_logs'),
+			'bb_ranks_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_ranks'),
+			'bb_guild_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_guild'),
+			'bb_players_table'              => $phpbb_container->getParameter('avathar.bbguild.tables.bb_players'),
+			'bb_classes_table'              => $this->bb_classes_table,
+			'bb_races_table'                => $this->bb_races_table,
+			'bb_gameroles_table'            => $phpbb_container->getParameter('avathar.bbguild.tables.bb_gameroles'),
+			'bb_factions_table'             => $this->bb_factions_table,
+			'bb_language_table'             => $this->bb_language_table,
+			'bb_motd_table'                 => $phpbb_container->getParameter('avathar.bbguild.tables.bb_motd'),
+			'bb_recruit_table'              => $phpbb_container->getParameter('avathar.bbguild.tables.bb_recruit'),
+			'bb_achievement_track_table'    => $phpbb_container->getParameter('avathar.bbguild.tables.bb_achievement_track'),
+			'bb_achievement_table'          => $phpbb_container->getParameter('avathar.bbguild.tables.bb_achievement'),
+			'bb_achievement_rewards_table'  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_achievement_rewards'),
+			'bb_criteria_track_table'       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_criteria_track'),
+			'bb_achievement_criteria_table' => $phpbb_container->getParameter('avathar.bbguild.tables.bb_achievement_criteria'),
+			'bb_relations_table'            => $phpbb_container->getParameter('avathar.bbguild.tables.bb_relations_table'),
+			'bb_bosstable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_bosstable'),
+			'bb_zonetable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_zonetable'),
+			'bb_news'                       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_news'),
+			'bb_plugins'                    => $phpbb_container->getParameter('avathar.bbguild.tables.bb_plugins'),
+		);
+	}
+
+	/**
 	 * adds a Game to database
 	 */
 	public function install_game()
@@ -446,7 +519,24 @@ class game
 			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
-		if (array_key_exists($this->game_id, $this->preinstalled_games))
+		// New path: try game registry (plugin-provided games) first
+		if ($this->game_registry !== null && $this->game_registry->has($this->game_id))
+		{
+			$provider = $this->game_registry->get($this->game_id);
+			$this->name = $provider->get_game_name();
+			$installer = $provider->get_installer();
+
+			$installer->install(
+				$this->get_table_names(),
+				$this->game_id,
+				$this->name,
+				$provider->get_boss_base_url(),
+				$provider->get_zone_base_url(),
+				$this->getRegion()
+			);
+		}
+		// Legacy path: built-in preinstalled games
+		else if (array_key_exists($this->game_id, $this->preinstalled_games))
 		{
 			//game id is one of the preinstallable games
 			$this->name= $this->preinstalled_games[$this->game_id];
@@ -512,6 +602,21 @@ class game
 			\trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
+		// New path: try game registry (plugin-provided games) first
+		if ($this->game_registry !== null && $this->game_registry->has($this->game_id))
+		{
+			$provider = $this->game_registry->get($this->game_id);
+			$installer = $provider->get_installer();
+
+			$installer->uninstall(
+				$this->get_table_names(),
+				$this->game_id,
+				$this->name
+			);
+			return;
+		}
+
+		// Legacy path: built-in preinstalled games
 		if (array_key_exists($this->game_id, $this->preinstalled_games))
 		{
 			//fetch installer

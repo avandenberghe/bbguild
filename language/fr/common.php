@@ -3,9 +3,9 @@
  * bbguild common language file [French]
  *
  * @package   phpBB Extension - bbguild
- * @copyright 2009 bbguild <https://github.com/bbDKP>
+ * @copyright 2009 bbguild
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author    sajaki <sajaki@gmail.com>
+ * @author    sajaki
  * @link      http://www.avathar.be/bbdkp
  * @version   2.0
  */
@@ -481,7 +481,7 @@ $lang = array_merge(
 	'AUTHNAME' => 'Ippeh',
 	'WEBNAME' => 'Site Web',
 	'SVNNAME' => 'Repositoire',
-	'SVNURL' => 'http://github.com/bbDKP/',
+	'SVNURL' => 'https://github.com/avandenberghe/bbguild',
 	'WEBURL' => 'http://www.avathar.be/bbdkp',
 	'WOWHEADID' => 'id Wowhead',
 	'AUTHWEB' => 'http://www.bbguild..com/',
@@ -509,7 +509,7 @@ Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir 
 	'JOB' => 'Job',
 	'DEVLINK' => 'Link',
 	'PROD' => 'bbDKP',
-	'DEVELOPERS' => '<a href=mailto:sajaki9@gmail.com>Sajaki</a>',
+	'DEVELOPERS' => '<a href=mailto:sajaki@avathar.be>Sajaki</a>',
 	'PHPBB' => 'phpBB',
 	'PHPBBGR' => 'phpBB Group',
 	'PHPBBLINK' => 'http://www.phpbb.com',

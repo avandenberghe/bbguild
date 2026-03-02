@@ -40,6 +40,9 @@ class view_controller
 	public $bb_news;
 	public $bb_plugins;
 
+	/** @var \avathar\bbguild\model\games\game_registry */
+	public $game_registry;
+
 
 	/**
 	 * @var \phpbb\config\config
@@ -148,6 +151,7 @@ class view_controller
 	 * @param  string           $bb_zonetable	name of zone table
 	 * @param  string           $bb_news	name of news table
 	 * @param  string           $bb_plugins	name of plugin table
+	 * @param  \avathar\bbguild\model\games\game_registry $game_registry
 	 */
 	public function __construct(
 		\phpbb\auth\auth $auth,
@@ -184,7 +188,8 @@ class view_controller
 		$bb_bosstable,
 		$bb_zonetable,
 		$bb_news,
-		$bb_plugins
+		$bb_plugins,
+		\avathar\bbguild\model\games\game_registry $game_registry
 	)
 	{
 
@@ -226,6 +231,7 @@ class view_controller
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
 		$this->bb_plugins = $bb_plugins;
+		$this->game_registry = $game_registry;
 
 		$this->languagecodes = array(
 			'de' => $user->lang['LANG_DE'],
@@ -238,6 +244,27 @@ class view_controller
 		$this->games = $listgames->games;
 		unset($listgames);
 
+	}
+
+	/**
+	 * Resolve game-specific images web path via game_registry.
+	 *
+	 * @param string $game_id
+	 * @return string Web-accessible images path, falls back to core bbguild images
+	 */
+	public function get_game_images_web_path(string $game_id): string
+	{
+		$provider = $this->game_registry->get($game_id);
+		if ($provider !== null)
+		{
+			$filesystem_path = $provider->get_images_path();
+			$pos = strpos($filesystem_path, 'ext/');
+			if ($pos !== false)
+			{
+				return $this->ext_path_web . substr($filesystem_path, $pos);
+			}
+		}
+		return $this->ext_path_images;
 	}
 
 	/**

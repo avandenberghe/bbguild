@@ -41,6 +41,7 @@ services:
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
             - '%avathar.bbguild.tables.bb_plugins%'
+            - '@avathar.bbguild.game_registry'
     avathar.bbguild.curl:
         class: avathar\bbguild\model\admin\curl
     avathar.bbguild.log:
@@ -139,6 +140,10 @@ services:
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
             - '%avathar.bbguild.tables.bb_plugins%'
+    avathar.bbguild.game_registry:
+        class: avathar\bbguild\model\games\game_registry
+        arguments:
+            - !tagged_iterator bbguild.game_provider
     avathar.bbguild.listener:
         class: avathar\bbguild\event\main_listener
         arguments:

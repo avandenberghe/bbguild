@@ -13,6 +13,7 @@ use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\player\guilds;
 use avathar\bbguild\model\player\ranks;
 use avathar\bbguild\model\player\player;
+use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\rpg\roles;
 
 /**
@@ -67,6 +68,44 @@ class bbguild_module
 
 	protected $module;
 	protected $p_master;
+
+	/**
+	 * Check if a game has API support via registry or DB fallback
+	 *
+	 * @param string $game_id
+	 * @return bool
+	 */
+	private function game_has_api($game_id)
+	{
+		global $phpbb_container;
+
+		// Try game registry first
+		if (isset($phpbb_container))
+		{
+			try
+			{
+				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
+				$provider = $registry->get($game_id);
+				if ($provider !== null)
+				{
+					return $provider->has_api();
+				}
+			}
+			catch (\Exception $e)
+			{
+				// Registry not available, fall through
+			}
+		}
+
+		// Fall back to checking the game's armory_enabled flag in DB
+		$bb_games_table = $phpbb_container->getParameter('avathar.bbguild.tables.bb_games');
+		$sql = 'SELECT armory_enabled FROM ' . $bb_games_table . " WHERE game_id = '" . $this->db->sql_escape($game_id) . "'";
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		return $row ? (bool) $row['armory_enabled'] : false;
+	}
 
 	/**
 	 * bbguild_module constructor.
@@ -210,7 +249,7 @@ class bbguild_module
 						'U_ACTION'              => $this->u_action,
 						'LA_ALERT_AJAX'         => $this->user->lang['ALERT_AJAX'] ,
 						'LA_ALERT_OLDBROWSER'     => $this->user->lang['ALERT_OLDBROWSER'] ,
-						'UA_PLAYERLIST'            => append_sid("{$phpbb_root_path}styles/" . rawurlencode($this->user->theme['template_path']) . '/template/dkp/findplayerlist.'. $phpEx),
+						'UA_PLAYERLIST'            => '',
 					)
 				);
 
@@ -358,8 +397,8 @@ class bbguild_module
 						'LA_ALERT_AJAX'          => $this->user->lang['ALERT_AJAX'],
 						'LA_ALERT_OLDBROWSER' => $this->user->lang['ALERT_OLDBROWSER'],
 						'LA_MSG_NAME_EMPTY'      => $this->user->lang['FV_REQUIRED_NAME'],
-						'UA_FINDGAMERANK'     => append_sid("{$phpbb_root_path}styles/" . rawurlencode($this->user->theme['template_path']) . '/template/dkp/findGameRank.'. $phpEx),
-						'UA_FINDCLASSRACE'      => append_sid("{$phpbb_root_path}styles/" . rawurlencode($this->user->theme['template_path']) . '/template/dkp/findclassrace.'. $phpEx),
+						'UA_FINDGAMERANK'     => '',
+						'UA_FINDCLASSRACE'      => '',
 					)
 				);
 				$this->tpl_name     = 'ucp_bbguild_charadd';
@@ -424,8 +463,7 @@ class bbguild_module
 		$players = new player();
 
 		// Attach the language file
-		$this->user->add_lang('mods/common');
-		$this->user->add_lang(array('mods/admin'));
+		$this->user->add_lang_ext('avathar/bbguild', array('common', 'admin'));
 		$show=true;
 
 		if ($player_id == 0)
@@ -743,16 +781,16 @@ class bbguild_module
 				'FEMALE_CHECKED'        => ($players->getPlayerGenderId()  == '1') ? ' checked="checked"' : '' ,
 				'PLAYER_COMMENT'        => $players->getPlayerComment(),
 				'REALM'                 => $players->getPlayerRealm(),
-				'S_CAN_HAVE_ARMORY'        =>  $players->game_id == 'wow' || $players->game_id == 'aion'  ? true : false,
+				'S_CAN_HAVE_ARMORY'        => $this->game_has_api($players->game_id),
 				'PLAYER_URL'            =>  $players->getPlayerArmoryUrl(),
 				'PLAYER_PORTRAIT'        =>  $players->getPlayerPortraitUrl(),
-				'S_PLAYER_PORTRAIT_EXISTS'  => strlen($players->getPlayerPortraitUrl()) > 1 ? true : false,
-				'S_CAN_GENERATE_ARMORY'        => $players->game_id == 'wow' ? true : false,
+				'S_PLAYER_PORTRAIT_EXISTS'  => strlen((string) $players->getPlayerPortraitUrl()) > 1 ? true : false,
+				'S_CAN_GENERATE_ARMORY'        => $this->game_has_api($players->game_id),
 				'COLORCODE'             => $players->getColorcode() == '' ? '#254689' : $players->getColorcode(),
 				'CLASS_IMAGE'             => $players->getClassImage(),
-				'S_CLASS_IMAGE_EXISTS'     => strlen($players->getClassImage()) > 1 ? true : false,
+				'S_CLASS_IMAGE_EXISTS'     => strlen((string) $players->getClassImage()) > 1 ? true : false,
 				'RACE_IMAGE'             => $players->getRaceImage(),
-				'S_RACE_IMAGE_EXISTS'     => strlen($players->getRaceImage()) > 1 ? true : false ,
+				'S_RACE_IMAGE_EXISTS'     => strlen((string) $players->getRaceImage()) > 1 ? true : false ,
 				'S_JOINDATE_DAY_OPTIONS'    => $s_playerjoin_day_options,
 				'S_JOINDATE_MONTH_OPTIONS'    => $s_playerjoin_month_options,
 				'S_JOINDATE_YEAR_OPTIONS'    => $s_playerjoin_year_options,
@@ -806,44 +844,47 @@ class bbguild_module
 				)
 			);
 
-			$sql_array2 = array(
-				'SELECT'    => ' d.dkpsys_id, d.dkpsys_name,
-				SUM(m.player_earned + m.player_adjustment) AS ep,
-			    SUM(m.player_spent - m.player_item_decay + ( ' . max(0, $this->config['bbguild_basegp']) . ')) AS gp,
-     			SUM(m.player_earned + m.player_adjustment - m.player_spent + m.player_item_decay - ( ' . max(0, $this->config['bbguild_basegp']) . ') ) AS player_current,
-				CASE WHEN SUM(m.player_spent - m.player_item_decay) <= 0
-					THEN SUM(m.player_earned + m.player_adjustment)
-					ELSE ROUND( SUM(m.player_earned + m.player_adjustment) /  SUM(' . max(0, $this->config['bbguild_basegp']) .' + m.player_spent - m.player_item_decay) ,2)
-				END AS pr',
-				'FROM'      => array(
-					PLAYER_DKP_TABLE     => 'm',
-					DKPSYS_TABLE         => 'd',
-					PLAYER_TABLE     => 'l',
-				),
-				'WHERE'     => "l.player_id = m.player_id and l.player_status = 1 and m.player_dkpid = d.dkpsys_id and d.dkpsys_status='Y' and m.player_id = " . $char['player_id'],
-				'GROUP_BY'  => ' d.dkpsys_id, d.dkpsys_name ',
-				'ORDER_BY'    => ' d.dkpsys_name ',
-			);
-
-			$sql2 = $this->db->sql_build_query('SELECT', $sql_array2);
-			$result = $this->db->sql_query($sql2);
-			while ($row2 = $this->db->sql_fetchrow($result))
+			if (defined('PLAYER_DKP_TABLE'))
 			{
-				$this->template->assign_block_vars(
-					'players_row.row', array(
-						'DKPSYS'        => $row2['dkpsys_name'],
-						'U_VIEW_PLAYER' => append_sid(
-							"{$phpbb_root_path}dkp.$phpEx",
-							'page=player&amp;' . URI_NAMEID . '=' . $char['player_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id']
-						),
-						'EARNED'       => $row2['ep'],
-						'SPENT'        => $row2['gp'],
-						'PR'           => $row2['pr'],
-						'CURRENT'      => $row2['player_current'],
-					)
+				$sql_array2 = array(
+					'SELECT'    => ' d.dkpsys_id, d.dkpsys_name,
+					SUM(m.player_earned + m.player_adjustment) AS ep,
+					SUM(m.player_spent - m.player_item_decay + ( ' . max(0, $this->config['bbguild_basegp']) . ')) AS gp,
+					SUM(m.player_earned + m.player_adjustment - m.player_spent + m.player_item_decay - ( ' . max(0, $this->config['bbguild_basegp']) . ') ) AS player_current,
+					CASE WHEN SUM(m.player_spent - m.player_item_decay) <= 0
+						THEN SUM(m.player_earned + m.player_adjustment)
+						ELSE ROUND( SUM(m.player_earned + m.player_adjustment) /  SUM(' . max(0, $this->config['bbguild_basegp']) .' + m.player_spent - m.player_item_decay) ,2)
+					END AS pr',
+					'FROM'      => array(
+						PLAYER_DKP_TABLE     => 'm',
+						DKPSYS_TABLE         => 'd',
+						PLAYER_TABLE     => 'l',
+					),
+					'WHERE'     => "l.player_id = m.player_id and l.player_status = 1 and m.player_dkpid = d.dkpsys_id and d.dkpsys_status='Y' and m.player_id = " . $char['player_id'],
+					'GROUP_BY'  => ' d.dkpsys_id, d.dkpsys_name ',
+					'ORDER_BY'    => ' d.dkpsys_name ',
 				);
+
+				$sql2 = $this->db->sql_build_query('SELECT', $sql_array2);
+				$result = $this->db->sql_query($sql2);
+				while ($row2 = $this->db->sql_fetchrow($result))
+				{
+					$this->template->assign_block_vars(
+						'players_row.row', array(
+							'DKPSYS'        => $row2['dkpsys_name'],
+							'U_VIEW_PLAYER' => append_sid(
+								"{$phpbb_root_path}dkp.$phpEx",
+								'page=player&amp;' . URI_NAMEID . '=' . $char['player_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id']
+							),
+							'EARNED'       => $row2['ep'],
+							'SPENT'        => $row2['gp'],
+							'PR'           => $row2['pr'],
+							'CURRENT'      => $row2['player_current'],
+						)
+					);
+				}
+				$this->db->sql_freeresult($result);
 			}
-			$this->db->sql_freeresult($result);
 
 		}
 		$this->template->assign_vars(

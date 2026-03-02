@@ -11,6 +11,7 @@ namespace avathar\bbguild\model\player;
 
 use avathar\bbguild\model\admin\admin;
 use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\game_provider_interface;
 use avathar\bbguild\model\api\battlenet;
 
 /**
@@ -1261,14 +1262,10 @@ class player
 			$this->player_level = $maxlevel;
 		}
 
-		switch ($this->game_id)
+		// Generate portrait from game provider if available, otherwise use legacy method
+		if (trim($this->player_portrait_url) == '')
 		{
-			case 'aion':
-				if (trim($this->player_portrait_url) == '')
-				{
-					$this->generate_portraitlink();
-				}
-				break;
+			$this->generate_portrait_from_provider();
 		}
 
 		// update the data including the phpbb userid
@@ -1492,11 +1489,8 @@ class player
 			}
 		}
 
-		switch ($this->game_id)
-		{
-			case 'aion':
-				$this->player_portrait_url = $this->generate_portraitlink();
-		}
+		// Generate portrait from game provider if available, otherwise use legacy method
+		$this->generate_portrait_from_provider();
 
 		$this->last_update = $this->time;
 		$query = $db->sql_build_array(
@@ -1550,11 +1544,16 @@ class player
 
 
 	/**
-	 * fetch info from Armory
+	 * fetch info from Armory/API
 	 *
+	 * When a game provider with an API is available, delegates to
+	 * game_api_interface::fetch_character_data(). Otherwise falls back
+	 * to the legacy Battle.net character API.
+	 *
+	 * @param game_provider_interface|null $provider Optional game provider with API
 	 * @return integer
 	 */
-	public function Armory_getplayer()
+	public function Armory_getplayer(game_provider_interface $provider = null)
 	{
 		global $user, $cache;
 
@@ -1567,7 +1566,34 @@ class player
 			return -1;
 		}
 
-		if ($this->game_id != 'wow')
+		// New path: delegate to game provider's API when available
+		if ($provider !== null && $provider->has_api())
+		{
+			$api = $provider->get_api();
+			$data = $api->fetch_character_data($this->player_name, $this->player_realm, $this->player_region);
+			if (!$data || !is_array($data))
+			{
+				$this->armoryresult = 'KO';
+				return -1;
+			}
+			// Update player fields from API data
+			$this->player_level = isset($data['level']) ? $data['level'] : $this->player_level;
+			$this->player_race_id = isset($data['race']) ? $data['race'] : $this->player_race_id;
+			$this->player_class_id = isset($data['class']) ? $data['class'] : $this->player_class_id;
+			$this->player_gender_id = isset($data['gender']) ? $data['gender'] : $this->player_gender_id;
+			$this->player_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->player_achiev;
+			$this->player_armory_url = $api->get_player_armory_url($this->player_name, $this->player_realm, $this->player_region);
+			$this->player_portrait_url = $api->get_player_portrait_url($data);
+			if (isset($data['realm']))
+			{
+				$this->player_realm = $data['realm'];
+			}
+			$this->armoryresult = 'OK';
+			return 1;
+		}
+
+		// Legacy path: game must have an API (currently only WoW has one in core)
+		if (!$game->getArmoryEnabled() || trim($game->getApikey()) == '')
 		{
 			$this->player_portrait_url = '';
 			$this->deactivate_reason = '';
@@ -1879,7 +1905,51 @@ class player
 
 
 	/**
+	 * Generate portrait URL from game provider if available.
+	 *
+	 * Checks the game registry for a provider that can generate
+	 * portrait URLs. Falls back to the legacy aion-specific method.
+	 */
+	private function generate_portrait_from_provider()
+	{
+		global $phpbb_container;
+
+		// Try game registry for a provider with an API
+		if (isset($phpbb_container))
+		{
+			try
+			{
+				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
+				$provider = $registry->get($this->game_id);
+				if ($provider !== null && $provider->has_api())
+				{
+					$api = $provider->get_api();
+					$player_data = array(
+						'race'   => $this->player_race_id,
+						'gender' => $this->player_gender_id,
+						'game_id' => $this->game_id,
+					);
+					$this->player_portrait_url = $api->get_player_portrait_url($player_data);
+					return;
+				}
+			}
+			catch (\Exception $e)
+			{
+				// Registry not available, fall through to legacy
+			}
+		}
+
+		// Legacy fallback: aion-specific portrait generation
+		if ($this->game_id == 'aion')
+		{
+			$this->generate_portraitlink();
+		}
+	}
+
+	/**
 	 * generates a standard portrait image url for aion based on characterdata
+	 *
+	 * @deprecated Use generate_portrait_from_provider() instead. Will be removed when aion is extracted.
 	 */
 	private function generate_portraitlink()
 	{

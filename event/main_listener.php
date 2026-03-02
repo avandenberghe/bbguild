@@ -136,8 +136,8 @@ class main_listener implements EventSubscriberInterface
 		$permission['u_bbguild']    = array('lang' => 'ACL_U_BBGUILD',        'cat' => 'bbguild');
 		$permission['u_charclaim']    = array('lang' => 'ACL_U_CHARCLAIM',    'cat' => 'bbguild');
 		$permission['u_charadd']    = array('lang' => 'ACL_U_CHARADD',        'cat' => 'bbguild');
-		$permission['u_chardelete']    = array('lang' => 'ACL_U_CHARUPDATE',    'cat' => 'bbguild');
-		$permission['u_charupdate']    = array('lang' => 'ACL_U_CHARDELETE',    'cat' => 'bbguild');
+		$permission['u_chardelete']    = array('lang' => 'ACL_U_CHARDELETE',    'cat' => 'bbguild');
+		$permission['u_charupdate']    = array('lang' => 'ACL_U_CHARUPDATE',    'cat' => 'bbguild');
 		$event['permissions'] = $permission;
 	}
 

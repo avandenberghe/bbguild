@@ -1273,7 +1273,7 @@ class game_module_old
 				'EDITGAME' => sprintf($this->user->lang['ACP_EDITGAME'], $editgame->getName()) ,
 				'BOSSBASEURL' => $editgame->getBossbaseurl(),
 				'ZONEBASEURL' => $editgame->getZonebaseurl(),
-				'ISWOW'     => $editgame->game_id == 'wow' ? 1: 0,
+				'ISWOW'     => $editgame->getArmoryEnabled() ? 1 : 0,
 				'APIKEY'    => $editgame->getApikey(),
 				'PRIVKEY'    => $editgame->get_privkey(),
 				'LOCALE'  => $editgame->get_apilocale(),

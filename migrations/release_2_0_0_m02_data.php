@@ -3,7 +3,7 @@
  * bbDKP database installer
  *
  * @package   bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @copyright 2015 bbdkp
  * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
