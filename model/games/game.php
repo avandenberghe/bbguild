@@ -119,13 +119,6 @@ class game
 	protected $apilocale;
 
 	/**
-	 * pre-installable games
-	 *
-	 * @var array
-	 */
-	protected $preinstalled_games;
-
-	/**
 	 * installed games
 	 *
 	 * @var array
@@ -363,29 +356,18 @@ class game
 
 
 	/**
-	 * Get all installable games: merges legacy preinstalled list with plugin-provided games.
+	 * Get all installable games from the plugin registry.
 	 *
 	 * @return array
 	 */
-	public function getPreinstalledGames()
+	public function getInstallableGames()
 	{
-		$games = $this->preinstalled_games;
-
-		// Merge in plugin-provided games from the registry
 		if ($this->game_registry !== null)
 		{
-			$games = array_merge($games, $this->game_registry->get_installable_games());
+			return $this->game_registry->get_installable_games();
 		}
 
-		return $games;
-	}
-
-	/**
-	 * @param array $preinstalled_games
-	 */
-	public function setPreinstalledGames($preinstalled_games)
-	{
-		$this->preinstalled_games = $preinstalled_games;
+		return array();
 	}
 
 	/**
@@ -421,24 +403,6 @@ class game
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_game_table = $bb_game_table;
 		$this->game_registry = $game_registry;
-
-		$this->preinstalled_games = array (
-			'aion'     => $user->lang['AION'],
-			'daoc'     => $user->lang['DAOC'],
-			'eq'     => $user->lang['EQ'],
-			'eq2'     => $user->lang['EQ2'],
-			'FFXI'     => $user->lang['FFXI'],
-			'gw2'     => $user->lang['GW2'],
-			'lineage2' => $user->lang['LINEAGE2'],
-			'lotro' => $user->lang['LOTRO'],
-			'rift'     => $user->lang['RIFT'],
-			'swtor' => $user->lang['SWTOR'],
-			'tera'     => $user->lang['TERA'],
-			'vanguard' => $user->lang['VANGUARD'],
-			'warhammer' => $user->lang['WARHAMMER'],
-			'wow'     => $user->lang['WOW'],
-			'ffxiv'    => $user->lang['FFXIV'],
-		);
 
 		$this->regions = array(
 			'eu' => $user->lang['REGIONEU'],
@@ -511,15 +475,14 @@ class game
 	 */
 	public function install_game()
 	{
-		//insert into phpbb_bbguild_games table
-		global $user, $phpEx, $config;
+		global $user;
 
 		if ($this->game_id == '')
 		{
 			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
-		// New path: try game registry (plugin-provided games) first
+		// Plugin-provided games (via game_registry)
 		if ($this->game_registry !== null && $this->game_registry->has($this->game_id))
 		{
 			$provider = $this->game_registry->get($this->game_id);
@@ -535,59 +498,22 @@ class game
 				$this->getRegion()
 			);
 		}
-		// Legacy path: built-in preinstalled games
-		else if (array_key_exists($this->game_id, $this->preinstalled_games))
-		{
-			//game id is one of the preinstallable games
-			$this->name= $this->preinstalled_games[$this->game_id];
-			//build name of the namespaced game installer class
-			$classname = '\avathar\bbguild\model\games\library\install_' . $this->game_id;
-			$installgame = new $classname;
-
-			//call the game installer
-			$installgame->install(
-				$this->game_id, $this->name,
-				$installgame->getBossbaseurl(),
-				$installgame->getZonebaseurl(),
-				$this->getRegion()
-			);
-
-			//is gameworld installed ?
-			if (isset($config['bbguild_gameworld_version']))
-			{
-				if ($config['bbguild_gameworld_version'] >= '2.0')
-				{
-					$classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
-					$installworld = new $classname;
-					$installworld->install($this->game_id);
-				}
-			}
-
-		}
 		else
 		{
-			//custom game, this is dispatched to dummy game installer
+			// Custom game
 			if ($this->name == '')
 			{
-				$this->name='Custom';
+				$this->name = 'Custom';
 			}
-			$installgame = new install_custom;
-			//call the game installer
-			$installgame->install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl(), $this->getRegion() );
-
-			//is gameworld installed ?
-			if (isset($config['bbguild_gameworld_version']))
-			{
-				if ($config['bbguild_gameworld_version'] >= '2.0')
-				{
-					if (!class_exists('\bbdkp\bbworld\model\games\library\world_custom'))
-					{
-						include $this->ext_path .'model/games/library/world_custom.' . $phpEx;
-					}
-					$installworld = new \bbdkp\bbworld\model\games\library\world_custom;
-					$installworld->install($this->game_id);
-				}
-			}
+			$installgame = new install_custom();
+			$installgame->install(
+				$this->get_table_names(),
+				$this->game_id,
+				$this->name,
+				'',
+				'',
+				$this->getRegion()
+			);
 		}
 	}
 
@@ -596,13 +522,14 @@ class game
 	 */
 	public function delete_game()
 	{
-		global $user, $phpEx, $config;
+		global $user;
+
 		if ($this->game_id == '')
 		{
-			\trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
+			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
-		// New path: try game registry (plugin-provided games) first
+		// Plugin-provided games (via game_registry)
 		if ($this->game_registry !== null && $this->game_registry->has($this->game_id))
 		{
 			$provider = $this->game_registry->get($this->game_id);
@@ -616,47 +543,13 @@ class game
 			return;
 		}
 
-		// Legacy path: built-in preinstalled games
-		if (array_key_exists($this->game_id, $this->preinstalled_games))
-		{
-			//fetch installer
-			if (!class_exists('\avathar\bbguild\model\games\library\install_' . $this->game_id))
-			{
-				include $this->ext_path .'model/games/library/install_' . $this->game_id . '.' . $phpEx;
-			}
-			$gameclassname = '\avathar\bbguild\model\games\library\install_' . $this->game_id;
-		}
-		else
-		{
-			if (!class_exists('\avathar\bbguild\model\games\library\install_custom'))
-			{
-				include $this->ext_path .'model/games/library/install_custom.' . $phpEx;
-			}
-			$gameclassname = '\avathar\bbguild\model\games\library\install_custom';
-		}
-
-		//is bossprogress installed ?
-		if (isset($config['bbguild_gameworld_version']))
-		{
-			if ($config['bbguild_gameworld_version'] >= '2.0')
-			{
-				if (array_key_exists($this->game_id, $this->preinstalled_games))
-				{
-					$gameworld_classname = '\bbdkp\bbworld\model\games\library\world_' . $this->game_id;
-					$installworld = new $gameworld_classname;
-				}
-				else
-				{
-					$installworld = new \bbdkp\bbworld\model\games\library\world_custom;
-				}
-				$installworld->uninstall($this->game_id, $this->getName());
-			}
-		}
-
-		//build name of the namespaced game installer class. do it after uninstalling the gameworld.
-		$installgame = new $gameclassname;
-		//call the game installer
-		$installgame->uninstall($this->game_id, $this->name);
+		// Custom game
+		$installgame = new install_custom();
+		$installgame->uninstall(
+			$this->get_table_names(),
+			$this->game_id,
+			$this->name
+		);
 	}
 
 	/**

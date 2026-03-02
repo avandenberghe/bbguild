@@ -8,24 +8,20 @@
  */
 namespace avathar\bbguild\model\games\library;
 
-use avathar\bbguild\model\games\library\game_install;
+use avathar\bbguild\model\games\abstract_game_install;
 
 /**
  * Custom Installer Class
  *
-* @package avathar\bbguild\model\games\library
+ * @package avathar\bbguild\model\games\library
  */
-class install_custom extends game_install
+class install_custom extends abstract_game_install
 {
-	protected $bossbaseurl = '';
-	protected $zonebaseurl = '';
-
 	/**
 	 * Installs factions
 	 */
 	protected function install_factions()
 	{
-
 	}
 
 	/**
@@ -33,7 +29,6 @@ class install_custom extends game_install
 	 */
 	protected function install_classes()
 	{
-
 	}
 
 	/**
@@ -41,10 +36,6 @@ class install_custom extends game_install
 	 */
 	protected function install_races()
 	{
-
 	}
-
-
-
 
 }
