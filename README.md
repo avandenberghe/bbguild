@@ -1,49 +1,101 @@
 [![bbGuild](https://www.avathar.be/forum/images/site_logo.png)](https://www.avathar.be/forum)
 
-### About
-bbGuild is a World of Warcraft Guild manager for your phpBB3 Bulletin board. It was originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008.
-The 2.0 version is renamed bbGuild and rebuilt for phpBB 3.3.
+# bbGuild
 
-Features:
-- Guild Roster
-- Guild News page
-- WoW Armory link
-- ACP and UCP modules
-- Languages supported: English, French, German, Italian
+A Guild Management System for [phpBB 3.3](https://www.phpbb.com/). Manage your gaming guild's roster, recruitment, and news directly from your forum.
 
-See contrib/CHANGELOG.md for upcoming and past changes.
+Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has been renamed bbGuild and rebuilt for phpBB 3.3 and PHP 8.x.
 
-Further development requests, support questions are welcome at our [Support Forum](https://www.avathar.be/forum) or in the [phpbb.com extension development topic](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
+## Features
 
-### Installation
-##### Requirements
-1. phpBB >= 3.3.0
-2. PHP >= 7.4.0
-3. PHP Client URL Library (php_curl)
-4. PHP GD library (php_gd2)
+### Guild Management
+- **Multi-guild support** — manage multiple guilds from a single phpBB installation
+- **Guild profiles** — name, realm, region, faction, game, emblem, and description
+- **Guild news** — message of the day and news feed on the guild welcome page
 
-##### Install
-1. Download the latest release.
-2. In the `ext` directory of your phpBB board, create a new directory named `avathar` (if it does not already exist).
-3. Copy the `bbguild` folder to `/ext/avathar/bbguild/` (if done correctly, you'll have the main extension class at (your forum root)/ext/avathar/bbguild/composer.json).
-4. Navigate in the ACP to `Customise -> Manage extensions`.
-5. Look for `bbGuild` under the Disabled Extensions list, and click its `Enable` link.
+### Roster
+- **Full guild roster** — sortable player list with class, race, rank, and level
+- **Player profiles** — detailed character view with gear, stats, and guild history
+- **Character management** — add, edit, delete, and claim characters via ACP and UCP
+- **Rank management** — define custom guild ranks with display preferences
 
-##### Uninstall
-1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
-2. Look for `bbGuild` under the Enabled Extensions list, and click its `Disable` link.
-3. To permanently uninstall, click `Delete Data` and then delete the `/ext/avathar/bbguild` folder.
+### Recruitment
+- **Recruitment board** — post open positions by role and class
+- **Status tracking** — open/closed status, number of positions, applicant count
+- **Role-based filtering** — recruit by game role (tank, healer, DPS, etc.)
+
+### Multi-Game Support
+- **Plugin architecture** — game support provided via separate `bbguild_<game>` extensions
+- **Available plugins:** World of Warcraft (with Battle.net API), Guild Wars 2, LOTRO, EverQuest, EverQuest 2, FFXI, FFXIV, SWTOR, Lineage 2
+- **Custom game support** — define your own game with custom classes, races, factions, and roles
+- **Per-game data** — classes, races, factions, and roles are fully configurable per game
+
+### Administration (ACP)
+- **Game management** — install, configure, and remove game definitions
+- **Guild management** — create and edit guilds, assign games and realms
+- **Player management** — full CRUD for characters, batch operations, rank sorting
+- **Recruitment management** — create and manage recruitment postings
+- **Activity logs** — track all administrative actions
+
+### User Control Panel (UCP)
+- **Character claiming** — users can link forum accounts to guild characters
+- **Character editing** — update your own character details
+- **Permission-based access** — granular permissions for claim, add, edit, and delete
+
+### Localization
+- English, French, German, Italian
+
+## Requirements
+
+- phpBB >= 3.3.0
+- PHP >= 7.4
+- PHP GD extension (`php_gd2`)
+- PHP cURL extension (`php_curl`)
+
+## Installation
+
+1. Download the [latest release](https://github.com/avandenberghe/bbguild/releases).
+2. Create the directory `ext/avathar/` in your phpBB installation (if it doesn't exist).
+3. Extract `bbguild` into `ext/avathar/bbguild/`.
+4. In the ACP, go to **Customise > Manage extensions**.
+5. Find **bbGuild** under Disabled Extensions and click **Enable**.
+
+### Game Plugins
+
+Game support is provided by separate extensions. Install them the same way:
+
+| Plugin | Directory | Notes |
+|--------|-----------|-------|
+| [bbguild_wow](https://github.com/avandenberghe/bbguild_wow) | `ext/avathar/bbguild_wow/` | Includes Battle.net API integration |
+| bbguild_gw2 | `ext/avathar/bbguild_gw2/` | Guild Wars 2 |
+| bbguild_eq | `ext/avathar/bbguild_eq/` | EverQuest |
+| bbguild_eq2 | `ext/avathar/bbguild_eq2/` | EverQuest 2 |
+| bbguild_ffxi | `ext/avathar/bbguild_ffxi/` | Final Fantasy XI |
+| bbguild_ffxiv | `ext/avathar/bbguild_ffxiv/` | Final Fantasy XIV |
+| bbguild_lotro | `ext/avathar/bbguild_lotro/` | Lord of the Rings Online |
+| bbguild_swtor | `ext/avathar/bbguild_swtor/` | Star Wars: The Old Republic |
+| bbguild_lineage2 | `ext/avathar/bbguild_lineage2/` | Lineage 2 |
+
+## Uninstall
+
+1. In the ACP, go to **Customise > Manage extensions**.
+2. Find **bbGuild** under Enabled Extensions and click **Disable**.
+3. To permanently remove, click **Delete Data** and then delete `ext/avathar/bbguild/`.
 
 ## Community
 
-Find support and more on
-* Forums: [https://www.avathar.be/forum](https://www.avathar.be/forum)
+- Support forum: [https://www.avathar.be/forum](https://www.avathar.be/forum)
+- phpBB topic: [Extension development](https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 
-### Contribute
-You can see all the awesome people contributing to this project [here](https://github.com/avandenberghe/bbguild/graphs/contributors).
+## Contributing
 
-1. [Create a ticket](https://github.com/avandenberghe/bbguild/issues) (unless there already is one)
-2. Make a pull request.
+See the [contributors](https://github.com/avandenberghe/bbguild/graphs/contributors) who have helped build this project.
 
-### License
+1. [Create an issue](https://github.com/avandenberghe/bbguild/issues) (unless one already exists).
+2. Submit a pull request.
+
+See `contrib/CHANGELOG.md` for version history.
+
+## License
+
 [GNU General Public License v2](http://opensource.org/licenses/gpl-2.0.php)
