@@ -212,7 +212,7 @@ class schema extends \phpbb\db\migration\migration
 					'COLUMNS' => [
 						'role_pkid'     => ['UINT', null, 'auto_increment'],
 						'game_id'       => ['VCHAR:10', ''],
-						'role_id'       => ['INT', 0],
+						'role_id'       => ['UINT', 0],
 						'role_color'    => ['VCHAR', ''],
 						'role_icon'     => ['VCHAR', ''],
 						'role_cat_icon' => ['VCHAR', ''],
@@ -225,7 +225,7 @@ class schema extends \phpbb\db\migration\migration
 					'COLUMNS' => [
 						'id'               => ['UINT', null, 'auto_increment'],
 						'guild_id'         => ['USINT', 0],
-						'role_id'          => ['INT', 0],
+						'role_id'          => ['UINT', 0],
 						'class_id'         => ['UINT', 0],
 						'level'            => ['UINT', 0],
 						'positions'        => ['USINT', 0],
