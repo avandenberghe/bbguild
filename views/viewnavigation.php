@@ -373,7 +373,17 @@ class viewnavigation implements iviews
 	 */
 	private function get_guildinfo()
 	{
-		$this->guild = new guilds( $this->view_controller->bb_players_table,
+		global $phpbb_container;
+		$bbguild_cache = $phpbb_container->get('cache.driver');
+		$bbguild_log = $phpbb_container->get('avathar.bbguild.log');
+
+		$this->guild = new guilds(
+			$this->db,
+			$this->user,
+			$this->config,
+			$bbguild_cache,
+			$bbguild_log,
+			$this->view_controller->bb_players_table,
 			$this->view_controller->bb_ranks_table,
 			$this->view_controller->bb_classes_table,
 			$this->view_controller->bb_races_table,

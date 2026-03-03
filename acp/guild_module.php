@@ -5,62 +5,17 @@
  * @copyright (c) 2018 avathar.be
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
- * Guild ACP module
+ * Guild ACP module — thin dispatcher (delegates to admin_guild controller)
  *
  */
 
 namespace avathar\bbguild\acp;
 
-use avathar\bbguild\model\admin\admin;
-use avathar\bbguild\model\admin\constants;
-use avathar\bbguild\model\games\game;
-use avathar\bbguild\model\games\rpg\faction;
-use avathar\bbguild\model\player\guilds;
-use avathar\bbguild\model\player\ranks;
-
-/**
- * This class manages guilds
- *
- * @package bbguild
- */
 class guild_module
 {
-
-	/* @var string */
-	public $u_action;
-	/* @var string  */
-	public $url_id;
-	/* @var \phpbb\request\request **/
-	protected $request;
-	/* @var \phpbb\template\template **/
-	protected $template;
-	/* @var \phpbb\user  **/
-	protected $user;
-	/* @var \phpbb\db\driver\driver_interface */
-	protected $db;
-	/* @var \phpbb\config\config */
-	protected $config;
-	/* @var \phpbb\auth\auth */
-	public $auth;
-	public $id;
-	public $mode;
-	public $tpl_name;
-	public $link;
 	public $page_title;
-
-	protected $factions;
-	/* @var \avathar\bbguild\controller\admin_controller */
-	protected $admin_controller;
-	/* @var \phpbb\controller\helper */
-	protected  $helper;
-	protected $phpbb_container;
-	/* @var string */
-	protected $factionroute;
-	/* @type game */
-	private $game;
-
-	/** @var \avathar\bbguild\model\games\game_registry */
-	private $game_registry;
+	public $tpl_name;
+	public $u_action;
 
 	/**
 	 * ACP guild function
@@ -70,78 +25,46 @@ class guild_module
 	 */
 	public function main($id, $mode)
 	{
-		global  $db, $phpbb_admin_path, $phpEx;
-		global $request, $auth;
-
 		global $phpbb_container;
 
-
-		$this->id       = $id;
-		$this->mode     = $mode;
-		$this->request  = $request;
-
-
-		$this->db       = $db;
-		$this->auth     = $auth;
-		$this->phpbb_container = $phpbb_container;
-		$this->game_registry = $phpbb_container->get('avathar.bbguild.game_registry');
-		$this->admin_controller = $this->phpbb_container->get('avathar.bbguild.admin.controller');
-		$ac = $this->admin_controller;
-		$this->helper = $phpbb_container->get('controller.helper');
-		$this->factionroute =  $this->helper->route('avathar_bbguild_01', array());
-
+		$admin_guild = $phpbb_container->get('avathar.bbguild.admin.guild');
 
 		$form_key = 'avathar/bbguild';
 		add_form_key($form_key);
-		$this->tpl_name   = 'acp_'.$mode;
-		$this->link       = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx",
-				'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds').'"><h3>'.$this->user->lang['RETURN_GUILDLIST'].'</h3></a>';
-		$this->page_title = 'ACP_LISTGUILDS';
+		$this->tpl_name = 'acp_' . $mode;
+
+		if (!$admin_guild->auth->acl_get('a_bbguild'))
+		{
+			trigger_error($admin_guild->user->lang['NOAUTH_A_GUILD_MAN'], E_USER_WARNING);
+		}
 
 		switch ($mode)
 		{
 			case 'listguilds':
-				$this->BuildTemplateListGuilds();
+				$admin_guild->BuildTemplateListGuilds();
 				break;
 
 			case 'addguild':
-				$this->show_addguild($config);
-
+				$admin_guild->show_addguild();
 				break;
+
 			case 'editguild':
-				$this->url_id = $this->request->variable(constants::URI_GUILD, 0);
-				$updateguild  = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $this->url_id);
-
-				$this->game          = new game($ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_factions_table, $ac->bb_games_table);
-				$this->game->game_id = $updateguild->getGameId();
-				$this->game->get_game();
-
-				if ($this->request->is_set_post('playeradd'))
-				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-mm_module&amp;mode=addplayer&amp;'.constants::URI_GUILD. '=' .$this->url_id));
-				}
-
-				$action = $this->request->variable('action', '');
-				switch ($action)
-				{
-					case 'guildranks':
-						$this->show_editguildranks($updateguild);
-						break;
-
-					case 'editguild':
-					default:
-						$this->show_editguild($updateguild);
-						break;
-				}//end switch
+				$admin_guild->show_editguild_dispatch();
 				break;
 
 			default:
 				$this->page_title = 'ACP_BBGUILD_MAINPAGE';
-				$success_message  = 'Error';
-				trigger_error($success_message.$this->link, E_USER_WARNING);
-		}//end switch
+				trigger_error('Error' . '<br /><a href="' . append_sid("index.php", 'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds') . '"><h3>' . $admin_guild->user->lang['RETURN_GUILDLIST'] . '</h3></a>', E_USER_WARNING);
+		}
 
-	}//end main()
-
-
-}//end class
+		// Propagate tpl_name/page_title back if controller changed them
+		if (isset($admin_guild->tpl_name))
+		{
+			$this->tpl_name = $admin_guild->tpl_name;
+		}
+		if (isset($admin_guild->page_title))
+		{
+			$this->page_title = $admin_guild->page_title;
+		}
+	}
+}

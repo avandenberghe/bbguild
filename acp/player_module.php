@@ -158,6 +158,9 @@ class player_module
 		$this->db=$db;
 		$this->phpbb_container = $phpbb_container;
 		$this->auth=$auth;
+		$this->config = $phpbb_container->get('config');
+		$this->bbguild_cache = $phpbb_container->get('cache.driver');
+		$this->bbguild_log = $phpbb_container->get('avathar.bbguild.log');
 
 
 
@@ -184,7 +187,7 @@ class player_module
 			 */
 			case 'listplayers':
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-player_module&amp;mode=listplayers') . '"><h3>Return to Index</h3></a>';
-				$this->guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+				$this->guild = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
 
 				$guildlist = $this->guild->guildlist(1);
 				if (count((array) $guildlist) == 0  )
@@ -432,7 +435,7 @@ class player_module
 		$newplayer->setPhpbbUserId($this->request->variable('phpbb_user_id', 0));
 		$newplayer->setPlayerStatus($this->request->variable('activated', '') == 'on' ? 1 : 0);
 
-		$this->guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $newplayer->getPlayerGuildId());
+		$this->guild = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $newplayer->getPlayerGuildId());
 		$this->guild->get_guild();
 
 		//only call armory if it is enabled.
@@ -511,7 +514,7 @@ class player_module
 		$updateplayer->setPlayerComment($this->request->variable('player_comment', '', true));
 		$updateplayer->setPhpbbUserId($this->request->variable('phpbb_user_id', 0));
 
-		$this->guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $updateplayer->getPlayerGuildId());
+		$this->guild = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $updateplayer->getPlayerGuildId());
 		$this->guild->get_guild();
 
 		if ($updateplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
@@ -579,7 +582,7 @@ class player_module
 	private function CallCharacterAPI()
 	{
 		$ac = $this->admin_controller;
-		$this->guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$this->guild = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
 		$this->guild->setGuildid($this->request->variable('hidden_guildid', 0));
 		$this->guild->get_guild();
 
@@ -860,7 +863,7 @@ class player_module
 			// set defaults
 			$editplayer->setPlayerGuildId($this->request->variable(constants::URI_GUILD, 0));
 		}
-		$this->guild     = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $editplayer->getPlayerGuildId());
+		$this->guild     = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $editplayer->getPlayerGuildId());
 
 		if ($S_ADD)
 		{
@@ -904,7 +907,7 @@ class player_module
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks  = new ranks($ac->bb_players_table, $ac->bb_ranks_table, $editplayer->getPlayerGuildId());
+		$Ranks  = new ranks($this->db, $this->user, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $editplayer->getPlayerGuildId());
 		$result = $Ranks->listranks();
 		while ($row = $this->db->sql_fetchrow($result))
 		{

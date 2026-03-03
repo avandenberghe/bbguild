@@ -177,10 +177,12 @@ class bbguild_module
 
 		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');
 		$ac = $this->admin_controller;
+		$this->bbguild_cache = $phpbb_container->get('cache.driver');
+		$this->bbguild_log = $phpbb_container->get('avathar.bbguild.log');
 
 		// Attach the language files
 		$this->user->add_lang(array('acp/groups', 'acp/common'));
-		$guilds = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, 0);
+		$guilds = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, 0);
 
 		// list all guild except noguild
 		$guildlist = $guilds->guildlist(1);
@@ -568,14 +570,14 @@ class bbguild_module
 				);
 			}
 
-			$guilds = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $players->getPlayerGuildId());
+			$guilds = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $players->getPlayerGuildId());
 			$gamename = $this->games[$guilds->game_id];
 
 		}
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks = new ranks($ac->bb_players_table, $ac->bb_ranks_table, $players->getPlayerGuildId());
+		$Ranks = new ranks($this->db, $this->user, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $players->getPlayerGuildId());
 
 		$result = $Ranks->listranks();
 

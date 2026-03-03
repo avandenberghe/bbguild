@@ -5,13 +5,20 @@
  * @copyright (c) 2018 avathar.be
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
- * Guild admin
+ * Guild admin controller
  *
  */
 
 namespace avathar\bbguild\controller;
 
-use avathar\bbguild\model\admin\admin;
+use phpbb\config\config;
+use phpbb\language\language;
+use phpbb\log\log;
+use phpbb\pagination;
+use phpbb\request\request;
+use phpbb\template\template;
+use phpbb\user;
+
 use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\games\game;
 use avathar\bbguild\model\games\game_registry;
@@ -21,563 +28,893 @@ use avathar\bbguild\model\player\ranks;
 
 class admin_guild
 {
-
-    /**
-     * @var \phpbb\auth\auth
-     */
-    public $auth;
-    /* @var string */
-    public $u_action;
-    /* @var string */
-    public $link = ' ';
-
-    /** @var \phpbb\config\config */
-    protected $config;
-    /** @var \phpbb\user */
-    protected $user;
-    /** @var \phpbb\template\template */
-    protected $template;
-
-    /** @var game_registry */
-    protected $game_registry;
-
-    public function __construct(
-        config $config,
-        user $user,
-        template $template,
-        \phpbb\db\driver\driver_interface $db,
-)
-    {
-
-        $this->config = $config;
-        $this->user = $user;
-        $this->template = $template;
-        if (! $this->auth->acl_get('a_bbguild'))
-        {
-            trigger_error($user->lang['NOAUTH_A_GUILD_MAN']);
-        }
-
-
-        //css trigger
-        $this->template->assign_vars(
-            array (
-                'S_BBGUILD' => true,
-            )
-        );
-
-
-    }
-
-
-
-
-    /**
-     * update the default flag
-     *
-     * @param $updateguild
-     */
-    private function UpdateDefaultGuild(guilds $updateguild)
-    {
-        $id = $this->request->variable('defaultguild', 0);
-        $updateguild->update_guilddefault($id);
-        $success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $id);
-        trigger_error($success_message.$this->link, E_USER_NOTICE);
-
-    }//end UpdateDefaultGuild()
-
-    /**
-     * @param guilds $addguild
-     */
-    private function AddGuild(guilds $addguild)
-    {
-        if (!check_form_key('avathar/bbguild'))
-        {
-            trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
-        }
-
-        $this->game          = new game;
-        $this->game->game_id = $this->request->variable('game_id', '');
-        $this->game->get_game();
-
-        $addguild->setGameId($this->request->variable('game_id', ''));
-        $addguild->setName($this->request->variable('guild_name', '', true));
-        $addguild->setRealm($this->request->variable('realm', '', true));
-        $addguild->setRegion($this->request->variable('region_id', ''));
-        $addguild->setFaction($this->request->variable('faction_id', 0));
-        $addguild->setShowroster($this->request->is_set_post('showroster'));
-        $addguild->setMinArmory($this->request->variable('min_armorylevel', 0));
-        $addguild->setArmoryEnabled($this->request->variable('armory_enabled', 0));
-        $addguild->setRecstatus($this->request->variable('switchon_recruitment', 0));
-        $addguild->setRecruitforum($this->request->variable('recruitforum', 0));
-        $addguild->setEmblempath($this->ext_path. 'images/guildemblem/' .$this->request->variable('guild_emblem', '', true));
-        $addguild->setStartdate(time());
-        $addguild->setArmoryresult('KO');
-        $addguild->make_guild();
-
-        //if wow battlenet connection is on then fetch info from Wow API.
-        if ($addguild->isArmoryEnabled())
-        {
-            $this->BattleNetUpdate($addguild);
-        }
-
-        $success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->getName());
-        trigger_error($success_message.$this->link, E_USER_NOTICE);
-    }
-
-    /**
-     * @param \avathar\bbguild\model\player\guilds $updateguild
-     */
-    private function UpdateGuild(guilds $updateguild)
-    {
-        $updateguild->setGuildid($this->url_id);
-        $updateguild->get_guild();
-        $old_guild = new guilds($this->url_id);
-        $old_guild->get_guild();
-
-        $updateguild->setGameId($this->request->variable('game_id', ''));
-        $updateguild->setName($this->request->variable('guild_name', '', true));
-        $updateguild->setRealm($this->request->variable('realm', '', true));
-        $updateguild->setRegion($this->request->variable('region_id', ' '));
-        $updateguild->setFaction($this->request->variable('faction_id', 0));
-        $updateguild->setShowroster($this->request->variable('showroster', 0));
-        $updateguild->setMinArmory($this->request->variable('min_armorylevel', 0));
-        $updateguild->setArmoryEnabled($this->request->variable('armory_enabled', 0));
-        $updateguild->setRecstatus($this->request->variable('switchon_recruitment', 0));
-        $updateguild->setRecruitforum($this->request->variable('recruitforum', 0));
-        // in the request we expect the file name here including extension, no path
-        $updateguild->setEmblempath($this->ext_path. 'images/guildemblem/' .$this->request->variable('guild_emblem', '', true));
-
-        if ($updateguild->isArmoryEnabled())
-        {
-            $this->BattleNetUpdate($updateguild);
-        }
-
-        if ($updateguild->update_guild($old_guild))
-        {
-            $success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-            trigger_error($success_message.$this->link, E_USER_NOTICE);
-        }
-        else
-        {
-            $success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_FAILED'], $this->url_id);
-            trigger_error($success_message.$this->link, E_USER_WARNING);
-        }
-
-    }
-
-    private function BattleNetUpdate(guilds $updateguild, $parameters = array())
-    {
-        $provider = $this->game_registry->get($updateguild->getGameId());
-        $data =  $updateguild->Call_Guild_API($parameters , $this->game, $provider);
-        if ($updateguild->getArmoryresult() == 'OK')
-        {
-            $updateguild->update_guild_battleNet($data, $parameters, $provider);
-        }
-    }
-
-
-    /**
-     * delete a guild
-     *
-     * @param $updateguild
-     */
-    private function DeleteGuild(guilds $updateguild)
-    {
-        if (confirm_box(true))
-        {
-            $deleteguild = new guilds($this->request->variable('guildid', 0));
-            $deleteguild->get_guild();
-            $deleteguild->delete_guild();
-            $success_message = sprintf($this->user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->getGuildid());
-            trigger_error($success_message.$this->link, E_USER_NOTICE);
-        }
-        else
-        {
-            $s_hidden_fields = build_hidden_fields(
-                array(
-                    'deleteguild' => true,
-                    'guildid'     => $updateguild->getGuildid(),
-                )
-            );
-
-            $this->template->assign_vars(
-                array('S_HIDDEN_FIELDS' => $s_hidden_fields)
-            );
-
-            confirm_box(false, $this->user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
-        }//end if
-
-    }//end DeleteGuild()
-
-
-    /**
-     * Add a guild rank
-     *
-     * @param $updateguild
-     */
-    private function AddRank(guilds $updateguild)
-    {
-        $newrank            = new ranks($updateguild->getGuildid());
-        $newrank->RankName  = $this->request->variable('nrankname', '', true);
-        $newrank->RankId    = $this->request->variable('nrankid', 0);
-        $newrank->RankGuild = $updateguild->getGuildid();
-        $newrank->RankHide  = $this->request->is_set_post('nhide');
-        $newrank->RankPrefix = $this->request->variable('nprefix', '', true);
-        $newrank->RankSuffix = $this->request->variable('nsuffix', '', true);
-        $newrank->Makerank();
-        $success_message = $this->user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
-        trigger_error($success_message.$this->link);
-
-    }//end AddRank()
-
-
-    /**
-     * Update a rank
-     *
-     * @param $updateguild
-     *
-     * @return int|string
-     */
-    private function UpdateRank(guilds $updateguild)
-    {
-        $newrank = new ranks($updateguild->getGuildid());
-        $oldrank = new ranks($updateguild->getGuildid());
-
-        $rank_id=0;
-        // template
-        $modrank = $this->request->variable('ranks', array(0 => ''), true);
-        foreach ($modrank as $rank_id => $rank_name)
-        {
-            $old = clone $oldrank;
-            $old->RankId    = $rank_id;
-            $old->RankGuild = $updateguild->getGuildid();
-            $old->Getrank();
-
-            $new= clone $newrank;
-            $new->RankId     = $rank_id;
-            $new->RankGuild  = $old->RankGuild;
-            $new->RankName   = $rank_name;
-            $RankHide   = $this->request->variable('hide', array((int) $rank_id => ''));
-            $new->RankHide = count($RankHide) > 0 ? (isset($RankHide[$rank_id]) ? 1 : 0) : 0;
-
-            $rank_prefix     = $this->request->variable('prefix', array((int) $rank_id => ''), true);
-            $new->RankPrefix = $rank_prefix[$rank_id];
-
-            $rank_suffix     = $this->request->variable('suffix', array((int) $rank_id => ''), true);
-            $new->RankSuffix = $rank_suffix[$rank_id];
-
-            // compare old with new,
-            if ($old != $new)
-            {
-                $new->Rankupdate($old);
-            }
-        }
-
-        $success_message = $this->user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
-        trigger_error($success_message.$this->link);
-        return $rank_id;
-
-    }//end UpdateRank()
-
-
-    /**
-     * delete a guild rank
-     */
-    private function DeleteRank()
-    {
-
-        if (confirm_box(true))
-        {
-            $guildid    = $this->request->variable('hidden_guildid', 0);
-            $rank_id    = $this->request->variable('hidden_rank_id', 999);
-            $deleterank = new ranks($guildid, $rank_id);
-            $deleterank->Rankdelete(false);
-        }
-        else
-        {
-            // delete the rank only if there are no players left
-            $rank_id    = $this->request->variable('ranktodelete', 999);
-            $guildid    = $this->request->variable(constants::URI_GUILD, 0);
-            $old_guild  = new guilds($guildid);
-            $deleterank = new ranks($guildid, $rank_id);
-
-            $s_hidden_fields = build_hidden_fields(
-                array(
-                    'deleterank'     => true,
-                    'hidden_rank_id' => $rank_id,
-                    'hidden_guildid' => $guildid,
-                )
-            );
-
-            confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_RANKS'], $deleterank->RankName, $old_guild->getName()), $s_hidden_fields);
-        }//end if
-
-    }//end DeleteRank()
-
-
-    /**
-     * list the guilds
-     */
-    private function BuildTemplateListGuilds()
-    {
-        global   $phpbb_admin_path, $phpEx;
-        if (count($this->games) == 0)
-        {
-            trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
-        }
-
-        $updateguild = new guilds();
-        $guildlist   = $updateguild->guildlist(1);
-        foreach ($guildlist as $g)
-        {
-            $this->template->assign_block_vars(
-                'defaultguild_row',
-                array(
-                    'VALUE'    => $g['id'],
-                    'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)',
-                )
-            );
-        }
-
-        $guilddefaultupdate = $this->request->is_set_post('upddefaultguild');
-        if ($guilddefaultupdate)
-        {
-            $this->UpdateDefaultGuild($updateguild);
-        }
-
-        $guildadd = $this->request->is_set_post('addguild');
-        if ($guildadd)
-        {
-            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=addguild'));
-        }
-
-        $sort_order      = array(
-            0 => array(
-                'id',
-                'id desc',
-            ),
-            1 => array(
-                'name',
-                'name desc',
-            ),
-            2 => array(
-                'realm desc',
-                'realm desc',
-            ),
-            3 => array(
-                'region',
-                'region desc',
-            ),
-            4 => array(
-                'roster',
-                'roster desc',
-            ),
-        );
-        $current_order   = $this->switch_order($sort_order);
-        $guild_count     = 0;
-        $sort_index      = explode('.', $current_order['uri']['current']);
-        $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-
-        $sql = 'SELECT id, name, realm, region, roster, game_id FROM '.GUILD_TABLE.' WHERE id > 0 ORDER BY '.$current_order['sql'];
-        if (!($guild_result = $this->db->sql_query($sql)))
-        {
-            trigger_error($this->user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-        }
-
-        while ($row = $this->db->sql_fetchrow($guild_result))
-        {
-            $guild_count++;
-            $listguild = new guilds($row['id']);
-            $this->template->assign_block_vars(
-                'guild_row',
-                array(
-                    'ID'           => $listguild->getGuildid(),
-                    'NAME'         => $listguild->getName(),
-                    'REALM'        => $listguild->getRealm(),
-                    'REGION'       => $listguild->getRegion(),
-                    'GAME'         => $listguild->getGameId(),
-                    'PLAYERCOUNT'  => $listguild->getPlayercount(),
-                    'SHOW_ROSTER'  => $listguild->getShowroster() == 1 ? 'yes' : 'no',
-                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;'.constants::URI_GUILD.'='.$listguild->getGuildid()),
-                )
-            );
-        }
-
-        $this->template->assign_vars(
-            array(
-                'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module').'&amp;mode=listguilds',
-                'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module').'&amp;mode=addguild',
-                'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module').'&amp;mode=editguild',
-                'L_TITLE'                => $this->user->lang['ACP_LISTGUILDS'],
-                'L_EXPLAIN'              => $this->user->lang['ACP_LISTGUILDS_EXPLAIN'],
-                'BUTTON_VALUE'           => $this->user->lang['DELETE_SELECTED_GUILDS'],
-                'O_ID'                   => $current_order['uri'][0],
-                'O_NAME'                 => $current_order['uri'][1],
-                'O_REALM'                => $current_order['uri'][2],
-                'O_REGION'               => $current_order['uri'][3],
-                'O_ROSTER'               => $current_order['uri'][4],
-                'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds'),
-                'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count),
-            )
-        );
-        $this->page_title = 'ACP_LISTGUILDS';
-
-    }
-
-
-
-    /**
-     * @param $config
-     */
-    private function show_addguild($config)
-    {
-        $addguild = new guilds();
-
-        foreach ($this->games as $key => $value)
-        {
-            if ($addguild->getGameId() == '')
-            {
-                $addguild->setGameId($key);
-            }
-
-            $this->template->assign_block_vars(
-                'game_row',
-                array(
-                    'VALUE'    => $key,
-                    'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($value)) ? $value : '(None)',
-                )
-            );
-        }
-
-        if ($this->request->is_set_post('newguild'))
-        {
-            $this->AddGuild($addguild);
-        }
-
-        $this->game          = new game;
-        $this->game->game_id = $addguild->getGameId();
-        $this->game->get_game();
-        // reset armory_enabled to false if game has armory but no API key configured
-        if ($this->game->getArmoryEnabled() && trim($this->game->getApikey()) == '')
-        {
-            $addguild->setArmoryEnabled(false);
-        }
-
-        foreach ($this->game->getRegions() as $key => $regionname)
-        {
-            $this->template->assign_block_vars(
-                'region_row',
-                array(
-                    'VALUE'    => $key,
-                    'SELECTED' => ($this->game->getRegion() == $key) ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
-                )
-            );
-        }
-        $this->factions = new faction($this->game->game_id);
-        $listfactions = $this->factions->get_factions();
-        if (isset($listfactions))
-        {
-            foreach ($listfactions as $key => $faction)
-            {
-                $this->template->assign_block_vars(
-                    'faction_row',
-                    array(
-                        'VALUE'    => $key,
-                        'SELECTED' => ($addguild->getFaction() == $key) ? ' selected="selected"' : '',
-                        'OPTION'   => (!empty($faction['faction_name'])) ? $faction['faction_name'] : '(None)',
-                    )
-                );
-            }
-        }
-        $this->template->assign_vars(
-            array(
-                'U_FACTION'       => $this->factionroute,
-                'GUILD_NAME'      => $addguild->getName(),
-                'REALM_NAME'      => $addguild->getRealm(),
-                'F_ENABLEARMORY'  => $addguild->isArmoryEnabled(),
-                'DEFAULTREALM'    => ($config['bbguild_default_realm'] == '') ? $addguild->getRealm() : $config['bbguild_default_realm'],
-                'RECSTATUS'       => true,
-                'MIN_ARMORYLEVEL' => $config['bbguild_minrosterlvl'],
-            )
-        );
-        $this->page_title = $this->user->lang['ACP_ADDGUILD'];
-    }
-
-    /**
-     * @param $phpbb_admin_path
-     * @param $phpEx
-     * @param $updateguild
-     */
-    private function show_editguildranks($updateguild)
-    {
-        global $phpbb_admin_path, $phpEx;
-        $updaterank = $this->request->is_set_post('updaterank');
-        $deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
-        $addrank    = $this->request->is_set_post('addrank');
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' .
-                $updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
-
-        if (($updaterank || $addrank) && (!check_form_key('avathar/bbguild')))
-        {
-            trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
-        }
-        if ($addrank)
-        {
-            $this->AddRank($updateguild);
-        }
-        if ($addrank)
-        {
-            $this->AddRank($updateguild);
-        }
-        if ($updaterank)
-        {
-            $this->UpdateRank($updateguild);
-        }
-        if ($deleterank)
-        {
-            $this->DeleteRank();
-        }
-        $this->tpl_name = 'acp_editguild_ranks';
-        $this->BuildTemplateEditGuildRanks($updateguild);
-    }
-
-    /**
-     * @param $phpbb_admin_path
-     * @param $phpEx
-     * @param $updateguild
-     */
-    private function show_editguild($updateguild)
-    {
-        global $phpbb_admin_path, $phpEx;
-        $submit       = $this->request->is_set_post('updateguild');
-        $delete       = $this->request->is_set_post('deleteguild');
-        $updatearmory = $this->request->is_set_post('armory');
-        $this->link   = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . constants::URI_GUILD . '=' .
-                $updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
-        // POST check
-        if ($submit)
-        {
-            if (!check_form_key('avathar/bbguild'))
-            {
-                trigger_error('FORM_INVALID', E_USER_NOTICE);
-            }
-            $this->UpdateGuild($updateguild);
-        }
-        if ($updatearmory)
-        {
-            $this->BattleNetUpdate($updateguild, array('members'));
-        }
-        if ($delete)
-        {
-            $this->DeleteGuild($updateguild);
-        }
-        // start template loading
-        $this->BuildTemplateEditGuild($updateguild);
-    }//end BuildTemplateListGuilds()
-
-
+	/** @var \phpbb\auth\auth */
+	public $auth;
+	/** @var \phpbb\cache\driver\driver_interface */
+	protected $cache;
+	/** @var \phpbb\config\config */
+	protected $config;
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\language\language */
+	protected $language;
+	/** @var \phpbb\log\log */
+	protected $log;
+	/** @var \phpbb\pagination */
+	protected $pagination;
+	/** @var \phpbb\request\request */
+	protected $request;
+	/** @var \phpbb\template\template */
+	protected $template;
+	/** @var \phpbb\user */
+	protected $user;
+	/** @var \phpbb\path_helper */
+	protected $path_helper;
+	/** @var \phpbb\extension\manager */
+	protected $phpbb_extension_manager;
+	/** @var string phpBB root path */
+	protected $root_path;
+	/** @var string phpBB admin relative path */
+	protected $adm_relative_path;
+	/** @var string PHP extension */
+	protected $php_ext;
+	/** @var string Extension path */
+	protected $ext_path;
+	/** @var string Extension web path */
+	protected $ext_path_web;
+
+	/** @var \avathar\bbguild\model\admin\curl */
+	public $curl;
+	/** @var \avathar\bbguild\model\admin\log */
+	public $bbguildlog;
+	/** @var \avathar\bbguild\model\admin\util */
+	public $util;
+	/** @var \phpbb\controller\helper */
+	protected $helper;
+	/** @var game_registry */
+	protected $game_registry;
+
+	/* @var string */
+	public $u_action;
+	/* @var string */
+	public $link = ' ';
+	/** @var string */
+	public $page_title;
+	/** @var string */
+	public $tpl_name;
+
+	public $bb_games_table;
+	public $bb_logs_table;
+	public $bb_ranks_table;
+	public $bb_guild_table;
+	public $bb_players_table;
+	public $bb_classes_table;
+	public $bb_races_table;
+	public $bb_gameroles_table;
+	public $bb_factions_table;
+	public $bb_language_table;
+	public $bb_motd_table;
+	public $bb_recruit_table;
+	public $bb_bosstable;
+	public $bb_zonetable;
+	public $bb_news;
+
+	/** @var int Guild ID from request */
+	protected $url_id;
+	/** @var game */
+	private $game;
+	/** @var array Installed games map [game_id => game_name] */
+	private $games;
+	/** @var string AJAX faction route */
+	private $factionroute;
+
+	/**
+	 * admin_guild constructor.
+	 *
+	 * @param \phpbb\auth\auth $auth
+	 * @param \phpbb\cache\driver\driver_interface $cache
+	 * @param config $config
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param language $language
+	 * @param log $log
+	 * @param pagination $pagination
+	 * @param request $request
+	 * @param template $template
+	 * @param user $user
+	 * @param \phpbb\path_helper $path_helper
+	 * @param \phpbb\extension\manager $phpbb_extension_manager
+	 * @param string $phpbb_root_path
+	 * @param string $adm_relative_path
+	 * @param string $phpEx
+	 * @param \avathar\bbguild\model\admin\curl $curl
+	 * @param \avathar\bbguild\model\admin\log $bbguildlog
+	 * @param \avathar\bbguild\model\admin\util $util
+	 * @param \phpbb\controller\helper $helper
+	 * @param game_registry $game_registry
+	 * @param string $bb_games_table
+	 * @param string $bb_logs_table
+	 * @param string $bb_ranks_table
+	 * @param string $bb_guild_table
+	 * @param string $bb_players_table
+	 * @param string $bb_classes_table
+	 * @param string $bb_races_table
+	 * @param string $bb_gameroles_table
+	 * @param string $bb_factions_table
+	 * @param string $bb_language_table
+	 * @param string $bb_motd_table
+	 * @param string $bb_recruit_table
+	 * @param string $bb_bosstable
+	 * @param string $bb_zonetable
+	 * @param string $bb_news
+	 */
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\cache\driver\driver_interface $cache,
+		config $config,
+		\phpbb\db\driver\driver_interface $db,
+		language $language,
+		log $log,
+		pagination $pagination,
+		request $request,
+		template $template,
+		user $user,
+		\phpbb\path_helper $path_helper,
+		\phpbb\extension\manager $phpbb_extension_manager,
+		$phpbb_root_path,
+		$adm_relative_path,
+		$phpEx,
+		\avathar\bbguild\model\admin\curl $curl,
+		\avathar\bbguild\model\admin\log $bbguildlog,
+		\avathar\bbguild\model\admin\util $util,
+		\phpbb\controller\helper $helper,
+		game_registry $game_registry,
+		$bb_games_table,
+		$bb_logs_table,
+		$bb_ranks_table,
+		$bb_guild_table,
+		$bb_players_table,
+		$bb_classes_table,
+		$bb_races_table,
+		$bb_gameroles_table,
+		$bb_factions_table,
+		$bb_language_table,
+		$bb_motd_table,
+		$bb_recruit_table,
+		$bb_bosstable,
+		$bb_zonetable,
+		$bb_news)
+	{
+		$this->auth = $auth;
+		$this->cache = $cache;
+		$this->config = $config;
+		$this->db = $db;
+		$this->language = $language;
+		$this->log = $log;
+		$this->log->set_log_table($bb_logs_table);
+		$this->bbguildlog = $bbguildlog;
+		$this->util = $util;
+		$this->pagination = $pagination;
+		$this->request = $request;
+		$this->template = $template;
+		$this->user = $user;
+		$this->path_helper = $path_helper;
+		$this->phpbb_extension_manager = $phpbb_extension_manager;
+		$this->ext_path = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+		$this->ext_path_web = $this->path_helper->get_web_root_path($this->ext_path);
+		$this->root_path = $phpbb_root_path;
+		$this->adm_relative_path = $adm_relative_path;
+		$this->php_ext = $phpEx;
+		$this->curl = $curl;
+		$this->helper = $helper;
+		$this->game_registry = $game_registry;
+
+		$this->bb_games_table = $bb_games_table;
+		$this->bb_logs_table = $bb_logs_table;
+		$this->bb_ranks_table = $bb_ranks_table;
+		$this->bb_guild_table = $bb_guild_table;
+		$this->bb_players_table = $bb_players_table;
+		$this->bb_classes_table = $bb_classes_table;
+		$this->bb_races_table = $bb_races_table;
+		$this->bb_gameroles_table = $bb_gameroles_table;
+		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_language_table = $bb_language_table;
+		$this->bb_motd_table = $bb_motd_table;
+		$this->bb_recruit_table = $bb_recruit_table;
+		$this->bb_bosstable = $bb_bosstable;
+		$this->bb_zonetable = $bb_zonetable;
+		$this->bb_news = $bb_news;
+
+		// Build faction AJAX route
+		$this->factionroute = $this->helper->route('avathar_bbguild_01', array());
+
+		// Build installed games map [game_id => game_name]
+		$gameObj = new game(
+			$this->bb_classes_table, $this->bb_races_table,
+			$this->bb_language_table, $this->bb_factions_table,
+			$this->bb_games_table, $this->game_registry
+		);
+		$gamelist = $gameObj->list_games();
+		$this->games = array();
+		foreach ($gamelist as $game_id => $data)
+		{
+			$this->games[$game_id] = $data['name'];
+		}
+
+		// CSS trigger
+		$this->template->assign_vars(array(
+			'S_BBGUILD' => true,
+		));
+	}
+
+	/**
+	 * Create a guilds model instance with full DI args
+	 *
+	 * @param int $guild_id
+	 * @return guilds
+	 */
+	private function makeGuilds($guild_id = 0)
+	{
+		return new guilds(
+			$this->db, $this->user, $this->config, $this->cache, $this->bbguildlog,
+			$this->bb_players_table, $this->bb_ranks_table, $this->bb_classes_table,
+			$this->bb_races_table, $this->bb_language_table, $this->bb_guild_table,
+			$this->bb_factions_table, $guild_id
+		);
+	}
+
+	/**
+	 * Create a ranks model instance with full DI args
+	 *
+	 * @param int $guild_id
+	 * @param int $rank_id
+	 * @return ranks
+	 */
+	private function makeRanks($guild_id, $rank_id = 0)
+	{
+		return new ranks(
+			$this->db, $this->user, $this->cache, $this->bbguildlog,
+			$this->bb_players_table, $this->bb_ranks_table,
+			$guild_id, $rank_id
+		);
+	}
+
+	/**
+	 * Create a game model instance with full DI args
+	 *
+	 * @return game
+	 */
+	private function makeGame()
+	{
+		return new game(
+			$this->bb_classes_table, $this->bb_races_table,
+			$this->bb_language_table, $this->bb_factions_table,
+			$this->bb_games_table, $this->game_registry
+		);
+	}
+
+	/**
+	 * Build an ACP URL for the guild module
+	 *
+	 * @param string $params
+	 * @return string
+	 */
+	private function acp_url($params = '')
+	{
+		$phpbb_admin_path = $this->root_path . $this->adm_relative_path;
+		return append_sid("{$phpbb_admin_path}index.{$this->php_ext}", $params);
+	}
+
+	/**
+	 * Dispatcher for the editguild mode. Called from guild_module.
+	 * Handles the action sub-switch (editguild / guildranks).
+	 */
+	public function show_editguild_dispatch()
+	{
+		$phpbb_admin_path = $this->root_path . $this->adm_relative_path;
+		$this->url_id = $this->request->variable(constants::URI_GUILD, 0);
+		$updateguild = $this->makeGuilds($this->url_id);
+
+		$this->game = $this->makeGame();
+		$this->game->game_id = $updateguild->getGameId();
+		$this->game->get_game();
+
+		if ($this->request->is_set_post('playeradd'))
+		{
+			redirect($this->acp_url('i=-avathar-bbguild-acp-mm_module&amp;mode=addplayer&amp;' . constants::URI_GUILD . '=' . $this->url_id));
+		}
+
+		$action = $this->request->variable('action', '');
+		switch ($action)
+		{
+			case 'guildranks':
+				$this->show_editguildranks($updateguild);
+				break;
+
+			case 'editguild':
+			default:
+				$this->show_editguild($updateguild);
+				break;
+		}
+	}
+
+	/**
+	 * Update the default guild flag
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function UpdateDefaultGuild(guilds $updateguild)
+	{
+		$id = $this->request->variable('defaultguild', 0);
+		$updateguild->update_guilddefault($id);
+		$success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $id);
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Add a guild
+	 *
+	 * @param guilds $addguild
+	 */
+	private function AddGuild(guilds $addguild)
+	{
+		if (!check_form_key('avathar/bbguild'))
+		{
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
+		}
+
+		$this->game = $this->makeGame();
+		$this->game->game_id = $this->request->variable('game_id', '');
+		$this->game->get_game();
+
+		$addguild->setGameId($this->request->variable('game_id', ''));
+		$addguild->setName($this->request->variable('guild_name', '', true));
+		$addguild->setRealm($this->request->variable('realm', '', true));
+		$addguild->setRegion($this->request->variable('region_id', ''));
+		$addguild->setFaction($this->request->variable('faction_id', 0));
+		$addguild->setShowroster($this->request->is_set_post('showroster'));
+		$addguild->setMinArmory($this->request->variable('min_armorylevel', 0));
+		$addguild->setArmoryEnabled($this->request->variable('armory_enabled', 0));
+		$addguild->setRecstatus($this->request->variable('switchon_recruitment', 0));
+		$addguild->setRecruitforum($this->request->variable('recruitforum', 0));
+		$addguild->setEmblempath($this->ext_path . 'images/guildemblem/' . $this->request->variable('guild_emblem', '', true));
+		$addguild->setStartdate(time());
+		$addguild->setArmoryresult('KO');
+		$addguild->make_guild();
+
+		// If BattleNet connection is on then fetch info from API
+		if ($addguild->isArmoryEnabled())
+		{
+			$this->BattleNetUpdate($addguild);
+		}
+
+		$success_message = sprintf($this->user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->getName());
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Update a guild
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function UpdateGuild(guilds $updateguild)
+	{
+		$updateguild->setGuildid($this->url_id);
+		$updateguild->get_guild();
+		$old_guild = $this->makeGuilds($this->url_id);
+		$old_guild->get_guild();
+
+		$updateguild->setGameId($this->request->variable('game_id', ''));
+		$updateguild->setName($this->request->variable('guild_name', '', true));
+		$updateguild->setRealm($this->request->variable('realm', '', true));
+		$updateguild->setRegion($this->request->variable('region_id', ' '));
+		$updateguild->setFaction($this->request->variable('faction_id', 0));
+		$updateguild->setShowroster($this->request->variable('showroster', 0));
+		$updateguild->setMinArmory($this->request->variable('min_armorylevel', 0));
+		$updateguild->setArmoryEnabled($this->request->variable('armory_enabled', 0));
+		$updateguild->setRecstatus($this->request->variable('switchon_recruitment', 0));
+		$updateguild->setRecruitforum($this->request->variable('recruitforum', 0));
+		$updateguild->setEmblempath($this->ext_path . 'images/guildemblem/' . $this->request->variable('guild_emblem', '', true));
+
+		if ($updateguild->isArmoryEnabled())
+		{
+			$this->BattleNetUpdate($updateguild);
+		}
+
+		if ($updateguild->update_guild($old_guild))
+		{
+			$success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
+			trigger_error($success_message . $this->link, E_USER_NOTICE);
+		}
+		else
+		{
+			$success_message = sprintf($this->user->lang['ADMIN_UPDATE_GUILD_FAILED'], $this->url_id);
+			trigger_error($success_message . $this->link, E_USER_WARNING);
+		}
+	}
+
+	/**
+	 * Call the BattleNet API
+	 *
+	 * @param guilds $updateguild
+	 * @param array $parameters
+	 */
+	private function BattleNetUpdate(guilds $updateguild, $parameters = array())
+	{
+		$provider = $this->game_registry->get($updateguild->getGameId());
+		$data = $updateguild->Call_Guild_API($parameters, $this->game, $provider);
+		if ($updateguild->getArmoryresult() == 'OK')
+		{
+			$updateguild->update_guild_battleNet($data, $parameters, $provider);
+		}
+	}
+
+	/**
+	 * Delete a guild
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function DeleteGuild(guilds $updateguild)
+	{
+		if (confirm_box(true))
+		{
+			$deleteguild = $this->makeGuilds($this->request->variable('guildid', 0));
+			$deleteguild->get_guild();
+			$deleteguild->delete_guild();
+			$success_message = sprintf($this->user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->getGuildid());
+			trigger_error($success_message . $this->link, E_USER_NOTICE);
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				'deleteguild' => true,
+				'guildid'     => $updateguild->getGuildid(),
+			));
+
+			$this->template->assign_vars(array(
+				'S_HIDDEN_FIELDS' => $s_hidden_fields,
+			));
+
+			confirm_box(false, $this->user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
+		}
+	}
+
+	/**
+	 * Add a guild rank
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function AddRank(guilds $updateguild)
+	{
+		$newrank = $this->makeRanks($updateguild->getGuildid());
+		$newrank->RankName  = $this->request->variable('nrankname', '', true);
+		$newrank->RankId    = $this->request->variable('nrankid', 0);
+		$newrank->RankGuild = $updateguild->getGuildid();
+		$newrank->RankHide  = $this->request->is_set_post('nhide');
+		$newrank->RankPrefix = $this->request->variable('nprefix', '', true);
+		$newrank->RankSuffix = $this->request->variable('nsuffix', '', true);
+		$newrank->Makerank();
+		$success_message = $this->user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
+		trigger_error($success_message . $this->link);
+	}
+
+	/**
+	 * Update a rank
+	 *
+	 * @param guilds $updateguild
+	 * @return int
+	 */
+	private function UpdateRank(guilds $updateguild)
+	{
+		$newrank = $this->makeRanks($updateguild->getGuildid());
+		$oldrank = $this->makeRanks($updateguild->getGuildid());
+
+		$rank_id = 0;
+		$modrank = $this->request->variable('ranks', array(0 => ''), true);
+		foreach ($modrank as $rank_id => $rank_name)
+		{
+			$old = clone $oldrank;
+			$old->RankId    = $rank_id;
+			$old->RankGuild = $updateguild->getGuildid();
+			$old->Getrank();
+
+			$new = clone $newrank;
+			$new->RankId     = $rank_id;
+			$new->RankGuild  = $old->RankGuild;
+			$new->RankName   = $rank_name;
+			$RankHide        = $this->request->variable('hide', array((int) $rank_id => ''));
+			$new->RankHide   = count($RankHide) > 0 ? (isset($RankHide[$rank_id]) ? 1 : 0) : 0;
+
+			$rank_prefix     = $this->request->variable('prefix', array((int) $rank_id => ''), true);
+			$new->RankPrefix = $rank_prefix[$rank_id];
+
+			$rank_suffix     = $this->request->variable('suffix', array((int) $rank_id => ''), true);
+			$new->RankSuffix = $rank_suffix[$rank_id];
+
+			if ($old != $new)
+			{
+				$new->Rankupdate($old);
+			}
+		}
+
+		$success_message = $this->user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
+		trigger_error($success_message . $this->link);
+		return $rank_id;
+	}
+
+	/**
+	 * Delete a guild rank
+	 */
+	private function DeleteRank()
+	{
+		if (confirm_box(true))
+		{
+			$guildid    = $this->request->variable('hidden_guildid', 0);
+			$rank_id    = $this->request->variable('hidden_rank_id', 999);
+			$deleterank = $this->makeRanks($guildid, $rank_id);
+			$deleterank->Rankdelete(false);
+		}
+		else
+		{
+			$rank_id    = $this->request->variable('ranktodelete', 999);
+			$guildid    = $this->request->variable(constants::URI_GUILD, 0);
+			$old_guild  = $this->makeGuilds($guildid);
+			$deleterank = $this->makeRanks($guildid, $rank_id);
+
+			$s_hidden_fields = build_hidden_fields(array(
+				'deleterank'     => true,
+				'hidden_rank_id' => $rank_id,
+				'hidden_guildid' => $guildid,
+			));
+
+			confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_RANKS'], $deleterank->RankName, $old_guild->getName()), $s_hidden_fields);
+		}
+	}
+
+	/**
+	 * List the guilds (ACP guild list page)
+	 */
+	public function BuildTemplateListGuilds()
+	{
+		if (count($this->games) == 0)
+		{
+			trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+		}
+
+		$updateguild = $this->makeGuilds();
+		$guildlist   = $updateguild->guildlist(1);
+		foreach ($guildlist as $g)
+		{
+			$this->template->assign_block_vars('defaultguild_row', array(
+				'VALUE'    => $g['id'],
+				'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
+				'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)',
+			));
+		}
+
+		$guilddefaultupdate = $this->request->is_set_post('upddefaultguild');
+		if ($guilddefaultupdate)
+		{
+			$this->UpdateDefaultGuild($updateguild);
+		}
+
+		$guildadd = $this->request->is_set_post('addguild');
+		if ($guildadd)
+		{
+			redirect($this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=addguild'));
+		}
+
+		$sort_order = array(
+			0 => array('id', 'id desc'),
+			1 => array('name', 'name desc'),
+			2 => array('realm desc', 'realm desc'),
+			3 => array('region', 'region desc'),
+			4 => array('roster', 'roster desc'),
+		);
+		$current_order = $this->util->switch_order($sort_order);
+		$guild_count   = 0;
+		$sort_index    = explode('.', $current_order['uri']['current']);
+
+		$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . $this->bb_guild_table . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
+		if (!($guild_result = $this->db->sql_query($sql)))
+		{
+			trigger_error($this->user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+		}
+
+		while ($row = $this->db->sql_fetchrow($guild_result))
+		{
+			$guild_count++;
+			$listguild = $this->makeGuilds($row['id']);
+			$this->template->assign_block_vars('guild_row', array(
+				'ID'           => $listguild->getGuildid(),
+				'NAME'         => $listguild->getName(),
+				'REALM'        => $listguild->getRealm(),
+				'REGION'       => $listguild->getRegion(),
+				'GAME'         => $listguild->getGameId(),
+				'PLAYERCOUNT'  => $listguild->getPlayercount(),
+				'SHOW_ROSTER'  => $listguild->getShowroster() == 1 ? 'yes' : 'no',
+				'U_VIEW_GUILD' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;' . constants::URI_GUILD . '=' . $listguild->getGuildid()),
+			));
+		}
+
+		$this->template->assign_vars(array(
+			'U_GUILDLIST'            => $this->acp_url('i=-avathar-bbguild-acp-guild_module') . '&amp;mode=listguilds',
+			'U_ADDGUILD'            => $this->acp_url('i=-avathar-bbguild-acp-guild_module') . '&amp;mode=addguild',
+			'U_GUILD'               => $this->acp_url('i=-avathar-bbguild-acp-guild_module') . '&amp;mode=editguild',
+			'L_TITLE'               => $this->user->lang['ACP_LISTGUILDS'],
+			'L_EXPLAIN'             => $this->user->lang['ACP_LISTGUILDS_EXPLAIN'],
+			'BUTTON_VALUE'          => $this->user->lang['DELETE_SELECTED_GUILDS'],
+			'O_ID'                  => $current_order['uri'][0],
+			'O_NAME'                => $current_order['uri'][1],
+			'O_REALM'               => $current_order['uri'][2],
+			'O_REGION'              => $current_order['uri'][3],
+			'O_ROSTER'              => $current_order['uri'][4],
+			'U_LIST_GUILD'          => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=listguilds'),
+			'GUILDPLAYERS_FOOTCOUNT' => sprintf($this->user->lang['GUILD_FOOTCOUNT'], $guild_count),
+		));
+		$this->page_title = 'ACP_LISTGUILDS';
+	}
+
+	/**
+	 * Show the add-guild form
+	 */
+	public function show_addguild()
+	{
+		$addguild = $this->makeGuilds();
+
+		foreach ($this->games as $key => $value)
+		{
+			if ($addguild->getGameId() == '')
+			{
+				$addguild->setGameId($key);
+			}
+
+			$this->template->assign_block_vars('game_row', array(
+				'VALUE'    => $key,
+				'SELECTED' => ($addguild->getGameId() == $key) ? ' selected="selected"' : '',
+				'OPTION'   => (!empty($value)) ? $value : '(None)',
+			));
+		}
+
+		if ($this->request->is_set_post('newguild'))
+		{
+			$this->AddGuild($addguild);
+		}
+
+		$this->game = $this->makeGame();
+		$this->game->game_id = $addguild->getGameId();
+		$this->game->get_game();
+
+		// Reset armory_enabled to false if game has armory but no API key configured
+		if ($this->game->getArmoryEnabled() && trim((string) $this->game->getApikey()) == '')
+		{
+			$addguild->setArmoryEnabled(false);
+		}
+
+		foreach ($this->game->getRegions() as $key => $regionname)
+		{
+			$this->template->assign_block_vars('region_row', array(
+				'VALUE'    => $key,
+				'SELECTED' => ($this->game->getRegion() == $key) ? ' selected="selected"' : '',
+				'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
+			));
+		}
+
+		$factions = new faction($this->game->game_id, $this->bb_factions_table, $this->bb_races_table);
+		$listfactions = $factions->get_factions();
+		if (isset($listfactions))
+		{
+			foreach ($listfactions as $key => $faction)
+			{
+				$this->template->assign_block_vars('faction_row', array(
+					'VALUE'    => $key,
+					'SELECTED' => ($addguild->getFaction() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($faction['faction_name'])) ? $faction['faction_name'] : '(None)',
+				));
+			}
+		}
+
+		$this->template->assign_vars(array(
+			'U_FACTION'       => $this->factionroute,
+			'GUILD_NAME'      => $addguild->getName(),
+			'REALM_NAME'      => $addguild->getRealm(),
+			'F_ENABLEARMORY'  => $addguild->isArmoryEnabled(),
+			'DEFAULTREALM'    => ($this->config['bbguild_default_realm'] == '') ? $addguild->getRealm() : $this->config['bbguild_default_realm'],
+			'RECSTATUS'       => true,
+			'MIN_ARMORYLEVEL' => $this->config['bbguild_minrosterlvl'],
+		));
+		$this->page_title = $this->user->lang['ACP_ADDGUILD'];
+	}
+
+	/**
+	 * Show the edit-guild form (General tab)
+	 *
+	 * @param guilds $updateguild
+	 */
+	public function show_editguild(guilds $updateguild)
+	{
+		$this->link = '<br /><a href="' . $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . constants::URI_GUILD . '=' .
+			$updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
+
+		$submit       = $this->request->is_set_post('updateguild');
+		$delete       = $this->request->is_set_post('deleteguild');
+		$updatearmory = $this->request->is_set_post('armory');
+
+		if ($submit)
+		{
+			if (!check_form_key('avathar/bbguild'))
+			{
+				trigger_error('FORM_INVALID', E_USER_NOTICE);
+			}
+			$this->UpdateGuild($updateguild);
+		}
+		if ($updatearmory)
+		{
+			$this->BattleNetUpdate($updateguild, array('members'));
+		}
+		if ($delete)
+		{
+			$this->DeleteGuild($updateguild);
+		}
+
+		$this->BuildTemplateEditGuild($updateguild);
+	}
+
+	/**
+	 * Show the edit-guild ranks tab
+	 *
+	 * @param guilds $updateguild
+	 */
+	public function show_editguildranks(guilds $updateguild)
+	{
+		$this->link = '<br /><a href="' . $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' .
+			$updateguild->getGuildid()) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
+
+		$updaterank = $this->request->is_set_post('updaterank');
+		$deleterank = $this->request->variable('deleterank', '') != '' ? true : false;
+		$addrank    = $this->request->is_set_post('addrank');
+
+		if (($updaterank || $addrank) && (!check_form_key('avathar/bbguild')))
+		{
+			trigger_error($this->user->lang['FORM_INVALID'] . adm_back_link($this->u_action));
+		}
+		if ($addrank)
+		{
+			$this->AddRank($updateguild);
+		}
+		if ($updaterank)
+		{
+			$this->UpdateRank($updateguild);
+		}
+		if ($deleterank)
+		{
+			$this->DeleteRank();
+		}
+
+		$this->tpl_name = 'acp_editguild_ranks';
+		$this->BuildTemplateEditGuildRanks($updateguild);
+	}
+
+	/**
+	 * Populate the edit-guild form template
+	 * Ported from old bbDKP acp_dkp_guild.php
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function BuildTemplateEditGuild(guilds $updateguild)
+	{
+		// Region dropdown
+		foreach ($this->game->getRegions() as $key => $regionname)
+		{
+			$this->template->assign_block_vars('region_row', array(
+				'VALUE'    => $key,
+				'SELECTED' => ($updateguild->getRegion() == $key) ? ' selected="selected"' : '',
+				'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
+			));
+		}
+
+		// Game dropdown
+		if (count($this->games) > 0)
+		{
+			foreach ($this->games as $key => $gamename)
+			{
+				$this->template->assign_block_vars('game_row', array(
+					'VALUE'    => $key,
+					'SELECTED' => ($updateguild->getGameId() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($gamename)) ? $gamename : '(None)',
+				));
+			}
+		}
+		else
+		{
+			trigger_error('ERROR_NOGAMES', E_USER_WARNING);
+		}
+
+		// Faction dropdown
+		$factions = new faction($updateguild->getGameId(), $this->bb_factions_table, $this->bb_races_table);
+		$listfactions = $factions->get_factions();
+		if (isset($listfactions))
+		{
+			foreach ($listfactions as $key => $faction)
+			{
+				$this->template->assign_block_vars('faction_row', array(
+					'VALUE'    => $key,
+					'SELECTED' => ($updateguild->getFaction() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($faction['faction_name'])) ? $faction['faction_name'] : '(None)',
+				));
+			}
+		}
+
+		$this->template->assign_vars(array(
+			'U_FACTION'              => $this->factionroute,
+			'F_ENABLGAMEEARMORY'     => $this->game->getArmoryEnabled(),
+			'F_ENABLEARMORY'         => $updateguild->isArmoryEnabled(),
+			'RECSTATUS'              => $updateguild->getRecstatus(),
+			'GAME_ID'                => $updateguild->getGameId(),
+			'GUILDID'                => $updateguild->getGuildid(),
+			'GUILD_NAME'             => $updateguild->getName(),
+			'REALM'                  => $updateguild->getRealm(),
+			'REGION'                 => $updateguild->getRegion(),
+			'MEMBERCOUNT'            => $updateguild->getPlayercount(),
+			'MIN_ARMORYLEVEL'        => $updateguild->getMinArmory(),
+			'SHOW_ROSTER'            => ($updateguild->getShowroster() == 1) ? 'checked="checked"' : '',
+			'ARMORYSTATUS'           => $updateguild->getArmoryresult(),
+			'L_TITLE'                => $this->user->lang['ACP_EDITGUILD'],
+			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
+			'L_EDIT_GUILD_TITLE'     => $this->user->lang['EDIT_GUILD'],
+			'MSG_NAME_EMPTY'         => $this->user->lang['FV_REQUIRED_NAME'],
+			'EMBLEM'                 => $updateguild->getEmblempath(),
+			'EMBLEMFILE'             => basename((string) $updateguild->getEmblempath()),
+			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+		));
+
+		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
+	}
+
+	/**
+	 * Populate the guild ranks template
+	 * Ported from old bbDKP acp_dkp_guild.php
+	 *
+	 * @param guilds $updateguild
+	 */
+	private function BuildTemplateEditGuildRanks(guilds $updateguild)
+	{
+		// Rank 90+ is readonly
+		$listranks = $this->makeRanks($updateguild->getGuildid());
+		$result = $listranks->listranks();
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->template->assign_block_vars('ranks_row', array(
+				'RANK_ID'       => $row['rank_id'],
+				'RANK_NAME'     => $row['rank_name'],
+				'RANK_PREFIX'   => $row['rank_prefix'],
+				'RANK_SUFFIX'   => $row['rank_suffix'],
+				'HIDE_CHECKED'  => ($row['rank_hide'] == 1) ? 'checked="checked"' : '',
+				'S_READONLY'    => ($row['rank_id'] >= 90) ? true : false,
+				'U_DELETE_RANK' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=' . $row['rank_id'] . '&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			));
+		}
+		$this->db->sql_freeresult($result);
+
+		$this->template->assign_vars(array(
+			'S_GUILDLESS'            => ($updateguild->getGuildid() == 0) ? true : false,
+			'F_ENABLGAMEEARMORY'     => $this->game->getArmoryEnabled(),
+			'F_ENABLEARMORY'         => $updateguild->isArmoryEnabled(),
+			'GAME_ID'                => $updateguild->getGameId(),
+			'GUILDID'                => $updateguild->getGuildid(),
+			'GUILD_NAME'             => $updateguild->getName(),
+			'L_TITLE'                => $this->user->lang['ACP_EDITGUILD'],
+			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
+			'L_ADD_GUILD_TITLE'      => $this->user->lang['EDIT_GUILD'],
+			'MSG_NAME_EMPTY'         => $this->user->lang['FV_REQUIRED_NAME'],
+			'EMBLEM'                 => $updateguild->getEmblempath(),
+			'EMBLEMFILE'             => basename((string) $updateguild->getEmblempath()),
+			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+		));
+
+		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
+	}
 }
-

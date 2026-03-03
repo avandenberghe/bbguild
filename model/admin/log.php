@@ -22,6 +22,7 @@ class log
 {
 	public $bb_logs_table;
 	protected $db;
+	protected $user;
 
 	/**
 	 * number of logs
@@ -167,10 +168,11 @@ class log
 
 	);
 
-	public function __construct($bb_logs_table, \phpbb\db\driver\driver_interface $db)
+	public function __construct($bb_logs_table, \phpbb\db\driver\driver_interface $db, \phpbb\user $user)
 	{
 		$this->bb_logs_table = $bb_logs_table;
 		$this->db = $db;
+		$this->user = $user;
 	}
 
 	/**
@@ -226,7 +228,6 @@ class log
 	 */
 	public function log_insert(array $values)
 	{
-		global $user;
 		/**
 		 * log_id        int(11)        UNSIGNED    No        auto_increment
 		 * log_date      int(11)            No    0
@@ -258,10 +259,10 @@ class log
 			'log_date'      => time(),
 			'log_type'      => '',
 			'log_action'    => '',
-			'log_ipaddress' => $user->ip,
-			'log_sid'       => $user->session_id,
+			'log_ipaddress' => $this->user->ip,
+			'log_sid'       => $this->user->session_id,
 			'log_result'    => 'L_SUCCESS',
-			'log_userid'    => $user->data['user_id']);
+			'log_userid'    => $this->user->data['user_id']);
 
 		if (count($values) > 0 )
 		{
@@ -366,7 +367,6 @@ class log
 	 */
 	public function read_log($order = '', $search = false, $verbose = false, $search_term = '', $start = '')
 	{
-		global $user;
 
 		$sql_array = array(
 		'SELECT' => 'l.*, u.username, u.user_colour ' ,
@@ -429,7 +429,7 @@ class log
 			'log_type'        => $log_type,
 			'username'        => get_username_string('full', $row['log_userid'], $row['username'], $row['user_colour']),
 			'log_ipaddress'    => $row['log_ipaddress'],
-			'log_result'    => $user->lang[str_replace('L_', '', (string) $row['log_result'])],
+			'log_result'    => $this->user->lang[str_replace('L_', '', (string) $row['log_result'])],
 			'cssresult'        => (str_replace('L_', '', (string) $row['log_result']) == 'SUCCESS') ? 'positive' : 'negative',
 			'encoded_type'     => urlencode($row['log_type']) ,
 			'encoded_user'     => urlencode($row['username']) ,
@@ -451,14 +451,13 @@ class log
 	 */
 	public function getLogMessage($value, $verbose = false)
 	{
-		global $user;
 		if ($verbose)
 		{
-			return $user->lang['VLOG_' . $value];
+			return $this->user->lang['VLOG_' . $value];
 		}
 		else
 		{
-			return $user->lang['ACTION_' . $value];
+			return $this->user->lang['ACTION_' . $value];
 		}
 
 	}
@@ -494,7 +493,6 @@ class log
 	 */
 	private function get_logmessage($log_type, $log_action, $log_userid, $username, $user_colour, $verbose = false)
 	{
-		global $user;
 
 		$logline = '';
 		$log = $this->getxmltag($log_action);
@@ -654,37 +652,37 @@ class log
 			);
 			break;
 		case 'GAME_ADDED':
-			$logline = sprintf($this->getLogMessage('GAME_ADDED', $verbose), $userstring, isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('GAME_ADDED', $verbose), $userstring, isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'GAME_DELETED':
-			$logline = sprintf($this->getLogMessage('GAME_DELETED', $verbose), $userstring, isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('GAME_DELETED', $verbose), $userstring, isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'SETTINGS_CHANGED':
 			$logline = sprintf($this->getLogMessage('SETTINGS_CHANGED', $verbose), $userstring, $log['L_SETTINGS']);
 			break;
 		case 'FACTION_ADDED':
-			$logline = sprintf($this->getLogMessage('FACTION_ADDED', $verbose), $userstring, $log['L_FACTION'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('FACTION_ADDED', $verbose), $userstring, $log['L_FACTION'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'FACTION_DELETED':
-			$logline = sprintf($this->getLogMessage('FACTION_DELETED', $verbose), $userstring, $log['L_FACTION'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('FACTION_DELETED', $verbose), $userstring, $log['L_FACTION'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'RACE_ADDED':
-			$logline = sprintf($this->getLogMessage('RACE_ADDED', $verbose), $userstring, $log['L_RACE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('RACE_ADDED', $verbose), $userstring, $log['L_RACE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'RACE_DELETED':
-			$logline = sprintf($this->getLogMessage('RACE_DELETED', $verbose), $userstring, $log['L_RACE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('RACE_DELETED', $verbose), $userstring, $log['L_RACE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'RACE_UPDATED':
-			$logline = sprintf($this->getLogMessage('RACE_UPDATED', $verbose), $userstring, $log['L_RACE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('RACE_UPDATED', $verbose), $userstring, $log['L_RACE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'CLASS_ADDED':
-			$logline = sprintf($this->getLogMessage('CLASS_ADDED', $verbose), $userstring, $log['L_CLASS'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('CLASS_ADDED', $verbose), $userstring, $log['L_CLASS'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'CLASS_DELETED':
-			$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring, $log['L_CLASS'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring, $log['L_CLASS'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'CLASS_UPDATED':
-			$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring, $log['L_CLASS'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring, $log['L_CLASS'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'PLAYER_DEACTIVATED':
 			$logline = sprintf($this->getLogMessage('PLAYER_DEACTIVATED', $verbose), $userstring, $log['L_NAME'], '');
@@ -693,19 +691,19 @@ class log
 			$logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring, ' ', ' ');
 			break;
 		case 'BATTLENET_ACCOUNT_INACTIVE':
-			$logline = sprintf($this->getLogMessage('BATTLENET_ACCOUNT_INACTIVE', $verbose), $userstring, isset($user->lang[strtoupper((string) $log['L_GUILD'])]) ? $user->lang[strtoupper((string) $log['L_GUILD'])] : $log['L_GUILD'], ' ');
+			$logline = sprintf($this->getLogMessage('BATTLENET_ACCOUNT_INACTIVE', $verbose), $userstring, isset($this->user->lang[strtoupper((string) $log['L_GUILD'])]) ? $this->user->lang[strtoupper((string) $log['L_GUILD'])] : $log['L_GUILD'], ' ');
 			break;
 		case 'FACTION_UPDATED':
-			$logline = sprintf($this->getLogMessage('FACTION_UPDATED', $verbose), $userstring, $log['L_FACTION'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('FACTION_UPDATED', $verbose), $userstring, $log['L_FACTION'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'ROLE_ADDED':
-			$logline = sprintf($this->getLogMessage('ROLE_ADDED', $verbose), $userstring, $log['L_ROLE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('ROLE_ADDED', $verbose), $userstring, $log['L_ROLE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'ROLE_UPDATED':
-			$logline = sprintf($this->getLogMessage('ROLE_UPDATED', $verbose), $userstring, $log['L_ROLE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('ROLE_UPDATED', $verbose), $userstring, $log['L_ROLE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		case 'ROLE_DELETED':
-			$logline = sprintf($this->getLogMessage('ROLE_DELETED', $verbose), $userstring, $log['L_ROLE'], isset($user->lang[strtoupper((string) $log['L_GAME'])]) ? $user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
+			$logline = sprintf($this->getLogMessage('ROLE_DELETED', $verbose), $userstring, $log['L_ROLE'], isset($this->user->lang[strtoupper((string) $log['L_GAME'])]) ? $this->user->lang[strtoupper((string) $log['L_GAME'])] : $log['L_GAME']);
 			break;
 		}
 

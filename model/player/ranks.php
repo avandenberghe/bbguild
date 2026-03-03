@@ -22,6 +22,14 @@ use avathar\bbguild\model\player\guilds;
  */
 class ranks extends guilds
 {
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\user */
+	protected $user;
+	/** @var \phpbb\cache\driver\driver_interface */
+	protected $cache;
+	/** @var \avathar\bbguild\model\admin\log */
+	protected $log;
 
 	public $bb_ranks_table;
 	public $bb_players_table;
@@ -65,13 +73,26 @@ class ranks extends guilds
 
 	/**
 	 * ranks constructor.
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\user $user
+	 * @param \phpbb\cache\driver\driver_interface $cache
+	 * @param \avathar\bbguild\model\admin\log $log
 	 * @param string $bb_players_table
 	 * @param string $bb_ranks_table
 	 * @param int $RankGuild
 	 * @param int $RankId
 	 */
-	public function __construct($bb_players_table, $bb_ranks_table, $RankGuild, $RankId = 0)
+	public function __construct(
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\user $user,
+		\phpbb\cache\driver\driver_interface $cache,
+		\avathar\bbguild\model\admin\log $log,
+		$bb_players_table, $bb_ranks_table, $RankGuild, $RankId = 0)
 	{
+		$this->db = $db;
+		$this->user = $user;
+		$this->cache = $cache;
+		$this->log = $log;
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 
@@ -97,19 +118,18 @@ class ranks extends guilds
 	 */
 	public function Getrank()
 	{
-		global $db;
 		$sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
     			FROM ' . $this->bb_ranks_table . '
     			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->RankGuild;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->RankName = $row['rank_name'];
 			$this->RankHide    = $row['rank_hide'];
 			$this->RankPrefix = $row['rank_prefix'];
 			$this->RankSuffix = $row['rank_suffix'];
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 	}
 
@@ -118,28 +138,26 @@ class ranks extends guilds
 	 */
 	public function Makerank()
 	{
-		global $user, $db, $cache;
-
-		$cache->destroy('sql', $this->bb_ranks_table);
+		$this->cache->destroy('sql', $this->bb_ranks_table);
 
 		if ($this->RankName == '')
 		{
-			trigger_error($user->lang('ERROR_RANK_NAME_EMPTY'), E_USER_WARNING);
+			trigger_error($this->user->lang('ERROR_RANK_NAME_EMPTY'), E_USER_WARNING);
 		}
 
 		//check if guildid is valid
 		if ($this->RankGuild == 0)
 		{
-			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
+			trigger_error($this->user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
 
 		$sql = 'DELETE FROM ' . $this->bb_ranks_table . '
                    	WHERE rank_id = ' . (int) $this->RankId . '
                    	AND guild_id = ' . (int) $this->RankGuild;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		// build insert array
-		$query = $db->sql_build_array(
+		$query = $this->db->sql_build_array(
 			'INSERT', array(
 			'rank_id' => (int) $this->RankId ,
 			'rank_name' => $this->RankName ,
@@ -149,17 +167,17 @@ class ranks extends guilds
 			'guild_id' => (int) $this->RankGuild)
 		);
 		// insert new rank
-		$db->sql_query('INSERT INTO ' . $this->bb_ranks_table . $query);
+		$this->db->sql_query('INSERT INTO ' . $this->bb_ranks_table . $query);
 
 		// log the action
 		$log_action = array(
 		'header' => 'L_ACTION_RANK_ADDED',
 		'id' => (int) $this->RankId,
 		'L_NAME' => $this->RankName,
-		'L_USERCOLOUR' => $user->data['user_colour'],
-		'L_ADDED_BY' => $user->data['username']);
+		'L_USERCOLOUR' => $this->user->data['user_colour'],
+		'L_ADDED_BY' => $this->user->data['username']);
 
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
 			'log_type' => $log_action['header'] ,
 			'log_action' => $log_action)
@@ -176,8 +194,6 @@ class ranks extends guilds
 	 */
 	public function Rankdelete($override = false)
 	{
-		global $user, $db;
-
 		if ($this->countplayers() > 0 )
 		{
 			return false;
@@ -189,8 +205,8 @@ class ranks extends guilds
 			$sql = 'SELECT count(*) as rankcount FROM ' . $this->bb_players_table . ' WHERE
             		 player_rank_id   = ' . (int) $this->RankId . ' and
             		 player_guild_id =  ' . (int) $this->RankGuild;
-			$result = $db->sql_query($sql);
-			if ((int) $db->sql_fetchfield('rankcount') >= 1)
+			$result = $this->db->sql_query($sql);
+			if ((int) $this->db->sql_fetchfield('rankcount') >= 1)
 			{
 				trigger_error('Cannot delete rank ' . $this->RankId . '. There are players with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
 			}
@@ -199,7 +215,7 @@ class ranks extends guilds
 		// hardcoded exclusion of ranks 90/99
 		$sql = 'DELETE FROM ' . $this->bb_ranks_table . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
 		$this->RankId . ' and guild_id = ' . $this->RankGuild;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		// log the action
 
@@ -207,9 +223,9 @@ class ranks extends guilds
 		'header' => 'L_ACTION_RANK_DELETED' ,
 		'id' => (int) $this->RankId  ,
 		'L_NAME' => $this->RankName ,
-		'L_ADDED_BY' => $user->data['username']);
+		'L_ADDED_BY' => $this->user->data['username']);
 
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
 			'log_type' => $log_action['header'] ,
 			'log_action' => $log_action)
@@ -229,9 +245,6 @@ class ranks extends guilds
 	 */
 	public function Rankupdate(ranks $old_rank)
 	{
-
-		global $user, $db;
-
 		$sql_ary = array(
 		'rank_id' => $this->RankId ,
 		'guild_id' => $this->RankGuild ,
@@ -242,10 +255,10 @@ class ranks extends guilds
 		);
 
 		$sql = 'UPDATE ' . $this->bb_ranks_table . '
-			SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+			SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) . '
 			WHERE rank_id=' . (int) $old_rank->RankId . '
 			AND guild_id = ' . (int) $old_rank->RankGuild;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		$log_action = array(
 		'header'         => 'L_ACTION_RANK_UPDATED' ,
@@ -257,9 +270,9 @@ class ranks extends guilds
 		'L_HIDE_AFTER' => $this->RankHide ,
 		'L_PREFIX_AFTER' => $this->RankPrefix ,
 		'L_SUFFIX_AFTER' => $this->RankSuffix ,
-		'L_UPDATED_BY' => $user->data['username']);
+		'L_UPDATED_BY' => $this->user->data['username']);
 
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
 			'log_type' => $log_action['header'] ,
 			'log_action' => $log_action)
@@ -277,13 +290,12 @@ class ranks extends guilds
 	 */
 	public function listranks()
 	{
-		global $db;
 		// rank 99 is the out-rank
 		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . $this->bb_ranks_table . '
 	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 
-		return $db->sql_query($sql);
+		return $this->db->sql_query($sql);
 
 	}
 
@@ -292,13 +304,11 @@ class ranks extends guilds
 	 */
 	public function countplayers()
 	{
-		global $db;
-
 		$sql = 'SELECT count(*) as countm FROM ' . $this->bb_players_table . '
 			WHERE player_rank_id = ' . $this->RankId . ' and player_guild_id = ' . $this->RankGuild;
-		$result = $db->sql_query($sql);
-		$countm = (int) $db->sql_fetchfield('countm');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$countm = (int) $this->db->sql_fetchfield('countm');
+		$this->db->sql_freeresult($result);
 
 		return $countm;
 	}

@@ -101,6 +101,9 @@ class recruit_module
 
 		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');
 		$ac = $this->admin_controller;
+		$this->config = $phpbb_container->get('config');
+		$bbguild_cache = $phpbb_container->get('cache.driver');
+		$bbguild_log = $phpbb_container->get('avathar.bbguild.log');
 
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
@@ -117,7 +120,7 @@ class recruit_module
 		$this->apply_installed = false;
 
 		$guild_id = $this->request->variable(constants::URI_GUILD, 1);
-		$Guild = new guilds($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$Guild = new guilds($this->db, $this->user, $this->config, $bbguild_cache, $bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
 		$guildlist   = $Guild->guildlist(1);
 		foreach ($guildlist as $g)
 		{
