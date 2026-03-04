@@ -429,7 +429,7 @@ class log
 			'log_type'        => $log_type,
 			'username'        => get_username_string('full', $row['log_userid'], $row['username'], $row['user_colour']),
 			'log_ipaddress'    => $row['log_ipaddress'],
-			'log_result'    => $this->user->lang[str_replace('L_', '', (string) $row['log_result'])],
+			'log_result'    => $this->user->lang[str_replace('L_', '', (string) $row['log_result'])] ?? str_replace('L_', '', (string) $row['log_result']),
 			'cssresult'        => (str_replace('L_', '', (string) $row['log_result']) == 'SUCCESS') ? 'positive' : 'negative',
 			'encoded_type'     => urlencode($row['log_type']) ,
 			'encoded_user'     => urlencode($row['username']) ,

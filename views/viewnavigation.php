@@ -440,6 +440,16 @@ class viewnavigation implements iviews
 		$this->guild->get_guild();
 		$this->game_id = $this->guild->getGameId();
 
+		$games_obj = new \avathar\bbguild\model\games\game(
+			$this->view_controller->bb_classes_table,
+			$this->view_controller->bb_races_table,
+			$this->view_controller->bb_language_table,
+			$this->view_controller->bb_factions_table,
+			$this->view_controller->bb_games_table
+		);
+		$this->games = $games_obj->games ?? [];
+		unset($games_obj);
+
 		return $guildlist;
 	}
 
@@ -496,8 +506,14 @@ class viewnavigation implements iviews
 		$result = $this->db->sql_query($sql);
 		while ( $row = $this->db->sql_fetchrow($result) )
 		{
-			$filtervalues[strtoupper($row['class_armor_type'])] = $this->user->lang[strtoupper($row['class_armor_type'])];
-			$this->armor_type[strtoupper($row['class_armor_type'])] = $this->user->lang[strtoupper($row['class_armor_type'])];
+			$armor_key = strtoupper($row['class_armor_type']);
+			if ($armor_key === '')
+			{
+				continue;
+			}
+			$armor_label = $this->user->lang[$armor_key] ?? $armor_key;
+			$filtervalues[$armor_key] = $armor_label;
+			$this->armor_type[$armor_key] = $armor_label;
 		}
 		$this->db->sql_freeresult($result);
 		$filtervalues['separator2'] = '--------';

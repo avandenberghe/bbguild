@@ -579,7 +579,7 @@ class admin_main
 
 			$response = $data['response'];
 			$latest_version = json_decode($response, true);
-			$latest_version = $latest_version['stable']['2.0']['current'];
+			$latest_version = $latest_version['unstable']['2.0']['current'] ?? $latest_version['stable']['2.0']['current'] ?? '';
 
 			//put this info in the cache
 			$this->cache->put('bbguild_version_latest', $latest_version, $ttl);

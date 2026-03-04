@@ -93,7 +93,7 @@ class viewroster implements iviews
 			$this->display_grid($players, $classes, $characters, $base_url, $start);
 		}
 
-		if ((count($this->navigation->games) > 1))
+		if (count($this->navigation->games ?? []) > 1)
 		{
 			$this->navigation->template->assign_vars(
 				array(

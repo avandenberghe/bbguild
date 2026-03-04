@@ -1148,7 +1148,7 @@ class guilds
 	 */
 	private function maxrank()
 	{
-		$sql = 'select max(rank_id) AS rank_id from ' . $this->bb_players_table . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
+		$sql = 'SELECT MAX(player_rank_id) AS rank_id FROM ' . $this->bb_players_table . ' WHERE player_guild_id = ' . (int) $this->guildid . ' AND player_rank_id != 90';
 		$result = $this->db->sql_query($sql);
 		$defaultrank_id = (int) $this->db->sql_fetchfield('rank_id', false, $result);
 		$this->db->sql_freeresult($result);

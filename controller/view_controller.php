@@ -253,7 +253,7 @@ class view_controller
 		if (in_array($page, $this->valid_views))
 		{
 			$navigation = new viewnavigation($page, $this, $guild_id);
-			$viewtype = "\\bbdkp\\bbguild\\views\\view". $page;
+			$viewtype = "\\avathar\\bbguild\\views\\view". $page;
 			$view = new $viewtype($navigation, $this);
 			$response = $view->response;
 			return $response;

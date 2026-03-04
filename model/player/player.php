@@ -989,13 +989,23 @@ class player
 	 */
 	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $player_id = 0, $guildlist = null)
 	{
+		global $phpbb_extension_manager, $phpbb_container;
+		if (!isset($phpbb_extension_manager) && isset($phpbb_container)) {
+			$phpbb_extension_manager = $phpbb_container->get('ext.manager');
+		}
+		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+
 		$this->bb_players_table = $bb_players_table;
+		$this->bb_races_table = $bb_races_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 		$this->bb_classes_table = $bb_classes_table;
-		$this->bb_races_table = $bb_races_table;
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_factions_table = $bb_factions_table;
+
+		$games_obj = new \avathar\bbguild\model\games\game($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $phpbb_container->getParameter('avathar.bbguild.tables.bb_games'));
+		$this->games = $games_obj->games ?? [];
+		unset($games_obj);
 
 		if (isset($player_id))
 		{
@@ -1013,7 +1023,12 @@ class player
 		$this->guildplayerlist = array();
 		if ($guildlist == null)
 		{
-			$guild = new guilds( $this->bb_players_table,
+			global $db, $user, $config, $cache, $phpbb_container;
+			$bbguild_log = $phpbb_container->get('avathar.bbguild.log');
+			$bbguild_cache = $phpbb_container->get('cache.driver');
+			$guild = new guilds(
+				$db, $user, $config, $bbguild_cache, $bbguild_log,
+				$this->bb_players_table,
 				$this->bb_ranks_table,
 				$this->bb_classes_table,
 				$this->bb_races_table,
@@ -2055,7 +2070,9 @@ class player
 			6 => array('m.player_achiev', 'm.player_achiev  desc')
 		);
 
-		$current_order = $this->switch_order($sort_order);
+		global $phpbb_container;
+		$util = $phpbb_container->get('avathar.bbguild.util');
+		$current_order = $util->switch_order($sort_order);
 
 		if ($mode == 1)
 		{

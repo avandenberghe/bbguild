@@ -59,10 +59,10 @@ class curl
 				$curl, array(
 					CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) Gecko/20100101 Firefox/61.0', //override
 					CURLOPT_TIMEOUT => 60,
-					CURLOPT_VERBOSE => true,
+					CURLOPT_VERBOSE => false,
 					CURLOPT_URL => $url,
 					CURLOPT_HEADER => $return_Server_Response_Header,
-					CURLOPT_FOLLOWLOCATION, true,
+					CURLOPT_FOLLOWLOCATION => true,
 					CURLOPT_RETURNTRANSFER => true, //return web page
 				)
 			);

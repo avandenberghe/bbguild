@@ -25,6 +25,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge(
 	$lang, array(
+	'ALL' => 'Alle',
 	'BBGUILDDISABLED' => 'bbGuild is zurzeit nicht erreichbar.',
 	'FOOTERBBGUILD' => 'bbGuild',
 

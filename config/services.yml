@@ -158,10 +158,16 @@ services:
             - '%avathar.bbguild.tables.bb_bosstable%'
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
+    avathar.bbguild.game_provider_collection:
+        class: phpbb\di\service_collection
+        arguments:
+            - '@service_container'
+        tags:
+            - { name: service_collection, tag: bbguild.game_provider }
     avathar.bbguild.game_registry:
         class: avathar\bbguild\model\games\game_registry
         arguments:
-            - !tagged_iterator bbguild.game_provider
+            - '@avathar.bbguild.game_provider_collection'
     avathar.bbguild.listener:
         class: avathar\bbguild\event\main_listener
         arguments:
