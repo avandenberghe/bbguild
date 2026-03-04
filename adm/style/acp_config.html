@@ -57,8 +57,7 @@
         <dl>
             <dt><label for="bbguild_hide_inactive">{{ lang('HIDE_INACTIVE') }}:</label><br />{{ lang('HIDE_INACTIVE_NOTE') }}</dt>
             <dd>
-                <input type="radio" id="bbguild_hide_inactive" name="bbguild_hide_inactive" value="1"{{ HIDE_INACTIVE_YES_CHECKED }} /> {{ lang('YES') }}&nbsp;&nbsp;
-                <input type="radio" name="bbguild_hide_inactive" value="0"{{ HIDE_INACTIVE_NO_CHECKED }} /> {{ lang('NO') }}
+                <input type="checkbox" name="bbguild_hide_inactive" id="bbguild_hide_inactive" value="1"{% if HIDE_INACTIVE %} checked="checked"{% endif %} />
             </dd>
         </dl>
     </fieldset>
@@ -69,8 +68,7 @@
                 <label>{{ lang('SHOW_MOTD') }}:</label>
             </dt>
             <dd>
-                <input type="radio" name="show_motd_block" value="1" {{ SHOW_WELCOME_YES_CHECKED }} /> {{ lang('YES') }}&nbsp;&nbsp;
-                <input type="radio" name="show_motd_block" value="0" {{ SHOW_WELCOME_NO_CHECKED }} /> {{ lang('NO') }}
+                <input type="checkbox" name="show_motd_block" id="show_motd_block" value="1"{% if SHOW_MOTD %} checked="checked"{% endif %} />
             </dd>
         </dl>
         <dl>
@@ -95,7 +93,7 @@
         <dl>
             <dt><label for="show_bosspblock">{{ lang('SHOWBOSSBLOCK') }}</label><br />{{ lang('SHOWBOSSBLOCKNOTE') }}</dt>
             <dd>
-                <input type="radio" name="show_bosspblock"  id="show_bosspblock"  value="1"{{ SHOW_BOSS_YES_CHECKED }} /> {{ lang('YES') }}&nbsp;&nbsp;<input type="radio" name="show_bosspblock" value="0"{{ SHOW_BOSS_NO_CHECKED }} /> {{ lang('NO') }}
+                <input type="checkbox" name="show_bosspblock" id="show_bosspblock" value="1"{% if SHOW_BOSS %} checked="checked"{% endif %} />
             </dd>
         </dl>
     </fieldset>

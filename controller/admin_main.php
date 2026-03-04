@@ -387,21 +387,7 @@ class admin_main
 			$s_lang_options .= '<option value="' . $lang . '" ' . $selected . '> ' . $langname . '</option>';
 		}
 
-		$this->template->assign_block_vars(
-			'hide_row', array(
-				'VALUE' => 'YES',
-				'SELECTED' => ($this->config['bbguild_hide_inactive'] == 1) ? ' selected="selected"' : '' ,
-				'OPTION' => 'YES')
-		);
-
-		$this->template->assign_block_vars(
-			'hide_row', array(
-				'VALUE' => 'NO',
-				'SELECTED' => ($this->config['bbguild_hide_inactive'] == 0) ? ' selected="selected"' : '' ,
-				'OPTION' => 'NO')
-		);
-
-		//roster layout switch hetween grid and class list
+		//roster layout switch between grid and class list
 		$rosterlayoutlist = array(
 			0 =>  $this->language->lang('ARM_STAND') ,
 			1 =>  $this->language->lang('ARM_CLASS')
@@ -445,10 +431,8 @@ class admin_main
 				'MAXCHARS' => $this->config['bbguild_maxchars'] ,
 				'MINLEVEL' => $this->config['bbguild_minrosterlvl'],
 				'F_SHOWACHIEV' => $this->config['bbguild_show_achiev'] ,
-				'HIDE_INACTIVE_YES_CHECKED' => ($this->config['bbguild_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
-				'HIDE_INACTIVE_NO_CHECKED' => ($this->config['bbguild_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
-				'SHOW_WELCOME_YES_CHECKED' => ($this->config['bbguild_motd'] == '1') ? 'checked="checked"' : '' ,
-				'SHOW_WELCOME_NO_CHECKED' => ($this->config['bbguild_motd'] == '0') ? 'checked="checked"' : '' ,
+				'HIDE_INACTIVE' => (int) $this->config['bbguild_hide_inactive'],
+				'SHOW_MOTD' => (int) $this->config['bbguild_motd'],
 				'WELCOME_MESSAGE' => $textarr['text'] ,
 				'USER_NLIMIT' => $this->config['bbguild_user_nlimit'] ,
 				'U_ACTION' => $this->u_action,
@@ -461,8 +445,7 @@ class admin_main
 			$this->template->assign_vars(
 				array(
 					'S_BP_SHOW' => true ,
-					'SHOW_BOSS_YES_CHECKED' => ($this->config['bbguild_portal_bossprogress'] == '1') ? ' checked="checked"' : '' ,
-					'SHOW_BOSS_NO_CHECKED' => ($this->config['bbguild_portal_bossprogress'] == '0') ? ' checked="checked"' : '')
+					'SHOW_BOSS' => (int) $this->config['bbguild_portal_bossprogress'])
 			);
 		}
 		else

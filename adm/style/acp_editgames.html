@@ -61,8 +61,7 @@
         <dl>
             <dt><label for="enable_armory">{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_EXPLAIN') }}</dt>
             <dd>
-                <input type="radio" id="enable_armory" name="enable_armory" value="1"{% if F_ENABLEARMORY == 1 %} checked="checked"{% endif %} /> {{ lang('ON') }}&nbsp;&nbsp;
-                <input type="radio" name="enable_armory" value="0"{% if F_ENABLEARMORY == 0 %} checked="checked"{% endif %} /> {{ lang('OFF') }}
+                <input type="checkbox" name="enable_armory" id="enable_armory" value="1"{% if F_ENABLEARMORY %} checked="checked"{% endif %} />
             </dd>
         </dl>
 

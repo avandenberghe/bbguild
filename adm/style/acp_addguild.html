@@ -76,10 +76,9 @@
                 </dl>
 
                 <dl>
-                    <dt><label>{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_GUILD_EXPLAIN') }}</dt>
+                    <dt><label for="armory_enabled">{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_GUILD_EXPLAIN') }}</dt>
                     <dd>
-                        <input type="radio" name="armory_enabled" value="1"{% if F_ENABLEARMORY == 1 %} checked="checked"{% endif %} /> {{ lang('ON') }}&nbsp;&nbsp;
-                        <input type="radio" name="armory_enabled" value="0"{% if F_ENABLEARMORY == 0 %} checked="checked"{% endif %} /> {{ lang('OFF') }}
+                        <input type="checkbox" name="armory_enabled" id="armory_enabled" value="1"{% if F_ENABLEARMORY %} checked="checked"{% endif %} />
                     </dd>
                 </dl>
                 <dl>
@@ -87,10 +86,9 @@
                     <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{{ MIN_ARMORYLEVEL }}" /></dd>
                 </dl>
                 <dl>
-                    <dt style="width: 35%;"><label>{{ lang('RECSTATUS') }}</label></dt>
+                    <dt style="width: 35%;"><label for="switchon_recruitment">{{ lang('RECSTATUS') }}</label></dt>
                     <dd>
-                        <input type="radio" name="switchon_recruitment" value="1"{% if RECSTATUS == 1 %} checked="checked"{% endif %} /> {{ lang('ON') }}&nbsp;&nbsp;
-                        <input type="radio" name="switchon_recruitment" value="0"{% if RECSTATUS == 0 %} checked="checked"{% endif %} /> {{ lang('OFF') }}
+                        <input type="checkbox" name="switchon_recruitment" id="switchon_recruitment" value="1"{% if RECSTATUS %} checked="checked"{% endif %} />
                     </dd>
                 </dl>
             </fieldset>
