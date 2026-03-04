@@ -17,18 +17,18 @@
         <br />
 
         <dl>
-            <dt><label for="player_name">{{ lang('NAME') }}, {{ lang('SURNAME') }} :</label></dt>
+            <dt><label for="player_name">{{ lang('NAME') }}, {{ lang('SURNAME') }}:</label><br /><span>{{ lang('PLAYER_NAME_EXPLAIN') }}</span></dt>
             <dd><input type="text" name="player_name" id="player_name" size="20" maxlength="30" value="{{ PLAYER_NAME }}" class="input" />
                 <input type="text" name="player_title" id="player_title" size="30" maxlength="40" value="{{ PLAYER_TITLE }}" class="input" />
             </dd>
         </dl>
         <dl>
-            <dt><label for="realm">{{ lang('REALM_NAME') }}:</label></dt>
+            <dt><label for="realm">{{ lang('REALM_NAME') }}:</label><br /><span>{{ lang('PLAYER_REALM_EXPLAIN') }}</span></dt>
             <dd>{{ REGIONNAME }} - <input type="text" id="realm" size="20" maxlength="30" name="realm" value="{{ REALM }}" /></dd>
         </dl>
 
         <dl>
-            <dt><label for="player_guild_id">{{ lang('GUILD') }}:</label></dt>
+            <dt><label for="player_guild_id">{{ lang('GUILD') }}:</label><br /><span>{{ lang('PLAYER_GUILD_EXPLAIN') }}</span></dt>
             <dd>
                 <select name="player_guild_id" id="player_guild_id" class="input" onchange="return GetRank(this.value)">
                     {% for guild_row in loops.guild_row %}
@@ -39,7 +39,7 @@
         </dl>
 
         <dl>
-            <dt><label for="player_rank_id">{{ lang('PLAYER_RANK') }}:</label></dt>
+            <dt><label for="player_rank_id">{{ lang('PLAYER_RANK') }}:</label><br /><span>{{ lang('PLAYER_RANK_EXPLAIN') }}</span></dt>
             <dd>
                 <select id="player_rank_id" name="player_rank_id" class="input">
                     {% for rank_row in loops.rank_row %}
@@ -51,7 +51,7 @@
         </dl>
 
         <dl>
-            <dt><label for="game_id">{{ lang('GAME') }}:</label></dt>
+            <dt><label for="game_id">{{ lang('GAME') }}:</label><br /><span>{{ lang('PLAYER_GAME_EXPLAIN') }}</span></dt>
             <dd>
                 <select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
                     {% for game_row in loops.game_row %}
@@ -64,7 +64,7 @@
 
 
         <dl>
-            <dt><label for="player_level">{{ lang('LEVEL') }}:</label></dt>
+            <dt><label for="player_level">{{ lang('LEVEL') }}:</label><br /><span>{{ lang('PLAYER_LEVEL_EXPLAIN') }}</span></dt>
             <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{{ PLAYER_LEVEL }}" class="input" />
                 <a id="levelup"  href="{{ F_ADD_PLAYER }}" target="_blank"><img src="./images/icon_up.gif" /></a>
                 <a id="leveldown" href="{{ F_ADD_PLAYER }}" target="_blank"><img src="./images/icon_down.gif" /></a>
@@ -72,14 +72,14 @@
         </dl>
 
         <dl>
-            <dt><label for="player_level">{{ lang('ACHIEV') }}:</label></dt>
+            <dt><label for="player_achiev">{{ lang('ACHIEV') }}:</label><br /><span>{{ lang('PLAYER_ACHIEV_EXPLAIN') }}</span></dt>
             <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{{ PLAYER_ACHIEV }}" class="input" /></dd>
         </dl>
 
 
 
         <dl>
-            <dt><label for="player_race_id">{{ lang('RACE') }}:</label></dt>
+            <dt><label for="player_race_id">{{ lang('RACE') }}:</label><br /><span>{{ lang('PLAYER_RACE_EXPLAIN') }}</span></dt>
             <dd><select id="player_race_id" name="player_race_id" class="input">
                 {% for race_row in loops.race_row %}
                 <option value="{{ race_row.VALUE }}"{{ race_row.SELECTED }}>{{ race_row.OPTION }}</option>
@@ -90,7 +90,7 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="player_class_id">{{ lang('CLASS') }}:</label></dt>
+            <dt><label for="player_class_id">{{ lang('CLASS') }}:</label><br /><span>{{ lang('PLAYER_CLASS_EXPLAIN') }}</span></dt>
             <dd>
                 <select id="player_class_id" name="player_class_id" class="input">
                     {% for class_row in loops.class_row %}
@@ -103,7 +103,7 @@
 
 
         <dl>
-            <dt><label for="player_role">{{ lang('ROLES') }}:</label></dt>
+            <dt><label for="player_role">{{ lang('ROLES') }}:</label><br /><span>{{ lang('PLAYER_ROLE_EXPLAIN') }}</span></dt>
             <dd>
                 <select name="player_role" id="player_role" class="input" >
                     {% for role_row in loops.role_row %}
@@ -115,7 +115,7 @@
 
         <dl>
 
-            <dt><label for="activated">{{ lang('ACTIVE') }}:</label></dt>
+            <dt><label for="activated">{{ lang('ACTIVE') }}:</label><br /><span>{{ lang('PLAYER_ACTIVE_EXPLAIN') }}</span></dt>
             <dd><input type="checkbox" class="checkbox" name="activated" id="activated" {% if STATUS_LOCK %} disabled="disabled" {% endif %} {{ STATUS }}  />
 
                 {% if ! S_ADD %}
@@ -127,7 +127,7 @@
         </dl>
 
         <dl>
-            <dt><label for="gender">{{ lang('GENDER') }}:</label></dt>
+            <dt><label for="gender">{{ lang('GENDER') }}:</label><br /><span>{{ lang('PLAYER_GENDER_EXPLAIN') }}</span></dt>
             <dd>
                 <input type="radio" id="gender" name="gender"  value="0" {{ MALE_CHECKED }} /> {{ lang('MALE') }}&nbsp;&nbsp;
                 <input type="radio" name="gender"  value="1" {{ FEMALE_CHECKED }} /> {{ lang('FEMALE') }}
@@ -150,7 +150,7 @@
         {% endif %}
 
         <dl>
-            <dt><label>{{ lang('JOINDATE') }} (YYYY-MM-DD):</label></dt>
+            <dt><label>{{ lang('JOINDATE') }}:</label><br /><span>{{ lang('PLAYER_JOINDATE_EXPLAIN') }}</span></dt>
 
             <dd>
                 {{ lang('DAY') }}: <select id="player_joindate_d" name="player_joindate_d">{{ S_JOINDATE_DAY_OPTIONS }}</select>
@@ -160,7 +160,7 @@
         </dl>
 
         <dl>
-            <dt><label>{{ lang('OUTDATE') }} (YYYY-MM-DD):</label></dt>
+            <dt><label>{{ lang('OUTDATE') }}:</label><br /><span>{{ lang('PLAYER_OUTDATE_EXPLAIN') }}</span></dt>
 
             <dd>
                 {{ lang('DAY') }}: <select id="player_outdate_d" name="player_outdate_d">{{ S_OUTDATE_DAY_OPTIONS }}</select>
@@ -176,7 +176,7 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="player_comment">{{ lang('COMMENT') }}:</label></dt>
+            <dt><label for="player_comment">{{ lang('COMMENT') }}:</label><br /><span>{{ lang('PLAYER_COMMENT_EXPLAIN') }}</span></dt>
             <dd><textarea name="player_comment" id="player_comment" rows="5" cols="30" style="width: 100%" class="input">{{ PLAYER_COMMENT }}</textarea></dd>
         </dl>
 

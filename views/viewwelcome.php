@@ -105,7 +105,6 @@ class viewwelcome implements iviews
 
 		$template->assign_vars(
 			array(
-			'EMBLEM'                =>  $this->navigation->guild->getEmblempath(),
 			'GUILD_FACTION'         =>  $this->navigation->guild->getFactionname(),
 			'WELCOME_MESSAGE'        => $welcometext,
 			'S_DISPLAY_WELCOME'     => true,

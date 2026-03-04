@@ -8,8 +8,8 @@
  */
 
 /**
-* @ignore
-*/
+ * @ignore
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -24,10 +24,12 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge(
 	$lang, array(
-	'ACP_CAT_BBGUILD'            => 'bbGuild',
-	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
-	'ACP_BBGUILD_PANEL'           => 'Dashboard',
-	'ACP_BBGUILD_CONFIG'          => 'Settings',
-	'ACP_BBGUILD_LOGS'            => 'Activity Log',
+	'ACP_BBGUILD_GAME'            => 'Configuración del juego',
+	'ACP_BBGUILD_FACTION_ADD'        => 'Añadir facción',
+	'ACP_BBGUILD_RACE_ADD'        => 'Añadir raza',
+	'ACP_BBGUILD_ROLE_ADD'        => 'Añadir rol',
+	'ACP_BBGUILD_CLASS_ADD'        => 'Añadir clase',
+	'ACP_BBGUILD_GAME_LIST'        => 'Lista de juegos',
+	'ACP_BBGUILD_GAME_EDIT'        => 'Editar juego',
 	)
 );

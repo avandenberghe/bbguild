@@ -129,6 +129,7 @@ class admin_games
 	protected $path_helper;
 	public $link;
 	public $page_title;
+	public $tpl_name;
 
 
 
@@ -318,7 +319,6 @@ class admin_games
 
 		$current_order = $this->util->switch_order($sort_order);
 
-		$sort_index = explode('.', $current_order['uri']['current']);
 		$this->gamelist = $games->list_games($current_order['sql']);
 
 		$installed = array();
@@ -327,6 +327,76 @@ class admin_games
 			$installed[$game['game_id']] = $game['name'];
 		}
 
+		// Installed games table
+		$row_count = 0;
+		foreach ($this->gamelist as $game)
+		{
+			$this->template->assign_block_vars('gamerow', array(
+				'ID'          => $game['id'],
+				'GAME_ID'     => $game['game_id'],
+				'NAME'        => $game['name'],
+				'STATUS'      => $game['status'] ? $this->language->lang('ACTIVE') : $this->language->lang('INACTIVE'),
+				'U_VIEW_GAME' => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;game_id=' . $game['game_id']),
+				'S_ROW_COUNT' => $row_count++,
+			));
+		}
+
+		// Default game dropdown
+		foreach ($this->gamelist as $game)
+		{
+			$this->template->assign_block_vars('defaultgame_row', array(
+				'VALUE'    => $game['game_id'],
+				'SELECTED' => ($this->config['bbguild_default_game'] == $game['game_id']) ? ' selected="selected"' : '',
+				'OPTION'   => $game['name'],
+			));
+		}
+
+		// Installable games dropdown (from game plugin registry, excluding already installed)
+		$installable = $this->game_registry->get_installable_games();
+		foreach ($installable as $game_id => $game_name)
+		{
+			if (!isset($installed[$game_id]))
+			{
+				$this->template->assign_block_vars('gamelistrow', array(
+					'VALUE'    => $game_id,
+					'SELECTED' => '',
+					'OPTION'   => $game_name,
+				));
+			}
+		}
+
+		// Region dropdown
+		$regions = array(
+			'eu'  => $this->language->lang('REGIONEU'),
+			'kr'  => $this->language->lang('REGIONKR'),
+			'sea' => $this->language->lang('REGIONSEA'),
+			'tw'  => $this->language->lang('REGIONTW'),
+			'us'  => $this->language->lang('REGIONUS'),
+		);
+		foreach ($regions as $key => $regionname)
+		{
+			$this->template->assign_block_vars('region_row', array(
+				'VALUE'    => $key,
+				'SELECTED' => '',
+				'OPTION'   => $regionname,
+			));
+		}
+
+		$u_list_game = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=listgames');
+
+		// Build list of available game plugin names for the info text
+		$plugin_names = implode(', ', $installable);
+
+		$this->template->assign_vars(array(
+			'S_INSTALLED'  => !empty($this->gamelist),
+			'CANINSTALL'   => !empty($installable),
+			'PREINSTALLED' => $this->language->lang('PREINSTALLED', $plugin_names ?: $this->language->lang('NA')),
+			'U_ACTION'     => $u_list_game,
+			'U_LIST_GAME'  => $u_list_game,
+			'O_ID'         => $current_order['uri'][0],
+			'O_GAMEID'     => $current_order['uri'][1],
+			'O_GAMENAME'   => $current_order['uri'][2],
+		));
 	}
 
 
@@ -336,11 +406,11 @@ class admin_games
 	 */
 	public function gamelist()
 	{
-		$editgame = new game;
+		$editgame = new game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table, $this->game_registry);
 		$editgame->game_id = $this->request->variable(constants::URI_GAME, $this->request->variable('hidden_game_id', ''));
 		$editgame->get_game();
 
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME ."={$editgame->game_id}") . '"><h3>' . $this->user->lang['RETURN_GAMEVIEW'] . '</h3></a>';
+		$this->link = '<br /><a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "={$editgame->game_id}") . '"><h3>' . $this->language->lang('RETURN_GAMEVIEW') . '</h3></a>';
 		$gamereset = $this->request->is_set_post('gamereset');
 		$gamedelete = $this->request->is_set_post('gamedelete');
 		$gamesettings = $this->request->is_set_post('gamesettings');
@@ -361,8 +431,8 @@ class admin_games
 		else if ($gamesettings)
 		{
 			$editgame = $this->SaveGameSettings();
-			$success_message = sprintf($this->user->lang['ADMIN_UPDATED_GAME_SUCCESS'], $editgame->game_id, $editgame->getName());
-			meta_refresh(0.5, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "={$editgame->game_id}"));
+			$success_message = sprintf($this->language->lang('ADMIN_UPDATED_GAME_SUCCESS'), $editgame->game_id, $editgame->getName());
+			meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "={$editgame->game_id}"));
 			trigger_error($success_message . $this->link, E_USER_NOTICE);
 		}
 		else if ($gamedelete)
@@ -372,6 +442,7 @@ class admin_games
 		else if ($addrole)
 		{
 			$this->BuildTemplateRole($editgame);
+			return;
 		}
 		else if ($action=='deleterole')
 		{
@@ -380,10 +451,12 @@ class admin_games
 		else if ($action=='editrole')
 		{
 			$this->BuildTemplateRole($editgame);
+			return;
 		}
 		else if ($addfaction)
 		{
 			$this->BuildTemplateFaction($editgame);
+			return;
 		}
 		else if ($action=='deletefaction')
 		{
@@ -392,14 +465,17 @@ class admin_games
 		else if ($action=='editfaction')
 		{
 			$this->BuildTemplateFaction($editgame);
+			return;
 		}
 		else if ($raceedit)
 		{
 			$this->BuildTemplateEditRace($editgame);
+			return;
 		}
 		else if ($addrace)
 		{
 			$this->BuildTemplateAddRace($editgame);
+			return;
 		}
 		else if ($racedelete)
 		{
@@ -408,10 +484,12 @@ class admin_games
 		else if ($classedit)
 		{
 			$this->BuildTemplateEditClass($editgame);
+			return;
 		}
 		else if ($addclass)
 		{
 			$this->BuildTemplateAddClass($editgame);
+			return;
 		}
 		else if ($classdelete)
 		{
@@ -424,35 +502,360 @@ class admin_games
 	}
 
 	/**
+	 * Build template for adding/editing a faction.
 	 *
+	 * @param game $editgame
 	 */
-	public function gamerole()
+	private function BuildTemplateFaction(game $editgame)
 	{
+		$game_id = $editgame->game_id;
+		$faction_id = $this->request->variable('f_index', 0);
+		$action = $this->request->variable('action', '');
+		$is_add = ($action !== 'editfaction');
 
+		$faction_name = '';
+		if (!$is_add)
+		{
+			$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+			$fac->faction_id = $faction_id;
+			$fac->get();
+			$faction_name = $fac->faction_name;
+		}
+
+		$this->tpl_name = 'acp_addfaction';
+		$this->page_title = $is_add ? 'ACP_ADDFACTION' : 'EDIT_FACTION';
+
+		$this->template->assign_vars(array(
+			'IS_ADD'       => $is_add,
+			'GAME_ID'      => $game_id,
+			'GAME_NAME'    => $editgame->getName(),
+			'FACTION_ID'   => $faction_id,
+			'FACTION_NAME' => $faction_name,
+			'U_BACK'       => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'U_ACTION2'    => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'MSG_NAME_EMPTY' => $this->language->lang('FV_REQUIRED_FACTION_NAME'),
+		));
 	}
 
 	/**
+	 * Delete a faction.
 	 *
+	 * @param game $editgame
 	 */
-	public function gamefaction()
+	private function DeleteFaction(game $editgame)
 	{
-
+		$faction_id = $this->request->variable('f_index', 0);
+		$fac = new faction($editgame->game_id, $this->bb_factions_table, $this->bb_races_table);
+		$fac->faction_id = $faction_id;
+		$fac->get();
+		$fac->delete_faction();
 	}
 
 	/**
+	 * Build template for adding/editing a role.
 	 *
+	 * @param game $editgame
 	 */
-	public function gamerace()
+	private function BuildTemplateRole(game $editgame)
 	{
+		$game_id = $editgame->game_id;
+		$role_id = $this->request->variable('role_id', $this->request->variable('hidden_role_id', 0));
+		$action = $this->request->variable('action', '');
+		$is_add = ($action !== 'editrole');
 
+		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role->game_id = $game_id;
+		$role->role_id = $role_id;
+
+		$role_name = '';
+		$role_color = '';
+		$role_icon = '';
+		$role_cat_icon = '';
+
+		if (!$is_add)
+		{
+			$role->get();
+			$role_name = $role->rolename;
+			$role_color = $role->role_color;
+			$role_icon = $role->role_icon;
+			$role_cat_icon = $role->role_cat_icon;
+		}
+
+		$role_icon_img = $this->ext_path_web . 'images/roles/' . $role_icon . '.png';
+
+		$this->tpl_name = 'acp_addrole';
+		$this->page_title = $is_add ? 'ACP_ADDROLE' : 'EDIT_ROLES';
+
+		$this->template->assign_vars(array(
+			'IS_ADD'        => $is_add,
+			'GAME_ID'       => $game_id,
+			'GAME_NAME'     => $editgame->getName(),
+			'ROLE_ID'       => $role_id,
+			'ROLE_NAME'     => $role_name,
+			'ROLE_COLOR'    => $role_color,
+			'ROLE_ICON'     => $role_icon,
+			'ROLE_CAT_ICON' => $role_cat_icon,
+			'ROLE_ICON_IMG' => $role_icon_img,
+			'U_BACK'        => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'U_ACTION2'     => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'MSG_NAME_EMPTY' => $this->language->lang('FV_REQUIRED_ROLE_NAME'),
+		));
 	}
 
 	/**
+	 * Delete a role.
 	 *
+	 * @param game $editgame
 	 */
-	public function gameclass()
+	private function DeleteRole(game $editgame)
 	{
+		$role_id = $this->request->variable('role_id', 0);
+		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role->game_id = $editgame->game_id;
+		$role->role_id = $role_id;
+		$role->get();
+		$role->delete_role();
+	}
 
+	/**
+	 * Build template for adding a race.
+	 *
+	 * @param game $editgame
+	 */
+	private function BuildTemplateAddRace(game $editgame)
+	{
+		$this->BuildTemplateRace($editgame, true);
+	}
+
+	/**
+	 * Build template for editing a race.
+	 *
+	 * @param game $editgame
+	 */
+	private function BuildTemplateEditRace(game $editgame)
+	{
+		$this->BuildTemplateRace($editgame, false);
+	}
+
+	/**
+	 * Build template for adding or editing a race.
+	 *
+	 * @param game  $editgame
+	 * @param bool  $is_add
+	 */
+	private function BuildTemplateRace(game $editgame, $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$race_id = $this->request->variable('race_id', $this->request->variable('hidden_race_id', 0));
+
+		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race->game_id = $game_id;
+		$race->race_id = $race_id;
+
+		$race_name = '';
+		$image_male = '';
+		$image_female = '';
+		$race_faction_id = 0;
+
+		if (!$is_add)
+		{
+			$race->get_race();
+			$race_name = $race->race_name;
+			$image_male = $race->image_male;
+			$image_female = $race->image_female;
+			$race_faction_id = $race->race_faction_id;
+		}
+
+		// Faction dropdown
+		$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$factions = $fac->get_factions();
+		$faction_options = '';
+		foreach ($factions as $fid => $fdata)
+		{
+			$selected = ($fid == $race_faction_id) ? ' selected="selected"' : '';
+			$faction_options .= '<option value="' . $fid . '"' . $selected . '>' . $fdata['faction_name'] . '</option>';
+		}
+
+		// Image paths
+		$race_image_m = $this->ext_path_web . 'images/' . $game_id . '/' . $image_male . '.png';
+		$race_image_f = $this->ext_path_web . 'images/' . $game_id . '/' . $image_female . '.png';
+		$race_image_m_file = $this->ext_path . 'images/' . $game_id . '/' . $image_male . '.png';
+		$race_image_f_file = $this->ext_path . 'images/' . $game_id . '/' . $image_female . '.png';
+
+		$this->tpl_name = 'acp_addrace';
+		$this->page_title = $is_add ? 'ACP_ADDRACE' : 'ACP_EDITRACE';
+
+		$this->template->assign_vars(array(
+			'S_ADD'                => $is_add,
+			'GAME_ID'              => $game_id,
+			'GAME_NAME'            => $editgame->getName(),
+			'RACE_ID'              => $race_id,
+			'RACE_NAME'            => $race_name,
+			'RACE_IMAGENAME_M'     => $image_male,
+			'RACE_IMAGENAME_F'     => $image_female,
+			'RACE_IMAGE_M'         => $race_image_m,
+			'RACE_IMAGE_F'         => $race_image_f,
+			'S_RACE_IMAGE_M_EXISTS' => @file_exists($race_image_m_file),
+			'S_RACE_IMAGE_F_EXISTS' => @file_exists($race_image_f_file),
+			'S_FACTIONLIST_OPTIONS' => $faction_options,
+			'U_BACK'               => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'U_ACTION2'            => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'MSG_NAME_EMPTY'       => $this->language->lang('FV_REQUIRED_RACE_NAME'),
+			'MSG_RACE_EMPTY'       => $this->language->lang('FV_REQUIRED_RACEID'),
+			'MIMAGEWARNING'        => '',
+			'FIMAGEWARNING'        => '',
+		));
+	}
+
+	/**
+	 * Delete a race.
+	 *
+	 * @param game $editgame
+	 */
+	private function DeleteRace(game $editgame)
+	{
+		$race_id = $this->request->variable('race_id', 0);
+		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race->game_id = $editgame->game_id;
+		$race->race_id = $race_id;
+		$race->get_race();
+		$race->delete_race();
+	}
+
+	/**
+	 * Build template for adding a class.
+	 *
+	 * @param game $editgame
+	 */
+	private function BuildTemplateAddClass(game $editgame)
+	{
+		$this->BuildTemplateClass($editgame, true);
+	}
+
+	/**
+	 * Build template for editing a class.
+	 *
+	 * @param game $editgame
+	 */
+	private function BuildTemplateEditClass(game $editgame)
+	{
+		$this->BuildTemplateClass($editgame, false);
+	}
+
+	/**
+	 * Build template for adding or editing a class.
+	 *
+	 * @param game  $editgame
+	 * @param bool  $is_add
+	 */
+	private function BuildTemplateClass(game $editgame, $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$class_id = $this->request->variable('class_id', $this->request->variable('hidden_class_id', 0));
+
+		$editclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$editclass->game_id = $game_id;
+		$editclass->class_id = $class_id;
+
+		$class_name = '';
+		$class_min = 1;
+		$class_max = 60;
+		$armor_type = '';
+		$imagename = '';
+		$colorcode = '#999999';
+		$c_index = 0;
+
+		if (!$is_add)
+		{
+			$editclass->get_class();
+			$class_name = $editclass->classname;
+			$class_min = $editclass->min_level;
+			$class_max = $editclass->max_level;
+			$armor_type = $editclass->armor_type;
+			$imagename = $editclass->imagename;
+			$colorcode = $editclass->colorcode;
+			$c_index = $editclass->c_index;
+		}
+
+		// Armor type dropdown
+		$armor_options = '';
+		foreach ($editclass->armortypes as $key => $name)
+		{
+			$selected = ($key == $armor_type) ? ' selected="selected"' : '';
+			$armor_options .= '<option value="' . $key . '"' . $selected . '>' . $name . '</option>';
+		}
+
+		// Image path
+		$class_image = $this->ext_path_web . 'images/' . $game_id . '/' . $imagename . '.png';
+		$class_image_file = $this->ext_path . 'images/' . $game_id . '/' . $imagename . '.png';
+
+		$this->tpl_name = 'acp_addclass';
+		$this->page_title = $is_add ? 'ACP_ADDCLASS' : 'ACP_EDITCLASS';
+
+		$this->template->assign_vars(array(
+			'S_ADD'               => $is_add,
+			'GAME_ID'             => $game_id,
+			'GAME_NAME'           => $editgame->getName(),
+			'CLASS_ID'            => $class_id,
+			'C_INDEX'             => $c_index,
+			'CLASS_NAME'          => $class_name,
+			'CLASS_MIN'           => $class_min,
+			'CLASS_MAX'           => $class_max,
+			'CLASS_IMAGENAME'     => $imagename,
+			'CLASS_IMAGE'         => $class_image,
+			'S_CLASS_IMAGE_EXISTS' => @file_exists($class_image_file),
+			'COLORCODE'           => $colorcode,
+			'S_ARMOR_OPTIONS'     => $armor_options,
+			'U_BACK'              => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'U_ACTION2'           => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"),
+			'IMAGEWARNING'        => '',
+		));
+	}
+
+	/**
+	 * Delete a class.
+	 *
+	 * @param game $editgame
+	 */
+	private function DeleteClass(game $editgame)
+	{
+		$class_id = $this->request->variable('class_id', 0);
+		$editclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$editclass->game_id = $editgame->game_id;
+		$editclass->class_id = $class_id;
+		$editclass->get_class();
+		$editclass->delete_class();
+	}
+
+	/**
+	 * Reset (reinstall) a game: uninstall then install again.
+	 *
+	 * @param game $editgame The game to reset
+	 */
+	private function ResetGame(game $editgame)
+	{
+		$editgame->delete_game();
+		$editgame->install_game();
+
+		$success_message = sprintf($this->language->lang('ADMIN_RESET_GAME_SUCCESS'), $editgame->getName());
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "={$editgame->game_id}"));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Delete a game and redirect to the game list.
+	 *
+	 * @param game $editgame The game to delete
+	 */
+	private function DeleteGame(game $editgame)
+	{
+		$game_id = $editgame->game_id;
+		$game_name = $editgame->getName();
+		$editgame->delete_game();
+
+		$success_message = sprintf($this->language->lang('ADMIN_DELETE_GAME_SUCCESS'), $game_name);
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=listgames'));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
 	}
 
 	/**

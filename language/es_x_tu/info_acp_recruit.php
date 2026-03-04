@@ -24,10 +24,9 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge(
 	$lang, array(
-	'ACP_CAT_BBGUILD'            => 'bbGuild',
-	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
-	'ACP_BBGUILD_PANEL'           => 'Dashboard',
-	'ACP_BBGUILD_CONFIG'          => 'Settings',
-	'ACP_BBGUILD_LOGS'            => 'Activity Log',
+	'ACP_BBGUILD_RECRUIT'        => 'Reclutamiento',
+	 'ACP_BBGUILD_RECRUIT_ADD'    => 'Añadir reclutamiento',
+	'ACP_BBGUILD_RECRUIT_EDIT'    => 'Editar reclutamiento',
+	'ACP_BBGUILD_RECRUIT_LIST'    => 'Reclutamientos',
 	)
 );

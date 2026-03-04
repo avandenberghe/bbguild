@@ -85,6 +85,11 @@ class bbguild_module
 	 */
 	private function game_has_api($game_id)
 	{
+		if (empty($game_id))
+		{
+			return false;
+		}
+
 		global $phpbb_container;
 
 		// Try game registry first
@@ -123,6 +128,11 @@ class bbguild_module
 	 */
 	private function get_game_provider($game_id)
 	{
+		if (empty($game_id))
+		{
+			return null;
+		}
+
 		global $phpbb_container;
 		if (isset($phpbb_container))
 		{
@@ -175,7 +185,7 @@ class bbguild_module
 		$this->id = $id;
 		$this->mode = $mode;
 
-		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');
+		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.main');
 		$ac = $this->admin_controller;
 		$this->bbguild_cache = $phpbb_container->get('cache.driver');
 		$this->bbguild_log = $phpbb_container->get('avathar.bbguild.log');
@@ -184,13 +194,28 @@ class bbguild_module
 		$this->user->add_lang(array('acp/groups', 'acp/common'));
 		$guilds = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, 0);
 
+		// Build installed games list and regions
+		$gameObj = new game(
+			$ac->bb_classes_table, $ac->bb_races_table,
+			$ac->bb_language_table, $ac->bb_factions_table,
+			$ac->bb_games_table
+		);
+		$gamelist = $gameObj->list_games();
+		$this->games = array();
+		foreach ($gamelist as $game_id => $data)
+		{
+			$this->games[$game_id] = $data['name'];
+		}
+		$this->regions = $gameObj->getRegions();
+
 		// list all guild except noguild
 		$guildlist = $guilds->guildlist(1);
 		if (count($guildlist) == 0)
 		{
 			trigger_error('ERROR_NOGUILD', E_USER_WARNING);
 		}
-		$mode = ($mode == '' ? 'characters' :$mode);
+		$mode = ($mode == '' ? 'char' : $mode);
+		$this->mode = $mode;
 
 		// GET processing logic
 		$form_key = 'avathar/bbguild';
@@ -198,7 +223,7 @@ class bbguild_module
 
 		switch ($this->mode)
 		{
-			case 'characters':
+			case 'char':
 				/***
 				 * ucp tab 1
 				 * list of characters
@@ -289,10 +314,10 @@ class bbguild_module
 
 				// Dear phpbb, please display the templates for us.
 				$this->tpl_name     = 'ucp_bbguild';
-				$this->page_title     = $this->user->lang['UCP_DKP_CHARACTERS'];
+				$this->page_title     = $this->user->lang['UCP_BBGUILD_CHARACTER_LIST'];
 
 				break;
-			case 'characteradd':
+			case 'add':
 				/**
 				 * ucp tab 2
 				 * character add/edit
@@ -861,7 +886,7 @@ class bbguild_module
 		{
 			$this->template->assign_block_vars(
 				'players_row', array(
-					'U_EDIT'        => append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=dkp&amp;mode=characteradd&amp;' . constants::URI_NAMEID . '=' . $char['player_id']),
+					'U_EDIT'        => append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=-avathar-bbguild-ucp-bbguild_module&amp;mode=add&amp;' . constants::URI_NAMEID . '=' . $char['player_id']),
 					'GAME'            => $char['game_id'],
 					'COLORCODE'        => $char['colorcode'],
 					'CLASS'            => $char['class_name'],

@@ -3,6 +3,7 @@
     <div class="profile-sidebar-inner">
         <div class="profile-sidebar-contents">
             {% if S_DISPLAY_ROSTERGRID or S_DISPLAY_ROSTERLISTING or S_DISPLAY_ACHIEVEMENTS %}
+            {% if S_EMBLEM_EXISTS %}
             <div class="profile-sidebar-tabard">
                 <div class="guild-tabard">
                     <img src="{{ EMBLEM }}" alt="{{ GUILD_NAME }}" />
@@ -10,14 +11,17 @@
                 </div>
             </div>
             {% endif %}
+            {% endif %}
             {% if S_DISPLAY_WELCOME %}
             <div class="profile-wrapper profile-wrapper-{{ FACTION_CSS }}">
                 <div class="profile-info-anchor profile-guild-info-anchor">
+                    {% if S_EMBLEM_EXISTS %}
                     <div class="guild-tabard">
                         <div class="tabard-overlay">
                         <img src="{{ EMBLEM }}" alt="{{ GUILD_NAME }}" />
                         </div>
                     </div>
+                    {% endif %}
                     <div class="profile-info profile-guild-info">
                         <div class="name">
                             {% if ARMORY %}<a href="{{ ARMORY }}">{{ GUILD_NAME }}</a>{% else %}{{ GUILD_NAME }}{% endif %}

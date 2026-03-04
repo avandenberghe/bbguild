@@ -156,6 +156,9 @@ $lang = array_merge(
 	'CHARACTER' => 'Nom de Caractère',
 	'CHARACTER_EXPLAIN' => 'Choisis ton nom de Caractere et confirme.',
 	'CHARACTERS_UPDATED' => 'Le nom de Caractère %s est assigné à votre compte.',
+	'CLAIM_PLAYER' => 'Revendiquer un personnage',
+	'CLAIM' => 'Revendiquer',
+	'NO_PLAYERS_FOUND' => 'Aucun personnage trouvé.',
 	'NO_CHARACTERS_BOUND' => 'pas trouvé de charactères liés à votre compte.',
 
 	'EVENT' => 'Evènement',

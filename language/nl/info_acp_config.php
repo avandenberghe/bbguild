@@ -25,9 +25,9 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge(
 	$lang, array(
 	'ACP_CAT_BBGUILD'            => 'bbGuild',
-	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
+	'ACP_BBGUILD_MAINPAGE'        => 'Algemene instellingen',
 	'ACP_BBGUILD_PANEL'           => 'Dashboard',
-	'ACP_BBGUILD_CONFIG'          => 'Settings',
-	'ACP_BBGUILD_LOGS'            => 'Activity Log',
+	'ACP_BBGUILD_CONFIG'          => 'Instellingen',
+	'ACP_BBGUILD_LOGS'            => 'Activiteitenlog',
 	)
 );

@@ -180,6 +180,19 @@ class player_module
 			)
 		);
 
+		// Build installed games list
+		$gameObj = new game(
+			$ac->bb_classes_table, $ac->bb_races_table,
+			$ac->bb_language_table, $ac->bb_factions_table,
+			$ac->bb_games_table
+		);
+		$gamelist = $gameObj->list_games();
+		$this->games = array();
+		foreach ($gamelist as $game_id => $data)
+		{
+			$this->games[$game_id] = $data['name'];
+		}
+
 		switch ($mode)
 		{
 			/**

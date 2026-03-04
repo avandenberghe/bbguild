@@ -24,10 +24,10 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge(
 	$lang, array(
-	'ACP_CAT_BBGUILD'            => 'bbGuild',
-	'ACP_BBGUILD_MAINPAGE'        => 'General Settings',
-	'ACP_BBGUILD_PANEL'           => 'Dashboard',
-	'ACP_BBGUILD_CONFIG'          => 'Settings',
-	'ACP_BBGUILD_LOGS'            => 'Activity Log',
+	'UCP_BBGUILD_CHARACTERS'        => 'Personaggi',
+	'UCP_BBGUILD'                    => 'bbGuild',
+	'UCP_BBGUILD_CHARACTER_LIST'    => 'I miei personaggi',
+	'UCP_BBGUILD_CHARACTER_ADD'        => 'Aggiungi personaggio'
+
 	)
 );

@@ -1,4 +1,22 @@
 /* Custom CSS for bbGuild */
+
+/* UCP form inputs: match pbwow3 .inputbox styling for bbGuild's .input class */
+.cp-main input.input,
+.cp-main select.input,
+.cp-main textarea.input,
+.cp-main input[type="text"],
+.cp-main select,
+.cp-main textarea {
+    background-color: #040D1A !important;
+    border: 1px solid #7F7F7F !important;
+    color: #CCC !important;
+}
+.cp-main input[type="text"]:focus,
+.cp-main select:focus,
+.cp-main textarea:focus {
+    border-color: #ea0605 !important;
+    color: #FFF !important;
+}
 .bbguildouter
 {
     background: rgba(0, 0, 0, 0) url("./images/bg-alliance.jpg") no-repeat scroll left top;

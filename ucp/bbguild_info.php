@@ -24,11 +24,11 @@ class bbguild_info
 			'version'    => '2.0.0',
 			'modes'        => array(
 				'char'    => array(
-					'title' => 'UCP_CHARACTERS',
+					'title' => 'UCP_BBGUILD_CHARACTER_LIST',
 					'auth' => 'ext_avathar/bbguild && acl_u_charclaim',
 					'cat' => array('UCP_BBGUILD')),
 				'add'    => array(
-					'title' => 'UCP_CHARACTER_ADD',
+					'title' => 'UCP_BBGUILD_CHARACTER_ADD',
 					'auth' => 'ext_avathar/bbguild && acl_u_charadd',
 					'cat' => array('UCP_BBGUILD')),
 			),

@@ -25,11 +25,13 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge(
 	$lang, array(
+
+	// General
 	'ALL' => 'All',
 	'BBGUILDDISABLED' => 'bbGuild is currently disabled.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
-	//---- Portal blocks -----
+	// Portal Blocks
 	'PORTAL' => 'Portal',
 	'REMEMBERME' => 'Remember me',
 	'INFORUM' => 'Posted in',
@@ -70,7 +72,7 @@ $lang = array_merge(
 	'LOTRO'      => 'Lord of the Rings Online',
 	'SWTOR'      => 'Starwars : The old Republic',
 	'FFXIV'      => 'Final Fantasy XIV',
-	'PREINSTALLED' => 'Preinstalled games: %s',
+	'PREINSTALLED' => 'Available game plugins: %s',
 
 	// Recruitment
 	'RECRUITMENT_BLOCK' => 'Recruitment Status',
@@ -92,7 +94,7 @@ $lang = array_merge(
 	'ACHIEV'  => 'Achievements',
 	'PROFFESSION' => 'Proffessions',
 
-	// Player list
+	// Player List
 	'FILTER' => 'Filter',
 	'LASTRAID' => 'Last Raid',
 	'LEVEL' => 'Level',
@@ -109,7 +111,7 @@ $lang = array_merge(
 	'NOUCPUPDCHARS' => 'You are not authorised to update your characters',
 	'NOUCPDELCHARS' => 'You are not authorised to delete your characters',
 
-	// Various
+	// Common Labels
 	'ACCOUNT' => 'Account',
 	'ACTION' => 'Action',
 	'ACHIEVED' => 'earned the achievement ',
@@ -129,7 +131,7 @@ $lang = array_merge(
 	'STATS_RAIDER' => '< 50% Attendance',
 	'STATS_CORERAIDER' => '> 70% Attendance',
 
-	// Armor types
+	// Armor Types
 	'CLOTH' => 'Very light / Cloth',
 	'ROBE' => 'Robes',
 	'LEATHER' => 'Light / Leather',
@@ -138,6 +140,7 @@ $lang = array_merge(
 	'HEAVY' => 'Heavy Armor',
 	'PLATE' => 'Heavy / Plate',
 
+	// Class & Race Labels
 	'CLASSID' => 'Class ID',
 	'CLASS_FACTOR' => 'Class Factor',
 	'CLASSARMOR' => 'Class Armor',
@@ -151,13 +154,18 @@ $lang = array_merge(
 	'DELETE' => 'Delete',
 	'DELETE_CONFIRMATION' => 'Delete Confirmation',
 
+	// Character Management
 	'NO_CHARACTERS' => 'No characters in database',
 	'STATUS' => 'Status Y/N',
 	'CHARACTER' => 'Here is a list of all your Characters. ',
 	'CHARACTER_EXPLAIN' => 'Choose an unclaimed Character to claim it and press submit.',
 	'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
+	'CLAIM_PLAYER' => 'Claim Character',
+	'CLAIM' => 'Claim',
+	'NO_PLAYERS_FOUND' => 'No characters found.',
 	'NO_CHARACTERS_BOUND' => 'No characters bound to your Account.',
 
+	// Entity Labels
 	'EVENT' => 'Event',
 	'EVENTNAME' => 'Event Name',
 	'EVENTS' => 'Events',
@@ -181,7 +189,6 @@ $lang = array_merge(
 	'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.',
 	'MISCELLANEOUS' => 'Miscellaneous',
 	'NEWEST' => 'Newest raid',
-
 	'NOTE' => 'Note',
 	'OLDEST' => 'Oldest raid',
 	'OPEN' => 'Open',
@@ -203,9 +210,7 @@ $lang = array_merge(
 	'RANK_DISTRIBUTION' => 'Rank Distribution',
 	'REASON' => 'Reason',
 	'RESULT' => 'Result',
-
 	'SESSION_ID' => 'Session ID',
-
 	'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 	'TIME' => 'Time',
 	'TOTAL' => 'Total',
@@ -243,7 +248,6 @@ $lang = array_merge(
 
 	// Miscellaneous
 	'DEACTIVATED_BY_USR' => 'Deactivated by User',
-
 	'ADDED' => 'Added',
 	'CLOSED' => 'Closed',
 	'DELETED' => 'Deleted',
@@ -260,8 +264,7 @@ $lang = array_merge(
 	'UPDATED' => 'Updated',
 	'NOVIEW' => 'Unknown Viewname %s',
 
-	//---- About ---
-	//tabs
+	// About Page
 	'ABOUT' => 'About',
 	'MAINIMG' => 'bbguild.png',
 	'IMAGE_ALT' => 'Logo',
@@ -297,7 +300,6 @@ $lang = array_merge(
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 	'COPYRIGHT2' => 'bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN',
 	'COPYRIGHT1' => 'EQDkp (c) 2003 The EqDkp Project Team ',
-
 	'PRODNAME' => 'Product',
 	'VERSION' => 'Version',
 	'DEVELOPER' => 'Developer',
@@ -312,7 +314,6 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 	'EQDKPVERS' => '1.3.2',
 	'EQDKPDEV' => 'Tsigo',
 	'EQDKPLINK' => 'http://www.eqdkp.com/',
-
 	'PLUGINS' => 'Plugins',
 	'PLUGINVERS' => 'Version',
 	'AUTHOR' => 'Author',

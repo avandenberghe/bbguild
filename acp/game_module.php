@@ -45,7 +45,7 @@ class game_module
 				break;
 
 			case 'editgames' :
-				$admin_games->editgames();
+				$admin_games->gamelist();
 				break;
 
 			case 'addrole' :
@@ -63,6 +63,17 @@ class game_module
 			case 'addclass':
 				$admin_games->show_addclass();
 				break;
+		}
+
+		// Allow the controller to override the template name (for sub-forms)
+		if (!empty($admin_games->tpl_name))
+		{
+			$this->tpl_name = $admin_games->tpl_name;
+		}
+
+		if (!empty($admin_games->page_title))
+		{
+			$this->page_title = $admin_games->page_title;
 		}
 
 	}

@@ -1,0 +1,71 @@
+{% INCLUDE 'ucp_header.html' %}
+
+<h2>{{ lang('UCP_BBGUILD_CHARACTER_LIST') }}</h2>
+
+<div class="panel">
+    <div class="inner"><span class="corners-top"><span></span></span>
+
+        {% if S_SHOW %}
+        <table class="table1 zebra-list" cellspacing="1">
+            <thead>
+            <tr>
+                <th>{{ lang('GAME') }}</th>
+                <th>{{ lang('NAME') }}</th>
+                <th>{{ lang('RACE') }}</th>
+                <th>{{ lang('CLASS') }}</th>
+                <th>{{ lang('LEVEL') }}</th>
+                <th>{{ lang('GUILD') }}</th>
+                <th>{{ lang('PLAYER_RANK') }}</th>
+                <th>{{ lang('REALM') }}</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for players_row in loops.players_row %}
+            <tr>
+                <td>{{ players_row.GAME }}</td>
+                <td style="color: {{ players_row.COLORCODE }}"><strong>{{ players_row.NAME }}</strong></td>
+                <td>
+                    {% if players_row.RACE_IMAGE %}<img src="{{ players_row.RACE_IMAGE }}" alt="{{ players_row.RACE }}" title="{{ players_row.RACE }}" /> {% endif %}
+                    {{ players_row.RACE }}
+                </td>
+                <td>
+                    {% if players_row.CLASS_IMAGE %}<img src="{{ players_row.CLASS_IMAGE }}" alt="{{ players_row.CLASS }}" title="{{ players_row.CLASS }}" /> {% endif %}
+                    {{ players_row.CLASS }}
+                </td>
+                <td>{{ players_row.LEVEL }}</td>
+                <td>{{ players_row.GUILD }}</td>
+                <td>{{ players_row.RANK }}</td>
+                <td>{{ players_row.REALM }}</td>
+                <td><a href="{{ players_row.U_EDIT }}">{{ lang('EDIT') }}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if S_SHOW_BUTTONS %}
+        <form method="post" action="{{ U_ACTION }}">
+            <fieldset class="quick">
+                <dl>
+                    <dt><label for="playerlist">{{ lang('CLAIM_PLAYER') }}:</label></dt>
+                    <dd>
+                        <select name="playerlist" id="playerlist">
+                            {{ S_DKPPLAYER_OPTIONS }}
+                        </select>
+                        <input type="submit" name="submit" value="{{ lang('CLAIM') }}" class="button2" />
+                    </dd>
+                </dl>
+                {{ S_FORM_TOKEN }}
+            </fieldset>
+        </form>
+        {% endif %}
+
+        {% else %}
+        <p>{{ lang('NO_PLAYERS_FOUND') }}</p>
+        {% endif %}
+
+        <span class="corners-bottom"><span></span></span>
+    </div>
+</div>
+
+{% INCLUDE 'ucp_footer.html' %}

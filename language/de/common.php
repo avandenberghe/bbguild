@@ -156,6 +156,9 @@ $lang = array_merge(
 	'CHARACTER' => 'Charaktername',
 	'CHARACTER_EXPLAIN' => 'Wähle dein Charakternamen and bestätige.',
 	'CHARACTERS_UPDATED' => 'Der Charaktername %s wurde an dein Forumkonto gekoppelt. ',
+	'CLAIM_PLAYER' => 'Charakter beanspruchen',
+	'CLAIM' => 'Beanspruchen',
+	'NO_PLAYERS_FOUND' => 'Keine Charaktere gefunden.',
 	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',
 
 	'EVENT' => 'Ereignis',

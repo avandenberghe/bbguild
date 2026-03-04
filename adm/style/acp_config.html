@@ -14,7 +14,7 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="date_format">{{ lang('DATE_FORMAT') }}:</label></dt>
+            <dt><label for="date_format">{{ lang('DATE_FORMAT') }}:</label><br /><span>{{ lang('DATE_FORMAT_EXPLAIN') }}</span></dt>
             <dd><input type="text" name="date_format" id="date_format" size="20" maxlength="30" value="{{ DATE_FORMAT }}" class="input" /></dd>
         </dl>
         <dl>
@@ -27,7 +27,7 @@
     <fieldset>
         <legend>{{ lang('PLAYERS') }}</legend>
         <dl>
-            <dt><label for="bbguild_user_llimit">{{ lang('LISTPLAYERS_PER_PAGE') }}:</label></dt>
+            <dt><label for="bbguild_user_llimit">{{ lang('LISTPLAYERS_PER_PAGE') }}:</label><br /><span>{{ lang('LISTPLAYERS_PER_PAGE_EXPLAIN') }}</span></dt>
             <dd><input type="text" name="bbguild_user_llimit" id="bbguild_user_llimit" size="20" maxlength="30" value="{{ USER_LLIMIT }}" class="input" />{{ FV_DEFAULT_LLIMIT }}</dd>
         </dl>
         <dl>
@@ -39,7 +39,7 @@
             <dd><input type="text" name="bbguild_minrosterlvl" id="bbguild_minrosterlvl" size="5" maxlength="2" value="{{ MINLEVEL }}" class="input" /></dd>
         </dl>
         <dl>
-            <dt><label for="bbguild_roster_layout">{{ lang('ARM_LAYOUTDO') }}:</label></dt>
+            <dt><label for="bbguild_roster_layout">{{ lang('ARM_LAYOUTDO') }}:</label><br /><span>{{ lang('ARM_LAYOUTDO_EXPLAIN') }}</span></dt>
             <dd>
                 <select name="bbguild_roster_layout" id="bbguild_roster_layout" class="input">
                     {% for rosterlayout_row in loops.rosterlayout_row %}
@@ -49,7 +49,7 @@
             </dd>
         </dl>
         <dl>
-            <dt><label for="bbguild_show_achiev">{{ lang('ARM_SHOWACH') }}</label></dt>
+            <dt><label for="bbguild_show_achiev">{{ lang('ARM_SHOWACH') }}</label><br /><span>{{ lang('ARM_SHOWACH_EXPLAIN') }}</span></dt>
             <dd>
                 <input type="checkbox" name="bbguild_show_achiev" id="bbguild_show_achiev" value="1" {% if F_SHOWACHIEV == 1 %} checked="checked"{% endif %}/>
             </dd>
@@ -81,7 +81,7 @@
     <fieldset>
         <legend>{{ lang('NEWSBLOCKSETTING') }}</legend>
         <dl>
-            <dt><label for="bbguild_user_nlimit">{{ lang('NEWSNUMBER') }}</label></dt>
+            <dt><label for="bbguild_user_nlimit">{{ lang('NEWSNUMBER') }}</label><br /><span>{{ lang('NEWSNUMBER_EXPLAIN') }}</span></dt>
             <dd>
                 <input type="text" name="bbguild_user_nlimit" id="bbguild_user_nlimit" size="20" maxlength="30" value="{{ USER_NLIMIT }}" class="input" />{{ FV_DEFAULT_NLIMIT }}
             </dd>

@@ -156,6 +156,9 @@ $lang = array_merge(
 	'CHARACTER' => 'Questa è la lista di tutti i tuoi Personaggi. ',
 	'CHARACTER_EXPLAIN' => 'Scegli un Personaggio che non è ancora stato associato.',
 	'CHARACTERS_UPDATED' => 'Il Personaggio %s è stato assegnato al tuo account. ',
+	'CLAIM_PLAYER' => 'Rivendica personaggio',
+	'CLAIM' => 'Rivendica',
+	'NO_PLAYERS_FOUND' => 'Nessun personaggio trovato.',
 	'NO_CHARACTERS_BOUND' => 'Nessun Personaggio collegato al tuo account.',
 
 	'EVENT' => 'Evento',
