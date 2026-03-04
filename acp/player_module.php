@@ -145,7 +145,7 @@ class player_module
 		global $user, $db, $template, $phpbb_admin_path, $phpEx;
 		global $request, $phpbb_container, $auth;
 
-		$this->admin_controller = $phpbb_container->get('avathar.bbguild.admin.controller');
+		$this->admin_controller = $phpbb_container->get('avathar.bbguild.controller');
 		$ac = $this->admin_controller;
 		$this->helper = $phpbb_container->get('controller.helper');
 		$this->factionroute =  $this->helper->route('avathar_bbguild_01', array());
@@ -691,7 +691,8 @@ class player_module
 			5 => array('last_update', 'last_update desc'),
 			7 => array('player_id', 'player_id desc')
 		);
-		$current_order   = $this->admin_controller->util->switch_order($sort_order);
+		$util = $this->phpbb_container->get('avathar.bbguild.util');
+		$current_order   = $util->switch_order($sort_order);
 		$sort_index      = explode('.', $current_order['uri']['current']);
 		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 		$show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;

@@ -429,7 +429,7 @@ class admin_main
 			$uid = $row['bbcode_uid'];
 		}
 
-		$textarr = generate_text_for_edit($welcometext, $uid, $bitfield);
+		$textarr = generate_text_for_edit($welcometext, $uid, (int) $bitfield);
 		// number of news and items to show on front page
 		$n_news  = $this->config['bbguild_n_news'];
 		$n_items = $this->config['bbguild_n_items'];
