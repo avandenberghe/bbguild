@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.0-a11 04/03/2026
+  - [FIX] #301: "Module not accessible" after adding guild — typo in acp/guild_module.php
+  - [FIX] #299: ACP achievement list error — wrong array index in acp/achievement_module.php
+  - [FIX] Wrong namespace `\bbdkp\bbguild` in view_controller.php
+  - [FIX] Wrong column names `rank_id`/`guild_id` in guilds.php (should be `player_rank_id`/`player_guild_id`)
+  - [FIX] Missing constructor arguments in player.php `guilds()` call
+  - [FIX] Missing `switch_order` call — method lives in `util` service, not player
+  - [FIX] Missing properties `$ext_path` and `$games` in player.php and viewnavigation.php
+  - [FIX] Missing `ALL` language key in all 4 language files
+  - [FIX] cURL fix: comma instead of `=>` for CURLOPT_FOLLOWLOCATION in curl.php
+  - [FIX] Version check: read `unstable` branch first in admin_main.php
+  - [FIX] Service collection: replaced `!tagged_iterator` with `phpbb\di\service_collection` in services.yml
+  - [CHG] Migration rewrite: reorganized into `basics/` + versioned dirs, fixed ROLE_USER_FULL permission bug, removed hardcoded `game_id='wow'`, removed AION columns and bb_plugins table
+  - [CHG] Migration seed data: populates all 13 core tables with Custom game test data
+  - [CHG] Game plugin architecture: extracted game support into separate `bbguild_<game>` extensions with provider + installer pattern
+  - [CHG] Language cleanup: archived 132 DKP keys per language, removed dead entries, moved WoW keys to bbguild_wow plugin
+  - [CHG] Legacy game installers removed; only `install_custom.php` remains in core
+  - [CHG] Core images cleaned up: game images moved to plugins, UI assets remain
+  - [CHG] ACP UI: replaced radio button Yes/No and On/Off pairs with checkboxes
+  - [CHG] Removed dead `hide_row` block vars from admin_main.php
+
 ## 2.0.0-a10 02/03/2026
   - [FIX] phpBB 3.3 compatibility: updated version gates in ext.php and composer.json
   - [FIX] PHP 8.x compatibility: null-safety casts in util.php, battlenet_resource.php, bbguild_module.php
