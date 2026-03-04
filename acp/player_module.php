@@ -650,7 +650,7 @@ class player_module
 	 */
 	private function BuildTemplateListPlayers($mode)
 	{
-		global  $config, $phpbb_admin_path, $phpEx;
+		global  $config, $phpbb_admin_path, $phpEx, $phpbb_container;
 
 		// fill popup and set selected to default selection
 		$this->guild->get_guild();
@@ -836,12 +836,32 @@ class player_module
 				'U_LIST_PLAYERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-player_module&amp;mode=listplayers&amp;'),
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
 				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $this->guild->getGuildid()),
-				'S_WOW'                 => $this->game_has_api($this->guild->getGameId()),
 				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
 				'GUILD_EMBLEM'          => $this->guild->getEmblempath(),
 				'GUILD_NAME'            => $this->guild->getName(),
 			)
 		);
+		// Dispatch event so game plugins can add API-specific template vars
+		$dispatcher = $phpbb_container->get('dispatcher');
+		$game_id = $this->guild->getGameId();
+		$has_api = $this->game_has_api($game_id);
+
+		/**
+		 * Event dispatched when the list players template is being built.
+		 * Allows game plugins to inject API-specific template variables.
+		 *
+		 * @event avathar.bbguild.acp_listplayers_display
+		 * @var string game_id  The game identifier for the current guild
+		 * @var bool   has_api  Whether this game has API support
+		 */
+		$vars = array('game_id', 'has_api');
+		extract($dispatcher->trigger_event('avathar.bbguild.acp_listplayers_display', compact($vars)));
+
+		$this->template->assign_vars(array(
+			'HAS_API' => $has_api,
+			'GAME_ID' => $game_id,
+		));
+
 		$this->page_title = 'ACP_BBGUILD_PLAYER_LIST';
 
 	}

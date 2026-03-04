@@ -97,27 +97,23 @@
 
                 </fieldset>
 
+                {% if HAS_API && F_ENABLGAMEEARMORY %}
                 <fieldset>
-                    <legend>{{ lang('WOWAPI') }}</legend>
+                    <legend>{{ lang('GAMEAPI') }}</legend>
 
-                    {% if S_WOW && F_ENABLGAMEEARMORY %}
                     <dl>
                         <dt><label for="armory_enabled">{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_GUILD_EXPLAIN') }}</dt>
                         <dd>
                             <input type="checkbox" name="armory_enabled" id="armory_enabled" value="1"{% if F_ENABLEARMORY %} checked="checked"{% endif %} />
                         </dd>
                     </dl>
-                    {% endif %}
 
                     {% if F_ENABLEARMORY %}
                     <dl>
                         <dt><label>{{ lang('ARMORYSTATUS') }}:</label></dt>
                         <dd>{{ ARMORYSTATUS }}</dd>
                     </dl>
-                    <dl>
-                        <dt><label>{{ lang('ARMORY_URL') }}:</label></dt>
-                        <dd><a href="{{ ARMORY_URL }}">{{ ARMORY_URL }}</a></dd>
-                    </dl>
+                    <!-- EVENT avathar_bbguild_acp_editguild_api_after -->
                     <dl>
                         <dt><label for="min_armorylevel">{{ lang('MIN_ARMORYLEVEL') }}</label></dt>
                         <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{{ MIN_ARMORYLEVEL }}" /></dd>
@@ -131,6 +127,7 @@
                     </dl>
                     {% endif %}
                 </fieldset>
+                {% endif %}
 
                 <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_END }};">
                     {{ S_FORM_TOKEN }}

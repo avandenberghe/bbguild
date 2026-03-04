@@ -17,6 +17,7 @@ use phpbb\log\log;
 use phpbb\pagination;
 use phpbb\request\request;
 use phpbb\template\template;
+use phpbb\event\dispatcher_interface;
 use phpbb\user;
 
 use avathar\bbguild\model\admin\constants;
@@ -73,6 +74,8 @@ class admin_guild
 	protected $helper;
 	/** @var game_registry */
 	protected $game_registry;
+	/** @var dispatcher_interface */
+	protected $dispatcher;
 
 	/* @var string */
 	public $u_action;
@@ -168,6 +171,7 @@ class admin_guild
 		\avathar\bbguild\model\admin\util $util,
 		\phpbb\controller\helper $helper,
 		game_registry $game_registry,
+		dispatcher_interface $dispatcher,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -207,6 +211,7 @@ class admin_guild
 		$this->curl = $curl;
 		$this->helper = $helper;
 		$this->game_registry = $game_registry;
+		$this->dispatcher = $dispatcher;
 
 		$this->bb_games_table = $bb_games_table;
 		$this->bb_logs_table = $bb_logs_table;
@@ -844,12 +849,18 @@ class admin_guild
 			}
 		}
 
+		// Check if this game has API support
+		$game_id = $updateguild->getGameId();
+		$provider = $this->game_registry->get($game_id);
+		$has_api = ($provider !== null && $provider->has_api());
+
 		$this->template->assign_vars(array(
 			'U_FACTION'              => $this->factionroute,
 			'F_ENABLGAMEEARMORY'     => $this->game->getArmoryEnabled(),
 			'F_ENABLEARMORY'         => $updateguild->isArmoryEnabled(),
 			'RECSTATUS'              => $updateguild->getRecstatus(),
-			'GAME_ID'                => $updateguild->getGameId(),
+			'GAME_ID'                => $game_id,
+			'HAS_API'                => $has_api,
 			'GUILDID'                => $updateguild->getGuildid(),
 			'GUILD_NAME'             => $updateguild->getName(),
 			'REALM'                  => $updateguild->getRealm(),
@@ -868,6 +879,18 @@ class admin_guild
 			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 		));
+
+		/**
+		 * Event dispatched when the edit guild template is being built.
+		 * Allows game plugins to inject their own template variables.
+		 *
+		 * @event avathar.bbguild.acp_editguild_display
+		 * @var guilds updateguild The guild object being displayed
+		 * @var string game_id     The game identifier
+		 * @var bool   has_api     Whether this game has API support
+		 */
+		$vars = array('updateguild', 'game_id', 'has_api');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editguild_display', compact($vars)));
 
 		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
 	}

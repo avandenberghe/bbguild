@@ -909,6 +909,7 @@ $lang = array_merge(
 	'DKPTIMEUNIT' => 'DKP earned per unit of time',
 	'DKPTIMEUNIT_EXPLAIN' => 'will assign x DKP as earned for each time interval that raider was present in raid. Used by Raidtracker and Manual raid Addscreen for time DKP',
 	'ARMORY_ENABLED' => 'Armory enabled',
+	'GAMEAPI' => 'Game API',
 	'TIMEUNIT' => 'Time interval',
 	'TIMEUNIT_EXPLAIN' => 'Duration in minutes for the DKP time interval. Used by Raidtracker and Manual raid Addscreen for time DKP',
 	'STANDARDDURATION' => 'Average Raid duration',

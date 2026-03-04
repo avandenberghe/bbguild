@@ -887,6 +887,7 @@ $lang = array_merge(
 	'DKPTIMEUNIT' => 'DKP verdient pro Zeiteinheit',
 	'DKPTIMEUNIT_EXPLAIN' => 'Kalkuliert x DKP als Verdient für jedes Zeit Intervall wo der Teilnehmer im Raid aktiv war.',
 	'ARMORY_ENABLED' => 'Armoryverbindung eingeschaltet',
+	'GAMEAPI' => 'Spiel-API',
 	'TIMEUNIT' => 'Zeit Intervall',
 	'TIMEUNIT_EXPLAIN' => 'Dauer in Minuten für das DKP Zeitintervall. Wird von Raidtracker und dem manuelle Raidlog zur Berechnung genutzt.',
 	'STANDARDDURATION' => 'durchschnittlicher Raid Dauer',

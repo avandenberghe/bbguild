@@ -57,36 +57,15 @@
             </dd>
         </dl>
 
-        {% if ISWOW %}
+        {% if HAS_API %}
         <dl>
             <dt><label for="enable_armory">{{ lang('ARMORY_ENABLED') }}:</label>{{ lang('ARMORY_ENABLED_EXPLAIN') }}</dt>
             <dd>
                 <input type="checkbox" name="enable_armory" id="enable_armory" value="1"{% if F_ENABLEARMORY %} checked="checked"{% endif %} />
             </dd>
         </dl>
-
-        <dl>
-            <dt><label for="apikey">{{ lang('WOWAPIKEY') }}:</label><br /><span>{{ lang('WOWAPIKEY_EXPLAIN') }} </span></dt>
-            <dd><input name="apikey" type="text" id="apikey" size="60" maxlength="100" value="{{ APIKEY }}"/></dd>
-        </dl>
-
-        <dl>
-            <dt><label for="privkey">{{ lang('WOWPRIVKEY') }}:</label><br /><span>{{ lang('WOWPRIVKEY_EXPLAIN') }} </span></dt>
-            <dd><input name="privkey" type="text" id="privkey" size="60" maxlength="100" value="{{ PRIVKEY }}"/></dd>
-        </dl>
-
-        <dl>
-            <dt><label for="apilocale">{{ lang('WOWAPILOCALE') }}:</label><br /><span>{{ lang('WOWAPILOCALE_EXPLAIN') }} </span></dt>
-            <dd>
-                <select id="apilocale" name="apilocale" class="input">
-                    {% for apilocale_row in loops.apilocale_row %}
-                    <option value="{{ apilocale_row.VALUE }}"{{ apilocale_row.SELECTED }}>{{ apilocale_row.OPTION }}</option>
-                    {% endfor %}
-                </select>
-            </dd>
-        </dl>
-
         {% endif %}
+        <!-- EVENT avathar_bbguild_acp_editgames_api_after -->
         
         <dl>
             <dt><label for="bossbaseurl">{{ lang('BOSSBASEURL') }}:</label><br /><span>{{ lang('BOSSBASEURL_EXPLAIN') }} <a href="{{ BOSSBASEURL }}">{{ BOSSBASEURL }}</a></span></dt>

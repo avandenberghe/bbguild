@@ -863,6 +863,7 @@ $lang = array_merge(
 	'DKPTIMEUNIT' => 'DKP acquisiti per unità di tempo',
 	'DKPTIMEUNIT_EXPLAIN' => 'Assegnerò x DKP per ciascun intervallo di tempo che il giocatore effettuerà nell’incursione. Usato da Raidtracker e Raid Addscreen per il tempo DKP',
 	'ARMORY_ENABLED' => 'Armory abilitata',
+	'GAMEAPI' => 'API del gioco',
 	'TIMEUNIT' => 'Intervallo di Tempo',
 	'TIMEUNIT_EXPLAIN' => 'Durata in minuti per intervallo di tempo. Usato da Raidtracker e Raid Addscreen per il tempo DKP',
 	'STANDARDDURATION' => 'Durata Media Incursione',

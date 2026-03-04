@@ -17,10 +17,12 @@ use phpbb\log\log;
 use phpbb\pagination;
 use phpbb\request\request;
 use phpbb\template\template;
+use phpbb\event\dispatcher_interface;
 use phpbb\user;
 
 use avathar\bbguild\model\admin\constants;
 use avathar\bbguild\model\games\game;
+use avathar\bbguild\model\games\game_registry;
 use avathar\bbguild\model\games\rpg\classes;
 use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\games\rpg\races;
@@ -85,6 +87,12 @@ class admin_games
 
 	/* @var \avathar\bbguild\model\admin\util utility class */
 	public $util;
+
+	/** @var game_registry */
+	protected $game_registry;
+
+	/** @var dispatcher_interface */
+	protected $dispatcher;
 
 	/**
 	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
@@ -177,6 +185,8 @@ class admin_games
 		\avathar\bbguild\model\admin\curl $curl,
 		\avathar\bbguild\model\admin\log $bbguildlog,
 		\avathar\bbguild\model\admin\util $util,
+		game_registry $game_registry,
+		dispatcher_interface $dispatcher,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -230,6 +240,8 @@ class admin_games
 		$this->root_path = $phpbb_root_path;
 		$this->php_ext = $phpEx;
 		$this->curl = $curl;
+		$this->game_registry = $game_registry;
+		$this->dispatcher = $dispatcher;
 
 		$this->languagecodes = array(
 			'de' => $this->language->lang('LANG_DE'),
@@ -441,5 +453,110 @@ class admin_games
 	public function gameclass()
 	{
 
+	}
+
+	/**
+	 * Save game settings from the edit game form.
+	 *
+	 * @return game The updated game object
+	 */
+	private function SaveGameSettings()
+	{
+		$editgame = new game(
+			$this->bb_classes_table, $this->bb_races_table,
+			$this->bb_language_table, $this->bb_factions_table,
+			$this->bb_games_table, $this->game_registry
+		);
+		$editgame->game_id = $this->request->variable(constants::URI_GAME, $this->request->variable('hidden_game_id', ''));
+		$editgame->get_game();
+
+		$editgame->setName($this->request->variable('game_name', '', true));
+		$editgame->setImagename($this->request->variable('imagename', '', true));
+		$editgame->setBossbaseurl($this->request->variable('bossbaseurl', '', true));
+		$editgame->setZonebaseurl($this->request->variable('zonebaseurl', '', true));
+
+		// Check if this game has API support via the game registry
+		$game_id = $editgame->game_id;
+		$provider = $this->game_registry->get($game_id);
+		$has_api = ($provider !== null && $provider->has_api());
+
+		if ($has_api)
+		{
+			$editgame->setArmoryEnabled($this->request->variable('enable_armory', 0));
+		}
+
+		/**
+		 * Event dispatched when game settings are submitted.
+		 * Allows game plugins to read their own form values and set them on the game object.
+		 *
+		 * @event avathar.bbguild.acp_editgames_submit
+		 * @var game   editgame  The game object being saved
+		 * @var string game_id   The game identifier
+		 * @var bool   has_api   Whether this game has API support
+		 */
+		$vars = array('editgame', 'game_id', 'has_api');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editgames_submit', compact($vars)));
+
+		$editgame->update_game();
+
+		return $editgame;
+	}
+
+	/**
+	 * Populate template variables for the edit game page.
+	 *
+	 * @param game $editgame The game being displayed
+	 */
+	private function showgame(game $editgame)
+	{
+		$game_id = $editgame->game_id;
+		$provider = $this->game_registry->get($game_id);
+		$has_api = ($provider !== null && $provider->has_api());
+
+		// Region dropdown
+		$regions = $editgame->getRegions();
+		if (is_array($regions))
+		{
+			foreach ($regions as $key => $regionname)
+			{
+				$this->template->assign_block_vars('region_row', array(
+					'VALUE'    => $key,
+					'SELECTED' => ($editgame->getRegion() == $key) ? ' selected="selected"' : '',
+					'OPTION'   => (!empty($regionname)) ? $regionname : '(None)',
+				));
+			}
+		}
+
+		// Game image path
+		$imagename = $editgame->getImagename();
+		$gamepath = $this->ext_path_web . 'images/' . $game_id . '/' . $imagename . '.png';
+		$gamepath_file = $this->ext_path . 'images/' . $game_id . '/' . $imagename . '.png';
+
+		$this->template->assign_vars(array(
+			'URI_GAME'           => constants::URI_GAME,
+			'GAME_ID'            => $game_id,
+			'GAME_NAME'          => $editgame->getName(),
+			'GAMEIMAGE'          => $imagename,
+			'GAMEIMAGEEXPLAIN'   => $this->language->lang('CLASS_IMAGE_EXPLAIN'),
+			'GAMEPATH'           => $gamepath,
+			'S_GAMEIMAGE_EXISTS' => @file_exists($gamepath_file),
+			'F_ENABLEARMORY'     => $editgame->getArmoryEnabled(),
+			'HAS_API'            => $has_api,
+			'BOSSBASEURL'        => $editgame->getBossbaseurl(),
+			'ZONEBASEURL'        => $editgame->getZonebaseurl(),
+			'EDITGAME'           => sprintf($this->language->lang('ACP_EDITGAME'), $editgame->getName()),
+		));
+
+		/**
+		 * Event dispatched when the edit game template is being built.
+		 * Allows game plugins to inject their own template variables.
+		 *
+		 * @event avathar.bbguild.acp_editgames_display
+		 * @var game   editgame  The game object being displayed
+		 * @var string game_id   The game identifier
+		 * @var bool   has_api   Whether this game has API support
+		 */
+		$vars = array('editgame', 'game_id', 'has_api');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editgames_display', compact($vars)));
 	}
 }

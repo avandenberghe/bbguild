@@ -877,6 +877,7 @@ $lang = array_merge(
 	'DKPTIMEUNIT' => 'DKP gagné par intervalle de temps',
 	'DKPTIMEUNIT_EXPLAIN' => 'assignera x DKP comme gagné pour chaque intervalle ou le joueur était présent dans le Raid. Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
 	'ARMORY_ENABLED' => 'lien Armorerie autorisé',
+	'GAMEAPI' => 'API du jeu',
 	'TIMEUNIT' => 'Intervalle de temps',
 	'TIMEUNIT_EXPLAIN' => 'Durée en minutes du temps d‘intervalle de Bonus Temps DKP.  Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
 	'STANDARDDURATION' => 'Durée moyenne d‘un Raid',
