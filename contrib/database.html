@@ -157,7 +157,11 @@ background-color:#999;
 
 
 
-<li><a href="#table_phpbb_bb_plugins">phpbb_bb_plugins</a></li>
+<li><a href="#table_phpbb_bb_portal_modules">phpbb_bb_portal_modules</a></li>
+
+
+
+<li><a href="#table_phpbb_bb_portal_config">phpbb_bb_portal_config</a></li>
 
 
 
@@ -4082,197 +4086,6 @@ faction_id
 
 
 <div class="TableSection">
-<a name="table_phpbb_bb_plugins" />
-
-<h2>phpbb_bb_plugins <span class="objectTypeBlock">Table</span></h2>
-
-
-<table class='dataTable columns objectInformation'>
-<tr><th>Object Type</th><td>Table</td></tr>
-<tr><th>Name</th><td>phpbb_bb_plugins</td></tr>
-<tr><th>Schema</th><td></td></tr>
-<tr><th>Comment</th><td></td></tr>
-</table>
-
-<h3> Columns</h3>
-
- <table class='dataTable columns'>
-    <tr>
-        <th>Column Name</th><th>Data Type</th><th>Primary Key</th><th>Options</th><th>Comment</th>
-    </tr>
-
-
-    <tr>
-        <td>name</td>
-        <td>VARCHAR(255)</td>
-        <td>&#10004;</td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>value</td>
-        <td>TINYINT(1)</td>
-        <td></td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-        <li>Unsigned</li>
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>version</td>
-        <td>VARCHAR(50)</td>
-        <td></td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>installdate</td>
-        <td>BIGINT(20)</td>
-        <td></td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>orginal_copyright</td>
-        <td>VARCHAR(150)</td>
-        <td></td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>bbdkp_copyright</td>
-        <td>VARCHAR(150)</td>
-        <td></td>
-        <td><ul class="fieldOptions">
-
-
-
-
-
-
-        <li>Not Null</li>
-
-
-
-
-
-
-
-
-        </ul>
-        </td>
-        <td></td>
-    </tr>
-</table>
-
-
-<h3>Indexes</h3>
-    <table class='dataTable indexes'>
-        <tr><th>Index Name</th><th>type</th><th>Comment</th><th>columns</th></tr>
-
-
-    <tr>
-    <td>Primary Key</td>
-    <td>PK</td>
-    <td></td>
-    <td>name</td>
-    </tr>
-
-
-
-</table>
-
-
-
-</div>
-<hr>
-
-
-<div class="TableSection">
 <a name="table_phpbb_bb_news" />
 
 <h2>phpbb_bb_news <span class="objectTypeBlock">Table</span></h2>
@@ -5358,6 +5171,253 @@ faction_id
 </div>
 <hr>
 
+
+<div class="TableSection">
+<a name="table_phpbb_bb_portal_modules" />
+
+<h2>phpbb_bb_portal_modules <span class="objectTypeBlock">Table</span></h2>
+
+
+<table class='dataTable columns objectInformation'>
+<tr><th>Object Type</th><td>Table</td></tr>
+<tr><th>Name</th><td>phpbb_bb_portal_modules</td></tr>
+<tr><th>Schema</th><td></td></tr>
+<tr><th>Comment</th><td>Guild-scoped portal module layout</td></tr>
+</table>
+
+<h3> Columns</h3>
+
+ <table class='dataTable columns'>
+    <tr>
+        <th>Column Name</th><th>Data Type</th><th>Primary Key</th><th>Options</th><th>Comment</th>
+    </tr>
+
+    <tr>
+        <td>module_id</td>
+        <td>INT UNSIGNED</td>
+        <td>&#10004;</td>
+        <td><ul class="fieldOptions">
+        <li>Auto Increment</li>
+        <li>Not Null</li>
+        </ul>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>guild_id</td>
+        <td>SMALLINT UNSIGNED</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Unsigned</li>
+        <li>Default: 0</li>
+        </ul>
+        </td>
+        <td>Guild scope (0 = default template)</td>
+    </tr>
+    <tr>
+        <td>module_classname</td>
+        <td>VARCHAR(255)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: ''</li>
+        </ul>
+        </td>
+        <td>Service class name</td>
+    </tr>
+    <tr>
+        <td>module_column</td>
+        <td>TINYINT(3)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: 0</li>
+        </ul>
+        </td>
+        <td>Column position (top/center/right)</td>
+    </tr>
+    <tr>
+        <td>module_order</td>
+        <td>TINYINT(3)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: 0</li>
+        </ul>
+        </td>
+        <td>Sort order within column</td>
+    </tr>
+    <tr>
+        <td>module_name</td>
+        <td>VARCHAR(255)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: ''</li>
+        </ul>
+        </td>
+        <td>Display name</td>
+    </tr>
+    <tr>
+        <td>module_image_src</td>
+        <td>VARCHAR(255)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: ''</li>
+        </ul>
+        </td>
+        <td>Module icon path</td>
+    </tr>
+    <tr>
+        <td>module_image_width</td>
+        <td>SMALLINT UNSIGNED</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Unsigned</li>
+        <li>Default: 16</li>
+        </ul>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>module_image_height</td>
+        <td>SMALLINT UNSIGNED</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Unsigned</li>
+        <li>Default: 16</li>
+        </ul>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>module_group_ids</td>
+        <td>VARCHAR(255)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: ''</li>
+        </ul>
+        </td>
+        <td>Comma-separated group IDs for visibility</td>
+    </tr>
+    <tr>
+        <td>module_status</td>
+        <td>TINYINT(1)</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: 1</li>
+        </ul>
+        </td>
+        <td>Enabled (1) / Disabled (0)</td>
+    </tr>
+</table>
+
+
+<h3>Indexes</h3>
+    <table class='dataTable indexes'>
+        <tr><th>Index Name</th><th>type</th><th>Comment</th><th>columns</th></tr>
+
+    <tr>
+    <td>Primary Key</td>
+    <td>PK</td>
+    <td></td>
+    <td>module_id</td>
+    </tr>
+
+    <tr>
+    <td>guild_col_order</td>
+    <td>INDEX</td>
+    <td></td>
+    <td>guild_id, module_column, module_order</td>
+    </tr>
+
+</table>
+
+
+
+</div>
+<hr>
+
+
+<div class="TableSection">
+<a name="table_phpbb_bb_portal_config" />
+
+<h2>phpbb_bb_portal_config <span class="objectTypeBlock">Table</span></h2>
+
+
+<table class='dataTable columns objectInformation'>
+<tr><th>Object Type</th><td>Table</td></tr>
+<tr><th>Name</th><td>phpbb_bb_portal_config</td></tr>
+<tr><th>Schema</th><td></td></tr>
+<tr><th>Comment</th><td>Guild-scoped portal module configuration</td></tr>
+</table>
+
+<h3> Columns</h3>
+
+ <table class='dataTable columns'>
+    <tr>
+        <th>Column Name</th><th>Data Type</th><th>Primary Key</th><th>Options</th><th>Comment</th>
+    </tr>
+
+    <tr>
+        <td>config_name</td>
+        <td>VARCHAR(255)</td>
+        <td>&#10004;</td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Default: ''</li>
+        </ul>
+        </td>
+        <td>Configuration key</td>
+    </tr>
+    <tr>
+        <td>config_value</td>
+        <td>MEDIUMTEXT</td>
+        <td></td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        </ul>
+        </td>
+        <td>Configuration value</td>
+    </tr>
+    <tr>
+        <td>guild_id</td>
+        <td>SMALLINT UNSIGNED</td>
+        <td>&#10004;</td>
+        <td><ul class="fieldOptions">
+        <li>Not Null</li>
+        <li>Unsigned</li>
+        <li>Default: 0</li>
+        </ul>
+        </td>
+        <td>Guild scope (0 = default template)</td>
+    </tr>
+</table>
+
+
+<h3>Indexes</h3>
+    <table class='dataTable indexes'>
+        <tr><th>Index Name</th><th>type</th><th>Comment</th><th>columns</th></tr>
+
+    <tr>
+    <td>Primary Key</td>
+    <td>PK</td>
+    <td></td>
+    <td>config_name, guild_id</td>
+    </tr>
+
+</table>
+
+
+
+</div>
+<hr>
 
 
 
