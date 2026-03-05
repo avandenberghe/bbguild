@@ -8,14 +8,7 @@
 
         <dl>
             <dt><label>{{ lang('BBGUILD_STARTED') }}:</label></dt>
-            <dd><input type="text" name="bbguild_start_dd" id="bbguild_start_dd" size="2" maxlength="2" value="{{ EQDKP_START_DD }}" class="input" />
-                <input type="text" name="bbguild_start_mm" id="bbguild_start_mm" size="2" maxlength="2" value="{{ EQDKP_START_MM }}" class="input" />
-                <input type="text" name="bbguild_start_yy" id="bbguild_start_yy" size="4" maxlength="4" value="{{ EQDKP_START_YY }}" class="input" />
-            </dd>
-        </dl>
-        <dl>
-            <dt><label for="date_format">{{ lang('DATE_FORMAT') }}:</label><br /><span>{{ lang('DATE_FORMAT_EXPLAIN') }}</span></dt>
-            <dd><input type="text" name="date_format" id="date_format" size="20" maxlength="30" value="{{ DATE_FORMAT }}" class="input" /></dd>
+            <dd><input type="date" name="bbguild_start_date" id="bbguild_start_date" value="{{ EQDKP_START_DATE }}" class="input" /></dd>
         </dl>
         <dl>
             <dt><label for="language">{{ lang('DEFAULT_LANGUAGE') }}:</label><br />{{ lang('DEFAULT_LANGUAGE_EXPLAIN') }}</dt>
@@ -48,12 +41,7 @@
                 </select>
             </dd>
         </dl>
-        <dl>
-            <dt><label for="bbguild_show_achiev">{{ lang('ARM_SHOWACH') }}</label><br /><span>{{ lang('ARM_SHOWACH_EXPLAIN') }}</span></dt>
-            <dd>
-                <input type="checkbox" name="bbguild_show_achiev" id="bbguild_show_achiev" value="1" {% if F_SHOWACHIEV == 1 %} checked="checked"{% endif %}/>
-            </dd>
-        </dl>
+        {% EVENT avathar_bbguild_acp_config_players_after %}
         <dl>
             <dt><label for="bbguild_hide_inactive">{{ lang('HIDE_INACTIVE') }}:</label><br />{{ lang('HIDE_INACTIVE_NOTE') }}</dt>
             <dd>

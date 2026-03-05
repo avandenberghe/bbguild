@@ -69,6 +69,9 @@ class admin_main
 	/** @var string Custom form action */
 	protected $u_action;
 
+	/** @var \phpbb\event\dispatcher_interface */
+	protected $dispatcher;
+
 	/* @var \avathar\bbguild\model\admin\curl curl class */
 	public $curl;
 
@@ -150,6 +153,7 @@ class admin_main
 		$phpbb_root_path,
 		$adm_relative_path,
 		$phpEx,
+		\phpbb\event\dispatcher_interface $dispatcher,
 		\avathar\bbguild\model\admin\curl $curl,
 		\avathar\bbguild\model\admin\log $bbguildlog,
 		\avathar\bbguild\model\admin\util $util,
@@ -212,13 +216,17 @@ class admin_main
 		*/
 
 		$this->php_ext = $phpEx;
+		$this->dispatcher = $dispatcher;
 		$this->curl = $curl;
 
 		$this->languagecodes = array(
 			'de' => $this->language->lang('LANG_DE'),
 			'en' => $this->language->lang('LANG_EN'),
+			'es' => $this->language->lang('LANG_ES'),
 			'fr' => $this->language->lang('LANG_FR'),
 			'it' => $this->language->lang('LANG_IT'),
+			'nl' => $this->language->lang('LANG_NL'),
+			'pl' => $this->language->lang('LANG_PL'),
 		);
 	}
 
@@ -282,7 +290,7 @@ class admin_main
 		$start_timestamp = (int) $this->config['bbguild_eqdkp_start'];
 		if ($start_timestamp > 0)
 		{
-			$bbguild_started = date((string) $this->config['bbguild_date_format'], $start_timestamp);
+			$bbguild_started = $this->user->format_date($start_timestamp);
 		}
 
 		//get number of games
@@ -423,15 +431,11 @@ class admin_main
 
 		$this->template->assign_vars(
 			array(
-				'EQDKP_START_DD' => date('d', (int) $this->config['bbguild_eqdkp_start']) ,
-				'EQDKP_START_MM' => date('m', (int) $this->config['bbguild_eqdkp_start']) ,
-				'EQDKP_START_YY' => date('Y', (int) $this->config['bbguild_eqdkp_start']) ,
-				'DATE_FORMAT'   => $this->config['bbguild_date_format'] ,
+				'EQDKP_START_DATE' => date('Y-m-d', (int) $this->config['bbguild_eqdkp_start']) ,
 				'S_LANG_OPTIONS' => $s_lang_options,
 				'USER_LLIMIT' => $this->config['bbguild_user_llimit'] ,
 				'MAXCHARS' => $this->config['bbguild_maxchars'] ,
 				'MINLEVEL' => $this->config['bbguild_minrosterlvl'],
-				'F_SHOWACHIEV' => $this->config['bbguild_show_achiev'] ,
 				'HIDE_INACTIVE' => (int) $this->config['bbguild_hide_inactive'],
 				'SHOW_MOTD' => (int) $this->config['bbguild_motd'],
 				'WELCOME_MESSAGE' => $textarr['text'] ,
@@ -439,6 +443,14 @@ class admin_main
 				'U_ACTION' => $this->u_action,
 			)
 		);
+
+		/**
+		 * Event to allow plugins to add settings to the bbGuild config page.
+		 *
+		 * @event avathar.bbguild.acp_config_display
+		 * @since 2.0.0-b1
+		 */
+		$this->dispatcher->dispatch('avathar.bbguild.acp_config_display');
 
 		// is gameworld extension installed ?
 		if (isset($config['bbguild_gameworld_version']))
@@ -469,21 +481,25 @@ class admin_main
 			trigger_error($this->lang->lang('FV_FORMVALIDATION'), E_USER_WARNING);
 		}
 
-		$day = $this->request->variable('bbguild_start_dd', 0);
-		$month = $this->request->variable('bbguild_start_mm', 0);
-		$year = $this->request->variable('bbguild_start_yy', 0);
-		$bbguild_start = mktime(0, 0, 0, $month, $day, $year);
+		$start_date = $this->request->variable('bbguild_start_date', '');
+		$bbguild_start = !empty($start_date) ? (int) strtotime($start_date) : 0;
 		$this->config->set('bbguild_eqdkp_start', $bbguild_start, true);
-		$this->config->set('bbguild_date_format', $this->request->variable('date_format', ''), true);
 		$this->config->set('bbguild_lang', $this->request->variable('language', 'en'), true);
 		$this->config->set('bbguild_user_nlimit', $this->request->variable('bbguild_user_nlimit', 0), true);
 		$this->config->set('bbguild_user_llimit', $this->request->variable('bbguild_user_llimit', 0), true);
 		$this->config->set('bbguild_maxchars', $this->request->variable('bbguild_maxchars', 2), true);
 		$this->config->set('bbguild_minrosterlvl', $this->request->variable('bbguild_minrosterlvl', 0), true);
 		$this->config->set('bbguild_roster_layout', $this->request->variable('bbguild_roster_layout', 0), true);
-		$this->config->set('bbguild_show_achiev', $this->request->variable('bbguild_show_achiev', 0), true);
 		$this->config->set('bbguild_hide_inactive', $this->request->variable('bbguild_hide_inactive', 0), true);
 		$this->config->set('bbguild_motd', $this->request->variable('show_motd_block', 0), true);
+
+		/**
+		 * Event to allow plugins to save settings from the bbGuild config page.
+		 *
+		 * @event avathar.bbguild.acp_config_submit
+		 * @since 2.0.0-b1
+		 */
+		$this->dispatcher->dispatch('avathar.bbguild.acp_config_submit');
 		$welcometext = $this->request->variable('message_of_the_day', '', true);
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
 		$allow_bbcode = $allow_urls = $allow_smilies = true;

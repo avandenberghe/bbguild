@@ -19,13 +19,12 @@ class config extends \phpbb\db\migration\migration
 
 	public function effectively_installed()
 	{
-		return isset($this->config['bbguild_date_format']);
+		return isset($this->config['bbguild_eqdkp_start']);
 	}
 
 	public function update_data()
 	{
 		return [
-			['config.add', ['bbguild_date_format', 'd.m.y']],
 			['config.add', ['bbguild_default_game', '']],
 			['config.add', ['bbguild_eqdkp_start', time()]],
 			['config.add', ['bbguild_guild_faction', 1]],
@@ -37,7 +36,6 @@ class config extends \phpbb\db\migration\migration
 			['config.add', ['bbguild_news_forumid', 2]],
 			['config.add', ['bbguild_regid', 0]],
 			['config.add', ['bbguild_roster_layout', 0]],
-			['config.add', ['bbguild_show_achiev', 0]],
 			['config.add', ['bbguild_user_llimit', 15]],
 			['config.add', ['bbguild_user_nlimit', 15]],
 			['config.add', ['bbguild_portal_links', 1]],
@@ -59,7 +57,6 @@ class config extends \phpbb\db\migration\migration
 	public function revert_data()
 	{
 		return [
-			['config.remove', ['bbguild_date_format']],
 			['config.remove', ['bbguild_default_game']],
 			['config.remove', ['bbguild_eqdkp_start']],
 			['config.remove', ['bbguild_guild_faction']],
@@ -71,7 +68,6 @@ class config extends \phpbb\db\migration\migration
 			['config.remove', ['bbguild_news_forumid']],
 			['config.remove', ['bbguild_regid']],
 			['config.remove', ['bbguild_roster_layout']],
-			['config.remove', ['bbguild_show_achiev']],
 			['config.remove', ['bbguild_user_llimit']],
 			['config.remove', ['bbguild_user_nlimit']],
 			['config.remove', ['bbguild_portal_links']],

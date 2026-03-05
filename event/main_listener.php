@@ -114,7 +114,7 @@ class main_listener implements EventSubscriberInterface
 				'avathar_bbguild_00',
 				array(
 					'guild_id' => 1,
-					'page' => 'roster'
+					'page' => 'welcome'
 				)
 			),
 			)
