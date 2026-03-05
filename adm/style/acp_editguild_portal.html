@@ -1,0 +1,112 @@
+{% INCLUDE 'overall_header.html' %}
+
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+
+<h1>{{ lang('TITLE') }}&nbsp;{{ GUILD_NAME }}</h1>
+<p>{{ lang('EXPLAIN') }}</p>
+
+<div id="advanced00">
+    <div class="permissions-category">
+        <ul>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILD }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_GUILD') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRANKS }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_RANKS') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRECRUITMENT }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_RECRUIT') }}</span></a></li>
+            <li class="permissions-preset-never activetab"><a href="{{ U_EDIT_GUILDPORTAL }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_PORTAL') }}</span></a></li>
+        </ul>
+    </div>
+
+    <div class="permissions-panel" id="options001">
+        <span class="corners-top"><span></span></span>
+
+        <fieldset>
+            <legend>{{ lang('ACP_PORTAL_MODULES') }}</legend>
+
+            {% if loops.module_row|length %}
+            <div class="tablewrap">
+                <table class="table1">
+                    <thead>
+                    <tr>
+                        <th style="width:5%">{{ lang('ID') }}</th>
+                        <th style="width:30%">{{ lang('ACP_PORTAL_MODULE_NAME') }}</th>
+                        <th style="width:15%">{{ lang('ACP_PORTAL_COLUMN') }}</th>
+                        <th style="width:10%">{{ lang('ACP_PORTAL_ORDER') }}</th>
+                        <th style="width:10%">{{ lang('STATUS') }}</th>
+                        <th style="width:30%">{{ lang('ACTION') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for module_row in loops.module_row %}
+                    <tr class="{% if module_row.S_ROW_COUNT is even %}row1{% else %}row2{% endif %}{% if not module_row.S_ENABLED %} disabled{% endif %}">
+                        <td>{{ module_row.MODULE_ID }}</td>
+                        <td><a href="{{ module_row.U_CONFIGURE }}">{{ module_row.MODULE_NAME }}</a></td>
+                        <td>{{ module_row.MODULE_COLUMN }}</td>
+                        <td style="text-align:center">{{ module_row.MODULE_ORDER }}</td>
+                        <td style="text-align:center">
+                            {% if module_row.S_ENABLED %}
+                            <span style="color:green">{{ lang('ENABLED') }}</span>
+                            {% else %}
+                            <span style="color:red">{{ lang('DISABLED') }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:center; white-space:nowrap">
+                            <a href="{{ module_row.U_MOVE_UP }}" title="{{ lang('MOVE_UP') }}">{{ ICON_MOVE_UP }}</a>
+                            <a href="{{ module_row.U_MOVE_DOWN }}" title="{{ lang('MOVE_DOWN') }}">{{ ICON_MOVE_DOWN }}</a>
+                            <a href="{{ module_row.U_MOVE_LEFT }}" title="{{ lang('ACP_PORTAL_MOVE_LEFT') }}"><i class="icon acp-icon fa-arrow-circle-left fa-fw"></i></a>
+                            <a href="{{ module_row.U_MOVE_RIGHT }}" title="{{ lang('ACP_PORTAL_MOVE_RIGHT') }}"><i class="icon acp-icon fa-arrow-circle-right fa-fw"></i></a>
+                            &nbsp;
+                            <a href="{{ module_row.U_TOGGLE }}" title="{% if module_row.S_ENABLED %}{{ lang('DISABLE') }}{% else %}{{ lang('ENABLE') }}{% endif %}">
+                                {% if module_row.S_ENABLED %}{{ lang('DISABLE') }}{% else %}{{ lang('ENABLE') }}{% endif %}
+                            </a>
+                            &nbsp;
+                            <a href="{{ module_row.U_DELETE }}" title="{{ lang('DELETE') }}">{{ ICON_DELETE }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="errorbox">
+                <p>{{ lang('ACP_PORTAL_NO_MODULES') }}</p>
+            </div>
+            {% endif %}
+        </fieldset>
+
+        <fieldset>
+            <legend>{{ lang('ACP_PORTAL_ADD_MODULE') }}</legend>
+            <form method="post" action="{{ U_EDIT_GUILDPORTAL }}" id="add_module_form">
+                <input type="hidden" name="{{ ACTION_PARAM }}" value="add" />
+                <input type="hidden" name="guild_id" value="{{ GUILDID }}" />
+                <dl>
+                    <dt>{{ lang('ACP_PORTAL_MODULE_NAME') }}:</dt>
+                    <dd>
+                        <select name="module_classname">
+                            {% for available_modules in loops.available_modules %}
+                            <option value="{{ available_modules.CLASSNAME }}">{{ available_modules.NAME }}</option>
+                            {% endfor %}
+                        </select>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>{{ lang('ACP_PORTAL_COLUMN') }}:</dt>
+                    <dd>
+                        <select name="module_column">
+                            {% for column_options in loops.column_options %}
+                            <option value="{{ column_options.VALUE }}">{{ column_options.LABEL }}</option>
+                            {% endfor %}
+                        </select>
+                    </dd>
+                </dl>
+                <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_END }};">
+                    {{ S_FORM_TOKEN }}
+                    <input type="submit" value="{{ lang('ADD') }}" class="button1" />
+                </fieldset>
+
+            </form>
+        </fieldset>
+
+        <span class="corners-bottom"><span></span></span>
+    </div>
+</div>
+
+{% INCLUDE 'overall_footer.html' %}

@@ -7,6 +7,8 @@
         <ul>
             <li class="permissions-preset-never activetab"><a href="{{ U_EDIT_GUILD }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_GUILD') }}</span></a></li>
             <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRANKS }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_RANKS') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRECRUITMENT }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_RECRUIT') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDPORTAL }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_PORTAL') }}</span></a></li>
         </ul>
     </div>
 
@@ -128,6 +130,16 @@
                     {% endif %}
                 </fieldset>
                 {% endif %}
+
+                <fieldset>
+                    <legend>{{ lang('BLOCK_MOTD') }}</legend>
+                    <dl>
+                        <dt><label for="message_of_the_day">{{ lang('BLOCK_MOTD') }}:</label><br /><span>{{ lang('BLOCK_MOTD_EXPLAIN') }}</span></dt>
+                        <dd>
+                            <textarea name="message_of_the_day" id="message_of_the_day" rows="3" cols="60" style="font-size: 100%; width: 99%" class="input">{{ WELCOME_MESSAGE }}</textarea>
+                        </dd>
+                    </dl>
+                </fieldset>
 
                 <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_END }};">
                     {{ S_FORM_TOKEN }}

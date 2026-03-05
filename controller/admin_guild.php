@@ -79,6 +79,8 @@ class admin_guild
 	protected $dispatcher;
 	/** @var portal_database_handler */
 	protected $portal_db_handler;
+	/** @var admin_portal */
+	protected $admin_portal;
 
 	/* @var string */
 	public $u_action;
@@ -177,6 +179,7 @@ class admin_guild
 		game_registry $game_registry,
 		dispatcher_interface $dispatcher,
 		portal_database_handler $portal_db_handler,
+		admin_portal $admin_portal,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -218,6 +221,7 @@ class admin_guild
 		$this->game_registry = $game_registry;
 		$this->dispatcher = $dispatcher;
 		$this->portal_db_handler = $portal_db_handler;
+		$this->admin_portal = $admin_portal;
 
 		$this->bb_games_table = $bb_games_table;
 		$this->bb_logs_table = $bb_logs_table;
@@ -341,6 +345,14 @@ class admin_guild
 				$this->show_editguildranks($updateguild);
 				break;
 
+			case 'guildportal':
+				$this->show_editguildportal($updateguild);
+				break;
+
+			case 'guildrecruitment':
+				$this->show_editguildrecruitment($updateguild);
+				break;
+
 			case 'editguild':
 			default:
 				$this->show_editguild($updateguild);
@@ -433,6 +445,41 @@ class admin_guild
 		{
 			$this->BattleNetUpdate($updateguild);
 		}
+
+		// Save MOTD for this guild
+		$welcometext = $this->request->variable('message_of_the_day', '', true);
+		$uid = $bitfield = $options = '';
+		$allow_bbcode = $allow_urls = $allow_smilies = true;
+		generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+
+		$guild_id = (int) $updateguild->getGuildid();
+
+		// Check if MOTD row exists for this guild
+		$sql = 'SELECT motd_id FROM ' . $this->bb_motd_table . ' WHERE guild_id = ' . $guild_id;
+		$result = $this->db->sql_query($sql);
+		$motd_row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if ($motd_row)
+		{
+			$sql = 'UPDATE ' . $this->bb_motd_table . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				'motd_msg'        => $welcometext,
+				'motd_timestamp'  => time(),
+				'bbcode_bitfield' => $bitfield,
+				'bbcode_uid'      => $uid,
+			]) . ' WHERE guild_id = ' . $guild_id;
+		}
+		else
+		{
+			$sql = 'INSERT INTO ' . $this->bb_motd_table . ' ' . $this->db->sql_build_array('INSERT', [
+				'guild_id'        => $guild_id,
+				'motd_msg'        => $welcometext,
+				'motd_timestamp'  => time(),
+				'bbcode_bitfield' => $bitfield,
+				'bbcode_uid'      => $uid,
+			]);
+		}
+		$this->db->sql_query($sql);
 
 		if ($updateguild->update_guild($old_guild))
 		{
@@ -809,6 +856,229 @@ class admin_guild
 	}
 
 	/**
+	 * Show the edit-guild portal tab.
+	 * Delegates to admin_portal for actions and template rendering.
+	 */
+	public function show_editguildportal(guilds $updateguild): void
+	{
+		$guild_id = $updateguild->getGuildid();
+
+		// Set up the portal controller with the guild edit base URL
+		$base_url = $this->acp_url('i=-avathar-bbguild-acp-guild_module&mode=editguild&action=guildportal&' . constants::URI_GUILD . '=' . $guild_id);
+		$this->admin_portal->set_u_action($base_url);
+
+		$portal_tpl = $this->admin_portal->display('portal_action');
+
+		// Portal configure returns a different template (e.g. acp_portal_config)
+		if ($portal_tpl !== 'acp_editguild_portal')
+		{
+			$this->tpl_name = $portal_tpl;
+			return;
+		}
+
+		// Assign tab URLs
+		$this->template->assign_vars([
+			'L_TITLE'                => $this->user->lang['ACP_EDITGUILD'],
+			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
+			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDPORTAL'     => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildportal&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'GUILD_NAME'             => $updateguild->getName(),
+			'GUILDID'                => $guild_id,
+		]);
+
+		$this->tpl_name = 'acp_editguild_portal';
+		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
+	}
+
+	/**
+	 * Show the edit-guild recruitment tab.
+	 */
+	public function show_editguildrecruitment(guilds $updateguild): void
+	{
+		$guild_id = (int) $updateguild->getGuildid();
+		$this->link = '<br /><a href="' . $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $guild_id) . '"><h3>' . $this->user->lang['RETURN_GUILDLIST'] . '</h3></a>';
+
+		$form_key = 'avathar/bbguild';
+
+		// Handle actions
+		$action = $this->request->variable('recruit_action', '');
+		$add = $this->request->is_set_post('add_recruit');
+		$update = $this->request->is_set_post('update_recruit');
+
+		if ($action === 'delete')
+		{
+			$recruit_id = $this->request->variable('id', 0);
+			if ($recruit_id)
+			{
+				$sql = 'DELETE FROM ' . $this->bb_recruit_table . ' WHERE id = ' . (int) $recruit_id;
+				$this->db->sql_query($sql);
+				$success_message = sprintf($this->user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit_id);
+				trigger_error($success_message . $this->link, E_USER_NOTICE);
+			}
+		}
+
+		if (($add || $update) && check_form_key($form_key))
+		{
+			$recruit_data = [
+				'guild_id'    => $guild_id,
+				'role_id'     => $this->request->variable('role', 0),
+				'class_id'    => $this->request->variable('class_id', 0),
+				'positions'   => $this->request->variable('numpositions', 1),
+				'level'       => $this->request->variable('recruit_level', 0),
+				'status'      => $this->request->variable('recruitstatus', '') === 'on' ? 1 : 0,
+				'note'        => utf8_normalize_nfc($this->request->variable('note', '', true)),
+				'last_update' => time(),
+			];
+
+			if ($add)
+			{
+				$recruit_data['applicants'] = 0;
+				$recruit_data['applytemplate_id'] = 0;
+				$sql = 'INSERT INTO ' . $this->bb_recruit_table . ' ' . $this->db->sql_build_array('INSERT', $recruit_data);
+				$this->db->sql_query($sql);
+				$new_id = $this->db->sql_nextid();
+				$success_message = sprintf($this->user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $new_id);
+				trigger_error($success_message . $this->link, E_USER_NOTICE);
+			}
+			elseif ($update)
+			{
+				$recruit_id = $this->request->variable('hidden_recruit_id', 0);
+				$recruit_data['applicants'] = $this->request->variable('applicants', 0);
+				$sql = 'UPDATE ' . $this->bb_recruit_table . ' SET ' . $this->db->sql_build_array('UPDATE', $recruit_data) . ' WHERE id = ' . (int) $recruit_id;
+				$this->db->sql_query($sql);
+				$success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit_id);
+				trigger_error($success_message . $this->link, E_USER_NOTICE);
+			}
+		}
+
+		// Build edit form if action=edit
+		$edit_id = 0;
+		$edit_recruit = [];
+		if ($action === 'edit')
+		{
+			$edit_id = $this->request->variable('id', 0);
+			$sql = 'SELECT * FROM ' . $this->bb_recruit_table . ' WHERE id = ' . (int) $edit_id;
+			$result = $this->db->sql_query($sql);
+			$edit_recruit = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+		}
+
+		// List existing recruitments
+		$lang_code = $this->config['bbguild_lang'] ?? 'en';
+		$sql = 'SELECT r.id, r.role_id, r.class_id, r.level, r.positions, r.applicants, r.status, r.note,
+				l_c.name as class_name, c.colorcode, c.imagename,
+				l_r.name as role_name, gr.role_color
+			FROM ' . $this->bb_recruit_table . ' r
+			LEFT JOIN ' . $this->bb_classes_table . ' c ON r.class_id = c.class_id
+			LEFT JOIN ' . $this->bb_language_table . " l_c ON r.class_id = l_c.attribute_id
+				AND l_c.attribute = 'class' AND l_c.language = '" . $this->db->sql_escape($lang_code) . "'
+				AND l_c.game_id = c.game_id
+			LEFT JOIN " . $this->bb_gameroles_table . ' gr ON r.role_id = gr.role_id
+			LEFT JOIN ' . $this->bb_language_table . " l_r ON r.role_id = l_r.attribute_id
+				AND l_r.attribute = 'role' AND l_r.language = '" . $this->db->sql_escape($lang_code) . "'
+				AND l_r.game_id = gr.game_id
+			WHERE r.guild_id = " . $guild_id . '
+			ORDER BY r.role_id, r.class_id';
+		$result = $this->db->sql_query($sql);
+
+		$recruit_count = 0;
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$recruit_count++;
+			$class_img = '';
+			if (!empty($row['imagename']))
+			{
+				$img_path = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+				if (file_exists($this->root_path . $img_path))
+				{
+					$class_img = $img_path;
+				}
+			}
+
+			$this->template->assign_block_vars('recruit_row', [
+				'ID'                    => $row['id'],
+				'ROLE_NAME'             => $row['role_name'] ?? '?',
+				'ROLE_COLOR'            => $row['role_color'] ?? '',
+				'CLASS_NAME'            => $row['class_name'] ?? '?',
+				'COLOR_CODE'            => $row['colorcode'] ?? '',
+				'S_CLASS_IMAGE_EXISTS'  => !empty($class_img),
+				'CLASS_IMAGE'           => $class_img,
+				'LEVEL'                 => $row['level'],
+				'POSITIONS'             => $row['positions'],
+				'APPLICANTS'            => $row['applicants'],
+				'S_OPEN'                => $row['status'] == 1,
+				'NOTE'                  => $row['note'],
+				'U_EDIT'                => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;recruit_action=edit&amp;id=' . $row['id'] . '&amp;' . constants::URI_GUILD . '=' . $guild_id),
+				'U_DELETE'              => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;recruit_action=delete&amp;id=' . $row['id'] . '&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			]);
+		}
+		$this->db->sql_freeresult($result);
+
+		// Build class dropdown
+		$game_id = $updateguild->getGameId();
+		$sql = 'SELECT c.class_id, l.name as class_name
+			FROM ' . $this->bb_classes_table . ' c
+			INNER JOIN ' . $this->bb_language_table . " l
+				ON l.game_id = c.game_id AND l.attribute_id = c.class_id AND l.attribute = 'class'
+				AND l.language = '" . $this->db->sql_escape($lang_code) . "'
+			WHERE c.game_id = '" . $this->db->sql_escape($game_id) . "'
+			ORDER BY l.name";
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->template->assign_block_vars('class_row', [
+				'VALUE'    => $row['class_id'],
+				'SELECTED' => (!empty($edit_recruit) && $edit_recruit['class_id'] == $row['class_id']) ? ' selected="selected"' : '',
+				'OPTION'   => $row['class_name'],
+			]);
+		}
+		$this->db->sql_freeresult($result);
+
+		// Build role dropdown
+		$sql = 'SELECT gr.role_id, l.name as role_name
+			FROM ' . $this->bb_gameroles_table . ' gr
+			INNER JOIN ' . $this->bb_language_table . " l
+				ON l.game_id = gr.game_id AND l.attribute_id = gr.role_id AND l.attribute = 'role'
+				AND l.language = '" . $this->db->sql_escape($lang_code) . "'
+			WHERE gr.game_id = '" . $this->db->sql_escape($game_id) . "'
+			ORDER BY l.name";
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->template->assign_block_vars('role_row', [
+				'VALUE'    => $row['role_id'],
+				'SELECTED' => (!empty($edit_recruit) && $edit_recruit['role_id'] == $row['role_id']) ? ' selected="selected"' : '',
+				'OPTION'   => $row['role_name'],
+			]);
+		}
+		$this->db->sql_freeresult($result);
+
+		$this->template->assign_vars([
+			'L_TITLE'                => $this->user->lang['ACP_EDITGUILD'],
+			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
+			'GUILD_NAME'             => $updateguild->getName(),
+			'GUILDID'                => $guild_id,
+			'RECRUIT_FOOTCOUNT'      => sprintf($this->user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
+			'S_EDIT_RECRUIT'         => !empty($edit_recruit),
+			'RECRUIT_ID'             => !empty($edit_recruit) ? $edit_recruit['id'] : 0,
+			'RECRUIT_POSITIONS'      => !empty($edit_recruit) ? $edit_recruit['positions'] : 1,
+			'RECRUIT_LEVEL'          => !empty($edit_recruit) ? $edit_recruit['level'] : $updateguild->getMinArmory(),
+			'RECRUIT_APPLICANTS'     => !empty($edit_recruit) ? $edit_recruit['applicants'] : 0,
+			'RECRUIT_STATUS_CHECKED' => (!empty($edit_recruit) ? $edit_recruit['status'] == 1 : true) ? 'checked="checked"' : '',
+			'RECRUIT_NOTE'           => !empty($edit_recruit) ? $edit_recruit['note'] : '',
+			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDPORTAL'     => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildportal&amp;' . constants::URI_GUILD . '=' . $guild_id),
+			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $guild_id),
+		]);
+
+		$this->tpl_name = 'acp_editguild_recruitment';
+		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
+	}
+
+	/**
 	 * Populate the edit-guild form template
 	 * Ported from old bbDKP acp_dkp_guild.php
 	 *
@@ -863,6 +1133,22 @@ class admin_guild
 		$provider = $this->game_registry->get($game_id);
 		$has_api = ($provider !== null && $provider->has_api());
 
+		// Load MOTD for this guild
+		$welcometext = $uid = $bitfield = '';
+		$sql = 'SELECT motd_msg, bbcode_bitfield, bbcode_uid
+			FROM ' . $this->bb_motd_table . '
+			WHERE guild_id = ' . (int) $updateguild->getGuildid();
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+		if ($row)
+		{
+			$welcometext = $row['motd_msg'];
+			$bitfield = $row['bbcode_bitfield'];
+			$uid = $row['bbcode_uid'];
+		}
+		$textarr = generate_text_for_edit($welcometext, $uid, (int) $bitfield);
+
 		$this->template->assign_vars(array(
 			'U_FACTION'              => $this->factionroute,
 			'F_ENABLGAMEEARMORY'     => $this->game->getArmoryEnabled(),
@@ -885,8 +1171,10 @@ class admin_guild
 			'EMBLEM'                 => $updateguild->getEmblempath(),
 			'EMBLEMFILE'             => basename((string) $updateguild->getEmblempath()),
 			'S_EMBLEM_EXISTS'        => !empty($updateguild->getEmblempath()) && file_exists($this->root_path . $updateguild->getEmblempath()),
+			'WELCOME_MESSAGE'        => $textarr['text'],
 			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDPORTAL'     => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildportal&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 		));
 
@@ -946,6 +1234,7 @@ class admin_guild
 			'S_EMBLEM_EXISTS'        => !empty($updateguild->getEmblempath()) && file_exists($this->root_path . $updateguild->getEmblempath()),
 			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 			'U_EDIT_GUILDRANKS'      => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
+			'U_EDIT_GUILDPORTAL'     => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildportal&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 			'U_EDIT_GUILDRECRUITMENT' => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
 		));
 
