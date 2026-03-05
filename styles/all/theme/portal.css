@@ -46,6 +46,11 @@
 	padding: 0;
 }
 
+.portal-module-postbody {
+	width: 100%;
+	max-width: 100%;
+}
+
 .portal-module-content {
 	padding: 10px;
 }
