@@ -1,0 +1,17 @@
+<div class="portal-block portal-block-side" id="portal-recruit-{{ definition.MODULE_ID }}">
+	<div class="portal-block-header">{{ definition.TITLE }}</div>
+	<div class="portal-block-body">
+		{% if S_PORTAL_HAS_RECRUITS %}
+		<ul class="portal-recruit-list">
+		{% for item in loops.portal_recruit %}
+			<li{% if item.COLORCODE %} style="color: {{ item.COLORCODE }};"{% endif %}>
+				{{ item.CLASS_NAME }}
+				<span class="portal-recruit-count">({{ item.OPEN }})</span>
+			</li>
+		{% endfor %}
+		</ul>
+		{% else %}
+		<p>{{ lang('NO_RECRUITS') }}</p>
+		{% endif %}
+	</div>
+</div>

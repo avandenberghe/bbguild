@@ -1,0 +1,29 @@
+<div class="portal-block" id="portal-recruit-{{ definition.MODULE_ID }}">
+	<div class="portal-block-header">{{ definition.TITLE }}</div>
+	<div class="portal-block-body">
+		{% if S_PORTAL_HAS_RECRUITS %}
+		<table class="table1 bbguild" style="width: 100%;">
+			<thead>
+				<tr>
+					<th>{{ lang('CLASS') }}</th>
+					<th>{{ lang('LEVEL') }}</th>
+					<th>{{ lang('POSITIONS') }}</th>
+					<th>{{ lang('APPLICANTS') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in loops.portal_recruit %}
+				<tr>
+					<td{% if item.COLORCODE %} style="color: {{ item.COLORCODE }};"{% endif %}>{{ item.CLASS_NAME }}</td>
+					<td>{{ item.LEVEL }}</td>
+					<td>{{ item.OPEN }}</td>
+					<td>{{ item.APPLICANTS }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p>{{ lang('NO_RECRUITS') }}</p>
+		{% endif %}
+	</div>
+</div>

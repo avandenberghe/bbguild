@@ -71,3 +71,66 @@ services:
             - '@config'
             - '@template'
             - '@user'
+
+    # --- Portal modules ---
+
+    avathar.bbguild.portal.module.motd:
+        class: avathar\bbguild\portal\modules\motd
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '%avathar.bbguild.tables.bb_motd%'
+        tags:
+            - { name: bbguild.portal.module }
+
+    avathar.bbguild.portal.module.guild_news:
+        class: avathar\bbguild\portal\modules\guild_news
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '%avathar.bbguild.tables.bb_news%'
+        tags:
+            - { name: bbguild.portal.module }
+
+    avathar.bbguild.portal.module.recruitment:
+        class: avathar\bbguild\portal\modules\recruitment
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '@config'
+            - '%avathar.bbguild.tables.bb_recruit%'
+            - '%avathar.bbguild.tables.bb_classes%'
+            - '%avathar.bbguild.tables.bb_language%'
+            - '%avathar.bbguild.tables.bb_gameroles%'
+        tags:
+            - { name: bbguild.portal.module }
+
+    avathar.bbguild.portal.module.activity_feed:
+        class: avathar\bbguild\portal\modules\activity_feed
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '@config'
+            - '@cache.driver'
+            - '@avathar.bbguild.game_registry'
+            - '%avathar.bbguild.tables.bb_players%'
+            - '%avathar.bbguild.tables.bb_ranks%'
+            - '%avathar.bbguild.tables.bb_classes%'
+            - '%avathar.bbguild.tables.bb_races%'
+            - '%avathar.bbguild.tables.bb_language%'
+            - '%avathar.bbguild.tables.bb_guild%'
+            - '%avathar.bbguild.tables.bb_factions%'
+        tags:
+            - { name: bbguild.portal.module }
+
+    avathar.bbguild.portal.module.custom:
+        class: avathar\bbguild\portal\modules\custom
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '@avathar.bbguild.portal.config'
+        tags:
+            - { name: bbguild.portal.module }

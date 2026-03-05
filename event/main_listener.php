@@ -95,7 +95,7 @@ class main_listener implements EventSubscriberInterface
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = array(
 			'ext_name' => 'avathar/bbguild',
-			'lang_set' => array('common','admin') ,
+			'lang_set' => array('common', 'admin', 'portal'),
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
