@@ -20,6 +20,7 @@
 .bbguildouter
 {
     background: rgba(0, 0, 0, 0) url("./images/bg-alliance.jpg") no-repeat scroll left top;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
 #bbguildwelcome
