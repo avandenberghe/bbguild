@@ -5,7 +5,7 @@
 **bbGuild** is a Guild Management System for phpBB 3.3+ designed for World of Warcraft gaming communities. It provides guild roster management, character tracking, achievements, recruitment, and integration with the Battle.net API.
 
 - **Author:** Andreas Vandenberghe (Sajaki)
-- **Version:** 2.0.0-a10 (alpha)
+- **Version:** 2.0.0-b1 (beta)
 - **License:** GPL-2.0-only
 - **Repository:** https://github.com/avandenberghe/bbguild
 
@@ -14,7 +14,7 @@
 | Metric | Value |
 |--------|-------|
 | First commit | May 28, 2010 |
-| Status | Revival in progress |
+| Status | Phase 1 complete, Portal feature added |
 | Tracking issue | [#303](https://github.com/avandenberghe/bbguild/issues/303) |
 
 ## Requirements
@@ -39,11 +39,17 @@ bbguild/
 │   ├── games/             # Game definitions + installers
 │   ├── player/            # Player, guild, rank management
 │   └── blocks/            # Display blocks
+├── portal/                # Portal block engine (forked from Board3 design)
+│   └── modules/          # Module infrastructure + built-in modules
 ├── event/                 # Event listeners
-├── migrations/            # Database migrations (5 files)
+├── migrations/            # Database migrations
+│   ├── basics/           # Initial install (schema, data, config, permissions, modules)
+│   ├── v200a10/          # Release 2.0.0-a10 (version stamp)
+│   ├── v200a11/          # Release 2.0.0-a11 (version stamp)
+│   └── v200a12/          # Release 2.0.0-b1 (portal schema, data, ACP module, version stamp)
 ├── config/                # Services and routing (YAML)
 ├── styles/                # Templates
-├── language/              # Localization (en, fr, de, it)
+├── language/              # Localization (en, fr, de, it, nl, es_x_tu, pl)
 ├── images/                # Game icons
 ├── contrib/               # Changelog, docs, diagrams
 ├── views/                 # View helpers
@@ -61,21 +67,28 @@ bbguild/
 | `admin_recruit.php` | Recruitment |
 | `admin_player.php` | Player management (empty) |
 | `admin_achievement.php` | Achievement management |
+| `admin_portal.php` | Portal module management |
 | `ajax.php` | AJAX endpoints |
 
-### Database Tables (20+)
+### Database Tables (21)
 
 **Core:** bb_games, bb_guild, bb_players, bb_ranks, bb_logs, bb_news, bb_motd
 
+**Portal:** bb_portal_modules, bb_portal_config
+
 **Game Content:** bb_classes, bb_races, bb_factions, bb_gameroles, bb_language
 
-**Recruitment:** bb_recruit, bb_bosstable, bb_zonetable
+**Recruitment:** bb_recruit
 
-**Achievements:** bb_achievement, bb_achievement_track, bb_achievement_criteria, bb_achievement_rewards, bb_criteria_track
+**Achievements (WoW-only):** bb_achievement, bb_achievement_track, bb_achievement_criteria, bb_achievement_rewards, bb_relations_table, bb_criteria_track
 
-### Supported Games
+**Not yet created (roadmap):** bb_bosstable, bb_zonetable (defined in tables.yml, schema TBD)
 
-World of Warcraft (Battle.net API), GW2, LOTRO, DAOC, Vanguard, EverQuest I/II, Warhammer, FFXI, AION, Rift, SWTOR, Lineage 2, TERA, FFXIV, Custom
+### Supported Games (via plugins)
+
+WoW (Battle.net API), GW2, LOTRO, EQ, EQ2, FFXI, FFXIV, SWTOR, Lineage 2, Custom
+
+Game plugins live at `ext/avathar/bbguild_<game>/`. Each provides a provider + installer; game data is seeded on-demand from ACP (not via migrations). Archived: AION, DAOC, Rift, TERA, Vanguard, Warhammer.
 
 ### Routes
 
@@ -102,6 +115,17 @@ World of Warcraft (Battle.net API), GW2, LOTRO, DAOC, Vanguard, EverQuest I/II, 
 - **phpBB 3.3 compatibility** - version gates, extension manager fallback, removed `$user->theme['template_path']`, fixed language loading
 - **PHP 8.x null-safety** - added `(string)` casts in `util.php`, `battlenet_resource.php`, `ucp/bbguild_module.php`
 - **DKP guard** - UCP DKP query wrapped in `defined('PLAYER_DKP_TABLE')` check
+- **Migration rewrite** - Reorganized into `basics/` + `v200a10/`, fixed ROLE_USER_FULL permission bug, removed hardcoded `game_id='wow'` from seed data, removed AION columns and bb_plugins table
+- **Migration seed data** - `data.php` now populates all 13 core tables with Custom game test data (factions, classes, races, roles, language, guild, ranks, players, motd, news, recruit, logs)
+- **Service collection fix** - Replaced `!tagged_iterator` (unsupported by phpBB 3.3) with `phpbb\di\service_collection` for game provider injection in `config/services.yml`
+- **cURL fix** - `CURLOPT_FOLLOWLOCATION, true` → `CURLOPT_FOLLOWLOCATION => true` (comma instead of `=>`) in `model/admin/curl.php:65`
+- **Version check fix** - `admin_main.php` now reads `unstable` branch first (was hardcoded to `stable`) in version_check()
+- **Wrong namespace** - `\bbdkp\bbguild` → `\avathar\bbguild` in `controller/view_controller.php:256`
+- **Wrong column names** - `rank_id`/`guild_id` → `player_rank_id`/`player_guild_id` in `model/player/guilds.php:1151` (bb_players table)
+- **Missing constructor args** - `model/player/player.php:1016` was calling `guilds()` without `$db, $user, $config, $cache, $log` arguments
+- **Missing `switch_order` call** - `player.php:2063` called `$this->switch_order()` but method lives in `util` service
+- **Missing properties** - `$this->ext_path` and `$this->games` not initialized in `player.php` constructor; `$this->games` not set in `viewnavigation.php`
+- **Missing `ALL` lang key** - Added to all 4 language files (was removed during language cleanup)
 
 ## Incomplete Features (Must Have)
 
@@ -117,9 +141,9 @@ World of Warcraft (Battle.net API), GW2, LOTRO, DAOC, Vanguard, EverQuest I/II, 
 - Removed references to `$user->theme['template_path']`
 - Language loading fixed (`add_lang_ext` instead of `mods/`)
 
-### PHP 8.x - Partially done
+### PHP 8.x - Done
 - Null-safety fixes applied to key files
-- More files may need review for strict type issues
+- Constructor and property initialization fixes in player.php, guilds.php, viewnavigation.php
 
 ### Battle.net API - Not started
 - API endpoints changed since 2016-2019
@@ -128,14 +152,27 @@ World of Warcraft (Battle.net API), GW2, LOTRO, DAOC, Vanguard, EverQuest I/II, 
 
 ## Modernization Path
 
-### Phase 1: Core compatibility (in progress)
+### Phase 1: Core compatibility — COMPLETE (2.0.0-a11)
 1. ~~Fix critical bugs (#301, #299, #298)~~ All fixed
-2. ~~Update PHP syntax for 8.x compatibility~~ Done (key files)
-4. ~~Test/fix phpBB 3.3 compatibility~~ Done
+2. ~~Update PHP syntax for 8.x compatibility~~ Done
+3. ~~Test/fix phpBB 3.3 compatibility~~ Done
+4. ~~Migration rewrite~~ Done
+5. ~~Game plugin extraction~~ Done
+6. ~~Language cleanup~~ Done
+7. ~~ACP UI modernization~~ Done
 
-### Phase 2: Later
-- Update Battle.net API integration
-- Complete must-have features (#290, #288, #278)
+### Phase 1.5: Portal feature — COMPLETE (2.0.0-b1)
+1. ~~Portal block engine (forked from Board3 design)~~ Done
+2. ~~Built-in modules: MOTD, Guild News, Recruitment, Activity Feed, Custom Block~~ Done
+3. ~~Welcome page rewrite to use portal renderer~~ Done
+4. ~~ACP Portal Management (add/remove/reorder/toggle modules per guild)~~ Done
+5. ~~Portal language files (7 languages)~~ Done
+
+### Phase 2: Feature completion
+- #290 — UCP bbguild page
+- #288 — Individual player page
+- #278 — Achievements pane
+- Update Battle.net API integration (OAuth 2.0)
 - Add unit tests (#244)
 
 ## Key Files
