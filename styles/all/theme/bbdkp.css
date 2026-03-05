@@ -1,18 +1,12 @@
 /* Custom CSS for bbGuild */
-.bbguildouter
-{
-    background:  rgb(255, 255, 255) transparent;
-}
 
 #bbguildwelcome
 {
     width: 100%;
-    color: #c09a67;
     margin: 0 auto;
     position: relative;
     min-height: 600px;
     clear: both;
-    background-color: rgb(255, 255, 255) transparent;
 }
 
 .roster {
@@ -30,282 +24,118 @@
     border-bottom: 0px !important;
 }
 
-/* profile sidebar */
-.profile-sidebar-anchor {
-    float: left;
-    height: 0;
-    position: relative;
-    width: 0;
-}
 
-.profile-sidebar-outer {
-    left: 0;
-    position: relative;
-    top: 0;
-}
-
-.profile-sidebar-inner {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-}
-
-.profile-sidebar-inner {
-   /* background: rgba(0, 0, 0, 0) url("./images/sidebar-bg.jpg") no-repeat scroll 0 0;*/
-    height: 684px;
-    width: 175px;
-}
-
-.profile-wrapper {
-    width: 200px;
-}
-
-.profile-info-anchor, .profile-info {
-    width: 700px;
-}
-
-.profile-info-anchor {
-    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
-    height: 218px;
-    position: relative;
-    z-index: 1;
-}
-
-.profile-guild-info-anchor .guild-tabard {
-    left: 720px;
-    top: 20px;
-}
-
-/* other pages tabard */
-.profile-sidebar-tabard {
-    height: 250px;
-    position: relative;
-    width: 230px;
-}
-
-.profile-sidebar-tabard .guild-tabard {
-    left: 7px;
+/* Guild header — normal document flow above portal content */
+.guild-header {
+    padding: 30px 20px 20px;
+    margin-bottom: 10px;
     overflow: hidden;
-    top: 0;
+    min-height: 80px;
 }
 
-.guild-tabard {
-    height: 200px;
-    position: absolute;
-    width: 200px;
+.guild-header-emblem {
+    float: right;
+    margin-left: 15px;
 }
 
-.profile-sidebar-tabard .tabard-overlay {
-    background: rgba(0, 0, 0, 0);
-    height: 289px;
-    left: -22px;
-    position: absolute;
-    top: 1px;
-    width: 269px;
+.guild-header-emblem img {
+    max-width: 200px;
+    max-height: 200px;
 }
 
-.profile-info {
-    left: 25px;
-    letter-spacing: -0.05em;
-    line-height: normal;
-    position: absolute;
-    top: 45px;
-}
-
-.profile-info-anchor, .profile-info {
-    width: 700px;
-}
-
-.profile-guild-info .name {
-    float: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 760px;
-}
-
-.profile-info .name {
-    color: #CDCCC3;
-    float: left;
-    font-size: 36px;
+.guild-header-name {
+    font-size: 2.6em;
     font-weight: bold;
-    left: -3px;
     letter-spacing: -0.05em;
-    line-height: 1.1em;
-    position: relative;
-    font-family: Arial,Verdana,sans-serif;
+    line-height: 1.1;
+    font-family: Arial, Verdana, sans-serif;
+    margin-bottom: 6px;
 }
 
-.profile-info .name a {
-    color: #CDCCC3;
-    outline: medium none;
+.guild-header-name a {
     text-decoration: none;
+    outline: none;
 }
 
-
-.profile-info .under-name {
-    font-size: 14px;
+.guild-header-details {
+    font-size: 1.1em;
     font-weight: normal;
     letter-spacing: normal;
-    line-height: 14px;
+    line-height: 1.4;
+    margin-top: 6px;
 }
 
-.profile-info .comma {
-    color: #cccccc;
-}
-
-
-.profile-info .realm {
-    border-bottom: 0 none;
-}
-
-.profile-info .achievements {
+.guild-header-achiev {
     margin-top: 20px;
 }
 
-.profile-info .achievements a {
+.guild-header-achiev a {
     background: rgba(0, 0, 0, 0) url("./images/achievements.gif") no-repeat scroll left 7px;
-    color: #CDCCC3;
-    font-family: "Arial Black",Arial,sans-serif;
+    font-family: "Arial Black", Arial, sans-serif;
     font-size: 20px;
     font-weight: 900;
     line-height: 23px;
     padding-left: 11px;
 }
 
-ul.profile-sidebar-menu {
-    position: absolute;
-    list-style-type: none;
-}
-
-ul.profile-sidebar-menu {
-    background: rgba(0, 0, 0, 0);
-    font-size: 13px;
-    margin: 14px 0 0 15px;
-    padding-bottom: 1px;
-    width: 100%;
-}
-
-ul.profile-sidebar-menu li {
-    background: rgba(0, 0, 0, 0);
-    padding-top: 1px;
-    white-space: nowrap;
-}
-ul.profile-sidebar-menu a {
-    display: block;
-    padding-left: 3px;
-}
-
-ul.profile-sidebar-menu a .arrow {
-    display: block;
-    line-height: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-.profile-guild-menu {
-    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
-    height: 100px;
-    position: relative;
-    z-index: 1;
-}
-
-.profile-guild-chooser {
-    background: rgba(0, 0, 0, 0) none no-repeat scroll 0 0;
-    height: 30px;
-    position: relative;
-    z-index: 1;
-    padding: 20px 5px 20px 20px;
-}
-
 .profile-section {
-    /*background: rgba(0, 0, 0, 0) url("./images/section-bg.png") no-repeat scroll 0 0;*/
     min-height: 400px;
     padding: 15px;
 }
 
-
-.profile-section-sub {
-    min-height: 400px;
-    margin-left: -150px;
+/* Roster module styling */
+.portal-roster-filters {
+    padding: 8px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.profile-contents {
-    margin-left: 170px;
-    min-height: 807px;
-    padding-bottom: 40px;
+.portal-roster-filters form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
 }
 
-/* welcome page */
-
-.welcome-top {
-    padding-top: 200px;
-    margin: 0 0 8px;
-    overflow: auto;
-    position: relative;
-}
-
-.welcome-col1 {
-    display: inline-block;
-    margin: 0 4px 0 0;
-    min-height: 250px;
-    vertical-align: top;
-    width: calc(60% - 8px);
-}
-
-.welcome-col2 {
-    display: inline-block;
-    margin: 0 0 0 4px;
-    min-height: 250px;
-    vertical-align: top;
-    width: calc(40% - 7px);
-}
-
-
-.bbguild-activity-feed li {
-    background-position: 5px 50%;
-    background-repeat: no-repeat;
-    border-top: 1px solid #371b0d;
-    padding: 13px 0 13px 29px;
-    position: relative;
-}
-
-.color-q4, .color-q4 a {
-    color: #c600ff !important;
-}
-
-.color-blizz, .color-blizz a {
-    color: #ffb100;
-}
-
-
-ul#bbguild-activity-feed {
-    list-style-type: none;
-}
-
-ul#bbguild-activity-feed li {
-    background-position: 5px 50%;
-    background-repeat: no-repeat;
-    padding-bottom: 5px;
-    padding-left: 29px;
-    padding-right: 0;
-    padding-top: 5px;
-    position: relative;
-    font-family: Verdana,Helvetica,Arial,sans-serif;
+.portal-roster-table {
+    width: 100%;
     font-size: 12px;
+    border-collapse: collapse;
 }
 
-
-ul#bbguild-activity-feed li dl dd  {
-    padding-right: 4px;
-    display: inline;
-}
-ul#bbguild-activity-feed li dl dt {
-    color: #71401f;
-    display: inline;
+.portal-roster-table th {
     font-size: 11px;
-    white-space: nowrap;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 6px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
 }
+
+.portal-roster-table th a {
+    text-decoration: none;
+}
+
+.portal-roster-table td {
+    padding: 4px 6px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.portal-roster-table td img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.portal-roster-table tfoot td {
+    font-size: 11px;
+    padding-top: 8px;
+    border-bottom: none;
+}
+
+
+
+
 
 @media screen and (max-width: 600px) {
     table.table1.bbguild thead {
@@ -475,45 +305,4 @@ ul#bbguild-achievement-feed {
     border-bottom: 1px solid #331509;
 }
 
-/* Portal layout
---------------------------------------------- */
-#bbguild-portal {
-    width: 100%;
-}
-
-#portal-top {
-    margin-bottom: 10px;
-}
-
-#portal-content-wrapper {
-    position: relative;
-}
-
-#portal-center {
-    min-height: 400px;
-}
-
-#portal-right {
-    float: right;
-    position: relative;
-}
-
-#portal-right .portal-block {
-    margin-bottom: 10px;
-}
-
-.portal-block {
-    margin-bottom: 10px;
-}
-
-.portal-block .portal-block-header {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-bottom: 1px solid #371b0d;
-}
-
-.portal-block .portal-block-body {
-    padding: 10px;
-}
 
