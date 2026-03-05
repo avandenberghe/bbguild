@@ -14,3 +14,5 @@ parameters:
     avathar.bbguild.tables.bb_bosstable: '%core.table_prefix%bb_bosstable'
     avathar.bbguild.tables.bb_zonetable: '%core.table_prefix%bb_zonetable'
     avathar.bbguild.tables.bb_news: '%core.table_prefix%bb_news'
+    avathar.bbguild.tables.bb_portal_modules: '%core.table_prefix%bb_portal_modules'
+    avathar.bbguild.tables.bb_portal_config: '%core.table_prefix%bb_portal_config'

@@ -1,5 +1,6 @@
 imports:
     - { resource: tables.yml }
+    - { resource: portal_services.yml }
 
 # mapping of services to controller classes
 services:

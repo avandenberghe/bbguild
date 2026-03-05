@@ -1,0 +1,73 @@
+services:
+
+    # --- Portal infrastructure ---
+
+    avathar.bbguild.portal.columns:
+        class: avathar\bbguild\portal\columns
+
+    avathar.bbguild.portal.config:
+        class: avathar\bbguild\portal\portal_config
+        arguments:
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '%avathar.bbguild.tables.bb_portal_config%'
+
+    avathar.bbguild.portal.module_collection:
+        class: phpbb\di\service_collection
+        arguments:
+            - '@service_container'
+        tags:
+            - { name: service_collection, tag: bbguild.portal.module }
+
+    avathar.bbguild.portal.module_registry:
+        class: avathar\bbguild\portal\module_registry
+        arguments:
+            - '@avathar.bbguild.portal.module_collection'
+
+    avathar.bbguild.portal.controller_helper:
+        class: avathar\bbguild\portal\controller_helper
+        arguments:
+            - '@avathar.bbguild.portal.columns'
+            - '@language'
+            - '@template'
+            - '@user'
+            - '@path_helper'
+            - '@avathar.bbguild.portal.module_registry'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+
+    avathar.bbguild.portal.modules.database_handler:
+        class: avathar\bbguild\portal\modules\database_handler
+        arguments:
+            - '@dbal.conn'
+            - '%avathar.bbguild.tables.bb_portal_modules%'
+
+    avathar.bbguild.portal.modules.constraints_handler:
+        class: avathar\bbguild\portal\modules\constraints_handler
+        arguments:
+            - '@avathar.bbguild.portal.columns'
+
+    avathar.bbguild.portal.modules.manager:
+        class: avathar\bbguild\portal\modules\manager
+        arguments:
+            - '@cache'
+            - '@dbal.conn'
+            - '@avathar.bbguild.portal.controller_helper'
+            - '@avathar.bbguild.portal.columns'
+            - '@avathar.bbguild.portal.module_registry'
+            - '@avathar.bbguild.portal.modules.constraints_handler'
+            - '@avathar.bbguild.portal.modules.database_handler'
+            - '@avathar.bbguild.portal.config'
+            - '@request'
+            - '@user'
+            - '%avathar.bbguild.tables.bb_portal_modules%'
+
+    avathar.bbguild.portal.renderer:
+        class: avathar\bbguild\portal\portal_renderer
+        arguments:
+            - '@avathar.bbguild.portal.columns'
+            - '@avathar.bbguild.portal.controller_helper'
+            - '@avathar.bbguild.portal.modules.database_handler'
+            - '@config'
+            - '@template'
+            - '@user'

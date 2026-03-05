@@ -1,0 +1,132 @@
+<?php
+/**
+ * @package bbGuild Portal
+ * @copyright (c) 2026 avathar.be
+ * @copyright (c) 2023 Board3 Group (www.board3.de) — original design
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
+ */
+
+namespace avathar\bbguild\portal;
+
+use avathar\bbguild\portal\modules\database_handler;
+use phpbb\config\config;
+use phpbb\template\template;
+use phpbb\user;
+
+/**
+ * Renders the portal page by loading and assembling all enabled modules
+ * for a given guild. Called from viewwelcome::buildpage().
+ */
+class portal_renderer
+{
+	protected columns $portal_columns;
+	protected controller_helper $controller_helper;
+	protected database_handler $database_handler;
+	protected config $config;
+	protected template $template;
+	protected user $user;
+
+	/** @var array Module count per column */
+	protected array $module_count = [];
+
+	public function __construct(
+		columns $portal_columns,
+		controller_helper $controller_helper,
+		database_handler $database_handler,
+		config $config,
+		template $template,
+		user $user
+	)
+	{
+		$this->portal_columns = $portal_columns;
+		$this->controller_helper = $controller_helper;
+		$this->database_handler = $database_handler;
+		$this->config = $config;
+		$this->template = $template;
+		$this->user = $user;
+	}
+
+	/**
+	 * Render all portal modules for a guild.
+	 */
+	public function render(int $guild_id): void
+	{
+		$this->module_count = [
+			'top'    => 0,
+			'center' => 0,
+			'right'  => 0,
+		];
+
+		$portal_modules = $this->database_handler->get_modules($guild_id);
+
+		foreach ($portal_modules as $row)
+		{
+			$module = $this->controller_helper->get_portal_module($row);
+			if (!$module)
+			{
+				continue;
+			}
+
+			// Set guild context so module can query guild-specific data
+			$module->set_guild_context($guild_id);
+
+			// Load language
+			$this->controller_helper->load_module_language($module);
+
+			// Get template based on column type
+			$template_module = $this->get_module_template($row, $module);
+			if (empty($template_module))
+			{
+				continue;
+			}
+
+			// Assign to template block
+			$this->controller_helper->assign_module_vars($row, $template_module);
+		}
+
+		// Assign column visibility vars
+		$this->assign_column_vars();
+	}
+
+	/**
+	 * Get the appropriate template for a module based on its column.
+	 *
+	 * @return string|array|null
+	 */
+	protected function get_module_template(array $row, modules\module_interface $module)
+	{
+		$column = $this->portal_columns->number_to_string((int) $row['module_column']);
+		if ($column === '')
+		{
+			return null;
+		}
+
+		if ($column === 'right')
+		{
+			$this->module_count['right']++;
+			return $module->get_template_side((int) $row['module_id']);
+		}
+
+		// top and center use get_template_center
+		$this->module_count[$column]++;
+		return $module->get_template_center((int) $row['module_id']);
+	}
+
+	/**
+	 * Assign template variables for column visibility.
+	 */
+	protected function assign_column_vars(): void
+	{
+		$right_column_width = isset($this->config['bbguild_portal_right_width'])
+			? (int) $this->config['bbguild_portal_right_width']
+			: 200;
+
+		$this->template->assign_vars([
+			'S_TOP_COLUMN'           => $this->module_count['top'] > 0,
+			'S_CENTER_COLUMN'        => $this->module_count['center'] > 0,
+			'S_RIGHT_COLUMN'         => $this->module_count['right'] > 0,
+			'S_PORTAL_RIGHT_COLUMN'  => $right_column_width,
+			'S_PORTAL_ACTIVE'        => true,
+		]);
+	}
+}

@@ -44,8 +44,10 @@
                     </li>
                     <li><a href="{{ U_ROSTER }}"><span class="arrow"><span
                             class="menu-label">{{ lang('MENU_ROSTER') }}</span></span></a></li>
+                    {% if S_DISPLAY_ACHIEVEMENTS %}
                     <li><a href="{{ U_ACHIEVEMENTS }}"><span class="arrow"><span class="menu-label">{{ lang('MENU_ACHIEVEMENTS') }}</span></span></a>
                     </li>
+                    {% endif %}
                     <!--
                     <li><a href="{{ U_PLAYER }}"><span class="arrow"><span class="menu-label">{{ lang('MENU_PLAYER') }}</span></span></a></li>
                     <li><a href="{{ U_STATS }}"><span class="arrow"><span class="menu-label">{{ lang('MENU_STATS') }}</span></span></a></li>

@@ -330,13 +330,6 @@ class viewnavigation implements iviews
 						'page' => 'roster'
 					)
 				),
-				'U_ACHIEVEMENTS'           => $this->helper->route(
-					'avathar_bbguild_00',
-					array(
-						'guild_id' => $this->guild_id,
-						'page' => 'achievements'
-					)
-				),
 				'FACTION'            => $this->guild->getFaction(),
 				'FACTION_NAME'       => $this->guild->getFactionname(),
 				'FACTION_CSS'        => preg_replace('/[^a-z0-9]/', '', strtolower((string) $this->guild->getFactionname())) ?: 'other',
