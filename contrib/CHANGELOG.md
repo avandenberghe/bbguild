@@ -12,6 +12,15 @@
   - [NEW] Portal language files for all 7 languages (en, de, fr, it, nl, es_x_tu, pl)
   - [CHG] Welcome page rewritten to use portal renderer instead of inline MOTD/activity code
   - [CHG] Portal CSS added to bbdkp.css for grid layout
+  - [CHG] #320: Log system refactored from XML serialization to phpBB log pattern (serialize/unserialize arrays, vsprintf with language keys)
+  - [CHG] DKP log types removed from core, to be provided by future bbDKP plugin (#321)
+  - [CHG] Added GUILD_DELETED constant and log type
+  - [FIX] PHP 8.x: cast config values to (int) for date() timestamps in admin_main.php and player_module.php
+  - [FIX] PHP 8.x: cast date format config to (string) in player_module.php
+  - [FIX] Wrong namespace in validator.php (sajaki\bbguild → avathar\bbguild)
+  - [FIX] Broken $this->log_insert() calls in player.php — method didn't exist on player class
+  - [FIX] Duplicate CLASS_UPDATED key in valid_action_types masking ITEM_DELETED and PLAYERDKP_DELETED
+  - [FIX] EPV: added .gitignore for .DS_Store
 
 ## 2.0.0-a11 04/03/2026
   - [FIX] #301: "Module not accessible" after adding guild — typo in acp/guild_module.php
