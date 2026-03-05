@@ -18,26 +18,16 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
+	'ACP_BBGUILD_PORTAL'             => 'Portaal',
+
 	// Module names
 	'BBGUILD_PORTAL_MOTD'            => 'Bericht van de dag',
-	'BBGUILD_PORTAL_GUILD_NEWS'      => 'Gildenieuws',
 	'BBGUILD_PORTAL_RECRUITMENT'     => 'Rekrutering',
-	'BBGUILD_PORTAL_ACTIVITY_FEED'   => 'Activiteitenoverzicht',
-	'BBGUILD_PORTAL_CUSTOM'          => 'Aangepast blok',
+	'BBGUILD_PORTAL_ROSTER'          => 'Gildeleden',
 
 	// Module content
 	'NO_RECRUITS'                    => 'Geen open rekruteringsposities.',
-	'NO_ACTIVITY'                    => 'Geen recente activiteit.',
 	'BBGUILD_NO_PORTAL_MODULES'      => 'Geen portaalmodules geconfigureerd voor deze gilde.',
-
-	// Activity feed
-	'LOOTED'                         => 'heeft verkregen',
-	'FORNPOINTS'                     => ' voor %s punten.',
-
-	// Custom module ACP
-	'BBGUILD_PORTAL_CUSTOM_SETTINGS' => 'Aangepast blok instellingen',
-	'BBGUILD_PORTAL_CUSTOM_TITLE'    => 'Bloktitel',
-	'BBGUILD_PORTAL_CUSTOM_CODE'     => 'Blokinhoud',
 
 	// ACP portal management
 	'ACP_PORTAL_EXPLAIN'             => 'Beheer portaalmodules per gilde. Voeg toe, verwijder, herorden en schakel blokken in/uit.',
@@ -56,4 +46,26 @@ $lang = array_merge($lang, [
 	'ACP_PORTAL_MODULE_DELETED'      => 'Portaalmodule is verwijderd.',
 	'ACP_PORTAL_MOVE_LEFT'           => 'Verplaats naar vorige kolom',
 	'ACP_PORTAL_MOVE_RIGHT'          => 'Verplaats naar volgende kolom',
+	'ACP_PORTAL_COLUMN_BOTTOM'       => 'Onder',
+
+	// Module configuration
+	'ACP_PORTAL_MODULE_CONFIG'        => 'Moduleconfiguratie',
+	'ACP_PORTAL_MODULE_CONFIG_EXPLAIN' => 'Configureer de weergavenaam, het icoon, de zichtbaarheid en modulespecifieke instellingen voor dit portaalblok. Wijzigingen zijn van toepassing op de gildewelkomstpagina.',
+	'ACP_PORTAL_MODULE_SETTINGS'      => 'Algemene instellingen',
+	'ACP_PORTAL_MODULE_SETTINGS_EXPLAIN' => 'Stel de weergavenaam in en schakel deze module in of uit. Uitgeschakelde modules zijn verborgen op het portaal maar behouden hun configuratie.',
+	'ACP_PORTAL_ICON_SETTINGS'        => 'Icooninstellingen',
+	'ACP_PORTAL_ICON_SETTINGS_EXPLAIN' => 'Kies een icoon dat naast de moduletitel op het portaal wordt weergegeven. Je kunt een afbeelding of een Font Awesome-icoon gebruiken. Als beide zijn ingesteld, heeft het Font Awesome-icoon voorrang.',
+	'ACP_PORTAL_IMAGE_SRC'            => 'Afbeeldingsbestand',
+	'ACP_PORTAL_IMAGE_SRC_EXPLAIN'    => 'Relatief pad naar een afbeeldingsbestand, bijv. <samp>ext/avathar/bbguild/images/icon.png</samp>.',
+	'ACP_PORTAL_FA_ICON'              => 'Font Awesome-icoon',
+	'ACP_PORTAL_FA_ICON_EXPLAIN'      => 'Voer een Font Awesome 4.7 CSS-klasse in, bijv. <samp>fa-star</samp>, <samp>fa-shield</samp>, <samp>fa-users</samp>. Heeft voorrang boven het afbeeldingsbestand. Laat leeg om het afbeeldingsbestand te gebruiken.',
+	'ACP_PORTAL_ICON_SIZE'            => 'Icoongrootte',
+	'ACP_PORTAL_ICON_SIZE_EXPLAIN'    => 'Grootte van het Font Awesome-icoon in pixels (8–64). Alleen van toepassing wanneer een Font Awesome-icoon is ingesteld.',
+	'ACP_PORTAL_GROUP_ACCESS'         => 'Groepstoegang',
+	'ACP_PORTAL_GROUP_ACCESS_EXPLAIN' => 'Beperk welke gebruikersgroepen deze module op de portaalpagina kunnen zien.',
+	'ACP_PORTAL_GROUP_IDS'            => 'Toegestane groepen',
+	'ACP_PORTAL_GROUP_IDS_EXPLAIN'    => 'Selecteer een of meer groepen. Alleen leden van de geselecteerde groepen zien deze module. Laat leeg om de module aan alle gebruikers te tonen.',
+	'ACP_PORTAL_MODULE_SPECIFIC'      => 'Module-instellingen',
+	'ACP_PORTAL_MODULE_SPECIFIC_EXPLAIN' => 'Instellingen specifiek voor dit moduletype. Beschikbare opties zijn afhankelijk van de module (bijv. aangepaste blokinhoud, feedlimieten).',
+	'ACP_PORTAL_MODULE_UPDATED'       => 'Moduleconfiguratie is opgeslagen.',
 ]);

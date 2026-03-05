@@ -18,26 +18,17 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
+	// ACP heading
+	'ACP_BBGUILD_PORTAL'             => 'Portal',
+
 	// Module names
 	'BBGUILD_PORTAL_MOTD'            => 'Message of the Day',
-	'BBGUILD_PORTAL_GUILD_NEWS'      => 'Guild News',
 	'BBGUILD_PORTAL_RECRUITMENT'     => 'Recruitment',
-	'BBGUILD_PORTAL_ACTIVITY_FEED'   => 'Activity Feed',
-	'BBGUILD_PORTAL_CUSTOM'          => 'Custom Block',
+	'BBGUILD_PORTAL_ROSTER'          => 'Guild Roster',
 
 	// Module content
 	'NO_RECRUITS'                    => 'No open recruitment positions.',
-	'NO_ACTIVITY'                    => 'No recent activity.',
 	'BBGUILD_NO_PORTAL_MODULES'      => 'No portal modules configured for this guild.',
-
-	// Activity feed
-	'LOOTED'                         => 'obtained',
-	'FORNPOINTS'                     => ' for %s points.',
-
-	// Custom module ACP
-	'BBGUILD_PORTAL_CUSTOM_SETTINGS' => 'Custom Block Settings',
-	'BBGUILD_PORTAL_CUSTOM_TITLE'    => 'Block Title',
-	'BBGUILD_PORTAL_CUSTOM_CODE'     => 'Block Content',
 
 	// ACP portal management
 	'ACP_PORTAL_EXPLAIN'             => 'Manage portal modules for each guild. Add, remove, reorder, and enable/disable blocks.',
@@ -56,4 +47,26 @@ $lang = array_merge($lang, [
 	'ACP_PORTAL_MODULE_DELETED'      => 'Portal module has been removed.',
 	'ACP_PORTAL_MOVE_LEFT'           => 'Move to previous column',
 	'ACP_PORTAL_MOVE_RIGHT'          => 'Move to next column',
+	'ACP_PORTAL_COLUMN_BOTTOM'       => 'Bottom',
+
+	// Module configuration
+	'ACP_PORTAL_MODULE_CONFIG'        => 'Module Configuration',
+	'ACP_PORTAL_MODULE_CONFIG_EXPLAIN' => 'Configure the display name, icon, visibility and module-specific settings for this portal block. Changes apply to the guild welcome page.',
+	'ACP_PORTAL_MODULE_SETTINGS'      => 'General Settings',
+	'ACP_PORTAL_MODULE_SETTINGS_EXPLAIN' => 'Set the display name and enable or disable this module. Disabled modules are hidden from the portal but retain their configuration.',
+	'ACP_PORTAL_ICON_SETTINGS'        => 'Icon Settings',
+	'ACP_PORTAL_ICON_SETTINGS_EXPLAIN' => 'Choose an icon displayed next to the module title on the portal. You can use either an image file or a Font Awesome icon. If both are set, the Font Awesome icon takes priority.',
+	'ACP_PORTAL_IMAGE_SRC'            => 'Image file',
+	'ACP_PORTAL_IMAGE_SRC_EXPLAIN'    => 'Relative path to an image file, e.g. <samp>ext/avathar/bbguild/images/icon.png</samp>.',
+	'ACP_PORTAL_FA_ICON'              => 'Font Awesome icon',
+	'ACP_PORTAL_FA_ICON_EXPLAIN'      => 'Enter a Font Awesome 4.7 CSS class, e.g. <samp>fa-star</samp>, <samp>fa-shield</samp>, <samp>fa-users</samp>. Takes priority over the image file. Leave empty to use the image instead.',
+	'ACP_PORTAL_ICON_SIZE'            => 'Icon size',
+	'ACP_PORTAL_ICON_SIZE_EXPLAIN'    => 'Size of the Font Awesome icon in pixels (8–64). Only applies when a Font Awesome icon is set.',
+	'ACP_PORTAL_GROUP_ACCESS'         => 'Group Access',
+	'ACP_PORTAL_GROUP_ACCESS_EXPLAIN' => 'Restrict which user groups can see this module on the portal page.',
+	'ACP_PORTAL_GROUP_IDS'            => 'Allowed groups',
+	'ACP_PORTAL_GROUP_IDS_EXPLAIN'    => 'Select one or more groups. Only members of the selected groups will see this module. Leave empty to show the module to all users.',
+	'ACP_PORTAL_MODULE_SPECIFIC'      => 'Module Settings',
+	'ACP_PORTAL_MODULE_SPECIFIC_EXPLAIN' => 'Settings specific to this module type. Available options depend on the module (e.g. custom block content, feed limits).',
+	'ACP_PORTAL_MODULE_UPDATED'       => 'Module configuration has been saved.',
 ]);

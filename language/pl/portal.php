@@ -18,26 +18,16 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
+	'ACP_BBGUILD_PORTAL'             => 'Portal',
+
 	// Module names
 	'BBGUILD_PORTAL_MOTD'            => 'Wiadomość dnia',
-	'BBGUILD_PORTAL_GUILD_NEWS'      => 'Aktualności gildii',
 	'BBGUILD_PORTAL_RECRUITMENT'     => 'Rekrutacja',
-	'BBGUILD_PORTAL_ACTIVITY_FEED'   => 'Ostatnia aktywność',
-	'BBGUILD_PORTAL_CUSTOM'          => 'Własny blok',
+	'BBGUILD_PORTAL_ROSTER'          => 'Lista członków',
 
 	// Module content
 	'NO_RECRUITS'                    => 'Brak otwartych pozycji rekrutacyjnych.',
-	'NO_ACTIVITY'                    => 'Brak ostatniej aktywności.',
 	'BBGUILD_NO_PORTAL_MODULES'      => 'Nie skonfigurowano modułów portalu dla tej gildii.',
-
-	// Activity feed
-	'LOOTED'                         => 'zdobył',
-	'FORNPOINTS'                     => ' za %s punktów.',
-
-	// Custom module ACP
-	'BBGUILD_PORTAL_CUSTOM_SETTINGS' => 'Ustawienia własnego bloku',
-	'BBGUILD_PORTAL_CUSTOM_TITLE'    => 'Tytuł bloku',
-	'BBGUILD_PORTAL_CUSTOM_CODE'     => 'Zawartość bloku',
 
 	// ACP portal management
 	'ACP_PORTAL_EXPLAIN'             => 'Zarządzaj modułami portalu dla każdej gildii. Dodawaj, usuwaj, zmieniaj kolejność i włączaj/wyłączaj bloki.',
@@ -56,4 +46,26 @@ $lang = array_merge($lang, [
 	'ACP_PORTAL_MODULE_DELETED'      => 'Moduł portalu został usunięty.',
 	'ACP_PORTAL_MOVE_LEFT'           => 'Przenieś do poprzedniej kolumny',
 	'ACP_PORTAL_MOVE_RIGHT'          => 'Przenieś do następnej kolumny',
+	'ACP_PORTAL_COLUMN_BOTTOM'       => 'Dół',
+
+	// Module configuration
+	'ACP_PORTAL_MODULE_CONFIG'        => 'Konfiguracja modułu',
+	'ACP_PORTAL_MODULE_CONFIG_EXPLAIN' => 'Skonfiguruj nazwę wyświetlaną, ikonę, widoczność i ustawienia specyficzne dla tego bloku portalu. Zmiany dotyczą strony powitalnej gildii.',
+	'ACP_PORTAL_MODULE_SETTINGS'      => 'Ustawienia ogólne',
+	'ACP_PORTAL_MODULE_SETTINGS_EXPLAIN' => 'Ustaw nazwę wyświetlaną oraz włącz lub wyłącz ten moduł. Wyłączone moduły są ukryte na portalu, ale zachowują swoją konfigurację.',
+	'ACP_PORTAL_ICON_SETTINGS'        => 'Ustawienia ikony',
+	'ACP_PORTAL_ICON_SETTINGS_EXPLAIN' => 'Wybierz ikonę wyświetlaną obok tytułu modułu na portalu. Możesz użyć pliku obrazu lub ikony Font Awesome. Jeśli oba są ustawione, ikona Font Awesome ma priorytet.',
+	'ACP_PORTAL_IMAGE_SRC'            => 'Plik obrazu',
+	'ACP_PORTAL_IMAGE_SRC_EXPLAIN'    => 'Ścieżka względna do pliku obrazu, np. <samp>ext/avathar/bbguild/images/icon.png</samp>.',
+	'ACP_PORTAL_FA_ICON'              => 'Ikona Font Awesome',
+	'ACP_PORTAL_FA_ICON_EXPLAIN'      => 'Wprowadź klasę CSS Font Awesome 4.7, np. <samp>fa-star</samp>, <samp>fa-shield</samp>, <samp>fa-users</samp>. Ma priorytet nad plikiem obrazu. Pozostaw puste, aby użyć obrazu.',
+	'ACP_PORTAL_ICON_SIZE'            => 'Rozmiar ikony',
+	'ACP_PORTAL_ICON_SIZE_EXPLAIN'    => 'Rozmiar ikony Font Awesome w pikselach (8–64). Dotyczy tylko gdy ustawiona jest ikona Font Awesome.',
+	'ACP_PORTAL_GROUP_ACCESS'         => 'Dostęp grup',
+	'ACP_PORTAL_GROUP_ACCESS_EXPLAIN' => 'Ogranicz, które grupy użytkowników mogą widzieć ten moduł na stronie portalu.',
+	'ACP_PORTAL_GROUP_IDS'            => 'Dozwolone grupy',
+	'ACP_PORTAL_GROUP_IDS_EXPLAIN'    => 'Wybierz jedną lub więcej grup. Tylko członkowie wybranych grup zobaczą ten moduł. Pozostaw puste, aby pokazać moduł wszystkim użytkownikom.',
+	'ACP_PORTAL_MODULE_SPECIFIC'      => 'Ustawienia modułu',
+	'ACP_PORTAL_MODULE_SPECIFIC_EXPLAIN' => 'Ustawienia specyficzne dla tego typu modułu. Dostępne opcje zależą od modułu (np. zawartość bloku niestandardowego, limity kanału).',
+	'ACP_PORTAL_MODULE_UPDATED'       => 'Konfiguracja modułu została zapisana.',
 ]);
