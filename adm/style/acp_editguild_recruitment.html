@@ -1,0 +1,146 @@
+{% INCLUDE 'overall_header.html' %}
+
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+
+<h1>{{ lang('TITLE') }}&nbsp;{{ GUILD_NAME }}</h1>
+<p>{{ lang('EXPLAIN') }}</p>
+
+<div id="advanced00">
+    <div class="permissions-category">
+        <ul>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILD }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_GUILD') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRANKS }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_RANKS') }}</span></a></li>
+            <li class="permissions-preset-never activetab"><a href="{{ U_EDIT_GUILDRECRUITMENT }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_RECRUIT') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDPORTAL }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_PORTAL') }}</span></a></li>
+        </ul>
+    </div>
+
+    <div class="permissions-panel" id="options001">
+        <span class="corners-top"><span></span></span>
+
+        <fieldset>
+            <legend>{{ lang('ACP_LISTRECRUITS') }}</legend>
+            <p>{{ lang('RECRUITMENT_BLOCK_EXPLAIN_BELOW') }}</p>
+
+            {% if loops.recruit_row|length %}
+            <div class="tablewrap">
+                <table class="table1">
+                    <thead>
+                    <tr>
+                        <th style="width:5%">{{ lang('ID') }}</th>
+                        <th style="width:15%">{{ lang('ROLE') }}</th>
+                        <th style="width:15%">{{ lang('CLASS') }}</th>
+                        <th style="width:8%">{{ lang('LEVEL') }}</th>
+                        <th style="width:8%">{{ lang('POSITIONS') }}</th>
+                        <th style="width:8%">{{ lang('APPLICANTS') }}</th>
+                        <th style="width:8%">{{ lang('STATUS') }}</th>
+                        <th style="width:23%">{{ lang('NOTE') }}</th>
+                        <th style="width:10%; text-align:center">{{ lang('ACTION') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for recruit_row in loops.recruit_row %}
+                    <tr class="{% if recruit_row.S_ROW_COUNT is even %}row1{% else %}row2{% endif %}">
+                        <td>{{ recruit_row.ID }}</td>
+                        <td style="color: {{ recruit_row.ROLE_COLOR }}"><strong>{{ recruit_row.ROLE_NAME }}</strong></td>
+                        <td>
+                            {% if recruit_row.S_CLASS_IMAGE_EXISTS %}<img src="{{ recruit_row.CLASS_IMAGE }}" alt="" style="vertical-align:middle; width:20px; height:20px;" />&nbsp;{% endif %}
+                            <span style="color: {{ recruit_row.COLOR_CODE }}"><strong>{{ recruit_row.CLASS_NAME }}</strong></span>
+                        </td>
+                        <td>{{ recruit_row.LEVEL }}</td>
+                        <td>{{ recruit_row.POSITIONS }}</td>
+                        <td>{{ recruit_row.APPLICANTS }}</td>
+                        <td>
+                            {% if recruit_row.S_OPEN %}
+                            <span style="color:green">{{ lang('RECRUIT_OPEN') }}</span>
+                            {% else %}
+                            <span style="color:red">{{ lang('RECRUIT_CLOSED') }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ recruit_row.NOTE }}</td>
+                        <td style="text-align:center; white-space:nowrap">
+                            <a href="{{ recruit_row.U_EDIT }}" title="{{ lang('EDIT') }}">{{ ICON_EDIT }}</a>
+                            <a href="{{ recruit_row.U_DELETE }}" title="{{ lang('DELETE') }}">{{ ICON_DELETE }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="9" class="footer">{{ RECRUIT_FOOTCOUNT }}</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% else %}
+            <div class="errorbox">
+                <p>{{ lang('WARNING_NORECRUITMENTS') }}</p>
+            </div>
+            {% endif %}
+        </fieldset>
+
+        <fieldset>
+            <legend>{% if S_EDIT_RECRUIT %}{{ lang('ACP_BBGUILD_RECRUIT_EDIT') }}{% else %}{{ lang('ACP_BBGUILD_RECRUIT_ADD') }}{% endif %}</legend>
+
+            <form method="post" action="{{ U_EDIT_GUILDRECRUITMENT }}" id="editrecruit">
+                <dl>
+                    <dt><label for="role">{{ lang('ROLE') }}:</label></dt>
+                    <dd>
+                        <select name="role" id="role" class="input">
+                            {% for role_row in loops.role_row %}
+                            <option value="{{ role_row.VALUE }}"{{ role_row.SELECTED }}>{{ role_row.OPTION }}</option>
+                            {% endfor %}
+                        </select>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><label for="class_id">{{ lang('CLASS') }}:</label></dt>
+                    <dd>
+                        <select name="class_id" id="class_id" class="input">
+                            {% for class_row in loops.class_row %}
+                            <option value="{{ class_row.VALUE }}"{{ class_row.SELECTED }}>{{ class_row.OPTION }}</option>
+                            {% endfor %}
+                        </select>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><label for="numpositions">{{ lang('POSITIONS') }}:</label></dt>
+                    <dd><input type="number" id="numpositions" name="numpositions" min="1" max="99" value="{{ RECRUIT_POSITIONS }}" class="input" style="width:60px" /></dd>
+                </dl>
+                <dl>
+                    <dt><label for="recruit_level">{{ lang('LEVEL') }}:</label></dt>
+                    <dd><input type="number" id="recruit_level" name="recruit_level" min="1" max="999" value="{{ RECRUIT_LEVEL }}" class="input" style="width:60px" /></dd>
+                </dl>
+                {% if S_EDIT_RECRUIT %}
+                <dl>
+                    <dt><label for="applicants">{{ lang('APPLICANTS') }}:</label></dt>
+                    <dd><input type="number" id="applicants" name="applicants" min="0" max="999" value="{{ RECRUIT_APPLICANTS }}" class="input" style="width:60px" /></dd>
+                </dl>
+                {% endif %}
+                <dl>
+                    <dt><label for="recruitstatus">{{ lang('STATUS') }}:</label></dt>
+                    <dd><input type="checkbox" id="recruitstatus" name="recruitstatus" {{ RECRUIT_STATUS_CHECKED }} /></dd>
+                </dl>
+                <dl>
+                    <dt><label for="note">{{ lang('NOTE') }}:</label></dt>
+                    <dd><textarea name="note" id="note" rows="3" cols="60" style="width:99%" class="input">{{ RECRUIT_NOTE }}</textarea></dd>
+                </dl>
+
+                <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_END }};">
+                    {{ S_FORM_TOKEN }}
+                    <input type="hidden" name="guild_id" value="{{ GUILDID }}" />
+                    <input type="hidden" name="hidden_recruit_id" value="{{ RECRUIT_ID }}" />
+                    {% if S_EDIT_RECRUIT %}
+                    <input type="submit" name="update_recruit" value="{{ lang('UPDATE') }}" class="button1" />
+                    {% else %}
+                    <input type="submit" name="add_recruit" value="{{ lang('ADD') }}" class="button1" />
+                    {% endif %}
+                </fieldset>
+            </form>
+        </fieldset>
+
+        <span class="corners-bottom"><span></span></span>
+    </div>
+</div>
+
+{% INCLUDE 'overall_footer.html' %}

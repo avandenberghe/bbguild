@@ -10,6 +10,8 @@
         <ul>
             <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILD }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_GUILD') }}</span></a></li>
             <li class="permissions-preset-never activetab"><a href="{{ U_EDIT_GUILDRANKS }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('EDIT_RANKS') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDRECRUITMENT }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_RECRUIT') }}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{{ U_EDIT_GUILDPORTAL }}" onclick=""><span class="tabbg"><span class="colour"></span>{{ lang('ACP_BBGUILD_PORTAL') }}</span></a></li>
         </ul>
     </div>
 
@@ -17,6 +19,7 @@
         <span class="corners-top"><span></span></span>
         <form method="post" action="{{ F_EDIT_GUILD }}" id="editguild">
             <div class="tablewrap">
+
                 <fieldset>
                     <legend>{{ lang('EDIT_RANKS') }}</legend>{{ lang('ACP_ADDRANK_EXPLAIN') }}
                     <div class="tablewrap">
