@@ -46,6 +46,7 @@ class schema extends \phpbb\db\migration\migration
 				$this->news_table => [
 					'COLUMNS' => [
 						'news_id'           => ['UINT', null, 'auto_increment'],
+						'guild_id'          => ['UINT', 0],
 						'news_headline'     => ['VCHAR_UNI', ''],
 						'news_message'      => ['TEXT_UNI', ''],
 						'news_date'         => ['TIMESTAMP', 0],
@@ -55,6 +56,9 @@ class schema extends \phpbb\db\migration\migration
 						'bbcode_options'    => ['VCHAR:8', ''],
 					],
 					'PRIMARY_KEY' => 'news_id',
+					'KEYS' => [
+						'guild_id' => ['INDEX', ['guild_id']],
+					],
 				],
 				/* 2 - language */
 				$this->bb_language => [
@@ -178,6 +182,7 @@ class schema extends \phpbb\db\migration\migration
 				$this->motd_table => [
 					'COLUMNS' => [
 						'motd_id'         => ['UINT', null, 'auto_increment'],
+						'guild_id'        => ['UINT', 0],
 						'motd_title'      => ['VCHAR_UNI', ''],
 						'motd_msg'        => ['TEXT_UNI', ''],
 						'motd_timestamp'  => ['TIMESTAMP', 0],
@@ -187,6 +192,9 @@ class schema extends \phpbb\db\migration\migration
 						'bbcode_options'  => ['UINT', 7],
 					],
 					'PRIMARY_KEY' => 'motd_id',
+					'KEYS' => [
+						'guild_id' => ['INDEX', ['guild_id']],
+					],
 				],
 				/* 10 - games */
 				$this->bbgames_table => [

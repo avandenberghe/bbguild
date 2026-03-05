@@ -288,6 +288,7 @@ class data extends \phpbb\db\migration\container_aware_migration
 		{
 			$this->db->sql_multi_insert($motd_table, [
 				[
+					'guild_id'        => 1,
 					'motd_title'      => $user->lang['MOTDGREETING'],
 					'motd_timestamp'  => $now,
 					'motd_msg'        => $welcome_message['text'],
@@ -304,6 +305,7 @@ class data extends \phpbb\db\migration\container_aware_migration
 			$news_message = $this->encode_message('Welcome to bbGuild! This is a sample news entry.');
 			$this->db->sql_multi_insert($news_table, [
 				[
+					'guild_id'        => 1,
 					'news_headline'   => 'bbGuild Installed',
 					'news_message'    => $news_message['text'],
 					'news_date'       => $now,

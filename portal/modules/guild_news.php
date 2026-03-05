@@ -46,6 +46,7 @@ class guild_news extends module_base
 				u.username, u.user_colour
 			FROM ' . $this->news_table . ' n
 			LEFT JOIN ' . USERS_TABLE . ' u ON n.user_id = u.user_id
+			WHERE n.guild_id = ' . (int) $this->guild_id . '
 			ORDER BY n.news_date DESC';
 		$result = $this->db->sql_query_limit($sql, $this->max_items);
 

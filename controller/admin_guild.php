@@ -26,6 +26,7 @@ use avathar\bbguild\model\games\game_registry;
 use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\player\guilds;
 use avathar\bbguild\model\player\ranks;
+use avathar\bbguild\portal\modules\database_handler as portal_database_handler;
 
 class admin_guild
 {
@@ -76,6 +77,8 @@ class admin_guild
 	protected $game_registry;
 	/** @var dispatcher_interface */
 	protected $dispatcher;
+	/** @var portal_database_handler */
+	protected $portal_db_handler;
 
 	/* @var string */
 	public $u_action;
@@ -134,6 +137,7 @@ class admin_guild
 	 * @param \avathar\bbguild\model\admin\util $util
 	 * @param \phpbb\controller\helper $helper
 	 * @param game_registry $game_registry
+	 * @param portal_database_handler $portal_db_handler
 	 * @param string $bb_games_table
 	 * @param string $bb_logs_table
 	 * @param string $bb_ranks_table
@@ -172,6 +176,7 @@ class admin_guild
 		\phpbb\controller\helper $helper,
 		game_registry $game_registry,
 		dispatcher_interface $dispatcher,
+		portal_database_handler $portal_db_handler,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -212,6 +217,7 @@ class admin_guild
 		$this->helper = $helper;
 		$this->game_registry = $game_registry;
 		$this->dispatcher = $dispatcher;
+		$this->portal_db_handler = $portal_db_handler;
 
 		$this->bb_games_table = $bb_games_table;
 		$this->bb_logs_table = $bb_logs_table;
@@ -385,6 +391,9 @@ class admin_guild
 		$addguild->setStartdate(time());
 		$addguild->setArmoryresult('KO');
 		$addguild->make_guild();
+
+		// Seed default portal layout for the new guild
+		$this->portal_db_handler->seed_guild_layout($addguild->getGuildid());
 
 		// If BattleNet connection is on then fetch info from API
 		if ($addguild->isArmoryEnabled())

@@ -36,7 +36,8 @@ class motd extends module_base
 	public function get_template_center(int $module_id)
 	{
 		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options
-			FROM ' . $this->motd_table;
+			FROM ' . $this->motd_table . '
+			WHERE guild_id = ' . (int) $this->guild_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
