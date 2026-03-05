@@ -70,6 +70,9 @@ class player
 	public $bb_guild_table;
 	public $bb_factions_table;
 
+	/** @var \avathar\bbguild\model\admin\log */
+	protected $log;
+
 	/**
 	 * game id
 	 *
@@ -994,6 +997,7 @@ class player
 			$phpbb_extension_manager = $phpbb_container->get('ext.manager');
 		}
 		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+		$this->log = $phpbb_container->get('avathar.bbguild.log');
 
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_races_table = $bb_races_table;
@@ -1155,9 +1159,9 @@ class player
 			$this->player_joindate_mo = date('n', $this->time);
 			$this->player_joindate_y = date('Y', $this->time);
 			$this->player_outdate = 0;
-			$this->player_outdate_d = date('j', 0);
-			$this->player_outdate_mo = date('n', 0);
-			$this->player_outdate_y = date('Y', 0);
+			$this->player_outdate_d = 1;
+			$this->player_outdate_mo = 1;
+			$this->player_outdate_y = 1970;
 			$this->player_guild_name = '';
 			$this->player_guild_id = 0;
 			$this->player_realm = '';
@@ -1351,29 +1355,11 @@ class player
 			);
 		}
 
-		$log_action = array(
-			'header' => 'L_ACTION_PLAYER_UPDATED' ,
-			'L_NAME' => $this->player_name ,
-			'L_NAME_BEFORE' => $old_player->player_name,
-			'L_LEVELBEFORE' => $old_player->player_level,
-			'L_RACE_BEFORE' => $old_player->player_race_id,
-			'L_RANK_BEFORE' => $old_player->player_rank_id,
-			'L_CLASS_BEFORE' => $old_player->player_class_id,
-			'L_GENDER_BEFORE' => $old_player->player_gender_id,
-			'L_ACHIEV_BEFORE' => $old_player->player_achiev,
-			'L_NAME_AFTER' => $this->player_name,
-			'L_LEVELAFTER' => $this->player_level,
-			'L_RACE_AFTER' => $this->player_race_id ,
-			'L_RANK_AFTER' => $this->player_rank_id,
-			'L_CLASS_AFTER' => $this->player_class_id ,
-			'L_GENDER_AFTER' => $this->player_gender_id,
-			'L_ACHIEV_AFTER' => $this->player_achiev,
-			'L_UPDATED_BY' => $user->data['username']);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_UPDATED',
+				'log_action' => [$this->player_name],
+			)
 		);
 
 		return true;
@@ -1390,17 +1376,11 @@ class player
 		$sql = 'DELETE FROM ' . $this->bb_players_table . ' where player_id = ' . (int) $this->player_id;
 		$db->sql_query($sql);
 
-		$log_action = array(
-			'header' => sprintf($user->lang['ACTION_PLAYER_DELETED'], $this->player_name) ,
-			'L_NAME' => $this->player_name ,
-			'L_LEVEL' => $this->player_level ,
-			'L_RACE' => $this->player_race_id ,
-			'L_CLASS' => $this->player_class_id);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_DELETED',
+				'log_action' => [$this->player_name],
+			)
 		);
 
 	}
@@ -1462,20 +1442,12 @@ class player
 
 		if (count($error) > 0)
 		{
-			$log_action = array(
-				'header'      => 'L_ACTION_PLAYER_ADDED' ,
-				'L_NAME'      => ucwords($this->player_name) . implode(',', $error)  ,
-				'L_GAME'      => $this->game_id,
-				'L_LEVEL'      => $this->player_level,
-				'L_RACE'      => $this->player_race_id,
-				'L_CLASS'      => $this->player_class_id,
-				'L_ADDED_BY' => $user->data['username']);
-
-			$this->log_insert(
+			$this->log->log_insert(
 				array(
-					'log_type'         => 'L_ACTION_PLAYER_ADDED' ,
-					'log_result'     => 'L_FAILED' ,
-					'log_action'     => $log_action)
+					'log_type'   => 'L_ACTION_PLAYER_ADDED',
+					'log_result' => 'L_FAILED',
+					'log_action' => [ucwords($this->player_name) . ' ' . implode(',', $error)],
+				)
 			);
 
 			return 0;
@@ -1539,19 +1511,11 @@ class player
 
 		$this->player_id = $db->sql_nextid();
 
-		$log_action = array(
-			'header'      => 'L_ACTION_PLAYER_ADDED' ,
-			'L_NAME'      => ucwords($this->player_name)  ,
-			'L_GAME'      => $this->game_id,
-			'L_LEVEL'      => $this->player_level,
-			'L_RACE'      => $this->player_race_id,
-			'L_CLASS'      => $this->player_class_id,
-			'L_ADDED_BY' => $user->data['username']);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type' => 'L_ACTION_PLAYER_ADDED' ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_ADDED',
+				'log_action' => [ucwords($this->player_name)],
+			)
 		);
 
 		return $this->player_id;
@@ -1667,16 +1631,11 @@ class player
 			);
 		}
 
-		$log_action = array(
-			'header'      => 'L_ACTION_PLAYER_ACTIVATED' ,
-			'L_NAME'      => \ucwords($this->player_name)  ,
-			'L_ADDED_BY' => $user->data['username']);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type'         => 'L_ACTION_PLAYER_ACTIVATED' ,
-				'log_result'     => 'L_SUCCESS' ,
-				'log_action'     => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_UPDATED',
+				'log_action' => [ucwords($this->player_name)],
+			)
 		);
 
 		return $changed;
@@ -1711,16 +1670,11 @@ class player
 			);
 		}
 
-		$log_action = array(
-			'header'      => 'L_ACTION_PLAYER_DEACTIVATED' ,
-			'L_NAME'      => \ucwords($this->player_name)  ,
-			'L_ADDED_BY' => $user->data['username']);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type'         => 'L_ACTION_PLAYER_DEACTIVATED' ,
-				'log_result'     => 'L_SUCCESS' ,
-				'log_action'     => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_DEACTIVATED',
+				'log_action' => [ucwords($this->player_name)],
+			)
 		);
 
 		return $changed;
@@ -1819,19 +1773,11 @@ class player
 
 		$db->sql_query($sql);
 
-		$log_action = array(
-			'header' => 'L_ACTION_PLAYER_UPDATED' ,
-			'L_NAME' => $player_name ,
-			'L_RANK_BEFORE' => $this->old_player['player_rank_id'] ,
-			'L_COMMENT_BEFORE' => $this->old_player['player_comment'] ,
-			'L_RANK_AFTER' => 99 ,
-			'L_COMMENT_AFTER' => 'Player left ' . date('F j, Y, g:i a') . ' by Armory plugin' ,
-			'L_UPDATED_BY' => $user->data['username']);
-
-		$this->log_insert(
+		$this->log->log_insert(
 			array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_PLAYER_UPDATED',
+				'log_action' => [$player_name],
+			)
 		);
 
 		return true;

@@ -623,16 +623,11 @@ class guilds
 		if (!isset($data))
 		{
 			$this->armoryresult = 'KO';
-			$log_action         = array(
-				'header'       => 'L_ERROR_ARMORY_DOWN',
-				'L_UPDATED_BY' => $this->user->data['username'],
-				'L_GUILD'      => $this->name . '-' . $this->realm,
-			);
 			$this->log->log_insert(
 				array(
-					'log_type'   => $log_action['header'],
-					'log_action' => $log_action,
-					'log_result' => 'L_ERROR'
+					'log_type'   => 'L_ERROR_ARMORY_DOWN',
+					'log_action' => [],
+					'log_result' => 'L_ERROR',
 				)
 			);
 			return false;
@@ -646,16 +641,11 @@ class guilds
 				// even if we have active API account, it may be that Blizzard account is inactive
 				$this->armoryresult = 'KO';
 				$this->armory_enabled = false;
-				$log_action         = array(
-					'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
-					'L_UPDATED_BY' => $this->user->data['username'],
-					'L_GUILD'      => $this->name . '-' . $this->realm,
-				);
 				$this->log->log_insert(
 					array(
-						'log_type'   => $log_action['header'],
-						'log_action' => $log_action,
-						'log_result' => 'L_ERROR'
+						'log_type'   => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
+						'log_action' => [$this->name . '-' . $this->realm],
+						'log_result' => 'L_ERROR',
 					)
 				);
 				return false;
@@ -801,19 +791,11 @@ class guilds
 		$newrank->RankSuffix = '';
 		$newrank->Makerank();
 
-		$log_action = array(
-			'header' => 'L_ACTION_GUILD_ADDED' ,
-			'id' =>  $this->guildid ,
-			'L_USER' => $this->user->data['user_id'] ,
-			'L_USERCOLOUR' => $this->user->data['user_colour'] ,
-			'L_NAME' => $this->name ,
-			'L_REALM' => $this->realm ,
-			'L_ADDED_BY' => $this->user->data['username']);
-
 		$this->log->log_insert(
 			array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_GUILD_ADDED',
+				'log_action' => [$this->realm . '-' . $this->name],
+			)
 		);
 
 	}
@@ -926,16 +908,11 @@ class guilds
 			unset($fp);
 		}
 
-		$log_action = array(
-			'header' => sprintf($this->user->lang['ACTION_GUILD_DELETED'], $this->name) ,
-			'L_NAME' => $this->name ,
-			'L_UPDATED_BY' => $this->user->data['username'],
-		);
-
 		$this->log->log_insert(
 			array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_GUILD_DELETED',
+				'log_action' => [$this->name],
+			)
 		);
 	}
 

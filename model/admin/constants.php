@@ -247,5 +247,9 @@ class constants {
 	 * inactive account
 	 */
 	const  BATTLENET_ACCOUNT_INACTIVE = 56;
+	/**
+	 * a guild was deleted
+	 */
+	const GUILD_DELETED = 57;
 
 }

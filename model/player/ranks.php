@@ -170,17 +170,11 @@ class ranks extends guilds
 		$this->db->sql_query('INSERT INTO ' . $this->bb_ranks_table . $query);
 
 		// log the action
-		$log_action = array(
-		'header' => 'L_ACTION_RANK_ADDED',
-		'id' => (int) $this->RankId,
-		'L_NAME' => $this->RankName,
-		'L_USERCOLOUR' => $this->user->data['user_colour'],
-		'L_ADDED_BY' => $this->user->data['username']);
-
 		$this->log->log_insert(
 			array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_RANK_ADDED',
+				'log_action' => [$this->RankName],
+			)
 		);
 
 		unset($bbguild);
@@ -219,16 +213,11 @@ class ranks extends guilds
 
 		// log the action
 
-		$log_action = array(
-		'header' => 'L_ACTION_RANK_DELETED' ,
-		'id' => (int) $this->RankId  ,
-		'L_NAME' => $this->RankName ,
-		'L_ADDED_BY' => $this->user->data['username']);
-
 		$this->log->log_insert(
 			array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_RANK_DELETED',
+				'log_action' => [$this->RankName],
+			)
 		);
 
 		unset($bbguild);
@@ -260,22 +249,11 @@ class ranks extends guilds
 			AND guild_id = ' . (int) $old_rank->RankGuild;
 		$this->db->sql_query($sql);
 
-		$log_action = array(
-		'header'         => 'L_ACTION_RANK_UPDATED' ,
-		'L_NAME_BEFORE' => $old_rank->RankName ,
-		'L_HIDE_BEFORE' => $old_rank->RankHide ,
-		'L_PREFIX_BEFORE' => $old_rank->RankPrefix ,
-		'L_SUFFIX_BEFORE' => $old_rank->RankSuffix ,
-		'L_NAME_AFTER' => $this->RankName,
-		'L_HIDE_AFTER' => $this->RankHide ,
-		'L_PREFIX_AFTER' => $this->RankPrefix ,
-		'L_SUFFIX_AFTER' => $this->RankSuffix ,
-		'L_UPDATED_BY' => $this->user->data['username']);
-
 		$this->log->log_insert(
 			array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_RANK_UPDATED',
+				'log_action' => [$old_rank->RankName, $this->RankName],
+			)
 		);
 
 		unset($bbguild);

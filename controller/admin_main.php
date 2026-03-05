@@ -509,15 +509,11 @@ class admin_main
 		//
 		// Logging
 		//
-		$log_action = array(
-			'header' => 'L_ACTION_SETTINGS_CHANGED'     ,
-			'L_SETTINGS' => $this->language->lang('ACTION_SETTINGS_CHANGED'),
-		);
-
 		$this->bbguildlog->log_insert(
 			array(
-				'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
-				'log_action' => $log_action)
+				'log_type'   => 'L_ACTION_SETTINGS_CHANGED',
+				'log_action' => [],
+			)
 		);
 
 		trigger_error($this->language->lang('ACTION_SETTINGS_CHANGED') . adm_back_link($this->u_action) , E_USER_NOTICE);
@@ -657,15 +653,12 @@ class admin_main
 			{
 				$marked = $this->request->variable('mark', array(0));
 				// deletion action and log
-				$log_action = array(
-					'header' => 'L_ACTION_LOG_DELETED' ,
-					'L_ADDED_BY' => $this->user->data['username'] ,
-					'L_LOG_ID' => implode(',', $this->bbguildlog->delete_log($marked)));
-
+				$deleted_ids = $this->bbguildlog->delete_log($marked);
 				$this->bbguildlog->log_insert(
 					array(
-						'log_type' => $log_action['header'] ,
-						'log_action' => $log_action)
+						'log_type'   => 'L_ACTION_LOG_DELETED',
+						'log_action' => [implode(',', $deleted_ids)],
+					)
 				);
 
 				//redirect to listing
@@ -704,48 +697,47 @@ class admin_main
 	public function viewlog($log_id)
 	{
 		$viewlog = $this->bbguildlog->get_logentry($log_id);
-		$log_actionxml = $viewlog['log_action'];
-		$search_term = $this->request->variable('search', '');
-		$start = $this->request->variable('start', 0);
-		$log_action = (array) simplexml_load_string($log_actionxml);
-		// loop the action elements and fill template
-		foreach ($log_action as $key => $value)
-		{
-			switch (strtolower($key))
-			{
-				case 'usercolour':
-				case 'id':
-					break;
-				case 'header':
-					if (in_array($log_action['header'], $this->bbguildlog->valid_action_types))
-					{
-						$log_actionstr = $this->bbguildlog->getLogMessage($log_action['header'], false);
-					}
-					break;
-				default:
-					$this->template->assign_block_vars(
-						'logaction_row', array(
-							'KEY'     =>     (null !== ($this->language->lang($key))) ? $this->language->lang($key) . ': ' : $key,
-							'VALUE' =>     $value)
-					);
+		$log_type = $viewlog['log_type_clean'];
+		$log_actionstr = $this->bbguildlog->getLogMessage($log_type, false);
 
+		// Parse log data and display as key/value rows
+		$log_data = $this->bbguildlog->parse_log_action($viewlog['log_action']);
+		foreach ($log_data as $key => $value)
+		{
+			if (is_numeric($key))
+			{
+				$label = $this->language->lang('LOG_PARAMETER') . ' ' . ($key + 1) . ':';
 			}
+			else
+			{
+				$skip = ['header', 'id', 'L_USERCOLOUR', 'L_ADDED_BY', 'L_UPDATED_BY', 'L_USER'];
+				if (in_array($key, $skip))
+				{
+					continue;
+				}
+				$label = (null !== $this->language->lang($key)) ? $this->language->lang($key) . ':' : $key;
+			}
+			$this->template->assign_block_vars(
+				'logaction_row', array(
+					'KEY'   => $label,
+					'VALUE' => $value,
+				)
+			);
 		}
 
-		// fill constant template elements
 		$this->template->assign_vars(
 			array(
-				'S_LIST' => false ,
-				'L_TITLE' => $this->language->lang('ACP_BBGUILD_LOGS') ,
-				'L_EXPLAIN' => $this->language->lang('ACP_BBGUILD_LOGS_EXPLAIN') ,
-				'LOG_DATE' => (! empty($viewlog['log_date'])) ? $this->user->format_date($viewlog['log_date'])  : '&nbsp;' ,
-				'LOG_USERNAME' => $viewlog['colouruser'],
-				'LOG_IP_ADDRESS' => $viewlog['log_ipaddress'] ,
-				'LOG_SESSION_ID' => $viewlog['log_sid'] ,
-				'LOG_RESULT' => $viewlog['log_result'] ,
-				'LOG_ACTION' => $log_actionstr)
+				'S_LIST'         => false,
+				'L_TITLE'        => $this->language->lang('ACP_BBGUILD_LOGS'),
+				'L_EXPLAIN'      => $this->language->lang('ACP_BBGUILD_LOGS_EXPLAIN'),
+				'LOG_DATE'       => (!empty($viewlog['log_date'])) ? $this->user->format_date($viewlog['log_date']) : '&nbsp;',
+				'LOG_USERNAME'   => $viewlog['colouruser'],
+				'LOG_IP_ADDRESS' => $viewlog['log_ipaddress'],
+				'LOG_SESSION_ID' => $viewlog['log_sid'],
+				'LOG_RESULT'     => $viewlog['log_result'],
+				'LOG_ACTION'     => $log_actionstr,
+			)
 		);
-
 	}
 
 	/**
