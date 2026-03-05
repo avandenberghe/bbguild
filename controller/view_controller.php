@@ -38,6 +38,9 @@ class view_controller
 	/** @var \avathar\bbguild\model\games\game_registry */
 	public $game_registry;
 
+	/** @var \avathar\bbguild\portal\portal_renderer */
+	public $portal_renderer;
+
 
 	/**
 	 * @var \phpbb\config\config
@@ -140,6 +143,7 @@ class view_controller
 	 * @param  string           $bb_zonetable	name of zone table
 	 * @param  string           $bb_news	name of news table
 	 * @param  \avathar\bbguild\model\games\game_registry $game_registry
+	 * @param  \avathar\bbguild\portal\portal_renderer $portal_renderer
 	 */
 	public function __construct(
 		\phpbb\auth\auth $auth,
@@ -170,7 +174,8 @@ class view_controller
 		$bb_bosstable,
 		$bb_zonetable,
 		$bb_news,
-		\avathar\bbguild\model\games\game_registry $game_registry
+		\avathar\bbguild\model\games\game_registry $game_registry,
+		\avathar\bbguild\portal\portal_renderer $portal_renderer
 	)
 	{
 
@@ -206,6 +211,7 @@ class view_controller
 		$this->bb_zonetable =  $bb_zonetable;
 		$this->bb_news = $bb_news;
 		$this->game_registry = $game_registry;
+		$this->portal_renderer = $portal_renderer;
 
 		$this->languagecodes = array(
 			'de' => $user->lang['LANG_DE'],

@@ -1,31 +1,22 @@
 <?php
 /**
- *
  * @package bbGuild Extension
  * @copyright (c) 2018 avathar.be
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
- * Welcome module
+ * Welcome module — renders the portal page for a guild.
  */
+
 namespace avathar\bbguild\views;
 
-use avathar\bbguild\model\games\game;
-
-/**
- * Class viewwelcome
- *
-* @package avathar\bbguild\views
- */
 class viewwelcome implements iviews
 {
 	private $navigation;
-	public  $response;
+	public $response;
 	private $tpl;
 
 	/**
-	 * viewWelcome constructor.
-	 *
-	 * @param \avathar\bbguild\views\viewnavigation $navigation
+	 * @param viewnavigation $navigation
 	 */
 	public function __construct(viewnavigation $navigation)
 	{
@@ -34,164 +25,24 @@ class viewwelcome implements iviews
 	}
 
 	/**
-	 *prepare the rendering
+	 * Build the welcome/portal page by delegating to the portal renderer.
 	 */
 	public function buildpage()
 	{
-		global $user, $template;
+		global $template;
+
 		$this->tpl = 'main.html';
+		$guild_id = (int) $this->navigation->guild_id;
 
-		$welcometext = $this->get_message_of_the_day();
+		// Render all portal modules for this guild
+		$this->navigation->view_controller->portal_renderer->render($guild_id);
 
-		if ($this->navigation->guild->isArmoryEnabled())
-		{
-			$game          = new game;
-			$game->game_id = $this->navigation->guild->getGameId();
-			$game->get_game();
+		$template->assign_vars([
+			'GUILD_FACTION'     => $this->navigation->guild->getFactionname(),
+			'S_DISPLAY_WELCOME' => true,
+		]);
 
-			// Get the game provider for API calls
-			$game_registry = $this->navigation->view_controller->game_registry;
-			$provider = $game_registry ? $game_registry->get($this->navigation->guild->getGameId()) : null;
-
-			$data = $this->navigation->guild->Call_Guild_API(array('news'), $game, $provider);
-			if ($data && isset($data['news']))
-			{
-				$i = 0;
-				foreach ($data['news'] as $id => $news)
-				{
-					$i++;
-					switch ($news['type'])
-					{
-					case 'itemCraft' :
-					case 'itemLoot' :
-						$template->assign_block_vars(
-							'activityfeed', array(
-							'TYPE'      => 'ITEM',
-							'ID'        => $id,
-							'VERB'      => $user->lang('LOOTED'),
-							'CHARACTER' => $news['character'],
-							'TIMESTAMP' => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-							'ITEM'      => isset($news['itemId']) ? $news['itemId'] : '',
-							'CONTEXT'   => $news['context'],
-							)
-						);
-						break;
-					case 'playerAchievement':
-						$template->assign_block_vars(
-							'activityfeed', array(
-							'TYPE'        => 'ACHI',
-							'ID'          => $id,
-							'VERB'        => $user->lang('ACHIEVED'),
-							'CHARACTER'   => $news['character'],
-							'TIMESTAMP'   => (!empty($news['timestamp'])) ? $this->date_diff($news['timestamp']) . '&nbsp;' : '&nbsp;',
-							'ACHIEVEMENT' => $news['achievement']['id'],
-							'TITLE'       => $news['achievement']['title'],
-							'POINTS'      => sprintf($user->lang['FORNPOINTS'], $news['achievement']['points']),
-							)
-						);
-						break;
-
-					default:
-						break;
-
-					}
-					if ($i > 25)
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		$template->assign_vars(
-			array(
-			'GUILD_FACTION'         =>  $this->navigation->guild->getFactionname(),
-			'WELCOME_MESSAGE'        => $welcometext,
-			'S_DISPLAY_WELCOME'     => true,
-			)
-		);
 		$title = $this->navigation->user->lang['WELCOME'];
-
-		// fully rendered page source that will be output on the screen.
 		$this->response = $this->navigation->helper->render($this->tpl, $title);
-
 	}
-
-	/**
-	 * Message of the day
-	*
-	 * @return mixed
-	 */
-	private function get_message_of_the_day()
-	{
-		global $db;
-
-		$text='';
-		$sql = 'SELECT motd_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . $this->navigation->view_controller->bb_motd_table;
-		$result = $db->sql_query($sql);
-		while ( $row = $db->sql_fetchrow($result) )
-		{
-			$text = $row['motd_msg'];
-			$bbcode_uid = $row['bbcode_uid'];
-			$bbcode_bitfield = $row['bbcode_bitfield'];
-			$bbcode_options = $row['bbcode_options'];
-		}
-		$db->sql_freeresult($result);
-		$message = generate_text_for_display($text, $bbcode_uid, $bbcode_bitfield, $bbcode_options);
-		return smiley_text($message);
-	}
-
-	/**
-	 * return relative time difference
-	 *
-	 * @param  $epoch //in microtime
-	 * @return string
-	 */
-	private function date_diff($epoch)
-	{
-		$epoch /= 1000;
-		$datetime1 = new \DateTime("@$epoch");
-		$datetime2 = new \DateTime();
-		$interval = date_diff($datetime1, $datetime2);
-
-		$min=$interval->format('%i');
-		$sec=$interval->format('%s');
-		$hour=$interval->format('%h');
-		$mon=$interval->format('%m');
-		$day=$interval->format('%d');
-		$year=$interval->format('%y');
-		if ($interval->format('%i%h%d%m%y')== '00000')
-		{
-			//echo $interval->format('%i%h%d%m%y')."<br>";
-			$dateDiff= $sec. ' Seconds';
-
-		}
-
-		else if ($interval->format('%h%d%m%y')== '0000')
-		{
-			$dateDiff= $min. ' Minutes';
-		}
-
-		else if ($interval->format('%d%m%y')== '000')
-		{
-			$dateDiff= $hour. ' Hours';
-		}
-
-		else if ($interval->format('%m%y')== '00')
-		{
-			$dateDiff= $day. ' Days';
-		}
-
-		else if ($interval->format('%y')== '0')
-		{
-			$dateDiff= $mon. ' Months';
-		}
-
-		else
-		{
-			$dateDiff= $year. ' Years';
-		}
-		return $dateDiff;
-	}
-
 }

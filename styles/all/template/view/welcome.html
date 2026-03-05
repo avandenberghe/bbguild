@@ -1,22 +1,45 @@
-<div class="profile-section">
-	<div id="box1" class="welcome-top">
+{% if S_PORTAL_ACTIVE %}
+<div id="bbguild-portal" role="grid">
+	{% if S_TOP_COLUMN %}
+	<div id="portal-top" role="rowgroup">
+		{% for modules_top in loops.modules_top %}
+			{% DEFINE TEMPLATE_FILE = ''~ modules_top.TEMPLATE_FILE ~'' %}
+			{% DEFINE TITLE = ''~ modules_top.TITLE ~'' %}
+			{% DEFINE MODULE_ID = ''~ modules_top.MODULE_ID ~'' %}
+			{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
+		{% endfor %}
+	</div>
+	{% endif %}
 
-	</div>
-	<div id="box2" class="welcome-col1">
-		<p>{{ WELCOME_MESSAGE }}</p>
-		BLOG
+	<div id="portal-content-wrapper">
+		{% if S_CENTER_COLUMN %}
+		<div id="portal-center"{% if S_RIGHT_COLUMN %} style="margin-right: {{ S_PORTAL_RIGHT_COLUMN }}px;"{% endif %}>
+			{% for modules_center in loops.modules_center %}
+				{% DEFINE TEMPLATE_FILE = ''~ modules_center.TEMPLATE_FILE ~'' %}
+				{% DEFINE TITLE = ''~ modules_center.TITLE ~'' %}
+				{% DEFINE MODULE_ID = ''~ modules_center.MODULE_ID ~'' %}
+				{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
+			{% endfor %}
+		</div>
+		{% endif %}
+
+		{% if S_RIGHT_COLUMN %}
+		<div id="portal-right" style="width: {{ S_PORTAL_RIGHT_COLUMN }}px;">
+			{% for modules_right in loops.modules_right %}
+				{% DEFINE TEMPLATE_FILE = ''~ modules_right.TEMPLATE_FILE ~'' %}
+				{% DEFINE TITLE = ''~ modules_right.TITLE ~'' %}
+				{% DEFINE MODULE_ID = ''~ modules_right.MODULE_ID ~'' %}
+				{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
+			{% endfor %}
+		</div>
+		{% endif %}
+		<span class="clear"></span>
 	</div>
 </div>
-<div class="profile-section-sub">
-	<div id="box3" class="welcome-col1">
-		{% EVENT bbguild_welcome_activity_feed %}
-	</div>
-	<div class="welcome-col2">
-		<div id="box5">
-			RECRUIT NEWS
-		</div>
-		<div id="box6">
-			Teamspeak
-		</div>
-	</div>
+{% else %}
+<div class="profile-section">
+	<p>{{ lang('BBGUILD_NO_PORTAL_MODULES') }}</p>
 </div>
+{% endif %}
+
+{% EVENT bbguild_welcome_after_portal %}

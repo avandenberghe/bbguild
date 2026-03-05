@@ -475,3 +475,45 @@ ul#bbguild-achievement-feed {
     border-bottom: 1px solid #331509;
 }
 
+/* Portal layout
+--------------------------------------------- */
+#bbguild-portal {
+    width: 100%;
+}
+
+#portal-top {
+    margin-bottom: 10px;
+}
+
+#portal-content-wrapper {
+    position: relative;
+}
+
+#portal-center {
+    min-height: 400px;
+}
+
+#portal-right {
+    float: right;
+    position: relative;
+}
+
+#portal-right .portal-block {
+    margin-bottom: 10px;
+}
+
+.portal-block {
+    margin-bottom: 10px;
+}
+
+.portal-block .portal-block-header {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-bottom: 1px solid #371b0d;
+}
+
+.portal-block .portal-block-body {
+    padding: 10px;
+}
+
