@@ -28,7 +28,14 @@ DROP TABLE IF EXISTS phpbb_bb_achievement;
 DROP TABLE IF EXISTS phpbb_bb_guild_wow;
 
 -- ----------------------------------------------------------------------------
--- 2. Drop bbguild core tables (child tables first)
+-- 2. Drop bbguild portal tables
+-- ----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS phpbb_bb_portal_config;
+DROP TABLE IF EXISTS phpbb_bb_portal_modules;
+
+-- ----------------------------------------------------------------------------
+-- 3. Drop bbguild core tables (child tables first)
 -- ----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS phpbb_bb_players;
@@ -46,33 +53,34 @@ DROP TABLE IF EXISTS phpbb_bb_guild;
 DROP TABLE IF EXISTS phpbb_bb_games;
 
 -- ----------------------------------------------------------------------------
--- 3. phpBB config entries
+-- 4. phpBB config entries
 -- ----------------------------------------------------------------------------
 
 DELETE FROM phpbb_config WHERE config_name LIKE 'bbguild\_%';
 
 -- ----------------------------------------------------------------------------
--- 4. phpBB extension registrations
+-- 5. phpBB extension registrations
 -- ----------------------------------------------------------------------------
 
 DELETE FROM phpbb_ext WHERE ext_name IN ('avathar/bbguild', 'avathar/bbguild_wow');
 
 -- ----------------------------------------------------------------------------
--- 5. phpBB migration tracking
+-- 6. phpBB migration tracking
 -- ----------------------------------------------------------------------------
 
 DELETE FROM phpbb_migrations WHERE migration_name LIKE '%avathar\\\\bbguild%';
 
 -- ----------------------------------------------------------------------------
--- 6. phpBB modules (ACP/UCP menu entries)
+-- 7. phpBB modules (ACP/UCP menu entries)
 -- ----------------------------------------------------------------------------
 
 DELETE FROM phpbb_modules WHERE module_langname LIKE 'ACP_BBGUILD%';
+DELETE FROM phpbb_modules WHERE module_langname LIKE 'ACP_CAT_BBGUILD%';
 DELETE FROM phpbb_modules WHERE module_langname LIKE 'UCP_BBGUILD%';
 DELETE FROM phpbb_modules WHERE module_basename LIKE '%avathar%bbguild%';
 
 -- ----------------------------------------------------------------------------
--- 7. phpBB permissions
+-- 8. phpBB permissions
 -- ----------------------------------------------------------------------------
 
 DELETE FROM phpbb_acl_roles_data WHERE auth_option_id IN (

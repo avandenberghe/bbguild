@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0-a12 05/03/2026
+## 2.0.0-b1 05/03/2026
   - [NEW] Portal system: guild-scoped block engine forked from Board3 Portal design (GPL-2.0)
   - [NEW] Portal modules: Message of the Day, Guild News, Recruitment, Activity Feed, Custom Block
   - [NEW] 3-column portal layout: top, center, right with bitmask-based column permissions
