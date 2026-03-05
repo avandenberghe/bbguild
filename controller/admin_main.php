@@ -279,9 +279,10 @@ class admin_main
 
 		//start date
 		$bbguild_started = '';
-		if ($this->config['bbguild_eqdkp_start'] != 0)
+		$start_timestamp = (int) $this->config['bbguild_eqdkp_start'];
+		if ($start_timestamp > 0)
 		{
-			$bbguild_started = date($this->config['bbguild_date_format'], $this->config['bbguild_eqdkp_start']);
+			$bbguild_started = date((string) $this->config['bbguild_date_format'], $start_timestamp);
 		}
 
 		//get number of games
@@ -422,9 +423,9 @@ class admin_main
 
 		$this->template->assign_vars(
 			array(
-				'EQDKP_START_DD' => date('d', $this->config['bbguild_eqdkp_start']) ,
-				'EQDKP_START_MM' => date('m', $this->config['bbguild_eqdkp_start']) ,
-				'EQDKP_START_YY' => date('Y', $this->config['bbguild_eqdkp_start']) ,
+				'EQDKP_START_DD' => date('d', (int) $this->config['bbguild_eqdkp_start']) ,
+				'EQDKP_START_MM' => date('m', (int) $this->config['bbguild_eqdkp_start']) ,
+				'EQDKP_START_YY' => date('Y', (int) $this->config['bbguild_eqdkp_start']) ,
 				'DATE_FORMAT'   => $this->config['bbguild_date_format'] ,
 				'S_LANG_OPTIONS' => $s_lang_options,
 				'USER_LLIMIT' => $this->config['bbguild_user_llimit'] ,

@@ -9,7 +9,7 @@
  * Data validation class
  *
  */
-namespace sajaki\bbguild\controller\admin;
+namespace avathar\bbguild\controller;
 
 /**
  * validator class
