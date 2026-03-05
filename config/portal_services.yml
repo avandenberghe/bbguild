@@ -83,15 +83,6 @@ services:
         tags:
             - { name: bbguild.portal.module }
 
-    avathar.bbguild.portal.module.guild_news:
-        class: avathar\bbguild\portal\modules\guild_news
-        arguments:
-            - '@dbal.conn'
-            - '@template'
-            - '@user'
-            - '%avathar.bbguild.tables.bb_news%'
-        tags:
-            - { name: bbguild.portal.module }
 
     avathar.bbguild.portal.module.recruitment:
         class: avathar\bbguild\portal\modules\recruitment
@@ -107,14 +98,17 @@ services:
         tags:
             - { name: bbguild.portal.module }
 
-    avathar.bbguild.portal.module.activity_feed:
-        class: avathar\bbguild\portal\modules\activity_feed
+
+    avathar.bbguild.portal.module.roster:
+        class: avathar\bbguild\portal\modules\roster
         arguments:
             - '@dbal.conn'
             - '@template'
             - '@user'
             - '@config'
-            - '@cache.driver'
+            - '@pagination'
+            - '@request'
+            - '@path_helper'
             - '@avathar.bbguild.game_registry'
             - '%avathar.bbguild.tables.bb_players%'
             - '%avathar.bbguild.tables.bb_ranks%'
@@ -123,14 +117,5 @@ services:
             - '%avathar.bbguild.tables.bb_language%'
             - '%avathar.bbguild.tables.bb_guild%'
             - '%avathar.bbguild.tables.bb_factions%'
-        tags:
-            - { name: bbguild.portal.module }
-
-    avathar.bbguild.portal.module.custom:
-        class: avathar\bbguild\portal\modules\custom
-        arguments:
-            - '@dbal.conn'
-            - '@template'
-            - '@avathar.bbguild.portal.config'
         tags:
             - { name: bbguild.portal.module }

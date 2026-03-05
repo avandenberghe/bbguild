@@ -1,6 +1,6 @@
-<div class="portal-block portal-block-side" id="portal-recruit-{{ definition.MODULE_ID }}">
-	<div class="portal-block-header">{{ definition.TITLE }}</div>
-	<div class="portal-block-body">
+{{ definition.LR_BLOCK_H_L }}
+{{ definition.BLOCK_ICON }}{{ definition.TITLE }}
+{{ definition.LR_BLOCK_H_R }}
 		{% if S_PORTAL_HAS_RECRUITS %}
 		<ul class="portal-recruit-list">
 		{% for item in loops.portal_recruit %}
@@ -13,5 +13,5 @@
 		{% else %}
 		<p>{{ lang('NO_RECRUITS') }}</p>
 		{% endif %}
-	</div>
-</div>
+{{ definition.LR_BLOCK_F_L }}
+{{ definition.LR_BLOCK_F_R }}

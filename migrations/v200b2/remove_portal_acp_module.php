@@ -2,21 +2,18 @@
 /**
  * @package bbGuild Extension
  * @copyright (c) 2026 avathar.be
- * @license GNU General Public License, version 2 (GPL-2.0-only)
+ * @license GNU General Public License, version 2 (GPL-2.0)
  *
- * Portal ACP module registration migration
+ * Remove standalone portal ACP module (merged into Settings page).
  */
 
-namespace avathar\bbguild\migrations\v200a12;
+namespace avathar\bbguild\migrations\v200b2;
 
-class portal_acp_module extends \phpbb\db\migration\migration
+class remove_portal_acp_module extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return [
-			'\avathar\bbguild\migrations\basics\modules',
-			'\avathar\bbguild\migrations\v200a12\portal_schema',
-		];
+		return ['\avathar\bbguild\migrations\v200b1\release_2_0_0_b1'];
 	}
 
 	public function effectively_installed()
@@ -29,15 +26,14 @@ class portal_acp_module extends \phpbb\db\migration\migration
 		$count = (int) $this->db->sql_fetchfield('cnt');
 		$this->db->sql_freeresult($result);
 
-		return $count > 0;
+		return $count === 0;
 	}
 
 	public function update_data()
 	{
 		return [
-			['module.add', ['acp', 'ACP_BBGUILD_MAINPAGE', [
+			['module.remove', ['acp', 'ACP_BBGUILD_MAINPAGE', [
 				'module_basename' => '\avathar\bbguild\acp\portal_module',
-				'modes'           => ['portal'],
 			]]],
 		];
 	}
@@ -45,8 +41,9 @@ class portal_acp_module extends \phpbb\db\migration\migration
 	public function revert_data()
 	{
 		return [
-			['module.remove', ['acp', 'ACP_BBGUILD_MAINPAGE', [
+			['module.add', ['acp', 'ACP_BBGUILD_MAINPAGE', [
 				'module_basename' => '\avathar\bbguild\acp\portal_module',
+				'modes'           => ['portal'],
 			]]],
 		];
 	}

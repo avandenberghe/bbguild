@@ -1,0 +1,115 @@
+{% INCLUDE 'overall_header.html' %}
+
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+
+<h1>{{ lang('ACP_PORTAL_MODULE_CONFIG') }}</h1>
+<p>{{ lang('ACP_PORTAL_MODULE_CONFIG_EXPLAIN') }}</p>
+
+<form method="post" action="{{ U_ACTION }}" id="portal_config_form">
+	<input type="hidden" name="{{ ACTION_PARAM }}" value="save_config" />
+	<input type="hidden" name="module_id" value="{{ MODULE_ID }}" />
+	<input type="hidden" name="guild_id" value="{{ GUILD_ID }}" />
+
+	<fieldset>
+		<legend>{{ lang('ACP_PORTAL_MODULE_SETTINGS') }}</legend>
+		<p>{{ lang('ACP_PORTAL_MODULE_SETTINGS_EXPLAIN') }}</p>
+		<dl>
+			<dt><label for="module_name">{{ lang('ACP_PORTAL_MODULE_NAME') }}:</label></dt>
+			<dd><input type="text" id="module_name" name="module_name" value="{{ MODULE_NAME }}" size="40" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="module_status">{{ lang('STATUS') }}:</label></dt>
+			<dd>
+				<label><input type="radio" name="module_status" value="1"{% if MODULE_STATUS %} checked="checked"{% endif %} /> {{ lang('ENABLED') }}</label>
+				<label><input type="radio" name="module_status" value="0"{% if not MODULE_STATUS %} checked="checked"{% endif %} /> {{ lang('DISABLED') }}</label>
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('ACP_PORTAL_ICON_SETTINGS') }}</legend>
+		<p>{{ lang('ACP_PORTAL_ICON_SETTINGS_EXPLAIN') }}</p>
+		<dl>
+			<dt><label for="module_image_src">{{ lang('ACP_PORTAL_IMAGE_SRC') }}:</label>
+				<br /><span>{{ lang('ACP_PORTAL_IMAGE_SRC_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<input type="text" id="module_image_src" name="module_image_src" value="{{ MODULE_IMAGE_SRC }}" size="40" />
+				{% if MODULE_IMAGE_SRC %}
+				<br /><img src="{{ MODULE_IMAGE_PREVIEW }}" alt="" style="margin-top: 5px;" />
+				{% endif %}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="module_icon">{{ lang('ACP_PORTAL_FA_ICON') }}:</label>
+				<br /><span>{{ lang('ACP_PORTAL_FA_ICON_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<input type="text" id="module_icon" name="module_icon" value="{{ MODULE_ICON }}" size="40" placeholder="fa-star" />
+				{% if MODULE_ICON %}
+				<br /><i class="fa {{ MODULE_ICON }}" style="font-size: {{ MODULE_ICON_SIZE }}px; margin-top: 5px;"></i>
+				{% endif %}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="module_icon_size">{{ lang('ACP_PORTAL_ICON_SIZE') }}:</label>
+				<br /><span>{{ lang('ACP_PORTAL_ICON_SIZE_EXPLAIN') }}</span>
+			</dt>
+			<dd><input type="number" id="module_icon_size" name="module_icon_size" value="{{ MODULE_ICON_SIZE }}" min="8" max="64" size="5" /> px</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('ACP_PORTAL_GROUP_ACCESS') }}</legend>
+		<p>{{ lang('ACP_PORTAL_GROUP_ACCESS_EXPLAIN') }}</p>
+		<dl>
+			<dt><label for="module_group_ids">{{ lang('ACP_PORTAL_GROUP_IDS') }}:</label>
+				<br /><span>{{ lang('ACP_PORTAL_GROUP_IDS_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<select id="module_group_ids" name="module_group_ids[]" multiple="multiple" size="6">
+					{% for group in loops.group_options %}
+					<option value="{{ group.VALUE }}"{% if group.SELECTED %} selected="selected"{% endif %}>{{ group.LABEL }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+	</fieldset>
+
+	{% if S_HAS_MODULE_SETTINGS %}
+	<fieldset>
+		<legend>{{ lang('ACP_PORTAL_MODULE_SPECIFIC') }}</legend>
+		<p>{{ lang('ACP_PORTAL_MODULE_SPECIFIC_EXPLAIN') }}</p>
+		{% for setting in loops.module_settings %}
+		<dl>
+			<dt><label for="config_{{ setting.KEY }}">{{ setting.LABEL }}:</label>
+				{% if setting.EXPLAIN %}<br /><span>{{ setting.EXPLAIN }}</span>{% endif %}
+			</dt>
+			<dd>
+				{% if setting.TYPE == 'text' %}
+				<input type="text" id="config_{{ setting.KEY }}" name="config[{{ setting.KEY }}]" value="{{ setting.VALUE }}" size="40" />
+				{% elseif setting.TYPE == 'textarea' %}
+				<textarea id="config_{{ setting.KEY }}" name="config[{{ setting.KEY }}]" rows="5" cols="60">{{ setting.VALUE }}</textarea>
+				{% elseif setting.TYPE == 'select' %}
+				<select id="config_{{ setting.KEY }}" name="config[{{ setting.KEY }}]">
+					{% for option in setting.options %}
+					<option value="{{ option.VALUE }}"{% if option.SELECTED %} selected="selected"{% endif %}>{{ option.LABEL }}</option>
+					{% endfor %}
+				</select>
+				{% elseif setting.TYPE == 'checkbox' %}
+				<label><input type="checkbox" id="config_{{ setting.KEY }}" name="config[{{ setting.KEY }}]" value="1"{% if setting.VALUE %} checked="checked"{% endif %} /> {{ setting.LABEL_INLINE }}</label>
+				{% endif %}
+			</dd>
+		</dl>
+		{% endfor %}
+	</fieldset>
+	{% endif %}
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button2" />
+	</fieldset>
+	{{ S_FORM_TOKEN }}
+</form>
+
+{% INCLUDE 'overall_footer.html' %}

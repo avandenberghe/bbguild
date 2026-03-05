@@ -15,7 +15,7 @@ use phpbb\user;
 
 /**
  * Renders the portal page by loading and assembling all enabled modules
- * for a given guild. Called from viewwelcome::buildpage().
+ * for a given guild. Called from view_controller::handleview().
  */
 class portal_renderer
 {
@@ -55,6 +55,7 @@ class portal_renderer
 			'top'    => 0,
 			'center' => 0,
 			'right'  => 0,
+			'bottom' => 0,
 		];
 
 		$portal_modules = $this->database_handler->get_modules($guild_id);
@@ -107,7 +108,7 @@ class portal_renderer
 			return $module->get_template_side((int) $row['module_id']);
 		}
 
-		// top and center use get_template_center
+		// top, center, and bottom use get_template_center
 		$this->module_count[$column]++;
 		return $module->get_template_center((int) $row['module_id']);
 	}
@@ -125,6 +126,7 @@ class portal_renderer
 			'S_TOP_COLUMN'           => $this->module_count['top'] > 0,
 			'S_CENTER_COLUMN'        => $this->module_count['center'] > 0,
 			'S_RIGHT_COLUMN'         => $this->module_count['right'] > 0,
+			'S_BOTTOM_COLUMN'        => $this->module_count['bottom'] > 0,
 			'S_PORTAL_RIGHT_COLUMN'  => $right_column_width,
 			'S_PORTAL_ACTIVE'        => true,
 		]);

@@ -9,7 +9,7 @@
 
 namespace avathar\bbguild\controller;
 
-use avathar\bbguild\views\viewnavigation;
+use avathar\bbguild\views\guild_context;
 use avathar\bbguild\model\games\game;
 
 /**
@@ -107,9 +107,6 @@ class view_controller
 	 */
 	public $languagecodes;
 
-
-	private $valid_views = array('roster', 'welcome');
-	//private $valid_views = array('news', 'roster', 'standings', 'welcome', 'stats', 'player', 'raids');
 
 	/**
 	 * view_controller constructor.
@@ -248,29 +245,22 @@ class view_controller
 	}
 
 	/**
-	 * View factory
+	 * Main view handler — builds guild context and renders portal.
 	 *
-	 * @param  $guild_id
-	 * @param  $page
+	 * @param  int    $guild_id
+	 * @param  string $page  Kept for route compatibility (unused)
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function handleview($guild_id, $page)
+	public function handleview($guild_id, $page = 'welcome')
 	{
-		if (in_array($page, $this->valid_views))
-		{
-			$navigation = new viewnavigation($page, $this, $guild_id);
-			$viewtype = "\\avathar\\bbguild\\views\\view". $page;
-			$view = new $viewtype($navigation, $this);
-			$response = $view->response;
-			return $response;
-		}
-		else
-		{
-			$alert=$this->language->lang('NOVIEW');
-			if (isset($alert))
-			{
-				trigger_error(sprintf($alert, $page));
-			}
-		}
+		// Build guild context (sidebar, header, guild data)
+		$context = new guild_context($this, $guild_id);
+
+		// Render all portal modules (MOTD, Roster, News, etc.)
+		$this->portal_renderer->render($context->guild_id);
+
+		$this->template->assign_vars(['S_DISPLAY_WELCOME' => true]);
+
+		return $this->helper->render('main.html', $context->guild->getName());
 	}
 }

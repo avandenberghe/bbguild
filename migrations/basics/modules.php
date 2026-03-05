@@ -49,6 +49,12 @@ class modules extends \phpbb\db\migration\migration
 				'modes'           => ['listgames', 'editgames', 'addfaction', 'addrace', 'addclass', 'addrole'],
 			]]],
 
+			// ACP modules — portal
+			['module.add', ['acp', 'ACP_BBGUILD_MAINPAGE', [
+				'module_basename' => '\avathar\bbguild\acp\portal_module',
+				'modes'           => ['portal'],
+			]]],
+
 			// ACP modules — player
 			['module.add', ['acp', 'ACP_BBGUILD_PLAYER', [
 				'module_basename' => '\avathar\bbguild\acp\guild_module',
@@ -78,6 +84,9 @@ class modules extends \phpbb\db\migration\migration
 			]]],
 			['module.remove', ['acp', 'ACP_BBGUILD_PLAYER', [
 				'module_basename' => '\avathar\bbguild\acp\guild_module',
+			]]],
+			['module.remove', ['acp', 'ACP_BBGUILD_MAINPAGE', [
+				'module_basename' => '\avathar\bbguild\acp\portal_module',
 			]]],
 			['module.remove', ['acp', 'ACP_BBGUILD_MAINPAGE', [
 				'module_basename' => '\avathar\bbguild\acp\game_module',

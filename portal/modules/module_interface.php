@@ -15,13 +15,14 @@ namespace avathar\bbguild\portal\modules;
  *   top    = 1
  *   center = 4
  *   right  = 8
+ *   bottom = 16
  */
 interface module_interface
 {
 	/**
 	 * Get bitmask of allowed columns for this module.
 	 *
-	 * @return int Sum of column constants (top=1, center=4, right=8)
+	 * @return int Sum of column constants (top=1, center=4, right=8, bottom=16)
 	 */
 	public function get_allowed_columns(): int;
 

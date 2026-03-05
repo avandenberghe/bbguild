@@ -150,6 +150,7 @@ services:
             - '@avathar.bbguild.game_registry'
             - '@dispatcher'
             - '@avathar.bbguild.portal.modules.database_handler'
+            - '@avathar.bbguild.admin.portal'
             - '%avathar.bbguild.tables.bb_games%'
             - '%avathar.bbguild.tables.bb_logs%'
             - '%avathar.bbguild.tables.bb_ranks%'
@@ -168,7 +169,6 @@ services:
     avathar.bbguild.admin.portal:
         class: avathar\bbguild\controller\admin_portal
         arguments:
-            - '@auth'
             - '@cache'
             - '@config'
             - '@dbal.conn'
@@ -180,6 +180,7 @@ services:
             - '@avathar.bbguild.portal.module_registry'
             - '@avathar.bbguild.portal.modules.database_handler'
             - '@avathar.bbguild.portal.modules.manager'
+            - '@avathar.bbguild.portal.config'
             - '%avathar.bbguild.tables.bb_guild%'
     avathar.bbguild.game_provider_collection:
         class: phpbb\di\service_collection
@@ -198,5 +199,7 @@ services:
             - '@template'
             - '@user'
             - '@config'
+            - '@dbal.conn'
+            - '%avathar.bbguild.tables.bb_guild%'
         tags:
             - { name: event.listener }

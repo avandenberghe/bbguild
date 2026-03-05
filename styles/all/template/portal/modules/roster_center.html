@@ -1,0 +1,98 @@
+{{ definition.C_BLOCK_H_L }}
+{{ definition.BLOCK_ICON }}{{ definition.TITLE }}
+{{ definition.C_BLOCK_H_R }}
+
+		<div class="portal-roster-filters">
+			<form id="roster_filter" method="get" action="">
+				<select name="filter" class="input" onchange="this.form.submit();">
+					{% for item in loops.roster_filter_row %}
+					<option value="{{ item.VALUE }}"{{ item.SELECTED }}{{ item.DISABLED }}>{{ item.OPTION }}</option>
+					{% endfor %}
+				</select>
+				<input type="hidden" name="hidden_guild_id" value="{{ ROSTER_GUILD_ID }}" />
+				<input type="search" name="player_name" size="20" maxlength="20" placeholder="{{ lang('SEARCH') }}..." value="{{ ROSTER_PLAYER_NAME }}" class="inputbox search tiny" />
+				<button type="submit" class="button icon-button search-icon">{{ lang('FILTER') }}</button>
+			</form>
+		</div>
+
+		{% if S_PORTAL_HAS_ROSTER %}
+		<table class="portal-roster-table">
+			{% if S_SHOWACH == 1 %}
+			<colgroup>
+				<col style="width:16%" />
+				<col style="width:5%" />
+				<col style="width:6%" />
+				<col style="width:15%" />
+				<col style="width:16%" />
+				<col style="width:14%" />
+				<col style="width:14%" />
+			</colgroup>
+			{% else %}
+			<colgroup>
+				<col style="width:18%" />
+				<col style="width:6%" />
+				<col style="width:16%" />
+				<col style="width:18%" />
+				<col style="width:16%" />
+				<col style="width:14%" />
+			</colgroup>
+			{% endif %}
+			<thead>
+			<tr>
+				<th style="text-align:left;"><a href="{{ O_NAME }}">{{ lang('PLAYER') }}</a></th>
+				<th style="text-align:center;"><a href="{{ O_LEVEL }}">{{ lang('LEVEL') }}</a></th>
+				{% if S_SHOWACH == 1 %}
+				<th style="text-align:center;"><a href="{{ O_ACHI }}">{{ lang('ACHIEV') }}</a></th>
+				{% endif %}
+				<th style="text-align:left;">{{ lang('RACE') }}</th>
+				<th style="text-align:left;"><a href="{{ O_CLASS }}">{{ lang('CLASS') }}</a></th>
+				<th style="text-align:left;"><a href="{{ O_RANK }}">{{ lang('RANK') }}</a></th>
+				<th style="text-align:left;"><a href="{{ O_PHPBB }}">{{ lang('MEMBER') }}</a></th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for row in loops.portal_roster_row %}
+			<tr class="{% if row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+				<td style="text-align:left;">
+					<a style="white-space:nowrap; color:{{ row.COLORCODE }}" href="{{ row.ARMORY }}"><strong>{{ row.NAME }}</strong></a>
+				</td>
+				<td style="text-align:center;">{{ row.LVL }}</td>
+				{% if S_SHOWACH == 1 %}
+				<td style="text-align:center;">{{ row.ACHIEVPTS }}</td>
+				{% endif %}
+				<td style="text-align:left;"><img src="{{ row.RACE_IMAGE }}" alt="" />&nbsp;{{ row.RACE }}</td>
+				<td style="text-align:left;">
+					<img src="{{ row.CLASS_IMAGE }}" alt="{{ row.CLASS }}" />&nbsp;
+					<span style="white-space:nowrap; color:{{ row.COLORCODE }}">{{ row.CLASS }}</span>
+				</td>
+				<td style="text-align:left; white-space:nowrap;">{{ row.RANK }}</td>
+				<td style="text-align:left;">{{ row.PHPBBUID }}</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+			<tfoot>
+			<tr>
+				<td colspan="{% if S_SHOWACH == 1 %}7{% else %}6{% endif %}" style="text-align:left;">
+					{{ lang('MEMBERS') }}: {{ ROSTER_FOOTCOUNT }}
+				</td>
+			</tr>
+			</tfoot>
+		</table>
+
+		<div class="pagination">
+			{% if loops.roster_pagination|length %}
+				{% for pagination in loops.roster_pagination %}
+					{% if pagination.S_IS_PREV %}<a href="{{ pagination.PAGE_URL }}">&laquo;</a>
+					{% elseif pagination.S_IS_NEXT %}<a href="{{ pagination.PAGE_URL }}">&raquo;</a>
+					{% elseif pagination.S_IS_CURRENT %}<strong>{{ pagination.PAGE_NUMBER }}</strong>
+					{% else %}<a href="{{ pagination.PAGE_URL }}">{{ pagination.PAGE_NUMBER }}</a>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+		{% else %}
+		<p>{{ lang('NO_PLAYERS') }}</p>
+		{% endif %}
+
+{{ definition.C_BLOCK_F_L }}
+{{ definition.C_BLOCK_F_R }}

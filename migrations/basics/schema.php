@@ -25,6 +25,8 @@ class schema extends \phpbb\db\migration\migration
 	protected $motd_table;
 	protected $bbrecruit_table;
 	protected $bb_gamerole_table;
+	protected $portal_modules_table;
+	protected $portal_config_table;
 
 	public static function depends_on()
 	{
@@ -264,6 +266,37 @@ class schema extends \phpbb\db\migration\migration
 						'I03' => ['INDEX', 'log_ipaddress'],
 					],
 				],
+				/* 14 - portal modules */
+				$this->portal_modules_table => [
+					'COLUMNS' => [
+						'module_id'           => ['UINT', null, 'auto_increment'],
+						'guild_id'            => ['USINT', 0],
+						'module_classname'    => ['VCHAR:255', ''],
+						'module_column'       => ['TINT:3', 0],
+						'module_order'        => ['TINT:3', 0],
+						'module_name'         => ['VCHAR:255', ''],
+						'module_image_src'    => ['VCHAR:255', ''],
+						'module_icon'         => ['VCHAR:100', ''],
+						'module_icon_size'    => ['USINT', 16],
+						'module_image_width'  => ['USINT', 16],
+						'module_image_height' => ['USINT', 16],
+						'module_group_ids'    => ['VCHAR:255', ''],
+						'module_status'       => ['TINT:1', 1],
+					],
+					'PRIMARY_KEY' => 'module_id',
+					'KEYS' => [
+						'guild_col_order' => ['INDEX', ['guild_id', 'module_column', 'module_order']],
+					],
+				],
+				/* 15 - portal config */
+				$this->portal_config_table => [
+					'COLUMNS' => [
+						'config_name'  => ['VCHAR:255', ''],
+						'config_value' => ['MTEXT', ''],
+						'guild_id'     => ['USINT', 0],
+					],
+					'PRIMARY_KEY' => ['config_name', 'guild_id'],
+				],
 			],
 		];
 	}
@@ -287,6 +320,8 @@ class schema extends \phpbb\db\migration\migration
 				$this->bb_gamerole_table,
 				$this->bbrecruit_table,
 				$this->bblogs_table,
+				$this->portal_modules_table,
+				$this->portal_config_table,
 			],
 		];
 	}
@@ -306,5 +341,7 @@ class schema extends \phpbb\db\migration\migration
 		$this->motd_table                 = $this->table_prefix . 'bb_motd';
 		$this->bbrecruit_table            = $this->table_prefix . 'bb_recruit';
 		$this->bb_gamerole_table          = $this->table_prefix . 'bb_gameroles';
+		$this->portal_modules_table       = $this->table_prefix . 'bb_portal_modules';
+		$this->portal_config_table        = $this->table_prefix . 'bb_portal_config';
 	}
 }

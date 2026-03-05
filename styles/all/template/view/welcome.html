@@ -1,3 +1,5 @@
+{% INCLUDE 'portal/_block_config.html' %}
+
 {% if S_PORTAL_ACTIVE %}
 <div id="bbguild-portal" role="grid">
 	{% if S_TOP_COLUMN %}
@@ -6,35 +8,74 @@
 			{% DEFINE TEMPLATE_FILE = ''~ modules_top.TEMPLATE_FILE ~'' %}
 			{% DEFINE TITLE = ''~ modules_top.TITLE ~'' %}
 			{% DEFINE MODULE_ID = ''~ modules_top.MODULE_ID ~'' %}
+			{% DEFINE IMAGE_SRC = ''~ modules_top.IMAGE_SRC ~'' %}
+			{% DEFINE IMAGE_WIDTH = ''~ modules_top.IMAGE_WIDTH ~'' %}
+			{% DEFINE IMAGE_HEIGHT = ''~ modules_top.IMAGE_HEIGHT ~'' %}
+			{% DEFINE FA_ICON = ''~ modules_top.FA_ICON ~'' %}
+			{% DEFINE FA_SIZE = ''~ modules_top.FA_SIZE ~'' %}
+			{% DEFINE FA_ENABLED = modules_top.FA_ENABLED %}
+			{% DEFINE CODE = ''~ modules_top.CODE ~'' %}
 			{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
 		{% endfor %}
 	</div>
 	{% endif %}
 
 	<div id="portal-content-wrapper">
-		{% if S_CENTER_COLUMN %}
-		<div id="portal-center"{% if S_RIGHT_COLUMN %} style="margin-right: {{ S_PORTAL_RIGHT_COLUMN }}px;"{% endif %}>
-			{% for modules_center in loops.modules_center %}
-				{% DEFINE TEMPLATE_FILE = ''~ modules_center.TEMPLATE_FILE ~'' %}
-				{% DEFINE TITLE = ''~ modules_center.TITLE ~'' %}
-				{% DEFINE MODULE_ID = ''~ modules_center.MODULE_ID ~'' %}
-				{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
-			{% endfor %}
-		</div>
-		{% endif %}
-
 		{% if S_RIGHT_COLUMN %}
 		<div id="portal-right" style="width: {{ S_PORTAL_RIGHT_COLUMN }}px;">
 			{% for modules_right in loops.modules_right %}
 				{% DEFINE TEMPLATE_FILE = ''~ modules_right.TEMPLATE_FILE ~'' %}
 				{% DEFINE TITLE = ''~ modules_right.TITLE ~'' %}
 				{% DEFINE MODULE_ID = ''~ modules_right.MODULE_ID ~'' %}
+				{% DEFINE IMAGE_SRC = ''~ modules_right.IMAGE_SRC ~'' %}
+				{% DEFINE IMAGE_WIDTH = ''~ modules_right.IMAGE_WIDTH ~'' %}
+				{% DEFINE IMAGE_HEIGHT = ''~ modules_right.IMAGE_HEIGHT ~'' %}
+				{% DEFINE FA_ICON = ''~ modules_right.FA_ICON ~'' %}
+				{% DEFINE FA_SIZE = ''~ modules_right.FA_SIZE ~'' %}
+				{% DEFINE FA_ENABLED = modules_right.FA_ENABLED %}
+				{% DEFINE CODE = ''~ modules_right.CODE ~'' %}
+				{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
+			{% endfor %}
+		</div>
+		{% endif %}
+
+		{% if S_CENTER_COLUMN %}
+		<div id="portal-center"{% if S_RIGHT_COLUMN %} style="margin-right: {{ S_PORTAL_RIGHT_COLUMN }}px;"{% endif %}>
+			{% for modules_center in loops.modules_center %}
+				{% DEFINE TEMPLATE_FILE = ''~ modules_center.TEMPLATE_FILE ~'' %}
+				{% DEFINE TITLE = ''~ modules_center.TITLE ~'' %}
+				{% DEFINE MODULE_ID = ''~ modules_center.MODULE_ID ~'' %}
+				{% DEFINE IMAGE_SRC = ''~ modules_center.IMAGE_SRC ~'' %}
+				{% DEFINE IMAGE_WIDTH = ''~ modules_center.IMAGE_WIDTH ~'' %}
+				{% DEFINE IMAGE_HEIGHT = ''~ modules_center.IMAGE_HEIGHT ~'' %}
+				{% DEFINE FA_ICON = ''~ modules_center.FA_ICON ~'' %}
+				{% DEFINE FA_SIZE = ''~ modules_center.FA_SIZE ~'' %}
+				{% DEFINE FA_ENABLED = modules_center.FA_ENABLED %}
+				{% DEFINE CODE = ''~ modules_center.CODE ~'' %}
 				{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
 			{% endfor %}
 		</div>
 		{% endif %}
 		<span class="clear"></span>
 	</div>
+
+	{% if S_BOTTOM_COLUMN %}
+	<div id="portal-bottom" role="rowgroup">
+		{% for modules_bottom in loops.modules_bottom %}
+			{% DEFINE TEMPLATE_FILE = ''~ modules_bottom.TEMPLATE_FILE ~'' %}
+			{% DEFINE TITLE = ''~ modules_bottom.TITLE ~'' %}
+			{% DEFINE MODULE_ID = ''~ modules_bottom.MODULE_ID ~'' %}
+			{% DEFINE IMAGE_SRC = ''~ modules_bottom.IMAGE_SRC ~'' %}
+			{% DEFINE IMAGE_WIDTH = ''~ modules_bottom.IMAGE_WIDTH ~'' %}
+			{% DEFINE IMAGE_HEIGHT = ''~ modules_bottom.IMAGE_HEIGHT ~'' %}
+			{% DEFINE FA_ICON = ''~ modules_bottom.FA_ICON ~'' %}
+			{% DEFINE FA_SIZE = ''~ modules_bottom.FA_SIZE ~'' %}
+			{% DEFINE FA_ENABLED = modules_bottom.FA_ENABLED %}
+			{% DEFINE CODE = ''~ modules_bottom.CODE ~'' %}
+			{% INCLUDE ''~ definition.TEMPLATE_FILE ~'' %}
+		{% endfor %}
+	</div>
+	{% endif %}
 </div>
 {% else %}
 <div class="profile-section">

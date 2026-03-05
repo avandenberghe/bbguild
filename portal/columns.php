@@ -12,8 +12,8 @@ namespace avathar\bbguild\portal;
  * Handles column numbering for the 3-column portal layout.
  * Left sidebar is bbGuild's guild navigation (not a portal column).
  *
- * Database storage: top=1, center=2, right=3
- * Bitmask constants: top=1, center=4, right=8
+ * Database storage: top=1, center=2, right=3, bottom=4
+ * Bitmask constants: top=1, center=4, right=8, bottom=16
  */
 class columns
 {
@@ -22,6 +22,7 @@ class columns
 		'top'    => 1,
 		'center' => 2,
 		'right'  => 3,
+		'bottom' => 4,
 	];
 
 	/** @var array Column name → bitmask constant */
@@ -29,6 +30,7 @@ class columns
 		'top'    => 1,
 		'center' => 4,
 		'right'  => 8,
+		'bottom' => 16,
 	];
 
 	/**

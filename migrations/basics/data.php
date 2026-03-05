@@ -38,12 +38,15 @@ class data extends \phpbb\db\migration\container_aware_migration
 	{
 		return [
 			['custom', [[$this, 'insert_sample_data']]],
+			['custom', [[$this, 'seed_portal_layout']]],
+			['config.add', ['bbguild_portal_right_width', 200]],
 		];
 	}
 
 	public function revert_data()
 	{
 		return [
+			['config.remove', ['bbguild_portal_right_width']],
 			['custom', [[$this, 'remove_sample_data']]],
 		];
 	}
@@ -353,9 +356,49 @@ class data extends \phpbb\db\migration\container_aware_migration
 		}
 	}
 
+	/**
+	 * Seed the default portal layout for the test guild.
+	 * Column numbers: top=1, center=2, right=3, bottom=4
+	 */
+	public function seed_portal_layout()
+	{
+		$portal_table = $this->table_prefix . 'bb_portal_modules';
+		if (!$this->db_tools->sql_table_exists($portal_table))
+		{
+			return;
+		}
+
+		$modules = [
+			['module_classname' => '\avathar\bbguild\portal\modules\motd',          'module_column' => 1, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_MOTD'],
+			['module_classname' => '\avathar\bbguild\portal\modules\roster',        'module_column' => 2, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_ROSTER'],
+			['module_classname' => '\avathar\bbguild\portal\modules\guild_news',    'module_column' => 2, 'module_order' => 2, 'module_name' => 'BBGUILD_PORTAL_GUILD_NEWS'],
+			['module_classname' => '\avathar\bbguild\portal\modules\recruitment',   'module_column' => 3, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_RECRUITMENT'],
+		];
+
+		foreach ($modules as $module)
+		{
+			$sql_ary = array_merge($module, [
+				'guild_id'            => 1,
+				'module_image_src'    => '',
+				'module_icon'         => '',
+				'module_icon_size'    => 16,
+				'module_image_width'  => 16,
+				'module_image_height' => 16,
+				'module_group_ids'    => '',
+				'module_status'       => 1,
+			]);
+
+			$sql = 'INSERT INTO ' . $portal_table . ' ' .
+				$this->db->sql_build_array('INSERT', $sql_ary);
+			$this->db->sql_query($sql);
+		}
+	}
+
 	public function remove_sample_data()
 	{
 		$tables = [
+			'bb_portal_modules' => null,
+			'bb_portal_config'  => null,
 			'bb_logs'      => "log_type = 'install'",
 			'bb_recruit'   => 'guild_id = 1',
 			'bb_news'      => "news_headline = 'bbGuild Installed'",

@@ -5,6 +5,11 @@ avathar_bbguild_00:
     requirements:
         guild_id: \d*
         page: welcome|roster
+avathar_bbguild_guild:
+    path: /guild/{guild_id}
+    defaults: { _controller: avathar.bbguild.controller:handleview , guild_id: 1, page: "welcome" }
+    requirements:
+        guild_id: \d*
 avathar_bbguild_01:
     path: /getfaction
     defaults: { _controller:avathar.bbguild.admin.controller:getfaction}

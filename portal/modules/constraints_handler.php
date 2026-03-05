@@ -61,7 +61,7 @@ class constraints_handler
 
 		if ($direction === database_handler::MOVE_DIRECTION_RIGHT)
 		{
-			return $module_data['module_column'] < $this->portal_columns->string_to_number('right');
+			return $module_data['module_column'] < $this->portal_columns->string_to_number('bottom');
 		}
 
 		return $module_data['module_column'] > $this->portal_columns->string_to_number('top');
@@ -78,11 +78,12 @@ class constraints_handler
 			return true; // No conflict
 		}
 
-		// Center group: top + center
-		if (in_array($column, ['center', 'top']))
+		// Center group: top + center + bottom
+		if (in_array($column, ['center', 'top', 'bottom']))
 		{
 			if (in_array('center', $this->module_column[$module_class]) ||
-				in_array('top', $this->module_column[$module_class]))
+				in_array('top', $this->module_column[$module_class]) ||
+				in_array('bottom', $this->module_column[$module_class]))
 			{
 				return false;
 			}

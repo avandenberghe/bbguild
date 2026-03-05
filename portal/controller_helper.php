@@ -128,16 +128,31 @@ class controller_helper
 			return;
 		}
 
+		// Icon data from DB row, with fallback
+		$fa_icon = $row['module_icon'] ?? '';
+		$fa_size = (int) ($row['module_icon_size'] ?? 16);
+		$fa_enabled = !empty($fa_icon);
+		$image_src = $row['module_image_src'] ?? '';
+		$image_width = (int) ($row['module_image_width'] ?? 16);
+		$image_height = (int) ($row['module_image_height'] ?? 16);
+
 		if (is_array($template_module))
 		{
+			$image_src_path = !empty($template_module['image_src'])
+				? $this->ext_path . 'styles/all/theme/images/portal/' . $template_module['image_src']
+				: (!empty($image_src) ? $this->ext_path . 'styles/all/theme/images/portal/' . $image_src : '');
+
 			$this->template->assign_block_vars('modules_' . $column_name, [
 				'TEMPLATE_FILE' => $this->parse_template_file($template_module['template']),
-				'IMAGE_SRC'     => $this->ext_path . 'styles/all/theme/images/portal/' . ($template_module['image_src'] ?? ''),
+				'IMAGE_SRC'     => $image_src_path,
 				'TITLE'         => $template_module['title'] ?? '',
 				'CODE'          => $template_module['code'] ?? '',
 				'MODULE_ID'     => $row['module_id'],
-				'IMAGE_WIDTH'   => $row['module_image_width'] ?? 16,
-				'IMAGE_HEIGHT'  => $row['module_image_height'] ?? 16,
+				'IMAGE_WIDTH'   => $image_width,
+				'IMAGE_HEIGHT'  => $image_height,
+				'FA_ICON'       => $fa_icon,
+				'FA_SIZE'       => $fa_size,
+				'FA_ENABLED'    => $fa_enabled,
 			]);
 		}
 		else
@@ -146,13 +161,20 @@ class controller_helper
 				? $this->user->lang[$row['module_name']]
 				: $row['module_name'];
 
+			$image_src_path = !empty($image_src)
+				? $this->ext_path . 'styles/all/theme/images/portal/' . $image_src
+				: '';
+
 			$this->template->assign_block_vars('modules_' . $column_name, [
 				'TEMPLATE_FILE' => $this->parse_template_file($template_module),
-				'IMAGE_SRC'     => $this->ext_path . 'styles/all/theme/images/portal/' . ($row['module_image_src'] ?? ''),
+				'IMAGE_SRC'     => $image_src_path,
 				'TITLE'         => $title,
 				'MODULE_ID'     => $row['module_id'],
-				'IMAGE_WIDTH'   => $row['module_image_width'] ?? 16,
-				'IMAGE_HEIGHT'  => $row['module_image_height'] ?? 16,
+				'IMAGE_WIDTH'   => $image_width,
+				'IMAGE_HEIGHT'  => $image_height,
+				'FA_ICON'       => $fa_icon,
+				'FA_SIZE'       => $fa_size,
+				'FA_ENABLED'    => $fa_enabled,
 			]);
 		}
 	}

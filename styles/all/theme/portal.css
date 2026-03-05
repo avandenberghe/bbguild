@@ -1,0 +1,185 @@
+/* Portal layout
+--------------------------------------------- */
+#bbguild-portal {
+	width: 100%;
+	clear: both;
+}
+
+#portal-top {
+	margin-bottom: 10px;
+}
+
+#portal-bottom {
+	margin-top: 10px;
+	clear: both;
+}
+
+#portal-content-wrapper {
+	position: relative;
+	overflow: hidden;
+}
+
+#portal-center {
+	min-height: 400px;
+	overflow: hidden;
+}
+
+#portal-right {
+	float: right;
+	margin-left: 10px;
+}
+
+/* Module blocks
+--------------------------------------------- */
+.portal-center-block,
+.portal-side {
+	margin-bottom: 10px;
+	border: 1px solid rgba(128, 128, 128, 0.3);
+	border-radius: 4px;
+}
+
+.portal-no-margin {
+	margin: 0;
+}
+
+.portal-module-postbody {
+	padding: 0;
+}
+
+.portal-module-content {
+	padding: 10px;
+}
+
+.portal-module-content p:last-child {
+	margin-bottom: 0;
+}
+
+.portal-module-list {
+	list-style: none;
+}
+
+/* Icon alignment */
+.b3p-icon {
+	vertical-align: middle;
+}
+
+.portal-center-block .header dt i.fa,
+.portal-side .header dt i.fa {
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
+/* News module */
+.portal-news-item {
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.portal-news-item:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.portal-news-headline {
+	font-size: 1.1em;
+	margin-bottom: 4px;
+}
+
+.portal-news-meta {
+	font-size: 0.85em;
+	color: #999;
+	margin-bottom: 6px;
+}
+
+.portal-news-meta .portal-news-author {
+	margin-right: 10px;
+}
+
+/* Recruitment module (side) */
+.portal-recruit-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.portal-recruit-list li {
+	padding: 4px 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.portal-recruit-list li:last-child {
+	border-bottom: none;
+}
+
+.portal-recruit-count {
+	float: right;
+	font-size: 0.9em;
+	opacity: 0.7;
+}
+
+/* Activity feed */
+ul#bbguild-activity-feed {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul#bbguild-activity-feed li {
+	background-position: 5px 50%;
+	background-repeat: no-repeat;
+	padding: 5px 0 5px 29px;
+	position: relative;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 12px;
+}
+
+ul#bbguild-activity-feed li dl dd {
+	padding-right: 4px;
+	display: inline;
+}
+
+ul#bbguild-activity-feed li dl dt {
+	color: #71401f;
+	display: inline;
+	font-size: 11px;
+	white-space: nowrap;
+}
+
+/* Responsive breakpoints
+--------------------------------------------- */
+@media screen and (max-width: 870px) {
+	#portal-right {
+		width: 160px !important;
+	}
+	#portal-center {
+		margin-right: 170px !important;
+	}
+}
+
+@media screen and (max-width: 740px) {
+	#portal-content-wrapper {
+		display: flex;
+		flex-direction: column;
+	}
+	#portal-center {
+		margin-right: 0 !important;
+		order: 1;
+	}
+	#portal-right {
+		float: none;
+		width: 100% !important;
+		margin-left: 0;
+		order: 2;
+	}
+}
+
+@media screen and (max-width: 540px) {
+	#portal-right {
+		display: none;
+	}
+	#portal-center {
+		margin-right: 0 !important;
+	}
+}
