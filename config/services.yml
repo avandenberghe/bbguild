@@ -163,6 +163,22 @@ services:
             - '%avathar.bbguild.tables.bb_bosstable%'
             - '%avathar.bbguild.tables.bb_zonetable%'
             - '%avathar.bbguild.tables.bb_news%'
+    avathar.bbguild.admin.portal:
+        class: avathar\bbguild\controller\admin_portal
+        arguments:
+            - '@auth'
+            - '@cache'
+            - '@config'
+            - '@dbal.conn'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@avathar.bbguild.portal.columns'
+            - '@avathar.bbguild.portal.module_registry'
+            - '@avathar.bbguild.portal.modules.database_handler'
+            - '@avathar.bbguild.portal.modules.manager'
+            - '%avathar.bbguild.tables.bb_guild%'
     avathar.bbguild.game_provider_collection:
         class: phpbb\di\service_collection
         arguments:

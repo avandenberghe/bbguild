@@ -95,7 +95,13 @@ class manager
 			return false;
 		}
 
-		return $this->database_handler->move_module_vertical($module_id, $module_data, $direction);
+		$result = $this->database_handler->move_module_vertical($module_id, $module_data, $direction);
+		if ($result)
+		{
+			$this->cache->destroy('sql', $this->modules_table);
+		}
+
+		return $result;
 	}
 
 	/**

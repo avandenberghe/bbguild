@@ -33,6 +33,14 @@ class database_handler
 	}
 
 	/**
+	 * Get the modules table name.
+	 */
+	public function get_table_name(): string
+	{
+		return $this->modules_table;
+	}
+
+	/**
 	 * Get module data from database.
 	 *
 	 * @return array|false

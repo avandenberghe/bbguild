@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0-a12 05/03/2026
+  - [NEW] Portal system: guild-scoped block engine forked from Board3 Portal design (GPL-2.0)
+  - [NEW] Portal modules: Message of the Day, Guild News, Recruitment, Activity Feed, Custom Block
+  - [NEW] 3-column portal layout: top, center, right with bitmask-based column permissions
+  - [NEW] Module plugin system via tagged services (`bbguild.portal.module`) and `phpbb\di\service_collection`
+  - [NEW] Guild-scoped portal config service replacing Board3's global functions
+  - [NEW] Default layout template (guild_id=0) copied to new guilds
+  - [NEW] ACP Portal Management: add, remove, reorder, move between columns, enable/disable modules per guild
+  - [NEW] Portal migration: `bb_portal_modules` and `bb_portal_config` tables with guild_id scoping
+  - [NEW] Portal language files for all 7 languages (en, de, fr, it, nl, es_x_tu, pl)
+  - [CHG] Welcome page rewritten to use portal renderer instead of inline MOTD/activity code
+  - [CHG] Portal CSS added to bbdkp.css for grid layout
+
 ## 2.0.0-a11 04/03/2026
   - [FIX] #301: "Module not accessible" after adding guild — typo in acp/guild_module.php
   - [FIX] #299: ACP achievement list error — wrong array index in acp/achievement_module.php
