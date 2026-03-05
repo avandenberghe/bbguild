@@ -14,13 +14,13 @@
 <div>
     <form id="listplayers" method="post" action="{{ F_PLAYERS_LIST }}">
 
-        <fieldset style="background-color: #EEEEEE">
+        <fieldset>
 
             <dl>
                 <dt><label for="player_guild_id">{{ lang('GUILD') }}:</label></dt>
                 <dd>
                     <div style="display: table;">
-                        <div style="width:50%; float: left"><a href="{{ U_VIEW_GUILD }}"><img style="width:80px; height:80px" src="{{ GUILD_EMBLEM }}" alt="" /></a></div>
+                        {% if GUILD_EMBLEM %}<div style="width:50%; float: left"><a href="{{ U_VIEW_GUILD }}"><img style="width:80px; height:80px" src="{{ GUILD_EMBLEM }}" alt="" /></a></div>{% endif %}
                         <div style="width:50%; vertical-align: middle; display: table-cell;">
                             <select id="player_guild_id" name="player_guild_id" class="input" onchange="javascript:form.submit();" >
                                 {% for guild_row in loops.guild_row %}
@@ -63,23 +63,11 @@
             </p>
         </fieldset>
 
-        <fieldset style="background-color: #EEEEEE">
-            <!-- EVENT avathar_bbguild_acp_listplayers_actions_before -->
-            <dl>
-                <dt style="width: 55%;"><label for="playeradd">{{ lang('ADD_PLAYER') }}:</label></dt>
-                <dd style="margin-left: 55%;">
-
-                    <fieldset class="submit-buttons" style="  text-align: left;">
-                        <input class="button1" name="playeradd" type="submit" value="{{ lang('ADD_PLAYER') }}" title="{{ lang('ADD_PLAYER') }}"/>
-                    </fieldset>
-                </dd>
-            </dl>
-            {{ S_FORM_TOKEN }}
-            {% for players_row in loops.players_row %}
-            <input type="hidden" name="hidden_player[{{ players_row.ID }}]" value="{{ players_row.ID }}" />
-            {% endfor %}
-            <input type="hidden" name="start" value="{{ START }}" />
-        </fieldset>
+        {{ S_FORM_TOKEN }}
+        {% for players_row in loops.players_row %}
+        <input type="hidden" name="hidden_player[{{ players_row.ID }}]" value="{{ players_row.ID }}" />
+        {% endfor %}
+        <input type="hidden" name="start" value="{{ START }}" />
 
         {% if loops.players_row|length %}
         <div class="pagination">
@@ -167,7 +155,9 @@
             {% endif %}
         </div>
 
-
+        <fieldset class="quick" style="float: {{ S_CONTENT_FLOW_BEGIN }};">
+            <input class="button1" name="playeradd" type="submit" value="{{ lang('ADD_PLAYER') }}" title="{{ lang('ADD_PLAYER') }}"/>
+        </fieldset>
 
         {% else %}
 

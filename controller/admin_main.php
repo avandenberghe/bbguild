@@ -412,19 +412,6 @@ class admin_main
 			);
 		}
 
-		// get welcome msg
-		$welcometext = $uid = $bitfield = '';
-		$sql = 'SELECT motd_msg, bbcode_bitfield, bbcode_uid FROM ' . $this->bb_motd_table;
-		$this->db->sql_query($sql);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$welcometext = $row['motd_msg'];
-			$bitfield = $row['bbcode_bitfield'];
-			$uid = $row['bbcode_uid'];
-		}
-
-		$textarr = generate_text_for_edit($welcometext, $uid, (int) $bitfield);
 		// number of news and items to show on front page
 		$n_news  = $this->config['bbguild_n_news'];
 		$n_items = $this->config['bbguild_n_items'];
@@ -437,8 +424,6 @@ class admin_main
 				'MAXCHARS' => $this->config['bbguild_maxchars'] ,
 				'MINLEVEL' => $this->config['bbguild_minrosterlvl'],
 				'HIDE_INACTIVE' => (int) $this->config['bbguild_hide_inactive'],
-				'SHOW_MOTD' => (int) $this->config['bbguild_motd'],
-				'WELCOME_MESSAGE' => $textarr['text'] ,
 				'USER_NLIMIT' => $this->config['bbguild_user_nlimit'] ,
 				'U_ACTION' => $this->u_action,
 			)
@@ -468,6 +453,8 @@ class admin_main
 
 		add_form_key('acp_bbguild');
 		$this->page_title = 'ACP_BBGUILD_CONFIG';
+
+		return 'acp_config';
 	}
 
 	/**
@@ -491,7 +478,6 @@ class admin_main
 		$this->config->set('bbguild_minrosterlvl', $this->request->variable('bbguild_minrosterlvl', 0), true);
 		$this->config->set('bbguild_roster_layout', $this->request->variable('bbguild_roster_layout', 0), true);
 		$this->config->set('bbguild_hide_inactive', $this->request->variable('bbguild_hide_inactive', 0), true);
-		$this->config->set('bbguild_motd', $this->request->variable('show_motd_block', 0), true);
 
 		/**
 		 * Event to allow plugins to save settings from the bbGuild config page.
@@ -500,18 +486,6 @@ class admin_main
 		 * @since 2.0.0-b1
 		 */
 		$this->dispatcher->dispatch('avathar.bbguild.acp_config_submit');
-		$welcometext = $this->request->variable('message_of_the_day', '', true);
-		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-		$allow_bbcode = $allow_urls = $allow_smilies = true;
-		generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
-
-		$sql = 'UPDATE ' . $this->bb_motd_table . " SET
-						motd_msg = '" . (string) $this->db->sql_escape($welcometext) . "' ,
-						motd_timestamp = " . (int) time() . " ,
-						bbcode_bitfield = 	'" . (string) $bitfield . "' ,
-						bbcode_uid = 		'" . (string) $uid . "'
-						WHERE motd_id = 1";
-		$this->db->sql_query($sql);
 
 		//if the gameworld extension is installed
 		if (isset($this->config['bbguild_gameworld_version']))

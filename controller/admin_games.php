@@ -424,7 +424,35 @@ class admin_games
 		$classedit = (isset($_GET['classedit'])) ? true : false;
 		$classdelete = (isset($_GET['classdelete'])) ? true : false;
 
-		if ($gamereset)
+		// Save handlers for add/edit forms
+		$save_faction_add = $this->request->is_set_post('factionadd');
+		$save_faction_edit = $this->request->is_set_post('factionedit');
+		$save_role_add = $this->request->is_set_post('addrole');
+		$save_role_edit = $this->request->is_set_post('editrole');
+		$save_race_or_class = $this->request->is_set_post('add');
+		$update_race_or_class = $this->request->is_set_post('update');
+
+		if ($save_faction_add || $save_faction_edit)
+		{
+			$this->SaveFaction($editgame, $save_faction_add);
+		}
+		else if ($save_role_add || $save_role_edit)
+		{
+			$this->SaveRole($editgame, $save_role_add);
+		}
+		else if ($save_race_or_class || $update_race_or_class)
+		{
+			// Determine whether this is a race or class save by checking which form fields exist
+			if ($this->request->is_set_post('racename') || $this->request->is_set_post('hidden_race_id'))
+			{
+				$this->SaveRace($editgame, $save_race_or_class);
+			}
+			else
+			{
+				$this->SaveClass($editgame, $save_race_or_class);
+			}
+		}
+		else if ($gamereset)
 		{
 			$this->ResetGame($editgame);
 		}
@@ -961,5 +989,229 @@ class admin_games
 		 */
 		$vars = array('editgame', 'game_id', 'has_api');
 		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editgames_display', compact($vars)));
+
+		$u_edit_game = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id");
+
+		// Factions
+		$factions_obj = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$factions = $factions_obj->get_factions();
+		$row_count = 0;
+		foreach ($factions as $fac)
+		{
+			$this->template->assign_block_vars('faction_row', array(
+				'FACTIONID'   => $fac['faction_id'],
+				'FACTIONNAME' => $fac['faction_name'],
+				'U_DELETE'    => $u_edit_game . '&amp;action=deletefaction&amp;f_index=' . $fac['f_index'],
+				'U_EDIT'      => $u_edit_game . '&amp;action=editfaction&amp;f_index=' . $fac['f_index'],
+				'S_ROW_COUNT' => $row_count++,
+			));
+		}
+		$this->template->assign_var('LISTFACTION_FOOTCOUNT', sprintf($this->language->lang('LISTFACTION_FOOTCOUNT'), count($factions)));
+
+		// Races
+		$races_obj = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$races_obj->game_id = $game_id;
+		$race_list = $races_obj->list_races();
+		$row_count = 0;
+		foreach ($race_list as $race)
+		{
+			$image_male = !empty($race['image_male']) ? $this->ext_path_web . 'images/' . $game_id . '/race_images/' . $race['image_male'] . '.png' : '';
+			$image_female = !empty($race['image_female']) ? $this->ext_path_web . 'images/' . $game_id . '/race_images/' . $race['image_female'] . '.png' : '';
+
+			$this->template->assign_block_vars('race_row', array(
+				'RACEID'               => $race['race_id'],
+				'RACENAME'             => $race['race_name'],
+				'RACE_IMAGE_M'         => $image_male,
+				'S_RACE_IMAGE_M_EXISTS'=> !empty($race['image_male']) && @file_exists($this->ext_path . 'images/' . $game_id . '/race_images/' . $race['image_male'] . '.png'),
+				'RACE_IMAGE_F'         => $image_female,
+				'S_RACE_IMAGE_F_EXISTS'=> !empty($race['image_female']) && @file_exists($this->ext_path . 'images/' . $game_id . '/race_images/' . $race['image_female'] . '.png'),
+				'FACTIONNAME'          => $race['faction_name'],
+				'U_DELETE'             => $u_edit_game . '&amp;racedelete=1&amp;race_id=' . $race['race_id'],
+				'U_EDIT'               => $u_edit_game . '&amp;raceedit=1&amp;race_id=' . $race['race_id'],
+				'S_ROW_COUNT'          => $row_count++,
+			));
+		}
+		$this->template->assign_var('LISTRACE_FOOTCOUNT', sprintf($this->language->lang('LISTRACE_FOOTCOUNT'), count($race_list)));
+
+		// Roles
+		$roles_obj = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$roles_obj->game_id = $game_id;
+		$role_list = $roles_obj->list_roles();
+		$row_count = 0;
+		foreach ($role_list as $role)
+		{
+			$role_icon_path = !empty($role['role_icon']) ? $this->ext_path_web . 'images/' . $game_id . '/' . $role['role_icon'] : '';
+			$role_cat_icon_path = !empty($role['role_cat_icon']) ? $this->ext_path_web . 'images/' . $game_id . '/' . $role['role_cat_icon'] : '';
+
+			$this->template->assign_block_vars('role_row', array(
+				'ROLE_ID'               => $role['role_id'],
+				'ROLE_NAME'             => $role['rolename'],
+				'ROLE_COLOR'            => $role['role_color'],
+				'ROLE_ICON'             => $role['role_icon'],
+				'U_ROLE_ICON'           => $role_icon_path,
+				'S_ROLE_ICON_EXISTS'    => !empty($role['role_icon']) && @file_exists($this->ext_path . 'images/' . $game_id . '/' . $role['role_icon']),
+				'U_ROLE_CAT_ICON'       => $role_cat_icon_path,
+				'S_ROLE_CAT_ICON_EXISTS'=> !empty($role['role_cat_icon']) && @file_exists($this->ext_path . 'images/' . $game_id . '/' . $role['role_cat_icon']),
+				'U_DELETE'              => $u_edit_game . '&amp;action=deleterole&amp;role_id=' . $role['role_id'],
+				'U_EDIT'                => $u_edit_game . '&amp;action=editrole&amp;role_id=' . $role['role_id'],
+				'S_ROW_COUNT'           => $row_count++,
+			));
+		}
+		$this->template->assign_var('LISTROLES_FOOTCOUNT', sprintf($this->language->lang('LISTROLES_FOOTCOUNT'), count($role_list)));
+
+		// Classes
+		$classes_obj = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$classes_obj->game_id = $game_id;
+		$class_list = $classes_obj->list_classes('class_id', 1);
+		$row_count = 0;
+		foreach ($class_list as $cls)
+		{
+			$class_image_path = !empty($cls['imagename']) ? $this->ext_path_web . 'images/' . $game_id . '/class_images/' . $cls['imagename'] . '.png' : '';
+
+			$this->template->assign_block_vars('class_row', array(
+				'CLASSID'             => $cls['class_id'],
+				'CLASSNAME'           => $cls['class_name'],
+				'COLORCODE'           => $cls['colorcode'],
+				'CLASSIMAGE'          => $class_image_path,
+				'S_CLASS_IMAGE_EXISTS'=> !empty($cls['imagename']) && @file_exists($this->ext_path . 'images/' . $game_id . '/class_images/' . $cls['imagename'] . '.png'),
+				'CLASSARMOR'          => $cls['class_armor_type'],
+				'CLASSMIN'            => $cls['class_min_level'],
+				'CLASSMAX'            => $cls['class_max_level'],
+				'U_DELETE'            => $u_edit_game . '&amp;classdelete=1&amp;class_id=' . $cls['class_id'],
+				'U_EDIT'              => $u_edit_game . '&amp;classedit=1&amp;class_id=' . $cls['class_id'],
+				'S_ROW_COUNT'         => $row_count++,
+			));
+		}
+		$this->template->assign_var('LISTCLASS_FOOTCOUNT', sprintf($this->language->lang('LISTCLASS_FOOTCOUNT'), count($class_list)));
+	}
+
+	/**
+	 * Save a faction (add or edit).
+	 */
+	private function SaveFaction(game $editgame, bool $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$fac->faction_name = $this->request->variable('factionname', '', true);
+
+		if ($is_add)
+		{
+			$fac->make_faction();
+			$success_message = sprintf($this->language->lang('ADMIN_ADD_FACTION_SUCCESS'), $fac->faction_name);
+		}
+		else
+		{
+			$fac->faction_id = $this->request->variable('hidden_faction_id', 0);
+			$fac->update_faction();
+			$success_message = sprintf($this->language->lang('ADMIN_UPDATE_FACTION_SUCCESS'), $fac->faction_name);
+		}
+
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Save a role (add or edit).
+	 */
+	private function SaveRole(game $editgame, bool $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role->game_id = $game_id;
+		$role->rolename = $this->request->variable('rolename', '', true);
+		$role->role_color = $this->request->variable('role_color', '', true);
+		$role->role_icon = $this->request->variable('role_icon', '', true);
+		$role->role_cat_icon = $this->request->variable('role_cat_icon', '', true);
+
+		if ($is_add)
+		{
+			$role->make_role();
+			$success_message = sprintf($this->language->lang('ADMIN_ADD_ROLE_SUCCESS'), $role->rolename);
+		}
+		else
+		{
+			$role->role_id = $this->request->variable('hidden_role_id', 0);
+			$role->role_pkid = $this->request->variable('hidden_role_id', 0);
+			$oldrole = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+			$oldrole->game_id = $game_id;
+			$oldrole->role_id = $role->role_id;
+			$oldrole->get();
+			$role->role_pkid = $oldrole->role_pkid;
+			$role->update_role($oldrole);
+			$success_message = sprintf($this->language->lang('ADMIN_UPDATE_ROLE_SUCCESS'), $role->rolename);
+		}
+
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Save a race (add or edit).
+	 */
+	private function SaveRace(game $editgame, bool $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race->game_id = $game_id;
+		$race->race_name = $this->request->variable('racename', '', true);
+		$race->race_faction_id = $this->request->variable('faction', 0);
+		$race->image_male = $this->request->variable('image_male', '', true);
+		$race->image_female = $this->request->variable('image_female', '', true);
+
+		if ($is_add)
+		{
+			$race->race_id = $this->request->variable('race_id', 0);
+			$race->make_race();
+			$success_message = sprintf($this->language->lang('ADMIN_ADD_RACE_SUCCESS'), $race->race_name);
+		}
+		else
+		{
+			$race->race_id = $this->request->variable('hidden_race_id', 0);
+			$old_race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+			$old_race->game_id = $game_id;
+			$old_race->race_id = $race->race_id;
+			$old_race->get_race();
+			$race->update_race($old_race);
+			$success_message = sprintf($this->language->lang('ADMIN_UPDATE_RACE_SUCCESS'), $race->race_name);
+		}
+
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
+	}
+
+	/**
+	 * Save a class (add or edit).
+	 */
+	private function SaveClass(game $editgame, bool $is_add)
+	{
+		$game_id = $editgame->game_id;
+		$cls = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$cls->game_id = $game_id;
+		$cls->classname = $this->request->variable('class_name', '', true);
+		$cls->min_level = $this->request->variable('class_level_min', 1);
+		$cls->max_level = $this->request->variable('class_level_max', 60);
+		$cls->armor_type = $this->request->variable('armory', '', true);
+		$cls->imagename = $this->request->variable('image', '', true);
+		$cls->colorcode = $this->request->variable('classcolor', '#999999', true);
+
+		if ($is_add)
+		{
+			$cls->class_id = $this->request->variable('class_id', 0);
+			$cls->make_class();
+			$success_message = sprintf($this->language->lang('ADMIN_ADD_CLASS_SUCCESS'), $cls->classname);
+		}
+		else
+		{
+			$cls->class_id = $this->request->variable('class_id', 0);
+			$cls->c_index = $this->request->variable('c_index', 0);
+			$oldclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+			$oldclass->game_id = $game_id;
+			$oldclass->class_id = $this->request->variable('class_id0', 0);
+			$cls->update_class($oldclass);
+			$success_message = sprintf($this->language->lang('ADMIN_UPDATE_CLASS_SUCCESS'), $cls->classname);
+		}
+
+		meta_refresh(3, append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id"));
+		trigger_error($success_message . $this->link, E_USER_NOTICE);
 	}
 }

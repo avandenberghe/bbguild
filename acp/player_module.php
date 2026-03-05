@@ -170,7 +170,7 @@ class player_module
 
 		if (! $this->auth->acl_get('a_bbguild'))
 		{
-			trigger_error($user->lang['NOAUTH_A_PLAYERS_MAN']);
+			trigger_error($this->user->lang['NOAUTH_A_PLAYERS_MAN']);
 		}
 
 		//css trigger
@@ -765,7 +765,7 @@ class player_module
 					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $race_img : '',
 					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
 					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
-					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : $user->format_date($row['last_update']),
+					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : $this->user->format_date($row['last_update']),
 					'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
 					'U_VIEW_PLAYER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-player_module&amp;mode=addplayer&amp;' . constants::URI_NAMEID . '=' . $row['player_id']),
 					'U_DELETE_PLAYER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-player_module&amp;mode=addplayer&amp;delete=1&amp;' . constants::URI_NAMEID . '=' . $row['player_id']))

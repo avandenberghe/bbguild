@@ -65,7 +65,7 @@ Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has 
 
 ## Installation
 
-1. Download the [latest release](https://github.com/avandenberghe/bbguild/releases).
+1. Download the [latest release](https://github.com/avatharbe/bbguild/releases).
 2. Create the directory `ext/avathar/` in your phpBB installation (if it doesn't exist).
 3. Extract `bbguild` into `ext/avathar/bbguild/`.
 4. In the ACP, go to **Customise > Manage extensions**.
@@ -77,7 +77,7 @@ Game support is provided by separate extensions. Install them the same way:
 
 | Plugin | Directory | Notes |
 |--------|-----------|-------|
-| [bbguild_wow](https://github.com/avandenberghe/bbguild_wow) | `ext/avathar/bbguild_wow/` | Includes Battle.net API integration |
+| [bbguild_wow](https://github.com/avatharbe/bbguild_wow) | `ext/avathar/bbguild_wow/` | Includes Battle.net API integration |
 | bbguild_gw2 | `ext/avathar/bbguild_gw2/` | Guild Wars 2 |
 | bbguild_eq | `ext/avathar/bbguild_eq/` | EverQuest |
 | bbguild_eq2 | `ext/avathar/bbguild_eq2/` | EverQuest 2 |
@@ -100,9 +100,9 @@ Game support is provided by separate extensions. Install them the same way:
 
 ## Contributing
 
-See the [contributors](https://github.com/avandenberghe/bbguild/graphs/contributors) who have helped build this project.
+See the [contributors](https://github.com/avatharbe/bbguild/graphs/contributors) who have helped build this project.
 
-1. [Create an issue](https://github.com/avandenberghe/bbguild/issues) (unless one already exists).
+1. [Create an issue](https://github.com/avatharbe/bbguild/issues) (unless one already exists).
 2. Submit a pull request.
 
 See `contrib/CHANGELOG.md` for version history.

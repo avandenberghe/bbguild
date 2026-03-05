@@ -50,23 +50,6 @@
         </dl>
     </fieldset>
     <fieldset>
-        <legend>{{ lang('BLOCK_MOTD_SETTING') }}</legend>
-        <dl>
-            <dt>
-                <label>{{ lang('SHOW_MOTD') }}:</label>
-            </dt>
-            <dd>
-                <input type="checkbox" name="show_motd_block" id="show_motd_block" value="1"{% if SHOW_MOTD %} checked="checked"{% endif %} />
-            </dd>
-        </dl>
-        <dl>
-            <dt><label>{{ lang('BLOCK_MOTD') }}:</label><br />{{ lang('BLOCK_MOTD_EXPLAIN') }}</dt>
-            <dd>
-                <textarea name="message_of_the_day" rows="3" cols="60" style=" font-size: 100%; width: 99%" class="input">{{ WELCOME_MESSAGE }}</textarea>
-            </dd>
-        </dl>
-    </fieldset>
-    <fieldset>
         <legend>{{ lang('NEWSBLOCKSETTING') }}</legend>
         <dl>
             <dt><label for="bbguild_user_nlimit">{{ lang('NEWSNUMBER') }}</label><br /><span>{{ lang('NEWSNUMBER_EXPLAIN') }}</span></dt>

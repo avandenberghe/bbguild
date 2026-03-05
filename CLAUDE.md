@@ -7,7 +7,7 @@
 - **Author:** Andreas Vandenberghe (Sajaki)
 - **Version:** 2.0.0-b1 (beta)
 - **License:** GPL-2.0-only
-- **Repository:** https://github.com/avandenberghe/bbguild
+- **Repository:** https://github.com/avatharbe/bbguild
 
 ## Project Status
 
@@ -15,7 +15,7 @@
 |--------|-------|
 | First commit | May 28, 2010 |
 | Status | Phase 1 complete, Portal feature added |
-| Tracking issue | [#303](https://github.com/avandenberghe/bbguild/issues/303) |
+| Tracking issue | [#303](https://github.com/avatharbe/bbguild/issues/303) |
 
 ## Requirements
 
@@ -44,9 +44,7 @@ bbguild/
 ├── event/                 # Event listeners
 ├── migrations/            # Database migrations
 │   ├── basics/           # Initial install (schema, data, config, permissions, modules)
-│   ├── v200a10/          # Release 2.0.0-a10 (version stamp)
-│   ├── v200a11/          # Release 2.0.0-a11 (version stamp)
-│   └── v200a12/          # Release 2.0.0-b1 (portal schema, data, ACP module, version stamp)
+│   └── v200b1/           # Release 2.0.0-b1 (portal data, ACP module, version stamp)
 ├── config/                # Services and routing (YAML)
 ├── styles/                # Templates
 ├── language/              # Localization (en, fr, de, it, nl, es_x_tu, pl)

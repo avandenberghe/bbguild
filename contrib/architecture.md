@@ -19,9 +19,7 @@ bbguild/
 ├── language/               # Localization (en, de, fr, it, nl, es_x_tu, pl)
 ├── migrations/             # Database migrations
 │   ├── basics/             # Initial install (schema, data, config, permissions, modules)
-│   ├── v200a10/            # 2.0.0-a10 release stamp
-│   ├── v200a11/            # 2.0.0-a11 release stamp
-│   └── v200a12/            # 2.0.0-b1 (portal schema, data, ACP module, release stamp)
+│   └── v200b1/             # 2.0.0-b1 (portal data, ACP module, release stamp)
 ├── model/                  # Business logic and data access
 │   ├── admin/              # Utilities: curl, log, constants, util
 │   ├── api/                # Battle.net API client
@@ -205,12 +203,9 @@ The log system (`model/admin/log.php`) follows the phpBB log design pattern:
 
 ```
 basics/schema → basics/data → basics/config → basics/permissions → basics/modules
-    → v200a10/release_2_0_0_a10
-    → v200a11/release_2_0_0_a11
-    → v200a12/portal_schema → v200a12/portal_data → v200a12/portal_acp_module
-    → v200a12/release_2_0_0_a12
+    → v200b1/portal_data → v200b1/release_2_0_0_b1
 ```
 
 ## Future: DKP Plugin
 
-The DKP (Dragon Kill Points) system is being developed as a separate extension at https://github.com/avandenberghe/bbDKP. It will provide raid tracking, loot management, point pools, and its own log types. See issue [#321](https://github.com/avandenberghe/bbguild/issues/321).
+The DKP (Dragon Kill Points) system is being developed as a separate extension at https://github.com/avatharbe/bbDKP. It will provide raid tracking, loot management, point pools, and its own log types. See issue [#321](https://github.com/avatharbe/bbguild/issues/321).
