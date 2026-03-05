@@ -6,14 +6,22 @@ A Guild Management System for [phpBB 3.3](https://www.phpbb.com/). Manage your g
 
 Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has been renamed bbGuild and rebuilt for phpBB 3.3 and PHP 8.x.
 
-**Current version:** 2.0.0-a11 (alpha)
+**Current version:** 2.0.0-a12 (alpha)
 
 ## Features
+
+### Guild Portal
+- **Block-based welcome page** — configurable portal with 3-column layout (top, center, right)
+- **Built-in modules** — Message of the Day, Guild News, Recruitment, Activity Feed, Custom Block
+- **Guild-scoped** — each guild gets its own portal layout, independently configured
+- **Module plugin system** — extensible via tagged services; add custom portal modules from other extensions
+- **ACP management** — add, remove, reorder, move between columns, and enable/disable modules per guild
+- **Default layout template** — new guilds inherit a default module configuration
 
 ### Guild Management
 - **Multi-guild support** — manage multiple guilds from a single phpBB installation
 - **Guild profiles** — name, realm, region, faction, game, emblem, and description
-- **Guild news** — message of the day and news feed on the guild welcome page
+- **Guild news** — message of the day and news feed
 
 ### Roster
 - **Full guild roster** — sortable player list with class, race, rank, and level
@@ -33,6 +41,7 @@ Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has 
 - **Per-game data** — classes, races, factions, and roles are fully configurable per game
 
 ### Administration (ACP)
+- **Portal management** — configure portal modules per guild (add, remove, reorder, toggle)
 - **Game management** — install, configure, and remove game definitions
 - **Guild management** — create and edit guilds, assign games and realms
 - **Player management** — full CRUD for characters, batch operations, rank sorting
@@ -45,7 +54,7 @@ Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has 
 - **Permission-based access** — granular permissions for claim, add, edit, and delete
 
 ### Localization
-- English, French, German, Italian
+- English, German, French, Italian, Dutch, Spanish, Polish
 
 ## Requirements
 
