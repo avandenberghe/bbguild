@@ -11,6 +11,7 @@ namespace avathar\bbguild\event;
 
 use phpbb\config\config;
 use phpbb\controller\helper;
+use phpbb\db\driver\driver_interface;
 use phpbb\template\template;
 use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,25 +33,29 @@ class main_listener implements EventSubscriberInterface
 	/* @var config */
 	protected $config;
 
+	/* @var driver_interface */
+	protected $db;
+
+	/* @var string */
+	protected $guild_table;
+
 	/**
 	 * main_listener constructor.
-	 *
-	 * @param \phpbb\controller\helper $helper
-	 * @param \phpbb\template\template $template
-	 * @param \phpbb\user              $user
-	 * @param \phpbb\config\config     $config
 	 */
 	public function __construct(helper $helper,
 		template $template,
 		user $user,
-		config $config
+		config $config,
+		driver_interface $db,
+		string $guild_table
 	)
 	{
-
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
 		$this->config = $config;
+		$this->db = $db;
+		$this->guild_table = $guild_table;
 	}
 
 
@@ -108,17 +113,37 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function add_page_header_link($event)
 	{
-		$this->template->assign_vars(
-			array(
-			'U_GUILD'    => $this->helper->route(
-				'avathar_bbguild_00',
-				array(
-					'guild_id' => 1,
-					'page' => 'welcome'
-				)
-			),
-			)
-		);
+		$sql = 'SELECT id, name FROM ' . $this->guild_table . ' WHERE id > 0 ORDER BY name ASC';
+		$result = $this->db->sql_query($sql);
+
+		$guilds = [];
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$guilds[] = $row;
+		}
+		$this->db->sql_freeresult($result);
+
+		// First guild is the default link
+		$first_guild_id = !empty($guilds) ? (int) $guilds[0]['id'] : 1;
+
+		$this->template->assign_vars([
+			'U_GUILD'           => $this->helper->route('avathar_bbguild_00', [
+				'guild_id' => $first_guild_id,
+				'page'     => 'welcome',
+			]),
+			'S_MULTI_GUILD'     => count($guilds) > 1,
+		]);
+
+		foreach ($guilds as $row)
+		{
+			$this->template->assign_block_vars('guild_nav', [
+				'NAME'  => $row['name'],
+				'U_GUILD' => $this->helper->route('avathar_bbguild_00', [
+					'guild_id' => (int) $row['id'],
+					'page'     => 'welcome',
+				]),
+			]);
+		}
 	}
 
 

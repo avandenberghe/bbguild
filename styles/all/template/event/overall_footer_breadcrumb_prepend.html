@@ -1,2 +1,16 @@
+{% if S_MULTI_GUILD %}
+<span class="crumb dropdown-container dropdown-up">
+	<a href="{{ U_GUILD }}" title="{{ lang('GUILD') }}" data-navbar-reference="home" class="dropdown-trigger"><i class="icon fa-shield fa-fw" aria-hidden="false"></i><span>{{ lang('GUILD') }}</span> <i class="icon fa-caret-down fa-fw"></i></a>
+	<div class="dropdown">
+		<div class="pointer"><div class="pointer-inner"></div></div>
+		<ul class="dropdown-contents">
+			{% for guild_nav in loops.guild_nav %}
+			<li><a href="{{ guild_nav.U_GUILD }}">{{ guild_nav.NAME }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</span>
+{% else %}
 <span class="crumb"><a href="{{ U_GUILD }}" title="{{ lang('GUILD') }}" data-navbar-reference="home"><i class="icon fa-shield fa-fw" aria-hidden="false"></i><span>{{ lang('GUILD') }}</span></a></span>
+{% endif %}
 {% for dkpnavlinks in loops.dkpnavlinks %} <strong>&#8249;</strong> <a href="{{ dkpnavlinks.U_DKPPAGE }}">{{ dkpnavlinks.DKPPAGE }}</a>{% endfor %}

@@ -2,29 +2,39 @@
 <div class="bbguildouter">
     <div id="bbguildwelcome">
 
-     <div class="profile-sidebar-anchor">
-            {% INCLUDE 'sidemenu.html' %}
+        <!-- Guild header -->
+        <div class="guild-header">
+            {% if S_EMBLEM_EXISTS %}
+            <div class="guild-header-emblem">
+                <img src="{{ EMBLEM }}" alt="{{ GUILD_NAME }}" />
+            </div>
+            {% endif %}
+            <div class="guild-header-info">
+                <div class="guild-header-name">
+                    {% if ARMORY %}<a href="{{ ARMORY }}">{{ GUILD_NAME }}</a>{% else %}{{ GUILD_NAME }}{% endif %}
+                </div>
+                <div class="guild-header-details">
+                    <span class="faction">{{ FACTION_NAME }}</span> {{ lang('GUILD') }}<span class="comma">,</span>
+                    <span class="realm">{{ REGION }}-{{ REALM }}</span><span class="comma">.</span>
+                    <span class="members">{{ PLAYERCOUNT }} {{ lang('MEMBERS') }}</span>
+                </div>
+                {% if ACHIEV %}
+                <div class="guild-header-achiev">
+                    <a href="{{ ARMORY }}">{{ ACHIEV }}</a>
+                </div>
+                {% endif %}
+            </div>
         </div>
 
-        <div class="profile-contents">
-            {% if S_ERROR %}
-            <h2>{{ ERROR_MESSAGE }}</h2>
-            {% endif %}
+        {% if S_ERROR %}
+        <h2>{{ ERROR_MESSAGE }}</h2>
+        {% endif %}
 
-            {% if S_DISPLAY_ROSTERGRID %}
-            {% INCLUDE 'view/rostergrid.html' %}
-            {% endif %}
-            {% if S_DISPLAY_ROSTERLISTING %}
-            {% INCLUDE 'view/rosterlisting.html' %}
-            {% endif %}
+        <!-- Portal renders all content (MOTD, Roster, Recruitment, etc.) -->
+        {% INCLUDE 'view/welcome.html' %}
 
-            {% if S_DISPLAY_WELCOME %}
-            {% INCLUDE 'view/welcome.html' %}
-            {% endif %}
+        {% EVENT bbguild_main_after_content %}
 
-            {% EVENT bbguild_main_after_content %}
-        </div>
-        <span class="clear"></span>
     </div>
 </div>
-            {% INCLUDE 'overall_footer.html' %}
+{% INCLUDE 'overall_footer.html' %}
