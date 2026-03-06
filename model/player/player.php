@@ -1007,7 +1007,15 @@ class player
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_factions_table = $bb_factions_table;
 
-		$games_obj = new \avathar\bbguild\model\games\game($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $phpbb_container->getParameter('avathar.bbguild.tables.bb_games'));
+		$games_obj = new \avathar\bbguild\model\games\game(
+			$phpbb_container->get('dbal.conn'),
+			$phpbb_container->get('cache.driver'),
+			$phpbb_container->get('config'),
+			$phpbb_container->get('user'),
+			$phpbb_extension_manager,
+			$bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table,
+			$phpbb_container->getParameter('avathar.bbguild.tables.bb_games')
+		);
 		$this->games = $games_obj->games ?? [];
 		unset($games_obj);
 
@@ -1132,7 +1140,16 @@ class player
 		else
 		{
 			// load games class
-			$games = new game();
+			global $phpbb_container;
+			$games = new game(
+				$phpbb_container->get('dbal.conn'),
+				$phpbb_container->get('cache.driver'),
+				$phpbb_container->get('config'),
+				$phpbb_container->get('user'),
+				$phpbb_container->get('ext.manager'),
+				$this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table,
+				$phpbb_container->getParameter('avathar.bbguild.tables.bb_games')
+			);
 			if (isset($games->games))
 			{
 				$this->games = $games->games;

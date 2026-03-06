@@ -14,6 +14,11 @@
 
 namespace avathar\bbguild\model\games;
 
+use phpbb\cache\driver\driver_interface as cache_interface;
+use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
+use phpbb\user;
+
 use avathar\bbguild\model\games\rpg\classes;
 use avathar\bbguild\model\games\rpg\faction;
 use avathar\bbguild\model\games\rpg\races;
@@ -35,6 +40,31 @@ abstract class abstract_game_install implements game_install_interface
 	/** @var array Table name map, set during install/uninstall */
 	protected $table_names = [];
 
+	/** @var driver_interface */
+	protected $db;
+	/** @var cache_interface */
+	protected $cache;
+	/** @var config */
+	protected $config;
+	/** @var user */
+	protected $user;
+
+	/**
+	 * Constructor
+	 *
+	 * @param driver_interface $db
+	 * @param cache_interface  $cache
+	 * @param config           $config
+	 * @param user             $user
+	 */
+	public function __construct(driver_interface $db, cache_interface $cache, config $config, user $user)
+	{
+		$this->db = $db;
+		$this->cache = $cache;
+		$this->config = $config;
+		$this->user = $user;
+	}
+
 	/**
 	 * Install a game.
 	 *
@@ -50,12 +80,10 @@ abstract class abstract_game_install implements game_install_interface
 	 */
 	public final function install(array $table_names, string $game_id, string $game_name, string $boss_base_url, string $zone_base_url, string $region): void
 	{
-		global $cache, $db;
-
 		$this->table_names = $table_names;
 		$this->game_id = $game_id;
 
-		$db->sql_transaction('begin');
+		$this->db->sql_transaction('begin');
 
 		$this->install_factions();
 		$this->install_classes();
@@ -74,17 +102,17 @@ abstract class abstract_game_install implements game_install_interface
 			'region'         => $region,
 		);
 
-		$sql = 'INSERT INTO ' . $this->table('bb_games_table') . ' ' . $db->sql_build_array('INSERT', $data);
-		$db->sql_query($sql);
+		$sql = 'INSERT INTO ' . $this->table('bb_games_table') . ' ' . $this->db->sql_build_array('INSERT', $data);
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
+		$this->db->sql_transaction('commit');
 
-		$cache->destroy('sql', $this->table('bb_games_table'));
-		$cache->destroy('sql', $this->table('bb_classes_table'));
-		$cache->destroy('sql', $this->table('bb_language_table'));
-		$cache->destroy('sql', $this->table('bb_races_table'));
-		$cache->destroy('sql', $this->table('bb_players_table'));
-		$cache->destroy('sql', $this->table('bb_gameroles_table'));
+		$this->cache->destroy('sql', $this->table('bb_games_table'));
+		$this->cache->destroy('sql', $this->table('bb_classes_table'));
+		$this->cache->destroy('sql', $this->table('bb_language_table'));
+		$this->cache->destroy('sql', $this->table('bb_races_table'));
+		$this->cache->destroy('sql', $this->table('bb_players_table'));
+		$this->cache->destroy('sql', $this->table('bb_gameroles_table'));
 	}
 
 	/**
@@ -99,17 +127,16 @@ abstract class abstract_game_install implements game_install_interface
 	 */
 	public final function uninstall(array $table_names, string $game_id, string $game_name): void
 	{
-		global $cache, $db;
-
 		$this->table_names = $table_names;
 		$this->game_id = $game_id;
 
-		$db->sql_transaction('begin');
+		$this->db->sql_transaction('begin');
 
-		$factions = new faction($game_id, $this->table('bb_factions_table'));
+		$factions = new faction($this->db, $this->cache, $this->user, $game_id, $this->table('bb_factions_table'));
 		$factions->delete_all_factions();
 
 		$races = new races(
+			$this->db, $this->config, $this->cache, $this->user,
 			$this->table('bb_language_table'),
 			$this->table('bb_players_table'),
 			$this->table('bb_games_table'),
@@ -120,6 +147,7 @@ abstract class abstract_game_install implements game_install_interface
 		$races->delete_all_races();
 
 		$classes = new classes(
+			$this->db, $this->config, $this->cache, $this->user,
 			$this->table('bb_language_table'),
 			$this->table('bb_players_table'),
 			$this->table('bb_games_table'),
@@ -129,6 +157,7 @@ abstract class abstract_game_install implements game_install_interface
 		$classes->delete_all_classes();
 
 		$roles = new roles(
+			$this->db, $this->config, $this->cache, $this->user,
 			$this->table('bb_gameroles_table'),
 			$this->table('bb_language_table'),
 			$this->table('bb_games_table'),
@@ -137,16 +166,16 @@ abstract class abstract_game_install implements game_install_interface
 		$roles->game_id = $game_id;
 		$roles->delete_all_roles();
 
-		$sql = 'DELETE FROM ' . $this->table('bb_games_table') . " WHERE game_id = '" . $db->sql_escape($game_id) . "'";
-		$db->sql_query($sql);
+		$sql = 'DELETE FROM ' . $this->table('bb_games_table') . " WHERE game_id = '" . $this->db->sql_escape($game_id) . "'";
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
+		$this->db->sql_transaction('commit');
 
-		$cache->destroy('sql', $this->table('bb_games_table'));
-		$cache->destroy('sql', $this->table('bb_classes_table'));
-		$cache->destroy('sql', $this->table('bb_language_table'));
-		$cache->destroy('sql', $this->table('bb_races_table'));
-		$cache->destroy('sql', $this->table('bb_players_table'));
+		$this->cache->destroy('sql', $this->table('bb_games_table'));
+		$this->cache->destroy('sql', $this->table('bb_classes_table'));
+		$this->cache->destroy('sql', $this->table('bb_language_table'));
+		$this->cache->destroy('sql', $this->table('bb_races_table'));
+		$this->cache->destroy('sql', $this->table('bb_players_table'));
 	}
 
 	/**
@@ -197,10 +226,8 @@ abstract class abstract_game_install implements game_install_interface
 	 */
 	protected function install_roles()
 	{
-		global $db;
-
-		$db->sql_query('DELETE FROM ' . $this->table('bb_gameroles_table') . " WHERE role_id < 3 and game_id = '" . $db->sql_escape($this->game_id) . "'");
-		$db->sql_query('DELETE FROM ' . $this->table('bb_language_table') . " WHERE attribute_id < 3 and attribute = 'role' and game_id = '" . $db->sql_escape($this->game_id) . "'");
+		$this->db->sql_query('DELETE FROM ' . $this->table('bb_gameroles_table') . " WHERE role_id < 3 and game_id = '" . $this->db->sql_escape($this->game_id) . "'");
+		$this->db->sql_query('DELETE FROM ' . $this->table('bb_language_table') . " WHERE attribute_id < 3 and attribute = 'role' and game_id = '" . $this->db->sql_escape($this->game_id) . "'");
 
 		$sql_ary = array(
 			array(
@@ -222,7 +249,7 @@ abstract class abstract_game_install implements game_install_interface
 				'role_icon'  => 'tank_icon',
 			),
 		);
-		$db->sql_multi_insert($this->table('bb_gameroles_table'), $sql_ary);
+		$this->db->sql_multi_insert($this->table('bb_gameroles_table'), $sql_ary);
 
 		$sql_ary = array(
 			array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' => 'en', 'attribute' => 'role', 'name' => 'Damage',  'name_short' => 'DPS'),
@@ -238,6 +265,6 @@ abstract class abstract_game_install implements game_install_interface
 			array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' => 'it', 'attribute' => 'role', 'name' => 'Cura',    'name_short' => 'Cura'),
 			array('game_id' => $this->game_id, 'attribute_id' => 2, 'language' => 'it', 'attribute' => 'role', 'name' => 'Difeza',  'name_short' => 'Tank'),
 		);
-		$db->sql_multi_insert($this->table('bb_language_table'), $sql_ary);
+		$this->db->sql_multi_insert($this->table('bb_language_table'), $sql_ary);
 	}
 }

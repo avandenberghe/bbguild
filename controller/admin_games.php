@@ -310,7 +310,7 @@ class admin_games
 	{
 		$link = '<br /><a href="' . append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=listgames') . '"><h3>' . $this->language->lang('RETURN_GAMELIST') . '</h3></a>';
 		//fetch installed games
-		$games = new game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table);
+		$games = new game($this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager, $this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table);
 
 		$sort_order = array(
 			0 => array(    'id' , 'id desc') ,
@@ -406,7 +406,7 @@ class admin_games
 	 */
 	public function gamelist()
 	{
-		$editgame = new game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table, $this->game_registry);
+		$editgame = new game($this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager, $this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table, $this->game_registry);
 		$editgame->game_id = $this->request->variable(constants::URI_GAME, $this->request->variable('hidden_game_id', ''));
 		$editgame->get_game();
 
@@ -544,7 +544,7 @@ class admin_games
 		$faction_name = '';
 		if (!$is_add)
 		{
-			$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+			$fac = new faction($this->db, $this->cache, $this->user, $game_id, $this->bb_factions_table, $this->bb_races_table);
 			$fac->faction_id = $faction_id;
 			$fac->get();
 			$faction_name = $fac->faction_name;
@@ -573,7 +573,7 @@ class admin_games
 	private function DeleteFaction(game $editgame)
 	{
 		$faction_id = $this->request->variable('f_index', 0);
-		$fac = new faction($editgame->game_id, $this->bb_factions_table, $this->bb_races_table);
+		$fac = new faction($this->db, $this->cache, $this->user, $editgame->game_id, $this->bb_factions_table, $this->bb_races_table);
 		$fac->faction_id = $faction_id;
 		$fac->get();
 		$fac->delete_faction();
@@ -591,7 +591,7 @@ class admin_games
 		$action = $this->request->variable('action', '');
 		$is_add = ($action !== 'editrole');
 
-		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role = new roles($this->db, $this->config, $this->cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 		$role->game_id = $game_id;
 		$role->role_id = $role_id;
 
@@ -638,7 +638,7 @@ class admin_games
 	private function DeleteRole(game $editgame)
 	{
 		$role_id = $this->request->variable('role_id', 0);
-		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role = new roles($this->db, $this->config, $this->cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 		$role->game_id = $editgame->game_id;
 		$role->role_id = $role_id;
 		$role->get();
@@ -676,7 +676,7 @@ class admin_games
 		$game_id = $editgame->game_id;
 		$race_id = $this->request->variable('race_id', $this->request->variable('hidden_race_id', 0));
 
-		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 		$race->game_id = $game_id;
 		$race->race_id = $race_id;
 
@@ -695,7 +695,7 @@ class admin_games
 		}
 
 		// Faction dropdown
-		$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$fac = new faction($this->db, $this->cache, $this->user, $game_id, $this->bb_factions_table, $this->bb_races_table);
 		$factions = $fac->get_factions();
 		$faction_options = '';
 		foreach ($factions as $fid => $fdata)
@@ -743,7 +743,7 @@ class admin_games
 	private function DeleteRace(game $editgame)
 	{
 		$race_id = $this->request->variable('race_id', 0);
-		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 		$race->game_id = $editgame->game_id;
 		$race->race_id = $race_id;
 		$race->get_race();
@@ -781,7 +781,7 @@ class admin_games
 		$game_id = $editgame->game_id;
 		$class_id = $this->request->variable('class_id', $this->request->variable('hidden_class_id', 0));
 
-		$editclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$editclass = new classes($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
 		$editclass->game_id = $game_id;
 		$editclass->class_id = $class_id;
 
@@ -848,7 +848,7 @@ class admin_games
 	private function DeleteClass(game $editgame)
 	{
 		$class_id = $this->request->variable('class_id', 0);
-		$editclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$editclass = new classes($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
 		$editclass->game_id = $editgame->game_id;
 		$editclass->class_id = $class_id;
 		$editclass->get_class();
@@ -894,6 +894,7 @@ class admin_games
 	private function SaveGameSettings()
 	{
 		$editgame = new game(
+			$this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager,
 			$this->bb_classes_table, $this->bb_races_table,
 			$this->bb_language_table, $this->bb_factions_table,
 			$this->bb_games_table, $this->game_registry
@@ -993,7 +994,7 @@ class admin_games
 		$u_edit_game = append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;' . constants::URI_GAME . "=$game_id");
 
 		// Factions
-		$factions_obj = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$factions_obj = new faction($this->db, $this->cache, $this->user, $game_id, $this->bb_factions_table, $this->bb_races_table);
 		$factions = $factions_obj->get_factions();
 		$row_count = 0;
 		foreach ($factions as $fac)
@@ -1009,7 +1010,7 @@ class admin_games
 		$this->template->assign_var('LISTFACTION_FOOTCOUNT', sprintf($this->language->lang('LISTFACTION_FOOTCOUNT'), count($factions)));
 
 		// Races
-		$races_obj = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$races_obj = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 		$races_obj->game_id = $game_id;
 		$race_list = $races_obj->list_races();
 		$row_count = 0;
@@ -1034,7 +1035,7 @@ class admin_games
 		$this->template->assign_var('LISTRACE_FOOTCOUNT', sprintf($this->language->lang('LISTRACE_FOOTCOUNT'), count($race_list)));
 
 		// Roles
-		$roles_obj = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$roles_obj = new roles($this->db, $this->config, $this->cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 		$roles_obj->game_id = $game_id;
 		$role_list = $roles_obj->list_roles();
 		$row_count = 0;
@@ -1060,7 +1061,7 @@ class admin_games
 		$this->template->assign_var('LISTROLES_FOOTCOUNT', sprintf($this->language->lang('LISTROLES_FOOTCOUNT'), count($role_list)));
 
 		// Classes
-		$classes_obj = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$classes_obj = new classes($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
 		$classes_obj->game_id = $game_id;
 		$class_list = $classes_obj->list_classes('class_id', 1);
 		$row_count = 0;
@@ -1091,7 +1092,7 @@ class admin_games
 	private function SaveFaction(game $editgame, bool $is_add)
 	{
 		$game_id = $editgame->game_id;
-		$fac = new faction($game_id, $this->bb_factions_table, $this->bb_races_table);
+		$fac = new faction($this->db, $this->cache, $this->user, $game_id, $this->bb_factions_table, $this->bb_races_table);
 		$fac->faction_name = $this->request->variable('factionname', '', true);
 
 		if ($is_add)
@@ -1116,7 +1117,7 @@ class admin_games
 	private function SaveRole(game $editgame, bool $is_add)
 	{
 		$game_id = $editgame->game_id;
-		$role = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$role = new roles($this->db, $this->config, $this->cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 		$role->game_id = $game_id;
 		$role->rolename = $this->request->variable('rolename', '', true);
 		$role->role_color = $this->request->variable('role_color', '', true);
@@ -1132,7 +1133,7 @@ class admin_games
 		{
 			$role->role_id = $this->request->variable('hidden_role_id', 0);
 			$role->role_pkid = $this->request->variable('hidden_role_id', 0);
-			$oldrole = new roles($this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+			$oldrole = new roles($this->db, $this->config, $this->cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 			$oldrole->game_id = $game_id;
 			$oldrole->role_id = $role->role_id;
 			$oldrole->get();
@@ -1151,7 +1152,7 @@ class admin_games
 	private function SaveRace(game $editgame, bool $is_add)
 	{
 		$game_id = $editgame->game_id;
-		$race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+		$race = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 		$race->game_id = $game_id;
 		$race->race_name = $this->request->variable('racename', '', true);
 		$race->race_faction_id = $this->request->variable('faction', 0);
@@ -1167,7 +1168,7 @@ class admin_games
 		else
 		{
 			$race->race_id = $this->request->variable('hidden_race_id', 0);
-			$old_race = new races($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
+			$old_race = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 			$old_race->game_id = $game_id;
 			$old_race->race_id = $race->race_id;
 			$old_race->get_race();
@@ -1185,7 +1186,7 @@ class admin_games
 	private function SaveClass(game $editgame, bool $is_add)
 	{
 		$game_id = $editgame->game_id;
-		$cls = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+		$cls = new classes($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
 		$cls->game_id = $game_id;
 		$cls->classname = $this->request->variable('class_name', '', true);
 		$cls->min_level = $this->request->variable('class_level_min', 1);
@@ -1204,7 +1205,7 @@ class admin_games
 		{
 			$cls->class_id = $this->request->variable('class_id', 0);
 			$cls->c_index = $this->request->variable('c_index', 0);
-			$oldclass = new classes($this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
+			$oldclass = new classes($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_classes_table);
 			$oldclass->game_id = $game_id;
 			$oldclass->class_id = $this->request->variable('class_id0', 0);
 			$cls->update_class($oldclass);

@@ -244,6 +244,7 @@ class admin_guild
 
 		// Build installed games map [game_id => game_name]
 		$gameObj = new game(
+			$this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager,
 			$this->bb_classes_table, $this->bb_races_table,
 			$this->bb_language_table, $this->bb_factions_table,
 			$this->bb_games_table, $this->game_registry
@@ -301,6 +302,7 @@ class admin_guild
 	private function makeGame()
 	{
 		return new game(
+			$this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager,
 			$this->bb_classes_table, $this->bb_races_table,
 			$this->bb_language_table, $this->bb_factions_table,
 			$this->bb_games_table, $this->game_registry
@@ -760,7 +762,7 @@ class admin_guild
 			));
 		}
 
-		$factions = new faction($this->game->game_id, $this->bb_factions_table, $this->bb_races_table);
+		$factions = new faction($this->db, $this->cache, $this->user, $this->game->game_id, $this->bb_factions_table, $this->bb_races_table);
 		$listfactions = $factions->get_factions();
 		if (isset($listfactions))
 		{
@@ -1114,7 +1116,7 @@ class admin_guild
 		}
 
 		// Faction dropdown
-		$factions = new faction($updateguild->getGameId(), $this->bb_factions_table, $this->bb_races_table);
+		$factions = new faction($this->db, $this->cache, $this->user, $updateguild->getGameId(), $this->bb_factions_table, $this->bb_races_table);
 		$listfactions = $factions->get_factions();
 		if (isset($listfactions))
 		{

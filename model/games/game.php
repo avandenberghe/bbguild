@@ -28,6 +28,15 @@ class game
 	public $bb_factions_table;
 	public $bb_game_table;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\cache\driver\driver_interface */
+	protected $cache;
+	/** @var \phpbb\config\config */
+	protected $config;
+	/** @var \phpbb\user */
+	protected $user;
+
 	/**
 	 * primary key in games table
 	 *
@@ -384,20 +393,25 @@ class game
 	/**
 	 * Game class constructor
 	 *
-	 * @param string              $bb_classes_table
-	 * @param string              $bb_races_table
-	 * @param string              $bb_language_table
-	 * @param string              $bb_factions_table
-	 * @param string              $bb_game_table
-	 * @param game_registry|null  $game_registry     Optional plugin registry
+	 * @param \phpbb\db\driver\driver_interface    $db
+	 * @param \phpbb\cache\driver\driver_interface $cache
+	 * @param \phpbb\config\config                 $config
+	 * @param \phpbb\user                          $user
+	 * @param \phpbb\extension\manager             $ext_manager
+	 * @param string                               $bb_classes_table
+	 * @param string                               $bb_races_table
+	 * @param string                               $bb_language_table
+	 * @param string                               $bb_factions_table
+	 * @param string                               $bb_game_table
+	 * @param game_registry|null                   $game_registry     Optional plugin registry
 	 */
-	public function __construct($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table, ?game_registry $game_registry = null)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, \phpbb\user $user, \phpbb\extension\manager $ext_manager, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_game_table, ?game_registry $game_registry = null)
 	{
-		global $user, $phpbb_extension_manager, $phpbb_container;
-		if (!isset($phpbb_extension_manager) && isset($phpbb_container)) {
-			$phpbb_extension_manager = $phpbb_container->get('ext.manager');
-		}
-		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
+		$this->db = $db;
+		$this->cache = $cache;
+		$this->config = $config;
+		$this->user = $user;
+		$this->ext_path = $ext_manager->get_extension_path('avathar/bbguild', true);
 
 		$this->bb_classes_table = $bb_classes_table;
 		$this->bb_races_table = $bb_races_table;
@@ -447,21 +461,21 @@ class game
 		global $phpbb_container;
 
 		return array(
-			'bb_games_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_games'),
-			'bb_logs_table'                 => $phpbb_container->getParameter('avathar.bbguild.tables.bb_logs'),
-			'bb_ranks_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_ranks'),
-			'bb_guild_table'                => $phpbb_container->getParameter('avathar.bbguild.tables.bb_guild'),
-			'bb_players_table'              => $phpbb_container->getParameter('avathar.bbguild.tables.bb_players'),
-			'bb_classes_table'              => $this->bb_classes_table,
-			'bb_races_table'                => $this->bb_races_table,
-			'bb_gameroles_table'            => $phpbb_container->getParameter('avathar.bbguild.tables.bb_gameroles'),
-			'bb_factions_table'             => $this->bb_factions_table,
-			'bb_language_table'             => $this->bb_language_table,
-			'bb_motd_table'                 => $phpbb_container->getParameter('avathar.bbguild.tables.bb_motd'),
-			'bb_recruit_table'              => $phpbb_container->getParameter('avathar.bbguild.tables.bb_recruit'),
-			'bb_bosstable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_bosstable'),
-			'bb_zonetable'                  => $phpbb_container->getParameter('avathar.bbguild.tables.bb_zonetable'),
-			'bb_news'                       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_news'),
+			'bb_games_table'     => $phpbb_container->getParameter('avathar.bbguild.tables.bb_games'),
+			'bb_logs_table'      => $phpbb_container->getParameter('avathar.bbguild.tables.bb_logs'),
+			'bb_ranks_table'     => $phpbb_container->getParameter('avathar.bbguild.tables.bb_ranks'),
+			'bb_guild_table'     => $phpbb_container->getParameter('avathar.bbguild.tables.bb_guild'),
+			'bb_players_table'   => $phpbb_container->getParameter('avathar.bbguild.tables.bb_players'),
+			'bb_classes_table'   => $this->bb_classes_table,
+			'bb_races_table'     => $this->bb_races_table,
+			'bb_gameroles_table' => $phpbb_container->getParameter('avathar.bbguild.tables.bb_gameroles'),
+			'bb_factions_table'  => $this->bb_factions_table,
+			'bb_language_table'  => $this->bb_language_table,
+			'bb_motd_table'      => $phpbb_container->getParameter('avathar.bbguild.tables.bb_motd'),
+			'bb_recruit_table'   => $phpbb_container->getParameter('avathar.bbguild.tables.bb_recruit'),
+			'bb_bosstable'       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_bosstable'),
+			'bb_zonetable'       => $phpbb_container->getParameter('avathar.bbguild.tables.bb_zonetable'),
+			'bb_news'            => $phpbb_container->getParameter('avathar.bbguild.tables.bb_news'),
 		);
 	}
 
@@ -470,11 +484,9 @@ class game
 	 */
 	public function install_game()
 	{
-		global $user;
-
 		if ($this->game_id == '')
 		{
-			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
 		// Plugin-provided games (via game_registry)
@@ -500,7 +512,7 @@ class game
 			{
 				$this->name = 'Custom';
 			}
-			$installgame = new install_custom();
+			$installgame = new install_custom($this->db, $this->cache, $this->config, $this->user);
 			$installgame->install(
 				$this->get_table_names(),
 				$this->game_id,
@@ -517,11 +529,9 @@ class game
 	 */
 	public function delete_game()
 	{
-		global $user;
-
 		if ($this->game_id == '')
 		{
-			trigger_error(sprintf($user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
 		// Plugin-provided games (via game_registry)
@@ -539,7 +549,7 @@ class game
 		}
 
 		// Custom game
-		$installgame = new install_custom();
+		$installgame = new install_custom($this->db, $this->cache, $this->config, $this->user);
 		$installgame->uninstall(
 			$this->get_table_names(),
 			$this->game_id,
@@ -553,14 +563,13 @@ class game
 	 */
 	public function get_game()
 	{
-		global $db;
 		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled,
  				bossbaseurl, zonebaseurl, apikey, apilocale, privkey, region
     			FROM ' . $this->bb_game_table . "
     			WHERE game_id = '" . $this->game_id . "'";
 
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->id = $row['id'];
 			$this->name = $row['game_name'];
@@ -574,7 +583,7 @@ class game
 			$this->privkey = $row['privkey'];
 			$this->region = $row['region'];
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 	}
 
 	/**
@@ -582,12 +591,9 @@ class game
 	 */
 	public function update_game()
 	{
-		//update phpbb_bbguild_games table
-		global $cache, $db;
+		$this->db->sql_transaction('begin');
 
-		$db->sql_transaction('begin');
-
-		$query = $db->sql_build_array(
+		$query = $this->db->sql_build_array(
 			'UPDATE', array(
 			'imagename'      => substr($this->imagename, 0, 20) ,
 			'armory_enabled' => $this->armory_enabled,
@@ -602,10 +608,10 @@ class game
 		);
 
 		$sql = 'UPDATE ' . $this->bb_game_table . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
-		$cache->destroy('sql', $this->bb_game_table);
+		$this->db->sql_transaction('commit');
+		$this->cache->destroy('sql', $this->bb_game_table);
 	}
 
 	/**
@@ -615,7 +621,6 @@ class game
 	 */
 	private function gamesarray()
 	{
-		global $db;
 		$this->games = array();
 		$sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' FROM ' . $this->bb_game_table . '  g';
@@ -623,13 +628,12 @@ class game
 		$sql .= ' INNER JOIN  ' . $this->bb_classes_table . ' c ON c.game_id= g.game_id';
 		$sql .= ' GROUP BY g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl, g.region ';
 		$sql .= ' ORDER BY g.game_id';
-		// cache for 1 days
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->games[$row['game_id']] = $row['game_name'];
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		return $this->games;
 	}
 
@@ -641,11 +645,10 @@ class game
 	 */
 	public function list_games($order = 'game_id ASC')
 	{
-		global $db;
 		$gamelist = array();
 		$sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl, region FROM ' . $this->bb_game_table . ' ORDER BY ' . $order;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$gamelist[$row['game_id']] = array(
 				'id' => $row['id'] ,
@@ -658,7 +661,7 @@ class game
 				'region'        => $row['region'],
 			);
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 		return $gamelist;
 	}
@@ -670,9 +673,7 @@ class game
 	 */
 	public function update_gamedefault($id)
 	{
-		global $config;
-		$config->set('bbguild_default_game', $id, true);
-
+		$this->config->set('bbguild_default_game', $id, true);
 	}
 
 

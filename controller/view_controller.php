@@ -74,6 +74,8 @@ class view_controller
 	 * @var \phpbb\pagination
 	 */
 	public $pagination;
+	/** @var \phpbb\cache\driver\driver_interface */
+	public $cache;
 	/**
 	 * @var \phpbb\extension\manager
 	 */
@@ -156,6 +158,7 @@ class view_controller
 		\phpbb\template\template $template,
 		\phpbb\request\request $request,
 		\phpbb\user $user,
+		\phpbb\cache\driver\driver_interface $cache,
 		$bb_games_table,
 		$bb_logs_table,
 		$bb_ranks_table,
@@ -192,6 +195,7 @@ class view_controller
 		$this->template     = $template;
 		$this->request      = $request;
 		$this->user         = $user;
+		$this->cache        = $cache;
 		$this->bb_games_table = $bb_games_table;
 		$this->bb_logs_table = $bb_logs_table;
 		$this->bb_ranks_table = $bb_ranks_table;
@@ -217,7 +221,7 @@ class view_controller
 			'it' => $user->lang['LANG_IT']
 		);
 
-		$listgames = new game($bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_games_table );
+		$listgames = new game($db, $cache, $config, $user, $phpbb_extension_manager, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_games_table );
 		$this->games = $listgames->games;
 		unset($listgames);
 

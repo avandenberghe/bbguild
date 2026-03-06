@@ -104,6 +104,7 @@ class player_module
 
 		// Fall back to checking the game's armory_enabled flag in DB
 		$game_check = new game(
+			$this->db, $this->admin_controller->cache, $phpbb_container->get('config'), $this->user, $phpbb_container->get('ext.manager'),
 			$this->admin_controller->bb_classes_table,
 			$this->admin_controller->bb_races_table,
 			$this->admin_controller->bb_language_table,
@@ -182,6 +183,7 @@ class player_module
 
 		// Build installed games list
 		$gameObj = new game(
+			$this->db, $ac->cache, $phpbb_container->get('config'), $this->user, $phpbb_container->get('ext.manager'),
 			$ac->bb_classes_table, $ac->bb_races_table,
 			$ac->bb_language_table, $ac->bb_factions_table,
 			$ac->bb_games_table
@@ -1040,7 +1042,7 @@ class player_module
 		$this->db->sql_freeresult($result);
 
 		// get roles
-		$Roles = new roles($ac->bb_gameroles_table, $ac->bb_language_table, $ac->bb_games_table, $ac->bb_classes_table);
+		$Roles = new roles($this->db, $phpbb_container->get('config'), $phpbb_container->get('cache.driver'), $this->user, $ac->bb_gameroles_table, $ac->bb_language_table, $ac->bb_games_table, $ac->bb_classes_table);
 		$Roles->game_id = $this->guild->getGameId();
 		$Roles->guild_id = $editplayer->getPlayerGuildId();
 		$listroles = $Roles->list_roles();

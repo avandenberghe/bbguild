@@ -11,6 +11,11 @@
 
 namespace avathar\bbguild\model\games\rpg;
 
+use phpbb\cache\driver\driver_interface as cache_interface;
+use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
+use phpbb\user;
+
 /**
  * Races
  *
@@ -26,6 +31,15 @@ class races
 	public $bb_players_table;
 	public $bb_games_table;
 	public $bb_factions_table;
+
+	/** @var driver_interface */
+	protected $db;
+	/** @var config */
+	protected $config;
+	/** @var cache_interface */
+	protected $cache;
+	/** @var user */
+	protected $user;
 
 	/**
 	  * the game_id (unique key)
@@ -78,9 +92,23 @@ class races
 
 	/**
 	 * constructor
+	 *
+	 * @param driver_interface $db
+	 * @param config           $config
+	 * @param cache_interface  $cache
+	 * @param user             $user
+	 * @param string           $bb_language_table
+	 * @param string           $bb_players_table
+	 * @param string           $bb_games_table
+	 * @param string           $bb_races_table
+	 * @param string           $bb_factions_table
 	 */
-	public function __construct($bb_language_table, $bb_players_table, $bb_games_table, $bb_races_table, $bb_factions_table)
+	public function __construct(driver_interface $db, config $config, cache_interface $cache, user $user, $bb_language_table, $bb_players_table, $bb_games_table, $bb_races_table, $bb_factions_table)
 	{
+		$this->db = $db;
+		$this->config = $config;
+		$this->cache = $cache;
+		$this->user = $user;
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_games_table = $bb_games_table;
@@ -93,22 +121,20 @@ class races
 	 */
 	public function get_race()
 	{
-		global $db, $config;
-
 		$sql_array = array (
 		'SELECT' => ' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female, r.image_male, r.race_hide ',
 		'FROM' => array ($this->bb_races_table => 'r', $this->bb_language_table => 'l' ),
 		'WHERE' => "   r.game_id = l.game_id
 						AND r.race_id = l.attribute_id
 						AND l.attribute='race'
-						AND l.language= '" . $config['bbguild_lang'] . "'
+						AND l.language= '" . $this->config['bbguild_lang'] . "'
 						AND l.game_id = '" . $this->game_id . "'
 						AND r.race_id = " . $this->race_id
 		);
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		while ( $row = $db->sql_fetchrow($result) )
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		while ( $row = $this->db->sql_fetchrow($result) )
 		{
 			$this->race_faction_id= $row['race_faction_id'];
 			$this->race_name = $row['race_name'];
@@ -116,7 +142,7 @@ class races
 			$this->image_female = $row['image_female'];
 			$this->race_hide = $row['race_hide'];
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		unset($result);
 	}
 
@@ -125,20 +151,18 @@ class races
 	 */
 	public function make_race()
 	{
-		global $user, $db, $config, $cache;
-
 		$sql = 'SELECT COUNT(race_id) AS countrace
 			FROM ' . $this->bb_races_table . '
 			WHERE race_id  = ' . $this->race_id . "
 			AND game_id = '" . $this->game_id . "'";
-		$resultr = $db->sql_query($sql);
-		$a = $db->sql_fetchfield('countrace', false, $resultr);
+		$resultr = $this->db->sql_query($sql);
+		$a = $this->db->sql_fetchfield('countrace', false, $resultr);
 		if (( int ) $a > 0)
 		{
 			//uh oh that race exists
-			trigger_error(sprintf($user->lang['ADMIN_ADD_RACE_FAILED'], $this->race_id), E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_ADD_RACE_FAILED'], $this->race_id), E_USER_WARNING);
 		}
-		$db->sql_freeresult($resultr);
+		$this->db->sql_freeresult($resultr);
 		$data = array (
 		'game_id' => ( string ) $this->game_id,
 		'race_id' => ( int ) $this->race_id,
@@ -147,24 +171,24 @@ class races
 		'image_female' => ( string ) $this->image_female,
 		'race_hide' => 0 );
 
-		$db->sql_transaction('begin');
-		$sql = 'INSERT INTO ' . $this->bb_races_table . ' ' . $db->sql_build_array('INSERT', $data);
-		$db->sql_query($sql);
+		$this->db->sql_transaction('begin');
+		$sql = 'INSERT INTO ' . $this->bb_races_table . ' ' . $this->db->sql_build_array('INSERT', $data);
+		$this->db->sql_query($sql);
 
 		$names = array (
 		'attribute_id' => $this->race_id,
 		'game_id' => $this->game_id,
-		'language' => $config['bbguild_lang'],
+		'language' => $this->config['bbguild_lang'],
 		'attribute' => 'race',
 		'name' => ( string ) $this->race_name,
 		'name_short' => ( string ) $this->race_name);
 
-		$sql = 'INSERT INTO ' . $this->bb_language_table . ' ' . $db->sql_build_array('INSERT', $names);
-		$db->sql_query($sql);
+		$sql = 'INSERT INTO ' . $this->bb_language_table . ' ' . $this->db->sql_build_array('INSERT', $names);
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
-		$cache->destroy('sql', $this->bb_language_table);
-		$cache->destroy('sql', $this->bb_races_table);
+		$this->db->sql_transaction('commit');
+		$this->cache->destroy('sql', $this->bb_language_table);
+		$this->cache->destroy('sql', $this->bb_races_table);
 	}
 
 
@@ -173,8 +197,6 @@ class races
 	*/
 	public function delete_race()
 	{
-		global $user, $db, $config, $cache;
-
 		/* check if there are players with this raceid */
 		$sql_array = array (
 		'SELECT' => ' count(*) as racecount  ',
@@ -186,32 +208,32 @@ class races
 		    			and r.game_id = m.game_id
 		    			and r.game_id = '" . $this->game_id . "'" );
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		$racecount = ( int ) $db->sql_fetchfield('racecount', false, $result);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$racecount = ( int ) $this->db->sql_fetchfield('racecount', false, $result);
 
 		if ($racecount != 0)
 		{
-			trigger_error(sprintf($user->lang['ADMIN_DELETE_RACE_FAILED'], $this->race_name), E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_RACE_FAILED'], $this->race_name), E_USER_WARNING);
 		}
 		else
 		{
-			$db->sql_transaction('begin');
+			$this->db->sql_transaction('begin');
 
 			$sql = 'DELETE FROM ' . $this->bb_races_table . ' WHERE race_id =' . $this->race_id . " AND game_id = '" . $this->game_id . "'";
-			$db->sql_query($sql);
+			$this->db->sql_query($sql);
 
-			$sql = 'DELETE FROM ' . $this->bb_language_table  . " WHERE language= '" . $config['bbguild_lang'] . "'
+			$sql = 'DELETE FROM ' . $this->bb_language_table  . " WHERE language= '" . $this->config['bbguild_lang'] . "'
 							AND attribute = 'race'
 							AND attribute_id= " . $this->race_id . "
 							AND game_id = '" . $this->game_id . "'";
 
-			$db->sql_query($sql);
+			$this->db->sql_query($sql);
 
-			$cache->destroy('sql', $this->bb_races_table);
-			$cache->destroy('sql', $this->bb_language_table );
+			$this->cache->destroy('sql', $this->bb_races_table);
+			$this->cache->destroy('sql', $this->bb_language_table );
 
-			$db->sql_transaction('commit');
+			$this->db->sql_transaction('commit');
 		}
 
 	}
@@ -222,18 +244,16 @@ class races
 	 */
 	public function delete_all_races()
 	{
-		global $db, $user, $cache;
-
 		$sql = 'DELETE FROM ' . $this->bb_races_table  . " WHERE game_id = '" .   $this->game_id . "'"  ;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		$sql = 'DELETE FROM ' . $this->bb_language_table  . " WHERE attribute = 'race'
 							AND game_id = '" . $this->game_id . "'";
 
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
-		$cache->destroy('sql', $this->bb_races_table );
-		$cache->destroy('sql', $this->bb_language_table );
+		$this->cache->destroy('sql', $this->bb_races_table );
+		$this->cache->destroy('sql', $this->bb_language_table );
 	}
 
 	/**
@@ -243,29 +263,27 @@ class races
 	 */
 	public function update_race(races $old_race)
 	{
-		global  $db, $config, $cache;
-
 		// note you cannot change the game to which a race belongs
 		$data = array (
 		'race_faction_id' => ( int ) $this->race_faction_id,
 		'image_male' => ( string ) $this->image_male,
 		'image_female' => ( string ) $this->image_female );
 
-		$db->sql_transaction('begin');
-		$sql = 'UPDATE ' . $this->bb_races_table  . ' SET ' . $db->sql_build_array('UPDATE', $data) . '
-			    WHERE race_id = ' . ( int ) $this->race_id . " AND game_id = '" . $db->sql_escape($this->game_id) . "'";
-		$db->sql_query($sql);
+		$this->db->sql_transaction('begin');
+		$sql = 'UPDATE ' . $this->bb_races_table  . ' SET ' . $this->db->sql_build_array('UPDATE', $data) . '
+			    WHERE race_id = ' . ( int ) $this->race_id . " AND game_id = '" . $this->db->sql_escape($this->game_id) . "'";
+		$this->db->sql_query($sql);
 
 		$names = array (
 		'name' => ( string ) $this->race_name, 'name_short' => ( string ) $this->race_name );
 
-		$sql = 'UPDATE ' . $this->bb_language_table  . ' SET ' . $db->sql_build_array('UPDATE', $names) . '
-			WHERE attribute_id = ' . $this->race_id . " AND attribute='race'  AND language= '" . $config['bbguild_lang'] . "' AND game_id =   '" . $db->sql_escape($this->game_id) . "'";
-		$db->sql_query($sql);
+		$sql = 'UPDATE ' . $this->bb_language_table  . ' SET ' . $this->db->sql_build_array('UPDATE', $names) . '
+			WHERE attribute_id = ' . $this->race_id . " AND attribute='race'  AND language= '" . $this->config['bbguild_lang'] . "' AND game_id =   '" . $this->db->sql_escape($this->game_id) . "'";
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
-		$cache->destroy('sql', $this->bb_language_table );
-		$cache->destroy('sql', $this->bb_races_table );
+		$this->db->sql_transaction('commit');
+		$this->cache->destroy('sql', $this->bb_language_table );
+		$this->cache->destroy('sql', $this->bb_races_table );
 	}
 
 	/**
@@ -276,8 +294,6 @@ class races
 	  */
 	public function list_races($order = 'r.race_id')
 	{
-		global $db, $config;
-
 		$sql_array = array (
 		'SELECT' => ' r.game_id, r.race_id, r.race_faction_id, r.race_hide, r.image_female, r.image_male,
 							  l.name as race_name, f.faction_name, g.game_name ',
@@ -289,13 +305,13 @@ class races
 		),
 		'WHERE' => " r.race_faction_id = f.faction_id
 					AND f.game_id = r.game_id AND r.game_id = g.game_id AND r.game_id = '" . $this->game_id . "'
-		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config['bbguild_lang'] . "'
+		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $this->config['bbguild_lang'] . "'
 		    		AND l.attribute = 'race' ", 'ORDER_BY' => $order );
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
 		$ra = array();
-		while ( $row = $db->sql_fetchrow($result) )
+		while ( $row = $this->db->sql_fetchrow($result) )
 		{
 			$ra[$row['race_id']] = array(
 			'game_name' => $row['game_name'],
@@ -305,7 +321,7 @@ class races
 			'image_male' => $row['image_male'],
 			'image_female' => $row['image_female']);
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		return $ra;
 	}
 }

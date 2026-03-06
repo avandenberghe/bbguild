@@ -20,6 +20,7 @@ services:
             - '@template'
             - '@request'
             - '@user'
+            - '@cache.driver'
             - '%avathar.bbguild.tables.bb_games%'
             - '%avathar.bbguild.tables.bb_logs%'
             - '%avathar.bbguild.tables.bb_ranks%'

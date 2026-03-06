@@ -196,6 +196,7 @@ class bbguild_module
 
 		// Build installed games list and regions
 		$gameObj = new game(
+			$this->db, $this->bbguild_cache, $this->config, $this->user, $phpbb_container->get('ext.manager'),
 			$ac->bb_classes_table, $ac->bb_races_table,
 			$ac->bb_language_table, $ac->bb_factions_table,
 			$ac->bb_games_table
@@ -715,7 +716,7 @@ class bbguild_module
 		$this->db->sql_freeresult($result);
 
 		//Role dropdown
-		$Roles = new roles($ac->bb_gameroles_table, $ac->bb_language_table, $ac->bb_games_table, $ac->bb_classes_table);
+		$Roles = new roles($this->db, $this->config, $this->bbguild_cache, $this->user, $ac->bb_gameroles_table, $ac->bb_language_table, $ac->bb_games_table, $ac->bb_classes_table);
 		$Roles->game_id = $guilds->game_id;
 		$Roles->guild_id = $players->getPlayerGuildId();
 		$listroles = $Roles->list_roles();

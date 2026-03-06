@@ -11,6 +11,11 @@
 
 namespace avathar\bbguild\model\games\rpg;
 
+use phpbb\cache\driver\driver_interface as cache_interface;
+use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
+use phpbb\user;
+
 /**
  * Classes
  *
@@ -24,6 +29,15 @@ class classes
 	public $bb_language_table;
 	public $bb_players_table;
 	public $bb_games_table;
+
+	/** @var driver_interface */
+	protected $db;
+	/** @var config */
+	protected $config;
+	/** @var cache_interface */
+	protected $cache;
+	/** @var user */
+	protected $user;
 
 	/**
 	  * the game_id (unique key)
@@ -122,14 +136,22 @@ class classes
 
 	/**
 	 * classes constructor.
-	 * @param $bb_language_table
-	 * @param $bb_players_table
-	 * @param $bb_games_table
-	 * @param $bb_classes_table
+	 *
+	 * @param driver_interface $db
+	 * @param config           $config
+	 * @param cache_interface  $cache
+	 * @param user             $user
+	 * @param string           $bb_language_table
+	 * @param string           $bb_players_table
+	 * @param string           $bb_games_table
+	 * @param string           $bb_classes_table
 	 */
-	public function __construct($bb_language_table, $bb_players_table, $bb_games_table, $bb_classes_table)
+	public function __construct(driver_interface $db, config $config, cache_interface $cache, user $user, $bb_language_table, $bb_players_table, $bb_games_table, $bb_classes_table)
 	{
-		global $user;
+		$this->db = $db;
+		$this->config = $config;
+		$this->cache = $cache;
+		$this->user = $user;
 
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_players_table = $bb_players_table;
@@ -162,8 +184,6 @@ class classes
 	 */
 	public function get_class()
 	{
-		global $db, $config;
-
 		$sql_array = array (
 		'SELECT' => ' c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_max_level, c.class_faction_id,
 							c.class_armor_type, c.imagename, c.colorcode ',
@@ -174,12 +194,12 @@ class classes
 							AND l.attribute='class'
 							AND l.game_id = '" . $this->game_id . "'
 							AND c.game_id = l.game_id
-							AND l.language= '" . $config['bbguild_lang'] . "'
+							AND l.language= '" . $this->config['bbguild_lang'] . "'
 							AND c.class_id = " . $this->class_id);
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		while ( $row = $db->sql_fetchrow($result))
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		while ( $row = $this->db->sql_fetchrow($result))
 		{
 			$this->c_index = $row['c_index'];
 			$this->class_id = (int) $row['class_id'];
@@ -191,7 +211,7 @@ class classes
 			$this->colorcode = (string) $row['colorcode'];
 			$this->faction_id = (string) $row['class_faction_id'];
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 	}
 
@@ -200,17 +220,15 @@ class classes
 	 */
 	public function make_class()
 	{
-		global $user, $db, $config, $cache;
-
 		$sql = 'SELECT count(*) AS countclass FROM ' . $this->bb_classes_table . ' WHERE class_id  = ' .
 		$this->class_id . " AND game_id = '" . $this->game_id . "'";
-		$resultc = $db->sql_query($sql);
+		$resultc = $this->db->sql_query($sql);
 
-		if (( int ) $db->sql_fetchfield('countclass', false, $resultc) > 0)
+		if (( int ) $this->db->sql_fetchfield('countclass', false, $resultc) > 0)
 		{
-			trigger_error(sprintf($user->lang['ADMIN_ADD_CLASS_FAILED'], $this->classname), E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_ADD_CLASS_FAILED'], $this->classname), E_USER_WARNING);
 		}
-		$db->sql_freeresult($resultc);
+		$this->db->sql_freeresult($resultc);
 		unset($resultc);
 
 		$data = array (
@@ -223,25 +241,25 @@ class classes
 		'class_hide' => 0,
 		'colorcode' => $this->colorcode );
 
-		$db->sql_transaction('begin');
+		$this->db->sql_transaction('begin');
 
-		$sql = 'INSERT INTO ' . $this->bb_classes_table . ' ' . $db->sql_build_array('INSERT', $data);
-		$db->sql_query($sql);
+		$sql = 'INSERT INTO ' . $this->bb_classes_table . ' ' . $this->db->sql_build_array('INSERT', $data);
+		$this->db->sql_query($sql);
 
 		$names = array (
 		'game_id' => ( string ) $this->game_id,
 		'attribute_id' => $this->class_id,
-		'language' => $config['bbguild_lang'],
+		'language' => $this->config['bbguild_lang'],
 		'attribute' => 'class',
 		'name' => ( string ) $this->classname,
 		'name_short' => ( string ) $this->classname );
 
-		$sql = 'INSERT INTO ' . $this->bb_language_table . ' ' . $db->sql_build_array('INSERT', $names);
-		$db->sql_query($sql);
+		$sql = 'INSERT INTO ' . $this->bb_language_table . ' ' . $this->db->sql_build_array('INSERT', $names);
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
-		$cache->destroy('sql', $this->bb_language_table);
-		$cache->destroy('sql', $this->bb_classes_table);
+		$this->db->sql_transaction('commit');
+		$this->cache->destroy('sql', $this->bb_language_table);
+		$this->cache->destroy('sql', $this->bb_classes_table);
 	}
 
 	/**
@@ -249,8 +267,6 @@ class classes
 	 */
 	public function delete_class()
 	{
-		global $user, $db, $config, $cache;
-
 		// see if there are players in this class
 		$sql_array = array (
 		'SELECT' => ' c.class_id, COUNT(*) AS classcount  ',
@@ -262,29 +278,29 @@ class classes
 		'GROUP_BY' => 'c.class_id'
 		);
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		$classcount = ( int ) $db->sql_fetchfield('classcount', false, $result);
-		$db->sql_freeresult($result);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$classcount = ( int ) $this->db->sql_fetchfield('classcount', false, $result);
+		$this->db->sql_freeresult($result);
 
 		if ($classcount == 0)
 		{
-			$db->sql_transaction('begin');
+			$this->db->sql_transaction('begin');
 
 			$sql = 'DELETE FROM ' . $this->bb_classes_table . ' WHERE class_id  = ' . $this->class_id . " and game_id = '" . $this->game_id . "'";
-			$db->sql_query($sql);
+			$this->db->sql_query($sql);
 
-			$sql = 'DELETE FROM ' . $this->bb_language_table . " WHERE language= '" . $config['bbguild_lang'] . "' AND attribute = 'class'
+			$sql = 'DELETE FROM ' . $this->bb_language_table . " WHERE language= '" . $this->config['bbguild_lang'] . "' AND attribute = 'class'
 					and attribute_id= " . $this->class_id . " and game_id = '" . $this->game_id . "'";
-			$db->sql_query($sql);
+			$this->db->sql_query($sql);
 
-			$db->sql_transaction('commit');
-			$cache->destroy('sql', $this->bb_classes_table);
-			$cache->destroy('sql', $this->bb_language_table);
+			$this->db->sql_transaction('commit');
+			$this->cache->destroy('sql', $this->bb_classes_table);
+			$this->cache->destroy('sql', $this->bb_language_table);
 		}
 		else
 		{
-			trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_FAILED'], $this->class_id), E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_DELETE_CLASS_FAILED'], $this->class_id), E_USER_WARNING);
 		}
 
 	}
@@ -294,17 +310,15 @@ class classes
 	 */
 	public function delete_all_classes()
 	{
-		global $db, $cache;
-
 		$sql = 'DELETE FROM ' . $this->bb_classes_table . " WHERE game_id = '" .   $this->game_id . "'"  ;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		$sql = 'DELETE FROM ' . $this->bb_language_table . " WHERE attribute = 'class'
 							AND game_id = '" . $this->game_id . "'";
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
-		$cache->destroy('sql', $this->bb_classes_table);
-		$cache->destroy('sql', $this->bb_language_table);
+		$this->cache->destroy('sql', $this->bb_classes_table);
+		$this->cache->destroy('sql', $this->bb_language_table);
 	}
 
 	/**
@@ -314,20 +328,18 @@ class classes
 	 */
 	public function update_class(classes $oldclass)
 	{
-		global $user, $db, $config, $cache;
-
 		// check for unique classid exception : if the new class id exists already
 		$sql = 'SELECT count(*) AS countclass FROM ' . $this->bb_classes_table . '
 				WHERE c_index != ' . $this->c_index . "
-				AND class_id = '" . $db->sql_escape($oldclass->class_id) . "'
+				AND class_id = '" . $this->db->sql_escape($oldclass->class_id) . "'
 				AND game_id = '" . $this->game_id. "'";
 
-		$result = $db->sql_query($sql);
-		if (( int ) $db->sql_fetchfield('countclass', false, $result) > 0)
+		$result = $this->db->sql_query($sql);
+		if (( int ) $this->db->sql_fetchfield('countclass', false, $result) > 0)
 		{
-			trigger_error(sprintf($user->lang['ADMIN_ADD_CLASS_FAILED'], $this->classname), E_USER_WARNING);
+			trigger_error(sprintf($this->user->lang['ADMIN_ADD_CLASS_FAILED'], $this->classname), E_USER_WARNING);
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 		$data = array (
 		'class_id' => ( int ) $this->class_id,
@@ -337,12 +349,12 @@ class classes
 		'imagename' => $this->imagename,
 		'class_hide' => 0,
 		'colorcode' => $this->colorcode );
-		$db->sql_transaction('begin');
+		$this->db->sql_transaction('begin');
 
-		$sql = 'UPDATE ' . $this->bb_classes_table . ' SET ' . $db->sql_build_array('UPDATE', $data) . '
+		$sql = 'UPDATE ' . $this->bb_classes_table . ' SET ' . $this->db->sql_build_array('UPDATE', $data) . '
 			    WHERE c_index = ' . $this->c_index;
 
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		// now update the language table!
 		$names = array (
@@ -350,14 +362,14 @@ class classes
 		'name' => ( string ) $this->classname,
 		'name_short' => ( string ) $this->classname);
 
-		$sql = 'UPDATE ' . $this->bb_language_table . ' SET ' . $db->sql_build_array('UPDATE', $names) . '
+		$sql = 'UPDATE ' . $this->bb_language_table . ' SET ' . $this->db->sql_build_array('UPDATE', $names) . '
 		 WHERE attribute_id = ' . $oldclass->class_id . " AND attribute='class'
-		 AND language= '" . $config['bbguild_lang'] . "' AND game_id = '" . $this->game_id . "'";
-		$db->sql_query($sql);
+		 AND language= '" . $this->config['bbguild_lang'] . "' AND game_id = '" . $this->game_id . "'";
+		$this->db->sql_query($sql);
 
-		$db->sql_transaction('commit');
-		$cache->destroy('sql', $this->bb_language_table);
-		$cache->destroy('sql', $this->bb_classes_table);
+		$this->db->sql_transaction('commit');
+		$this->cache->destroy('sql', $this->bb_language_table);
+		$this->cache->destroy('sql', $this->bb_classes_table);
 
 	}
 
@@ -371,8 +383,6 @@ class classes
 	  */
 	public function list_classes($order = 'class_id', $mode = 0)
 	{
-		global $db, $config;
-
 		$sql_array = array (
 		'SELECT' => ' c.game_id, c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_hide,
 					c.class_max_level, c.class_armor_type, c.imagename, c.colorcode,  g.game_name ',
@@ -381,8 +391,8 @@ class classes
 			$this->bb_language_table => 'l',
 			$this->bb_games_table => 'g'  ),
 		'WHERE' => " c.class_id = l.attribute_id
-							AND c.game_id = g.game_id AND c.game_id = l.game_id AND l.game_id = '" . $db->sql_escape($this->game_id) . "'
-							AND l.attribute='class' AND l.language= '" . $config['bbguild_lang'] . "'",
+							AND c.game_id = g.game_id AND c.game_id = l.game_id AND l.game_id = '" . $this->db->sql_escape($this->game_id) . "'
+							AND l.attribute='class' AND l.language= '" . $this->config['bbguild_lang'] . "'",
 		'ORDER_BY' => $order );
 
 		if ($mode == 0)
@@ -390,10 +400,10 @@ class classes
 			$sql_array['WHERE'] .=    'AND c.class_id = ' . $this->class_id;
 		}
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
 		$cl=array();
-		while ( $row = $db->sql_fetchrow($result))
+		while ( $row = $this->db->sql_fetchrow($result))
 		{
 			$cl[$row['class_id']]  = array(
 			'c_index' => (int) $row['c_index'],
@@ -408,7 +418,7 @@ class classes
 			'colorcode' => (string) $row['colorcode'],
 			);
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		return $cl;
 	}
 
