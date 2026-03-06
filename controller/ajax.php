@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * AJAX controller — returns JSON for dependent dropdowns in ACP.
  */
-class admin_controller_temp
+class ajax_controller
 {
 	/** @var string */
 	public $bb_games_table;

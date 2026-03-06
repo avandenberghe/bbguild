@@ -38,7 +38,7 @@ services:
             - '@avathar.bbguild.game_registry'
             - '@avathar.bbguild.portal.renderer'
     avathar.bbguild.admin.controller:
-        class: avathar\bbguild\controller\admin_controller_temp
+        class: avathar\bbguild\controller\ajax_controller
         arguments:
             - '@config'
             - '@dbal.conn'
