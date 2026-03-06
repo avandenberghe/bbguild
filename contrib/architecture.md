@@ -30,10 +30,39 @@ bbguild/
 │   └── modules/            # Module infrastructure + built-in modules
 ├── styles/                 # Twig templates (prosilver)
 ├── ucp/                    # User Control Panel modules
-├── views/                  # View helpers (navigation)
+├── views/                  # View helpers (guild_context)
 ├── images/                 # UI assets (emblems, icons, progressbar)
 ├── contrib/                # Documentation, diagrams, changelog
 └── tests/                  # Unit tests
+```
+
+## Frontend Architecture (Portal-First)
+
+The frontend uses a portal-first, single-page architecture:
+
+1. **`view_controller::handleview()`** receives the request
+2. **`guild_context`** resolves the guild, loads guild data, and assigns header/dropdown template vars
+3. **`portal_renderer`** renders all enabled portal modules (MOTD, Roster, News, Recruitment, etc.)
+4. **`main.html`** contains the guild header (normal flow) and includes `view/welcome.html` (portal renderer template)
+
+All content is rendered as portal modules on a single page — there are no separate "welcome" and "roster" pages. The roster is a portal module (`portal/modules/roster.php`) displayed in the center column with filters and pagination.
+
+### Template Structure
+
+```
+main.html
+├── Guild header (name, faction, realm, member count, emblem)
+├── view/welcome.html (portal renderer)
+│   ├── portal-top (modules_top loop)
+│   ├── portal-content-wrapper
+│   │   ├── portal-right (modules_right loop)
+│   │   │   └── recruitment_side.html, custom blocks, etc.
+│   │   └── portal-center (modules_center loop)
+│   │       ├── motd_center.html
+│   │       ├── roster_center.html (filters, table, pagination)
+│   │       └── news_center.html, activity, etc.
+│   └── portal-bottom (modules_bottom loop)
+└── overall_footer.html
 ```
 
 ## Service Layer
@@ -44,7 +73,7 @@ All services are defined in `config/services.yml` and `config/portal_services.ym
 
 | Service ID | Class | Purpose |
 |---|---|---|
-| `avathar.bbguild.controller` | `controller\view_controller` | Frontend routes (welcome, roster) |
+| `avathar.bbguild.controller` | `controller\view_controller` | Frontend routes (guild page) |
 | `avathar.bbguild.admin.main` | `controller\admin_main` | ACP dashboard, settings, logs |
 | `avathar.bbguild.admin.games` | `controller\admin_games` | Game/faction/race/class/role management |
 | `avathar.bbguild.admin.guild` | `controller\admin_guild` | Guild/rank/player management |
@@ -69,6 +98,7 @@ Built-in portal modules (tagged `bbguild.portal.module`):
 - `portal_motd` - Message of the Day
 - `portal_news` - Guild News
 - `portal_recruit` - Recruitment Status
+- `portal_roster` - Guild Roster (center-only, with filters and pagination)
 - `portal_activity` - Activity Feed
 - `portal_custom` - Custom HTML Block
 
@@ -78,13 +108,14 @@ Defined in `config/routing.yml`:
 
 | Route | Path | Controller |
 |---|---|---|
-| `avathar_bbguild_00` | `/guild/{page}/{guild_id}` | `view_controller::handleview` |
+| `avathar_bbguild_guild` | `/guild/{guild_id}` | `view_controller::handleview` |
+| `avathar_bbguild_00` | `/guild/{page}/{guild_id}` | `view_controller::handleview` (compat) |
 | `avathar_bbguild_01` | `/getfaction` | AJAX: faction selector |
 | `avathar_bbguild_02` | `/getguildrank/{guild_id}` | AJAX: rank selector |
 | `avathar_bbguild_03` | `/getplayerList/{game_id}` | AJAX: player list |
 | `avathar_bbguild_04` | `/getclassrace/{game_id}` | AJAX: class/race selector |
 
-Frontend pages: `welcome` (portal), `roster` (guild member list).
+The primary route is `/guild/{guild_id}`. The legacy `/guild/{page}/{guild_id}` route is kept for backward compatibility but `$page` is ignored.
 
 ## ACP Modules
 
@@ -202,8 +233,8 @@ The log system (`model/admin/log.php`) follows the phpBB log design pattern:
 ## Migration Chain
 
 ```
-basics/schema → basics/data → basics/config → basics/permissions → basics/modules
-    → v200b1/portal_data → v200b1/release_2_0_0_b1
+basics/schema -> basics/data -> basics/config -> basics/permissions -> basics/modules
+    -> v200b1/portal_data -> v200b1/release_2_0_0_b1
 ```
 
 ## Future: DKP Plugin

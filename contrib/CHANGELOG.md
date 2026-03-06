@@ -2,19 +2,32 @@
 
 ## 2.0.0-b1 05/03/2026
   - [NEW] Portal system: guild-scoped block engine forked from Board3 Portal design (GPL-2.0)
-  - [NEW] Portal modules: Message of the Day, Guild News, Recruitment, Activity Feed, Custom Block
+  - [NEW] Portal modules: Message of the Day, Roster, Recruitment
   - [NEW] 3-column portal layout: top, center, right with bitmask-based column permissions
   - [NEW] Module plugin system via tagged services (`bbguild.portal.module`) and `phpbb\di\service_collection`
   - [NEW] Guild-scoped portal config service replacing Board3's global functions
   - [NEW] Default layout template (guild_id=0) copied to new guilds
-  - [NEW] ACP Portal Management: add, remove, reorder, move between columns, enable/disable modules per guild
-  - [NEW] Portal migration: `bb_portal_modules` and `bb_portal_config` tables with guild_id scoping
   - [NEW] Portal language files for all 7 languages (en, de, fr, it, nl, es_x_tu, pl)
+  - [NEW] Recruitment ACP tab in Edit Guild (list, add, edit, delete recruitment entries)
+  - [NEW] Multi-guild dropdown in breadcrumb navbar using phpBB native dropdown system
+  - [NEW] Dedicated portal.css for portal grid layout
   - [CHG] Welcome page rewritten to use portal renderer instead of inline MOTD/activity code
-  - [CHG] Portal CSS added to bbdkp.css for grid layout
-  - [CHG] #320: Log system refactored from XML serialization to phpBB log pattern (serialize/unserialize arrays, vsprintf with language keys)
+  - [CHG] Portal ACP integrated as tab in Edit Guild (Guild | Ranks | Recruitment | Portal)
+  - [CHG] Removed standalone portal ACP module (merged into guild edit)
+  - [CHG] Removed standalone recruitment ACP module (merged into guild edit)
+  - [CHG] Removed sidebar navigation — full-width layout, guild switching via breadcrumb dropdown
+  - [CHG] Removed Custom Block, Activity Feed (#332), and Guild News portal modules
+  - [CHG] Removed hardcoded colors for cross-theme compatibility (dark and light themes)
+  - [CHG] Removed theme-specific CSS overrides (pbwow3, ne-blackgreen, Black)
+  - [CHG] Roster uses self-contained portal-roster-table CSS, removed phpBB table1 class dependency
+  - [CHG] Migrations consolidated into basics/ + v200b1/ for clean install
+  - [CHG] #320: Log system refactored from XML serialization to phpBB log pattern
   - [CHG] DKP log types removed from core, to be provided by future bbDKP plugin (#321)
   - [CHG] Added GUILD_DELETED constant and log type
+  - [FIX] Portal right column float ordering (floated element must precede content in DOM)
+  - [FIX] Portal .postbody width override for PBWoW3 theme (was constrained to 70%)
+  - [FIX] Roster colgroup percentages now sum to 100%
+  - [FIX] Hardcoded guild_id=1 in main_listener replaced with dynamic guild query
   - [FIX] PHP 8.x: cast config values to (int) for date() timestamps in admin_main.php and player_module.php
   - [FIX] PHP 8.x: cast date format config to (string) in player_module.php
   - [FIX] Wrong namespace in validator.php (sajaki\bbguild → avathar\bbguild)

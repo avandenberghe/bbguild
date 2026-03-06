@@ -9,160 +9,79 @@
 
 namespace avathar\bbguild\controller;
 
-use avathar\bbguild\model\player\player;
-use phpbb\cache\service;
 use phpbb\config\config;
-use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
-use phpbb\extension\manager;
-use phpbb\pagination;
 use phpbb\request\request;
-use phpbb\template\template;
-use phpbb\user;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Admin controller
+ * AJAX controller — returns JSON for dependent dropdowns in ACP.
  */
 class admin_controller_temp
 {
+	/** @var string */
 	public $bb_games_table;
-	public $bb_logs_table;
+	/** @var string */
 	public $bb_ranks_table;
+	/** @var string */
 	public $bb_guild_table;
+	/** @var string */
 	public $bb_players_table;
+	/** @var string */
 	public $bb_classes_table;
+	/** @var string */
 	public $bb_races_table;
-	public $bb_gameroles_table;
+	/** @var string */
 	public $bb_factions_table;
+	/** @var string */
 	public $bb_language_table;
-	public $bb_motd_table;
-	public $bb_recruit_table;
-	public $bb_bosstable;
-	public $bb_zonetable;
-	public $bb_news;
 
-	/*** @var service */
-	protected $cache;
-
-	/** @var \phpbb\config\config */
+	/** @var config */
 	protected $config;
 
-	/*** @var driver_interface */
+	/** @var driver_interface */
 	protected $db;
 
-	/*** @var pagination */
-	protected $pagination;
-
-	/*** @var helper */
-	protected $helper;
-
-	/** @var \phpbb\request\request */
+	/** @var request */
 	protected $request;
-
-	/*** @var template */
-	protected $template;
-
-	/** @var \phpbb\user */
-	protected $user;
-
-	/*** @var manager "Extension Manager" */
-	protected $ext_manager;
-
-	/*** @var string phpEx */
-	protected $php_ext;
-
-	/*** @var string Custom form action */
-	protected $u_action;
 
 	/**
 	 * Constructor
 	 *
-	 * @param  service          $cache       Cache object
-	 * @param  config           $config      Config object
-	 * @param  driver_interface $db          Database object
-	 * @param  pagination       $pagination  Pagination object
-	 * @param  helper           $helper      Controller helper object
-	 * @param  request          $request     Request object
-	 * @param  template         $template    Template object
-	 * @param  user             $user        User object
-	 * @param  manager          $ext_manager Extension manager object
-	 * @param  string           $root_path   phpBB root path
-	 * @param  string           $php_ext     phpEx
-	 * @param  string           $bb_games_table	name of game table
-	 * @param  string           $bb_logs_table	name of logging table
-	 * @param  string           $bb_ranks_table	name of ranks table
-	 * @param  string           $bb_guild_table	name of guild table
-	 * @param  string           $bb_players_table	name of players table
-	 * @param  string           $bb_classes_table	name of classes table
-	 * @param  string           $bb races_table	name of races table
-	 * @param  string           $bb_gameroles_table	name of roles table
-	 * @param  string           $bb_factions_table	name of factions table
-	 * @param  string           $bb_language_table	name of language table
-	 * @param  string           $bb_motd_table	name of motd table
-	 * @param  string           $bb_recruit_table	name of recruit table
-	 * @param  string           $bb_bosstable	name of boss table
-	 * @param  string           $bb_zonetable	name of zone table
-	 * @param  string           $bb_news	name of news table
-	 * @return \avathar\bbguild\controller\admin_controller
-	 * @access public
+	 * @param config           $config
+	 * @param driver_interface $db
+	 * @param request          $request
+	 * @param string           $bb_ranks_table
+	 * @param string           $bb_guild_table
+	 * @param string           $bb_players_table
+	 * @param string           $bb_classes_table
+	 * @param string           $bb_races_table
+	 * @param string           $bb_factions_table
+	 * @param string           $bb_language_table
 	 */
 	public function __construct(
-		service $cache,
 		config $config,
 		driver_interface $db,
-		pagination $pagination,
-		helper $helper,
 		request $request,
-		template $template,
-		user $user,
-		manager $ext_manager,
-		$root_path,
-		$php_ext,
-		$bb_games_table,
-		$bb_logs_table,
 		$bb_ranks_table,
 		$bb_guild_table,
 		$bb_players_table,
 		$bb_classes_table,
 		$bb_races_table,
-		$bb_gameroles_table,
 		$bb_factions_table,
-		$bb_language_table,
-		$bb_motd_table,
-		$bb_recruit_table,
-		$bb_bosstable,
-		$bb_zonetable,
-		$bb_news
+		$bb_language_table
 	)
 	{
-
-		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
-		$this->pagination = $pagination;
-		$this->helper = $helper;
 		$this->request = $request;
-		$this->template = $template;
-		$this->user = $user;
-		$this->ext_manager     = $ext_manager;
-		$this->php_ext = $php_ext;
-		$this->ext_path = $this->ext_manager->get_extension_path('avathar/bbguild', true);
-		$this->bb_games_table = $bb_games_table;
-		$this->bb_logs_table = $bb_logs_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_classes_table = $bb_classes_table;
 		$this->bb_races_table = $bb_races_table;
-		$this->bb_gameroles_table = $bb_gameroles_table;
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_language_table = $bb_language_table;
-		$this->bb_motd_table = $bb_motd_table;
-		$this->bb_recruit_table = $bb_recruit_table;
-		$this->bb_bosstable = $bb_bosstable;
-		$this->bb_zonetable =  $bb_zonetable;
-		$this->bb_news = $bb_news;
 	}
 
 	/**
@@ -174,21 +93,23 @@ class admin_controller_temp
 	 */
 	public function getfaction()
 	{
-		$game_id =  $this->request->variable('game_id', '', true);
-		$sql = 'SELECT faction_id, faction_name FROM ' . $this->bb_factions_table . " where game_id = '" . $game_id . "' order by faction_id";
+		$game_id = $this->db->sql_escape($this->request->variable('game_id', '', true));
+		$sql = 'SELECT faction_id, faction_name
+			FROM ' . $this->bb_factions_table . "
+			WHERE game_id = '" . $game_id . "'
+			ORDER BY faction_id";
 		$result = $this->db->sql_query($sql);
 
-		$data =array();
-		while ( $row = $this->db->sql_fetchrow($result))
+		$data = [];
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$data[] =array(
-			'faction_id' => $row['faction_id'],
-			'faction_name' =>  $row['faction_name'],
-			);
+			$data[] = [
+				'faction_id'   => $row['faction_id'],
+				'faction_name' => $row['faction_name'],
+			];
 		}
 		$this->db->sql_freeresult($result);
 
-		//transform array to json using phpbb class
 		return new JsonResponse($data);
 	}
 
@@ -201,26 +122,28 @@ class admin_controller_temp
 	 */
 	public function getguildrank()
 	{
-		$guild_id =  $this->request->variable('guild_id', '', true);
+		$guild_id = (int) $this->request->variable('guild_id', 0);
 
 		$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
-		FROM ' . $this->bb_ranks_table . ' a, ' . $this->bb_guild_table. ' b WHERE a.rank_hide = 0 and
-		a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
+			FROM ' . $this->bb_ranks_table . ' a, ' . $this->bb_guild_table . ' b
+			WHERE a.rank_hide = 0
+				AND a.guild_id = ' . $guild_id . '
+				AND a.guild_id = b.id
+			ORDER BY rank_id DESC';
 
 		$result = $this->db->sql_query($sql);
-		$data =array();
-		while ( $row = $this->db->sql_fetchrow($result))
+		$data = [];
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$data[] =array(
-			'rank_game_id' => $row['game_id'],
-			'rank_id' => $row['rank_id'],
-			'rank_name' => $row['rank_name']
-			);
+			$data[] = [
+				'rank_game_id' => $row['game_id'],
+				'rank_id'      => $row['rank_id'],
+				'rank_name'    => $row['rank_name'],
+			];
 		}
 		$this->db->sql_freeresult($result);
-		//transform array to json using phpbb class
-		$jsonresponse = new JsonResponse($data);
-		return $jsonresponse;
+
+		return new JsonResponse($data);
 	}
 
 
@@ -233,22 +156,27 @@ class admin_controller_temp
 	 */
 	public function getplayerList()
 	{
-		$players = new player();
-		$guild_id =  $this->request->variable('guild_id', '', true);
-		$players->listallplayers($guild_id);
+		$guild_id = (int) $this->request->variable('guild_id', 0);
 
-		$data =array();
-		foreach ((array) $players->getGuildplayerlist() as $player)
+		$sql = 'SELECT p.player_id, p.player_name, r.rank_name
+			FROM ' . $this->bb_players_table . ' p
+			LEFT JOIN ' . $this->bb_ranks_table . ' r
+				ON p.player_rank_id = r.rank_id AND p.player_guild_id = r.guild_id
+			WHERE p.player_guild_id = ' . $guild_id . '
+			ORDER BY p.player_name ASC';
+
+		$result = $this->db->sql_query($sql);
+		$data = [];
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$data[] =array(
-			'player_id' => $player['player_id'],
-			'player_name' =>  $player['rank_name'] . ' '.  $player['player_name'],
-			);
+			$data[] = [
+				'player_id'   => $row['player_id'],
+				'player_name' => $row['rank_name'] . ' ' . $row['player_name'],
+			];
 		}
-		unset($players);
-		//transform array to json using phpbb class
-		$jsonresponse = new JsonResponse($data);
-		return $jsonresponse;
+		$this->db->sql_freeresult($result);
+
+		return new JsonResponse($data);
 	}
 
 
@@ -259,66 +187,66 @@ class admin_controller_temp
 	*/
 	public function getclassrace()
 	{
+		$game_id = $this->db->sql_escape($this->request->variable('game_id', '', true));
+		$lang = $this->db->sql_escape($this->config['bbguild_lang']);
 
-		$game_id  =  $this->request->variable('game_id', '', true);
-
-		$sql_array = array(
-		'SELECT'    =>    '  r.race_id, l.name as race_name ',
-		'FROM'        => array(
-			$this->bb_races_table        => 'r',
-			$this->bb_language_table     => 'l',
-		),
-		'WHERE'        => " r.race_id = l.attribute_id
-					AND r.game_id = '" . $game_id . "'
-					AND l.attribute='race'
-					AND l.game_id = r.game_id
-					AND l.language= '" . $this->config['bbdkp_lang'] ."'",
-		'ORDER_BY'    => 'l.name',
-		);
+		// Races
+		$sql_array = [
+			'SELECT'   => 'r.race_id, l.name as race_name',
+			'FROM'     => [
+				$this->bb_races_table    => 'r',
+				$this->bb_language_table => 'l',
+			],
+			'WHERE'    => "r.race_id = l.attribute_id
+				AND r.game_id = '" . $game_id . "'
+				AND l.attribute = 'race'
+				AND l.game_id = r.game_id
+				AND l.language = '" . $lang . "'",
+			'ORDER_BY' => 'l.name',
+		];
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
 
-		$races =array();
-		while ( $row = $this->db->sql_fetchrow($result))
+		$races = [];
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$races[] =array(
-			'race_id' => $row['race_id'],
-			'race_name' => $row['race_name']
-			);
-		}
-
-		//now get classes
-		$sql_array = array(
-		'SELECT'    =>    ' c.class_id, l.name as class_name ',
-		'FROM'        => array(
-			$this->bb_classes_table        => 'c',
-			$this->bb_language_table        => 'l',
-		),
-		'WHERE'        => " l.game_id = c.game_id AND c.game_id = '" . $game_id . "'
-			AND l.attribute_id = c.class_id  AND l.language= '" . $this->config['bbdkp_lang'] . "' AND l.attribute = 'class' ",
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_array);
-		$result1 = $this->db->sql_query($sql);
-		$classes = array();
-		while ( $row1 = $this->db->sql_fetchrow($result1))
-		{
-			$classes[] = array(
-			'class_id' => $row1['class_id'],
-			'class_name' => $row1['class_name']
-			);
+			$races[] = [
+				'race_id'   => $row['race_id'],
+				'race_name' => $row['race_name'],
+			];
 		}
 		$this->db->sql_freeresult($result);
-		$this->db->sql_freeresult($result1);
 
-		$data = json_encode(
-			array(
-			'races'=> $races,
-			'classes'=> $classes,
-			)
-		);
+		// Classes
+		$sql_array = [
+			'SELECT'   => 'c.class_id, l.name as class_name',
+			'FROM'     => [
+				$this->bb_classes_table   => 'c',
+				$this->bb_language_table  => 'l',
+			],
+			'WHERE'    => "l.game_id = c.game_id
+				AND c.game_id = '" . $game_id . "'
+				AND l.attribute_id = c.class_id
+				AND l.language = '" . $lang . "'
+				AND l.attribute = 'class'",
+		];
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
 
-		return new JsonResponse($data);
+		$classes = [];
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$classes[] = [
+				'class_id'   => $row['class_id'],
+				'class_name' => $row['class_name'],
+			];
+		}
+		$this->db->sql_freeresult($result);
 
+		return new JsonResponse([
+			'races'   => $races,
+			'classes' => $classes,
+		]);
 	}
 
 }

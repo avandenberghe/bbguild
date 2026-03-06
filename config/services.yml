@@ -37,6 +37,19 @@ services:
             - '%avathar.bbguild.tables.bb_news%'
             - '@avathar.bbguild.game_registry'
             - '@avathar.bbguild.portal.renderer'
+    avathar.bbguild.admin.controller:
+        class: avathar\bbguild\controller\admin_controller_temp
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@request'
+            - '%avathar.bbguild.tables.bb_ranks%'
+            - '%avathar.bbguild.tables.bb_guild%'
+            - '%avathar.bbguild.tables.bb_players%'
+            - '%avathar.bbguild.tables.bb_classes%'
+            - '%avathar.bbguild.tables.bb_races%'
+            - '%avathar.bbguild.tables.bb_factions%'
+            - '%avathar.bbguild.tables.bb_language%'
     avathar.bbguild.curl:
         class: avathar\bbguild\model\admin\curl
     avathar.bbguild.log:
