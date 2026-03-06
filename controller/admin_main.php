@@ -46,6 +46,8 @@ class admin_main
 	protected $template;
 	/** @var \phpbb\user */
 	protected $user;
+	/** @var \phpbb\path_helper */
+	protected $path_helper;
 	/**
 	 * @var \phpbb\extension\manager
 	 */
@@ -209,11 +211,6 @@ class admin_main
 		$this->ext_path_web = $this->path_helper->get_web_root_path($this->ext_path);
 		$this->root_path = $phpbb_root_path;
 		$this->adm_relative_path = $adm_relative_path;
-
-		/*echo $this->adm_relative_path;
-		echo '<br/>';
-		echo $this->ext_path;
-		*/
 
 		$this->php_ext = $phpEx;
 		$this->dispatcher = $dispatcher;
@@ -438,7 +435,7 @@ class admin_main
 		$this->dispatcher->dispatch('avathar.bbguild.acp_config_display');
 
 		// is gameworld extension installed ?
-		if (isset($config['bbguild_gameworld_version']))
+		if (isset($this->config['bbguild_gameworld_version']))
 		{
 			$this->template->assign_vars(
 				array(
@@ -452,9 +449,6 @@ class admin_main
 		}
 
 		add_form_key('acp_bbguild');
-		$this->page_title = 'ACP_BBGUILD_CONFIG';
-
-		return 'acp_config';
 	}
 
 	/**
@@ -465,7 +459,7 @@ class admin_main
 	{
 		if (! check_form_key('acp_bbguild'))
 		{
-			trigger_error($this->lang->lang('FV_FORMVALIDATION'), E_USER_WARNING);
+			trigger_error($this->language->lang('FV_FORMVALIDATION'), E_USER_WARNING);
 		}
 
 		$start_date = $this->request->variable('bbguild_start_date', '');
