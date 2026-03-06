@@ -371,7 +371,6 @@ class data extends \phpbb\db\migration\container_aware_migration
 		$modules = [
 			['module_classname' => '\avathar\bbguild\portal\modules\motd',          'module_column' => 1, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_MOTD'],
 			['module_classname' => '\avathar\bbguild\portal\modules\roster',        'module_column' => 2, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_ROSTER'],
-			['module_classname' => '\avathar\bbguild\portal\modules\guild_news',    'module_column' => 2, 'module_order' => 2, 'module_name' => 'BBGUILD_PORTAL_GUILD_NEWS'],
 			['module_classname' => '\avathar\bbguild\portal\modules\recruitment',   'module_column' => 3, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_RECRUITMENT'],
 		];
 
