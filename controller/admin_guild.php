@@ -212,7 +212,7 @@ class admin_guild
 		$this->path_helper = $path_helper;
 		$this->phpbb_extension_manager = $phpbb_extension_manager;
 		$this->ext_path = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
-		$this->ext_path_web = $this->path_helper->get_web_root_path($this->ext_path);
+		$this->ext_path_web = $this->path_helper->update_web_root_path($this->ext_path);
 		$this->root_path = $phpbb_root_path;
 		$this->adm_relative_path = $adm_relative_path;
 		$this->php_ext = $phpEx;

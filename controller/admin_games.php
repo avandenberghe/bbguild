@@ -237,7 +237,7 @@ class admin_games
 		$this->path_helper  = $path_helper;
 		$this->phpbb_extension_manager = $phpbb_extension_manager;
 		$this->ext_path     = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
-		$this->ext_path_web = $this->path_helper->get_web_root_path($this->ext_path);
+		$this->ext_path_web = $this->path_helper->update_web_root_path($this->ext_path);
 		$this->root_path = $phpbb_root_path;
 		$this->php_ext = $phpEx;
 		$this->curl = $curl;
@@ -609,7 +609,16 @@ class admin_games
 			$role_cat_icon = $role->role_cat_icon;
 		}
 
-		$role_icon_img = $this->ext_path_web . 'images/roles/' . $role_icon . '.png';
+		$provider = $this->game_registry->get($game_id);
+		if ($provider)
+		{
+			$role_images_web = $this->path_helper->update_web_root_path($provider->get_images_path());
+		}
+		else
+		{
+			$role_images_web = $this->ext_path_web . 'images/' . $game_id . '/';
+		}
+		$role_icon_img = $role_images_web . 'role_icons/' . $role_icon . '.png';
 
 		$this->tpl_name = 'acp_addrole';
 		$this->page_title = $is_add ? 'ACP_ADDROLE' : 'EDIT_ROLES';
@@ -704,11 +713,22 @@ class admin_games
 			$faction_options .= '<option value="' . $fid . '"' . $selected . '>' . $fdata['faction_name'] . '</option>';
 		}
 
-		// Image paths
-		$race_image_m = $this->ext_path_web . 'images/' . $game_id . '/' . $image_male . '.png';
-		$race_image_f = $this->ext_path_web . 'images/' . $game_id . '/' . $image_female . '.png';
-		$race_image_m_file = $this->ext_path . 'images/' . $game_id . '/' . $image_male . '.png';
-		$race_image_f_file = $this->ext_path . 'images/' . $game_id . '/' . $image_female . '.png';
+		// Image paths - use game plugin's own path if provider exists
+		$provider = $this->game_registry->get($game_id);
+		if ($provider)
+		{
+			$img_path = $provider->get_images_path();
+			$img_web  = $this->path_helper->update_web_root_path($img_path);
+		}
+		else
+		{
+			$img_path = $this->ext_path . 'images/' . $game_id . '/';
+			$img_web  = $this->ext_path_web . 'images/' . $game_id . '/';
+		}
+		$race_image_m = $img_web . $image_male . '.png';
+		$race_image_f = $img_web . $image_female . '.png';
+		$race_image_m_file = $img_path . $image_male . '.png';
+		$race_image_f_file = $img_path . $image_female . '.png';
 
 		$this->tpl_name = 'acp_addrace';
 		$this->page_title = $is_add ? 'ACP_ADDRACE' : 'ACP_EDITRACE';
@@ -813,9 +833,20 @@ class admin_games
 			$armor_options .= '<option value="' . $key . '"' . $selected . '>' . $name . '</option>';
 		}
 
-		// Image path
-		$class_image = $this->ext_path_web . 'images/' . $game_id . '/' . $imagename . '.png';
-		$class_image_file = $this->ext_path . 'images/' . $game_id . '/' . $imagename . '.png';
+		// Image path - use game plugin's own path if provider exists
+		$provider = $this->game_registry->get($game_id);
+		if ($provider)
+		{
+			$img_path = $provider->get_images_path();
+			$img_web  = $this->path_helper->update_web_root_path($img_path);
+		}
+		else
+		{
+			$img_path = $this->ext_path . 'images/' . $game_id . '/';
+			$img_web  = $this->ext_path_web . 'images/' . $game_id . '/';
+		}
+		$class_image = $img_web . $imagename . '.png';
+		$class_image_file = $img_path . $imagename . '.png';
 
 		$this->tpl_name = 'acp_addclass';
 		$this->page_title = $is_add ? 'ACP_ADDCLASS' : 'ACP_EDITCLASS';
@@ -959,10 +990,22 @@ class admin_games
 			}
 		}
 
+		// Resolve image paths: use game plugin's own path if provider exists, else fall back to core
+		if ($provider)
+		{
+			$game_images_path = $provider->get_images_path();
+			$game_images_web  = $this->path_helper->update_web_root_path($game_images_path);
+		}
+		else
+		{
+			$game_images_path = $this->ext_path . 'images/' . $game_id . '/';
+			$game_images_web  = $this->ext_path_web . 'images/' . $game_id . '/';
+		}
+
 		// Game image path
 		$imagename = $editgame->getImagename();
-		$gamepath = $this->ext_path_web . 'images/' . $game_id . '/' . $imagename . '.png';
-		$gamepath_file = $this->ext_path . 'images/' . $game_id . '/' . $imagename . '.png';
+		$gamepath = $game_images_web . $imagename . '.png';
+		$gamepath_file = $game_images_path . $imagename . '.png';
 
 		$this->template->assign_vars(array(
 			'URI_GAME'           => constants::URI_GAME,
@@ -1009,6 +1052,19 @@ class admin_games
 		}
 		$this->template->assign_var('LISTFACTION_FOOTCOUNT', sprintf($this->language->lang('LISTFACTION_FOOTCOUNT'), count($factions)));
 
+		// Resolve image paths: use game plugin's own path if provider exists, else fall back to core
+		$provider = $this->game_registry->get($game_id);
+		if ($provider)
+		{
+			$game_images_path = $provider->get_images_path();
+			$game_images_web  = $this->path_helper->update_web_root_path($game_images_path);
+		}
+		else
+		{
+			$game_images_path = $this->ext_path . 'images/' . $game_id . '/';
+			$game_images_web  = $this->ext_path_web . 'images/' . $game_id . '/';
+		}
+
 		// Races
 		$races_obj = new races($this->db, $this->config, $this->cache, $this->user, $this->bb_language_table, $this->bb_players_table, $this->bb_games_table, $this->bb_races_table, $this->bb_factions_table);
 		$races_obj->game_id = $game_id;
@@ -1016,16 +1072,16 @@ class admin_games
 		$row_count = 0;
 		foreach ($race_list as $race)
 		{
-			$image_male = !empty($race['image_male']) ? $this->ext_path_web . 'images/' . $game_id . '/race_images/' . $race['image_male'] . '.png' : '';
-			$image_female = !empty($race['image_female']) ? $this->ext_path_web . 'images/' . $game_id . '/race_images/' . $race['image_female'] . '.png' : '';
+			$image_male = !empty($race['image_male']) ? $game_images_web . 'race_images/' . $race['image_male'] . '.png' : '';
+			$image_female = !empty($race['image_female']) ? $game_images_web . 'race_images/' . $race['image_female'] . '.png' : '';
 
 			$this->template->assign_block_vars('race_row', array(
 				'RACEID'               => $race['race_id'],
 				'RACENAME'             => $race['race_name'],
 				'RACE_IMAGE_M'         => $image_male,
-				'S_RACE_IMAGE_M_EXISTS'=> !empty($race['image_male']) && @file_exists($this->ext_path . 'images/' . $game_id . '/race_images/' . $race['image_male'] . '.png'),
+				'S_RACE_IMAGE_M_EXISTS'=> !empty($race['image_male']) && @file_exists($game_images_path . 'race_images/' . $race['image_male'] . '.png'),
 				'RACE_IMAGE_F'         => $image_female,
-				'S_RACE_IMAGE_F_EXISTS'=> !empty($race['image_female']) && @file_exists($this->ext_path . 'images/' . $game_id . '/race_images/' . $race['image_female'] . '.png'),
+				'S_RACE_IMAGE_F_EXISTS'=> !empty($race['image_female']) && @file_exists($game_images_path . 'race_images/' . $race['image_female'] . '.png'),
 				'FACTIONNAME'          => $race['faction_name'],
 				'U_DELETE'             => $u_edit_game . '&amp;racedelete=1&amp;race_id=' . $race['race_id'],
 				'U_EDIT'               => $u_edit_game . '&amp;raceedit=1&amp;race_id=' . $race['race_id'],
@@ -1041,8 +1097,8 @@ class admin_games
 		$row_count = 0;
 		foreach ($role_list as $role)
 		{
-			$role_icon_path = !empty($role['role_icon']) ? $this->ext_path_web . 'images/' . $game_id . '/' . $role['role_icon'] : '';
-			$role_cat_icon_path = !empty($role['role_cat_icon']) ? $this->ext_path_web . 'images/' . $game_id . '/' . $role['role_cat_icon'] : '';
+			$role_icon_path = !empty($role['role_icon']) ? $game_images_web . $role['role_icon'] : '';
+			$role_cat_icon_path = !empty($role['role_cat_icon']) ? $game_images_web . $role['role_cat_icon'] : '';
 
 			$this->template->assign_block_vars('role_row', array(
 				'ROLE_ID'               => $role['role_id'],
@@ -1050,9 +1106,9 @@ class admin_games
 				'ROLE_COLOR'            => $role['role_color'],
 				'ROLE_ICON'             => $role['role_icon'],
 				'U_ROLE_ICON'           => $role_icon_path,
-				'S_ROLE_ICON_EXISTS'    => !empty($role['role_icon']) && @file_exists($this->ext_path . 'images/' . $game_id . '/' . $role['role_icon']),
+				'S_ROLE_ICON_EXISTS'    => !empty($role['role_icon']) && @file_exists($game_images_path . $role['role_icon']),
 				'U_ROLE_CAT_ICON'       => $role_cat_icon_path,
-				'S_ROLE_CAT_ICON_EXISTS'=> !empty($role['role_cat_icon']) && @file_exists($this->ext_path . 'images/' . $game_id . '/' . $role['role_cat_icon']),
+				'S_ROLE_CAT_ICON_EXISTS'=> !empty($role['role_cat_icon']) && @file_exists($game_images_path . $role['role_cat_icon']),
 				'U_DELETE'              => $u_edit_game . '&amp;action=deleterole&amp;role_id=' . $role['role_id'],
 				'U_EDIT'                => $u_edit_game . '&amp;action=editrole&amp;role_id=' . $role['role_id'],
 				'S_ROW_COUNT'           => $row_count++,
@@ -1067,14 +1123,14 @@ class admin_games
 		$row_count = 0;
 		foreach ($class_list as $cls)
 		{
-			$class_image_path = !empty($cls['imagename']) ? $this->ext_path_web . 'images/' . $game_id . '/class_images/' . $cls['imagename'] . '.png' : '';
+			$class_image_path = !empty($cls['imagename']) ? $game_images_web . 'class_images/' . $cls['imagename'] . '.png' : '';
 
 			$this->template->assign_block_vars('class_row', array(
 				'CLASSID'             => $cls['class_id'],
 				'CLASSNAME'           => $cls['class_name'],
 				'COLORCODE'           => $cls['colorcode'],
 				'CLASSIMAGE'          => $class_image_path,
-				'S_CLASS_IMAGE_EXISTS'=> !empty($cls['imagename']) && @file_exists($this->ext_path . 'images/' . $game_id . '/class_images/' . $cls['imagename'] . '.png'),
+				'S_CLASS_IMAGE_EXISTS'=> !empty($cls['imagename']) && @file_exists($game_images_path . 'class_images/' . $cls['imagename'] . '.png'),
 				'CLASSARMOR'          => $cls['class_armor_type'],
 				'CLASSMIN'            => $cls['class_min_level'],
 				'CLASSMAX'            => $cls['class_max_level'],
