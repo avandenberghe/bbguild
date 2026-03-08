@@ -318,7 +318,7 @@ class data extends \phpbb\db\migration\container_aware_migration
 					'user_id'         => $user->data['user_id'],
 					'bbcode_bitfield' => $news_message['bitfield'],
 					'bbcode_uid'      => $news_message['uid'],
-					'bbcode_options'  => '',
+					'bbcode_options'  => 0,
 				],
 			]);
 		}
