@@ -1051,7 +1051,7 @@ class player_module
 		$this->db->sql_freeresult($result);
 
 		// get roles
-		$Roles = new roles($this->db, $phpbb_container->get('config'), $phpbb_container->get('cache.driver'), $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
+		$Roles = new roles($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bb_gameroles_table, $this->bb_language_table, $this->bb_games_table, $this->bb_classes_table);
 		$Roles->game_id = $this->guild->getGameId();
 		$Roles->guild_id = $editplayer->getPlayerGuildId();
 		$listroles = $Roles->list_roles();
