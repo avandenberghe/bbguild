@@ -73,6 +73,9 @@ class data extends \phpbb\db\migration\container_aware_migration
 
 		$now = (int) time();
 
+		// Clean up any partial previous run
+		$this->remove_sample_data();
+
 		// -- bb_games: Custom game --
 		if ($this->db_tools->sql_table_exists($games_table))
 		{
@@ -367,6 +370,9 @@ class data extends \phpbb\db\migration\container_aware_migration
 		{
 			return;
 		}
+
+		// Clean up any partial previous run
+		$this->db->sql_query('DELETE FROM ' . $portal_table . ' WHERE guild_id = 1');
 
 		$modules = [
 			['module_classname' => '\avathar\bbguild\portal\modules\motd',          'module_column' => 1, 'module_order' => 1, 'module_name' => 'BBGUILD_PORTAL_MOTD'],
