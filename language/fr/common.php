@@ -31,6 +31,7 @@ $lang = array_merge(
 	'ARMORY' => 'Armurerie',
 	'GAME' => 'Jeu',
 	'INACTIVE' => 'Inactif',
+	'PLUGIN_DISABLED' => 'Désactivé (plugin non activé)',
 	'LINKED_USER' => 'Compte Forum',
 	'NO_PLAYER' => 'Joueur introuvable.',
 	'ROLE' => 'Rôle',

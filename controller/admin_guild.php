@@ -253,7 +253,11 @@ class admin_guild
 		$this->games = array();
 		foreach ($gamelist as $game_id => $data)
 		{
-			$this->games[$game_id] = $data['name'];
+			// Only include games whose plugin is enabled (or the built-in 'custom' game)
+			if ($game_id === 'custom' || $this->game_registry->has($game_id))
+			{
+				$this->games[$game_id] = $data['name'];
+			}
 		}
 
 		// CSS trigger
@@ -1099,14 +1103,21 @@ class admin_guild
 			));
 		}
 
-		// Game dropdown
-		if (count($this->games) > 0)
+		// Game dropdown — include the guild's current game even if its plugin is disabled
+		$current_game_id = $updateguild->getGameId();
+		$game_options = $this->games;
+		if ($current_game_id !== '' && !isset($game_options[$current_game_id]))
 		{
-			foreach ($this->games as $key => $gamename)
+			$game_options[$current_game_id] = $current_game_id . ' (' . $this->language->lang('PLUGIN_DISABLED') . ')';
+		}
+
+		if (count($game_options) > 0)
+		{
+			foreach ($game_options as $key => $gamename)
 			{
 				$this->template->assign_block_vars('game_row', array(
 					'VALUE'    => $key,
-					'SELECTED' => ($updateguild->getGameId() == $key) ? ' selected="selected"' : '',
+					'SELECTED' => ($current_game_id == $key) ? ' selected="selected"' : '',
 					'OPTION'   => (!empty($gamename)) ? $gamename : '(None)',
 				));
 			}

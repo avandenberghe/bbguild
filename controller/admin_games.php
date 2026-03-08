@@ -331,13 +331,27 @@ class admin_games
 		$row_count = 0;
 		foreach ($this->gamelist as $game)
 		{
+			// Check if the game's plugin is available in the registry
+			// 'custom' is built-in and always available; other games need their plugin enabled
+			$plugin_available = ($game['game_id'] === 'custom' || $this->game_registry->has($game['game_id']));
+
+			if ($plugin_available)
+			{
+				$status_text = $game['status'] ? $this->language->lang('ACTIVE') : $this->language->lang('INACTIVE');
+			}
+			else
+			{
+				$status_text = $this->language->lang('PLUGIN_DISABLED');
+			}
+
 			$this->template->assign_block_vars('gamerow', array(
-				'ID'          => $game['id'],
-				'GAME_ID'     => $game['game_id'],
-				'NAME'        => $game['name'],
-				'STATUS'      => $game['status'] ? $this->language->lang('ACTIVE') : $this->language->lang('INACTIVE'),
-				'U_VIEW_GAME' => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;game_id=' . $game['game_id']),
-				'S_ROW_COUNT' => $row_count++,
+				'ID'               => $game['id'],
+				'GAME_ID'          => $game['game_id'],
+				'NAME'             => $game['name'],
+				'STATUS'           => $status_text,
+				'PLUGIN_AVAILABLE' => $plugin_available,
+				'U_VIEW_GAME'      => append_sid("index.$this->php_ext", 'i=-avathar-bbguild-acp-game_module&amp;mode=editgames&amp;game_id=' . $game['game_id']),
+				'S_ROW_COUNT'      => $row_count++,
 			));
 		}
 

@@ -124,14 +124,14 @@
         <tbody>
         {% for gamerow in loops.gamerow %}
         {% if gamerow.S_ROW_COUNT is even %}
-        <tr class="row1">
+        <tr class="row1"{% if not gamerow.PLUGIN_AVAILABLE %} style="opacity: 0.6;"{% endif %}>
             {% else %}
-        <tr class="row2">
+        <tr class="row2"{% if not gamerow.PLUGIN_AVAILABLE %} style="opacity: 0.6;"{% endif %}>
             {% endif %}
             <td style="text-align: center; width:10%; white-space: nowrap">{{ gamerow.ID }}</td>
             <td><a href="{{ gamerow.U_VIEW_GAME }}">{{ gamerow.GAME_ID }}</a></td>
             <td><a href="{{ gamerow.U_VIEW_GAME }}">{{ gamerow.NAME }}</a></td>
-            <td style="text-align: center; width:10%; white-space: nowrap">{{ gamerow.STATUS }}</td>
+            <td style="text-align: center; width:10%; white-space: nowrap">{% if not gamerow.PLUGIN_AVAILABLE %}<span style="color: #c00;">{{ gamerow.STATUS }}</span>{% else %}{{ gamerow.STATUS }}{% endif %}</td>
             <td style="text-align: center;"><a href="{{ gamerow.U_VIEW_GAME }}">{{ ICON_EDIT }}</a></td>
         </tr>
         {% endfor %}
