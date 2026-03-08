@@ -29,6 +29,7 @@ class recruitment extends module_base
 	protected string $classes_table;
 	protected string $language_table;
 	protected string $gameroles_table;
+	protected string $guild_table;
 
 	public function __construct(
 		driver_interface $db,
@@ -38,7 +39,8 @@ class recruitment extends module_base
 		string $recruit_table,
 		string $classes_table,
 		string $language_table,
-		string $gameroles_table
+		string $gameroles_table,
+		string $guild_table
 	)
 	{
 		$this->db = $db;
@@ -49,6 +51,7 @@ class recruitment extends module_base
 		$this->classes_table = $classes_table;
 		$this->language_table = $language_table;
 		$this->gameroles_table = $gameroles_table;
+		$this->guild_table = $guild_table;
 	}
 
 	/**
@@ -73,17 +76,18 @@ class recruitment extends module_base
 	protected function load_recruitment(int $module_id, string $template_file): string
 	{
 		$lang = $this->config['bbguild_lang'] ?? 'en';
+		$game_id = $this->get_guild_game_id();
 
 		$sql = 'SELECT r.id, r.role_id, r.class_id, r.level, r.positions, r.applicants, r.status, r.note,
 				l.name as class_name, c.colorcode, c.imagename,
 				gr.role_id as gr_role_id
 			FROM ' . $this->recruit_table . ' r
-			LEFT JOIN ' . $this->classes_table . ' c ON r.class_id = c.class_id
-			LEFT JOIN ' . $this->language_table . " l ON r.class_id = l.attribute_id
+			LEFT JOIN ' . $this->classes_table . " c ON r.class_id = c.class_id AND c.game_id = '" . $this->db->sql_escape($game_id) . "'
+			LEFT JOIN " . $this->language_table . " l ON r.class_id = l.attribute_id
 				AND l.attribute = 'class' AND l.language = '" . $this->db->sql_escape($lang) . "'
-				AND l.game_id = c.game_id
-			LEFT JOIN " . $this->gameroles_table . ' gr ON r.role_id = gr.role_id
-			WHERE r.guild_id = ' . (int) $this->guild_id . '
+				AND l.game_id = '" . $this->db->sql_escape($game_id) . "'
+			LEFT JOIN " . $this->gameroles_table . " gr ON r.role_id = gr.role_id AND gr.game_id = '" . $this->db->sql_escape($game_id) . "'
+			WHERE r.guild_id = " . (int) $this->guild_id . '
 				AND r.status = 1
 			ORDER BY r.role_id, r.class_id';
 		$result = $this->db->sql_query($sql);
@@ -110,5 +114,17 @@ class recruitment extends module_base
 		$this->template->assign_var('S_PORTAL_HAS_RECRUITS', $has_recruits);
 
 		return $template_file;
+	}
+
+	/**
+	 * Get the game_id for the current guild.
+	 */
+	protected function get_guild_game_id(): string
+	{
+		$sql = 'SELECT game_id FROM ' . $this->guild_table . ' WHERE id = ' . (int) $this->guild_id;
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+		return $row ? (string) $row['game_id'] : '';
 	}
 }

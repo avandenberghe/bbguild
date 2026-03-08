@@ -95,6 +95,7 @@ services:
             - '%avathar.bbguild.tables.bb_classes%'
             - '%avathar.bbguild.tables.bb_language%'
             - '%avathar.bbguild.tables.bb_gameroles%'
+            - '%avathar.bbguild.tables.bb_guild%'
         tags:
             - { name: bbguild.portal.module }
 
