@@ -96,7 +96,7 @@ class ranks extends guilds
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_ranks_table = $bb_ranks_table;
 
-		if (($RankGuild >= 0 && $RankId = 0) or ($RankGuild == 0 && $RankId = 99) )
+		if (($RankGuild >= 0 && $RankId == 0) or ($RankGuild == 0 && $RankId == 99))
 		{
 			$this->RankGuild=$RankGuild;
 			$this->RankId=$RankId;
