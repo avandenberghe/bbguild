@@ -209,7 +209,7 @@ class classes
 			$this->armor_type = (string) $row['class_armor_type'];
 			$this->imagename = (string) $row['imagename'];
 			$this->colorcode = (string) $row['colorcode'];
-			$this->faction_id = (string) $row['class_faction_id'];
+			$this->faction_id = (int) $row['class_faction_id'];
 		}
 		$this->db->sql_freeresult($result);
 

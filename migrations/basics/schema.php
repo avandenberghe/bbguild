@@ -53,9 +53,9 @@ class schema extends \phpbb\db\migration\migration
 						'news_message'      => ['TEXT_UNI', ''],
 						'news_date'         => ['TIMESTAMP', 0],
 						'user_id'           => ['UINT', 0],
-						'bbcode_bitfield'   => ['VCHAR:20', ''],
+						'bbcode_bitfield'   => ['VCHAR:255', ''],
 						'bbcode_uid'        => ['VCHAR:8', ''],
-						'bbcode_options'    => ['VCHAR:8', ''],
+						'bbcode_options'    => ['UINT', 7],
 					],
 					'PRIMARY_KEY' => 'news_id',
 					'KEYS' => [

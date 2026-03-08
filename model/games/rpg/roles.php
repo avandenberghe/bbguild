@@ -242,8 +242,8 @@ class roles
 		$this->db->sql_query($sql);
 
 		$this->db->sql_transaction('commit');
-		$this->cache->destroy('sql', $this->bb_classes_table);
-		$this->cache->destroy('sql', $this->bb_language_table );
+		$this->cache->destroy('sql', $this->bb_gameroles_table);
+		$this->cache->destroy('sql', $this->bb_language_table);
 	}
 
 	/**
