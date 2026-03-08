@@ -25,8 +25,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge(
 	$lang, array(
 	'UCP_BBGUILD'                  => 'bbGuild',
-	'UCP_BBGUILD_CHARACTER_LIST'   => 'I Miei Personaggi',
-	'UCP_BBGUILD_CHARACTER_ADD'    => 'Aggiungi Personaggio',
-
+	'UCP_BBGUILD_CHARACTER_LIST'   => 'Moje Postacie',
+	'UCP_BBGUILD_CHARACTER_ADD'    => 'Dodaj Postać',
 	)
 );

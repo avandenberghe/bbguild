@@ -242,7 +242,43 @@ class bbguild_module
 				 */
 				$this->link = '';
 				$submit = $this->request->is_set_post('submit');
+				$unclaim = $this->request->is_set_post('unclaim');
 				$player = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $this->bb_players_table, $this->bb_ranks_table, $this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_guild_table, $this->bb_factions_table, $this->bb_games_table, $this->bbguild_game_registry);
+
+				if ($unclaim)
+				{
+					if (!$this->auth->acl_get('u_charclaim'))
+					{
+						trigger_error($this->user->lang['NOUCPACCESS']);
+					}
+					$player_id = (int) $this->request->variable('unclaim_player_id', 0);
+					$player->player_id = $player_id;
+					$player->Getplayer();
+					$player_name = $player->getPlayerName();
+
+					if (confirm_box(true))
+					{
+						if ($player->Unclaim_Player())
+						{
+							meta_refresh(2, $this->u_action);
+							$message = sprintf($this->user->lang['CHARACTER_UNCLAIMED'], $player_name) . '<br /><br />' . sprintf($this->user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
+							trigger_error($message);
+						}
+						else
+						{
+							trigger_error($this->user->lang['CHARACTER_UNCLAIM_FAILED'], E_USER_WARNING);
+						}
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+							'unclaim'            => true,
+							'unclaim_player_id'  => $player_id,
+						));
+						confirm_box(false, sprintf($this->user->lang['CONFIRM_UNCLAIM_PLAYER'], $player_name), $s_hidden_fields);
+					}
+				}
+
 				if ($submit)
 				{
 					if (!check_form_key('avathar/bbguild'))
@@ -253,7 +289,6 @@ class bbguild_module
 					$player->player_id = $player_id;
 					$player->Getplayer();
 					$player->Claim_Player();
-					// Generate confirmation page. It will redirect back to the calling page
 					meta_refresh(2, $this->u_action);
 					$message = sprintf($this->user->lang['CHARACTERS_UPDATED'], $player->getPlayerName()) . '<br /><br />' . sprintf($this->user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 					unset($player);
@@ -317,10 +352,8 @@ class bbguild_module
 						'S_DKPPLAYER_OPTIONS'    => $s_guildplayers,
 						'S_SHOW'                => $show,
 						'S_SHOW_BUTTONS'        => $show_buttons,
+						'S_CAN_UNCLAIM'         => $this->auth->acl_get('u_charclaim'),
 						'U_ACTION'              => $this->u_action,
-						'LA_ALERT_AJAX'         => $this->user->lang['ALERT_AJAX'] ,
-						'LA_ALERT_OLDBROWSER'     => $this->user->lang['ALERT_OLDBROWSER'] ,
-						'UA_PLAYERLIST'            => '',
 					)
 				);
 
@@ -493,7 +526,7 @@ class bbguild_module
 		$updateplayer->game_id          = $this->request->variable('game_id', '');
 		$updateplayer->setPlayerRaceId($this->request->variable('player_race_id', 0));
 		$updateplayer->setPlayerClassId($this->request->variable('player_class_id', 0));
-		$updateplayer->setplayerrole($this->request->variable('player_role', ''));
+		$updateplayer->setPlayerRole($this->request->variable('player_role', ''));
 		$updateplayer->setPlayerRealm($this->request->variable('realm', '', true));
 		$updateplayer->setPlayerRegion($this->request->variable('region_id', ''));
 
@@ -899,6 +932,7 @@ class bbguild_module
 			$this->template->assign_block_vars(
 				'players_row', array(
 					'U_EDIT'        => append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=-avathar-bbguild-ucp-bbguild_module&amp;mode=add&amp;' . constants::URI_NAMEID . '=' . $char['player_id']),
+					'PLAYER_ID'       => $char['player_id'],
 					'GAME'            => $char['game_id'],
 					'COLORCODE'        => $char['colorcode'],
 					'CLASS'            => $char['class_name'],

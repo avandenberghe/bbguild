@@ -11,10 +11,10 @@ namespace avathar\bbguild\controller;
 
 use avathar\bbguild\portal\guild_context;
 use avathar\bbguild\portal\portal_renderer;
+use avathar\bbguild\views\player_detail;
 
 /**
- * Front-end controller for the guild portal page.
- * Handles the /guild/{page}/{guild_id} route.
+ * Front-end controller for the guild portal and player detail pages.
  */
 class view_controller
 {
@@ -30,23 +30,27 @@ class view_controller
 	/** @var portal_renderer */
 	protected $portal_renderer;
 
-	/**
-	 * @param \phpbb\controller\helper $helper
-	 * @param \phpbb\template\template $template
-	 * @param guild_context            $guild_context
-	 * @param portal_renderer          $portal_renderer
-	 */
+	/** @var player_detail */
+	protected $player_detail;
+
+	/** @var \phpbb\event\dispatcher_interface */
+	protected $dispatcher;
+
 	public function __construct(
 		\phpbb\controller\helper $helper,
 		\phpbb\template\template $template,
 		guild_context $guild_context,
-		portal_renderer $portal_renderer
+		portal_renderer $portal_renderer,
+		player_detail $player_detail,
+		\phpbb\event\dispatcher_interface $dispatcher
 	)
 	{
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->guild_context = $guild_context;
 		$this->portal_renderer = $portal_renderer;
+		$this->player_detail = $player_detail;
+		$this->dispatcher = $dispatcher;
 	}
 
 	/**
@@ -58,14 +62,38 @@ class view_controller
 	 */
 	public function handleview($guild_id, $page = 'welcome')
 	{
-		// Build guild context (header, guild dropdown)
 		$this->guild_context->init((int) $guild_id);
-
-		// Render all portal modules (MOTD, Roster, News, etc.)
 		$this->portal_renderer->render($this->guild_context->guild_id);
-
 		$this->template->assign_vars(['S_DISPLAY_WELCOME' => true]);
 
 		return $this->helper->render('main.html', $this->guild_context->guild->getName());
+	}
+
+	/**
+	 * Individual player detail page.
+	 *
+	 * @param  int $guild_id
+	 * @param  int $player_id
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function playerdetail($guild_id, $player_id)
+	{
+		$guild_id = (int) $guild_id;
+		$player_id = (int) $player_id;
+
+		// Build guild context (header, guild dropdown)
+		$this->guild_context->init($guild_id);
+
+		// Load player data
+		if (!$this->player_detail->load($player_id, $this->template))
+		{
+			throw new \phpbb\exception\http_exception(404, 'NO_PLAYER');
+		}
+
+		// Allow plugins (e.g. bbguild_wow) to inject additional content
+		$vars = ['player_id', 'guild_id'];
+		extract($this->dispatcher->trigger_event('avathar.bbguild.player_detail_display', compact($vars)));
+
+		return $this->helper->render('player_detail.html', $this->player_detail->get_player_name());
 	}
 }

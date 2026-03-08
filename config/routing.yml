@@ -1,4 +1,10 @@
 # ext/avathar/bbguild/config/routing.yml
+avathar_bbguild_player:
+    path: /guild/{guild_id}/player/{player_id}
+    defaults: { _controller: avathar.bbguild.controller:playerdetail }
+    requirements:
+        guild_id: \d+
+        player_id: \d+
 avathar_bbguild_00:
     path: /guild/{page}/{guild_id}
     defaults: { _controller: avathar.bbguild.controller:handleview , guild_id: 1, page: "welcome" }

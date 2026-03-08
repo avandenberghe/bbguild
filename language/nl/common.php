@@ -27,7 +27,14 @@ $lang = array_merge(
 	$lang, array(
 
 	// General
+	'ACTIVE' => 'Actief',
 	'ALL' => 'Alle',
+	'ARMORY' => 'Armory',
+	'GAME' => 'Spel',
+	'INACTIVE' => 'Inactief',
+	'LINKED_USER' => 'Forumaccount',
+	'NO_PLAYER' => 'Speler niet gevonden.',
+	'ROLE' => 'Rol',
 	'BBGUILDDISABLED' => 'bbGuild is momenteel uitgeschakeld.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
@@ -162,6 +169,11 @@ $lang = array_merge(
 	'CHARACTERS_UPDATED' => 'De personagenaam %s is toegewezen aan uw account. ',
 	'CLAIM_PLAYER' => 'Karakter claimen',
 	'CLAIM' => 'Claimen',
+	'UNCLAIM' => 'Vrijgeven',
+	'CHARACTER_UNCLAIMED' => 'Het personage %s is van je account verwijderd.',
+	'CHARACTER_UNCLAIM_FAILED' => 'Kon dit personage niet vrijgeven.',
+	'CONFIRM_UNCLAIM_PLAYER' => 'Weet je zeker dat je %s wilt vrijgeven?',
+	'MY_CHARACTERS' => 'Mijn Personages',
 	'NO_PLAYERS_FOUND' => 'Geen karakters gevonden.',
 	'NO_CHARACTERS_BOUND' => 'Geen personages gekoppeld aan uw account.',
 

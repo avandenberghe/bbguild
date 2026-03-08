@@ -27,7 +27,14 @@ $lang = array_merge(
 	$lang, array(
 
 	// General
+	'ACTIVE' => 'Active',
 	'ALL' => 'All',
+	'ARMORY' => 'Armory',
+	'GAME' => 'Game',
+	'INACTIVE' => 'Inactive',
+	'LINKED_USER' => 'Forum Account',
+	'NO_PLAYER' => 'Player not found.',
+	'ROLE' => 'Role',
 	'BBGUILDDISABLED' => 'bbGuild is currently disabled.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
@@ -162,6 +169,11 @@ $lang = array_merge(
 	'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
 	'CLAIM_PLAYER' => 'Claim Character',
 	'CLAIM' => 'Claim',
+	'UNCLAIM' => 'Unclaim',
+	'CHARACTER_UNCLAIMED' => 'The character %s has been removed from your account.',
+	'CHARACTER_UNCLAIM_FAILED' => 'Could not unclaim this character. It may not be assigned to your account.',
+	'CONFIRM_UNCLAIM_PLAYER' => 'Are you sure you want to unclaim %s?',
+	'MY_CHARACTERS' => 'My Characters',
 	'NO_PLAYERS_FOUND' => 'No characters found.',
 	'NO_CHARACTERS_BOUND' => 'No characters bound to your Account.',
 

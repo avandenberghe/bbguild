@@ -25,7 +25,15 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge(
 	$lang, array(
+	// General
+	'ACTIVE' => 'Attivo',
 	'ALL' => 'Tutti',
+	'ARMORY' => 'Armeria',
+	'GAME' => 'Gioco',
+	'INACTIVE' => 'Inattivo',
+	'LINKED_USER' => 'Account Forum',
+	'NO_PLAYER' => 'Giocatore non trovato.',
+	'ROLE' => 'Ruolo',
 	'BBGUILDDISABLED' => 'bbGuild è attualmente disabilitato.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
@@ -158,6 +166,11 @@ $lang = array_merge(
 	'CHARACTERS_UPDATED' => 'Il Personaggio %s è stato assegnato al tuo account. ',
 	'CLAIM_PLAYER' => 'Rivendica personaggio',
 	'CLAIM' => 'Rivendica',
+	'UNCLAIM' => 'Rilascia',
+	'CHARACTER_UNCLAIMED' => 'Il personaggio %s è stato rimosso dal tuo account.',
+	'CHARACTER_UNCLAIM_FAILED' => 'Impossibile rilasciare questo personaggio.',
+	'CONFIRM_UNCLAIM_PLAYER' => 'Sei sicuro di voler rilasciare %s?',
+	'MY_CHARACTERS' => 'I Miei Personaggi',
 	'NO_PLAYERS_FOUND' => 'Nessun personaggio trovato.',
 	'NO_CHARACTERS_BOUND' => 'Nessun Personaggio collegato al tuo account.',
 

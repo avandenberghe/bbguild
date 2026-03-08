@@ -1042,6 +1042,7 @@ class player
 		$this->bb_factions_table = $bb_factions_table;
 		$this->bb_games_table = $bb_games_table;
 		$this->game_registry = $game_registry;
+		$this->time = time();
 
 		$games_obj = new \avathar\bbguild\model\games\game(
 			$db, $cache, $config, $user, $ext_manager,
@@ -1569,16 +1570,6 @@ class player
 	 */
 	public function Armory_getplayer(?game_provider_interface $provider = null)
 	{
-
-		$game = new game;
-		$game->game_id = $this->game_id;
-		$game->get_game();
-
-		if ($game->getArmoryEnabled() == 0)
-		{
-			return -1;
-		}
-
 		// Delegate to game provider's API
 		if ($provider !== null && $provider->has_api())
 		{
@@ -1894,6 +1885,23 @@ class player
 						SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE player_id = ' . $this->player_id;
 		$this->db->sql_query($sql);
+	}
+
+	/**
+	 * Unclaim a character from your phpBB user.
+	 * Only succeeds if the character is currently claimed by the calling user.
+	 *
+	 * @return bool True if unclaimed, false if not owned by this user
+	 */
+	public function Unclaim_Player()
+	{
+		$sql = 'UPDATE ' . $this->bb_players_table . '
+			SET phpbb_user_id = 0
+			WHERE player_id = ' . (int) $this->player_id . '
+				AND phpbb_user_id = ' . (int) $this->user->data['user_id'];
+		$this->db->sql_query($sql);
+
+		return ($this->db->sql_affectedrows() > 0);
 	}
 
 	/**

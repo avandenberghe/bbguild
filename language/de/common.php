@@ -25,7 +25,15 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge(
 	$lang, array(
+	// General
+	'ACTIVE' => 'Aktiv',
 	'ALL' => 'Alle',
+	'ARMORY' => 'Armory',
+	'GAME' => 'Spiel',
+	'INACTIVE' => 'Inaktiv',
+	'LINKED_USER' => 'Forum-Konto',
+	'NO_PLAYER' => 'Spieler nicht gefunden.',
+	'ROLE' => 'Rolle',
 	'BBGUILDDISABLED' => 'bbGuild is zurzeit nicht erreichbar.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
@@ -158,6 +166,11 @@ $lang = array_merge(
 	'CHARACTERS_UPDATED' => 'Der Charaktername %s wurde an dein Forumkonto gekoppelt. ',
 	'CLAIM_PLAYER' => 'Charakter beanspruchen',
 	'CLAIM' => 'Beanspruchen',
+	'UNCLAIM' => 'Freigeben',
+	'CHARACTER_UNCLAIMED' => 'Der Charakter %s wurde von deinem Konto entfernt.',
+	'CHARACTER_UNCLAIM_FAILED' => 'Der Charakter konnte nicht freigegeben werden.',
+	'CONFIRM_UNCLAIM_PLAYER' => 'Bist du sicher, dass du %s freigeben möchtest?',
+	'MY_CHARACTERS' => 'Meine Charaktere',
 	'NO_PLAYERS_FOUND' => 'Keine Charaktere gefunden.',
 	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',
 

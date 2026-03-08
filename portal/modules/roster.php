@@ -208,6 +208,10 @@ class roster extends module_base
 				'ACHIEVPTS'   => $char['player_achiev'],
 				'CLASS_IMAGE' => $ext_path_images . 'class_images/' . basename($char['class_image']),
 				'RACE_IMAGE'  => $ext_path_images . 'race_images/' . basename($char['race_image']),
+				'U_PLAYER_DETAIL' => $this->helper->route('avathar_bbguild_player', [
+					'guild_id'  => $this->guild_id,
+					'player_id' => $char['player_id'],
+				]),
 			]);
 		}
 
@@ -295,6 +299,10 @@ class roster extends module_base
 							'ACHIEVPTS' => $char['player_achiev'],
 							'CLASS_IMAGE' => $ext_path_images . 'class_images/' . basename($char['class_image']),
 							'RACE_IMAGE'  => $ext_path_images . 'race_images/' . basename($char['race_image']),
+						'U_PLAYER_DETAIL' => $this->helper->route('avathar_bbguild_player', [
+							'guild_id'  => $this->guild_id,
+							'player_id' => $char['player_id'],
+						]),
 						]);
 					}
 				}

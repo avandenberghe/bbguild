@@ -52,15 +52,15 @@
 
                 <dl>
                     <dt><label for="player_name">{{ lang('NAME') }}, {{ lang('SURNAME') }}:</label></dt>
-                    <dd><input type="text" name="player_name" id="player_name" size="18" maxlength="30" value="{{ PLAYER_NAME }}" class="input" />
-                        <input type="text" name="player_title" id="player_title" size="23" maxlength="40" value="{{ PLAYER_TITLE }}" class="input" /></dd>
+                    <dd><input type="text" name="player_name" id="player_name" size="18" maxlength="30" value="{{ PLAYER_NAME }}" class="inputbox" />
+                        <input type="text" name="player_title" id="player_title" size="23" maxlength="40" value="{{ PLAYER_TITLE }}" class="inputbox" /></dd>
                 </dl>
 
                 <dl>
                     <dt>
                         <label for="region_id">{{ lang('REGION') }}:</label></dt>
                     <dd>
-                        <select id="region_id" name="region_id" class="input">
+                        <select id="region_id" name="region_id" class="inputbox">
                             {% for region_row in loops.region_row %}
                             <option value="{{ region_row.VALUE }}"{{ region_row.SELECTED }}>{{ region_row.OPTION }}</option>
                             {% endfor %}
@@ -69,13 +69,13 @@
                 </dl>
                 <dl>
                     <dt><label for="realm">{{ lang('REALM_NAME') }}:</label></dt>
-                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{{ REALM }}" /></dd>
+                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{{ REALM }}" class="inputbox" /></dd>
                 </dl>
 
                 <dl>
                     <dt><label for="player_guild_id">{{ lang('GUILD') }}:</label></dt>
                     <dd>
-                        <select name="player_guild_id" id="player_guild_id" class="input">
+                        <select name="player_guild_id" id="player_guild_id" class="inputbox">
                             {% for guild_row in loops.guild_row %}
                             <option value="{{ guild_row.VALUE }}"{{ guild_row.SELECTED }}>{{ guild_row.OPTION }}</option>
                             {% endfor %}
@@ -86,7 +86,7 @@
                 <dl>
                     <dt><label for="player_rank_id">{{ lang('PLAYER_RANK') }}:</label></dt>
                     <dd>
-                        <select id="player_rank_id" name="player_rank_id" class="input">
+                        <select id="player_rank_id" name="player_rank_id" class="inputbox">
                             {% for rank_row in loops.rank_row %}
                             <option value="{{ rank_row.VALUE }}"{{ rank_row.SELECTED }}>{{ rank_row.OPTION }}</option>
                             {% endfor %}
@@ -97,12 +97,12 @@
                 <dl>
                     <dt><label for="game_id">{{ lang('GAME') }}:</label></dt>
                     <dd><input type="hidden" name="game_id" id="game_id" value="{{ GAME_ID }}" />
-                        <input readonly type="text" name="game_name" id="game_name" size="50" value="{{ GAME }}" class="input" /></dd>
+                        <input readonly type="text" name="game_name" id="game_name" size="50" value="{{ GAME }}" class="inputbox" /></dd>
                 </dl>
 
                 <dl>
                     <dt><label for="player_level">{{ lang('LEVEL') }}:</label></dt>
-                    <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{{ PLAYER_LEVEL }}" class="input" />
+                    <dd><input type="text" name="player_level" id="player_level" size="5" maxlength="3" value="{{ PLAYER_LEVEL }}" class="inputbox" />
                         <a id="levelup" href="#"><img src="./adm/images/icon_up.gif" alt="+" /></a>
                         <a id="leveldown" href="#"><img src="./adm/images/icon_down.gif" alt="-" /></a>
                     </dd>
@@ -110,12 +110,12 @@
 
                 <dl>
                     <dt><label for="player_achiev">{{ lang('ACHIEV') }}:</label></dt>
-                    <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{{ PLAYER_ACHIEV }}" class="input" /></dd>
+                    <dd><input type="text" name="player_achiev" id="player_achiev" size="6" maxlength="6" value="{{ PLAYER_ACHIEV }}" class="inputbox" /></dd>
                 </dl>
 
                 <dl>
                     <dt><label for="player_race_id">{{ lang('RACE') }}:</label></dt>
-                    <dd><select id="player_race_id" name="player_race_id" class="input">
+                    <dd><select id="player_race_id" name="player_race_id" class="inputbox">
                         {% for race_row in loops.race_row %}
                         <option value="{{ race_row.VALUE }}"{{ race_row.SELECTED }}>{{ race_row.OPTION }}</option>
                         {% endfor %}
@@ -126,7 +126,7 @@
                 <dl>
                     <dt><label for="player_class_id">{{ lang('CLASS') }}:</label></dt>
                     <dd>
-                        <select id="player_class_id" name="player_class_id" class="input">
+                        <select id="player_class_id" name="player_class_id" class="inputbox">
                             {% for class_row in loops.class_row %}
                             <option value="{{ class_row.VALUE }}"{{ class_row.SELECTED }}>{{ class_row.OPTION }}</option>
                             {% endfor %}
@@ -138,7 +138,7 @@
                 <dl>
                     <dt><label for="player_role">{{ lang('ROLES') }}:</label></dt>
                     <dd>
-                        <select name="player_role" id="player_role" class="input" >
+                        <select name="player_role" id="player_role" class="inputbox" >
                             {% for role_row in loops.role_row %}
                             <option value="{{ role_row.VALUE }}"{{ role_row.SELECTED }}>{{ role_row.OPTION }}</option>
                             {% endfor %}
@@ -172,7 +172,7 @@
                         <img src="{{ PLAYER_PORTRAIT }}" alt="image" width="64" height="64" />
                         {% endif %}
                         </a>
-                        <input type="text" name="player_armorylink" size="80%" maxlength="300" value="{{ PLAYER_URL }}" class="input" />
+                        <input type="text" name="player_armorylink" size="80%" maxlength="300" value="{{ PLAYER_URL }}" class="inputbox" />
                     </dd>
                 </dl>
                 {% endif %}
@@ -197,7 +197,7 @@
 
                 <dl>
                     <dt><label for="player_comment">{{ lang('COMMENT') }}:</label></dt>
-                    <dd><textarea name="player_comment" id="player_comment" rows="5" cols="10" style="width: 80%" class="input">{{ PLAYER_COMMENT }}</textarea></dd>
+                    <dd><textarea name="player_comment" id="player_comment" rows="5" cols="10" style="width: 80%" class="inputbox">{{ PLAYER_COMMENT }}</textarea></dd>
                 </dl>
 
                 <input type="hidden" name="hidden_player_id" value="{{ PLAYER_ID }}" />

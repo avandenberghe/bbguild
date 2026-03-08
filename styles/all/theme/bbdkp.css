@@ -321,4 +321,117 @@ ul#bbguild-achievement-feed {
     border-bottom: 1px solid #331509;
 }
 
+/* Player detail page
+--------------------------------------------- */
+.player-detail {
+    padding: 15px;
+    min-height: 400px;
+}
+
+.player-detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.player-detail-portrait img {
+    width: 84px;
+    height: 84px;
+    border: 2px solid rgba(128, 128, 128, 0.4);
+    border-radius: 4px;
+}
+
+.player-detail-name {
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.player-detail-title {
+    font-size: 1.1em;
+    font-style: italic;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.player-detail-subtitle {
+    font-size: 0.95em;
+    margin-top: 6px;
+}
+
+.player-detail-subtitle img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.player-detail-body {
+    padding: 10px 0;
+}
+
+.player-detail-body fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.player-detail-body dl {
+    display: flex;
+    margin: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.player-detail-body dl:last-child {
+    border-bottom: none;
+}
+
+.player-detail-body dt {
+    width: 160px;
+    min-width: 160px;
+    font-weight: bold;
+    padding: 2px 0;
+}
+
+.player-detail-body dd {
+    margin: 0;
+    padding: 2px 0;
+    flex: 1;
+}
+
+.player-detail-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.player-status-active {
+    color: #00cc00;
+    font-weight: bold;
+}
+
+.player-status-inactive {
+    color: #cc0000;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 600px) {
+    .player-detail-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .player-detail-body dl {
+        flex-direction: column;
+    }
+
+    .player-detail-body dt {
+        width: auto;
+        min-width: auto;
+    }
+}
 

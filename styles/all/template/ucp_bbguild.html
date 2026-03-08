@@ -6,6 +6,9 @@
     <div class="inner"><span class="corners-top"><span></span></span>
 
         {% if S_SHOW %}
+
+        {% if loops.players_row|length %}
+        <h3>{{ lang('MY_CHARACTERS') }}</h3>
         <table class="table1 zebra-list" cellspacing="1">
             <thead>
             <tr>
@@ -15,7 +18,7 @@
                 <th>{{ lang('CLASS') }}</th>
                 <th>{{ lang('LEVEL') }}</th>
                 <th>{{ lang('GUILD') }}</th>
-                <th>{{ lang('PLAYER_RANK') }}</th>
+                <th>{{ lang('RANK') }}</th>
                 <th>{{ lang('REALM') }}</th>
                 <th>&nbsp;</th>
             </tr>
@@ -37,13 +40,27 @@
                 <td>{{ players_row.GUILD }}</td>
                 <td>{{ players_row.RANK }}</td>
                 <td>{{ players_row.REALM }}</td>
-                <td><a href="{{ players_row.U_EDIT }}">{{ lang('EDIT') }}</a></td>
+                <td>
+                    <a href="{{ players_row.U_EDIT }}">{{ lang('EDIT') }}</a>
+                    {% if S_CAN_UNCLAIM %}
+                    <form method="post" action="{{ U_ACTION }}" style="display:inline;">
+                        <input type="hidden" name="unclaim_player_id" value="{{ players_row.PLAYER_ID }}" />
+                        {{ S_FORM_TOKEN }}
+                        <input type="submit" name="unclaim" value="{{ lang('UNCLAIM') }}" class="button2" />
+                    </form>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>{{ lang('NO_CHARACTERS_BOUND') }}</p>
+        {% endif %}
 
         {% if S_SHOW_BUTTONS %}
+        <h3>{{ lang('CLAIM_PLAYER') }}</h3>
+        <p>{{ lang('CHARACTER_EXPLAIN') }}</p>
         <form method="post" action="{{ U_ACTION }}">
             <fieldset class="quick">
                 <dl>

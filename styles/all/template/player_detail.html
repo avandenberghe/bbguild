@@ -1,0 +1,137 @@
+{% INCLUDE 'overall_header.html' %}
+<div class="bbguildouter">
+    <div id="bbguildwelcome">
+
+        <!-- Guild header -->
+        <div class="guild-header">
+            {% if S_EMBLEM_EXISTS %}
+            <div class="guild-header-emblem">
+                <img src="{{ EMBLEM }}" alt="{{ GUILD_NAME }}" />
+            </div>
+            {% endif %}
+            <div class="guild-header-info">
+                <div class="guild-header-name">
+                    {% if ARMORY %}<a href="{{ ARMORY }}">{{ GUILD_NAME }}</a>{% else %}{{ GUILD_NAME }}{% endif %}
+                </div>
+                <div class="guild-header-details">
+                    <span class="faction">{{ FACTION_NAME }}</span> {{ lang('GUILD') }}<span class="comma">,</span>
+                    <span class="realm">{{ REGION }}-{{ REALM }}</span><span class="comma">.</span>
+                    <span class="members">{{ PLAYERCOUNT }} {{ lang('MEMBERS') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player detail card -->
+        <div class="player-detail">
+            <div class="player-detail-header">
+                {% if S_HAS_PORTRAIT %}
+                <div class="player-detail-portrait">
+                    <img src="{{ PLAYER_PORTRAIT }}" alt="{{ PLAYER_NAME }}" />
+                </div>
+                {% endif %}
+                <div class="player-detail-title-block">
+                    <h2 class="player-detail-name" style="color: {{ PLAYER_COLORCODE }}">{{ PLAYER_NAME }}</h2>
+                    {% if PLAYER_TITLE %}
+                    <div class="player-detail-title">&laquo; {{ PLAYER_TITLE }} &raquo;</div>
+                    {% endif %}
+                    <div class="player-detail-subtitle">
+                        {{ lang('LEVEL') }} {{ PLAYER_LEVEL }}
+                        {% if PLAYER_RACE_IMAGE %}<img src="{{ PLAYER_RACE_IMAGE }}" alt="{{ PLAYER_RACE }}" class="player-detail-icon" />{% endif %}
+                        {{ PLAYER_RACE }}
+                        {% if PLAYER_CLASS_IMAGE %}<img src="{{ PLAYER_CLASS_IMAGE }}" alt="{{ PLAYER_CLASS }}" class="player-detail-icon" />{% endif %}
+                        <span style="color: {{ PLAYER_COLORCODE }}">{{ PLAYER_CLASS }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-detail-body">
+                <fieldset>
+                    <dl>
+                        <dt>{{ lang('GUILD') }}:</dt>
+                        <dd>{{ PLAYER_GUILD_NAME }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>{{ lang('RANK') }}:</dt>
+                        <dd>{{ PLAYER_RANK }}</dd>
+                    </dl>
+                    {% if PLAYER_ROLE %}
+                    <dl>
+                        <dt>{{ lang('ROLE') }}:</dt>
+                        <dd>{{ PLAYER_ROLE }}</dd>
+                    </dl>
+                    {% endif %}
+                    <dl>
+                        <dt>{{ lang('GENDER') }}:</dt>
+                        <dd>{{ PLAYER_GENDER }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>{{ lang('REALM') }}:</dt>
+                        <dd>{% if PLAYER_REGION %}{{ PLAYER_REGION }}-{% endif %}{{ PLAYER_REALM }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>{{ lang('GAME') }}:</dt>
+                        <dd>{{ PLAYER_GAME_NAME }}</dd>
+                    </dl>
+                    {% if S_SHOWACH %}
+                    <dl>
+                        <dt>{{ lang('ACHIEV') }}:</dt>
+                        <dd>{{ PLAYER_ACHIEV }}</dd>
+                    </dl>
+                    {% endif %}
+                    <dl>
+                        <dt>{{ lang('STATUS') }}:</dt>
+                        <dd>
+                            {% if S_PLAYER_ACTIVE %}
+                            <span class="player-status-active">{{ lang('ACTIVE') }}</span>
+                            {% else %}
+                            <span class="player-status-inactive">{{ lang('INACTIVE') }}</span>
+                            {% if PLAYER_DEACTIVATE_REASON %}<br /><em>{{ PLAYER_DEACTIVATE_REASON }}</em>{% endif %}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    {% if PLAYER_JOINDATE %}
+                    <dl>
+                        <dt>{{ lang('JOINDATE') }}:</dt>
+                        <dd>{{ PLAYER_JOINDATE }}</dd>
+                    </dl>
+                    {% endif %}
+                    {% if PLAYER_OUTDATE and not S_PLAYER_ACTIVE %}
+                    <dl>
+                        <dt>{{ lang('OUTDATE') }}:</dt>
+                        <dd>{{ PLAYER_OUTDATE }}</dd>
+                    </dl>
+                    {% endif %}
+                    {% if PLAYER_LAST_UPDATE %}
+                    <dl>
+                        <dt>{{ lang('LAST_UPDATE') }}:</dt>
+                        <dd>{{ PLAYER_LAST_UPDATE }}</dd>
+                    </dl>
+                    {% endif %}
+                    {% if S_HAS_PHPBB_USER %}
+                    <dl>
+                        <dt>{{ lang('LINKED_USER') }}:</dt>
+                        <dd>{{ PLAYER_PHPBB_USER }}</dd>
+                    </dl>
+                    {% endif %}
+                    {% if PLAYER_COMMENT %}
+                    <dl>
+                        <dt>{{ lang('COMMENT') }}:</dt>
+                        <dd>{{ PLAYER_COMMENT }}</dd>
+                    </dl>
+                    {% endif %}
+                    {% if S_HAS_ARMORY %}
+                    <dl>
+                        <dt>{{ lang('ARMORY') }}:</dt>
+                        <dd><a href="{{ PLAYER_ARMORY_URL }}" target="_blank" rel="noopener">{{ PLAYER_ARMORY_URL }}</a></dd>
+                    </dl>
+                    {% endif %}
+                </fieldset>
+            </div>
+
+            {% EVENT bbguild_player_detail_after_content %}
+
+        </div>
+
+    </div>
+</div>
+{% INCLUDE 'overall_footer.html' %}

@@ -7,12 +7,12 @@
 		<form id="roster_filter" method="get" action="{{ F_ROSTER }}">
 			<div>
 				<div style="float:left; text-align:left; white-space:nowrap; padding: 4px;">
-					<select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();">
+					<select name="rosterlayout" id="rosterlayout" class="inputbox" onchange="javascript:form.submit();">
 						{% for rosterlayout_row in loops.rosterlayout_row %}
 						<option value="{{ rosterlayout_row.VALUE }}"{{ rosterlayout_row.SELECTED }}>{{ rosterlayout_row.OPTION }}</option>
 						{% endfor %}
 					</select>
-					<select name="filter" class="input" onchange="javascript:form.submit();">
+					<select name="filter" class="inputbox" onchange="javascript:form.submit();">
 						{% for filter_row in loops.roster_filter_row %}
 						<option value="{{ filter_row.VALUE }}"{{ filter_row.SELECTED }}{{ filter_row.DISABLED }}>{{ filter_row.OPTION }}</option>
 						{% endfor %}
@@ -90,7 +90,7 @@
 				{% for row in loops.portal_roster_row %}
 				<tr class="{% if row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
 					<td style="text-align: left;">
-						<a style="white-space: nowrap; color:{{ row.COLORCODE }}" href="{{ row.ARMORY }}"><strong>{{ row.NAME }}</strong></a>
+						<a style="white-space: nowrap; color:{{ row.COLORCODE }}" href="{{ row.U_PLAYER_DETAIL }}"><strong>{{ row.NAME }}</strong></a>
 					</td>
 					<td style="text-align:center;">{{ row.LVL }}</td>
 					{% if S_SHOWACH == 1 %}
@@ -147,11 +147,11 @@
 		<tr class="bg1">
 		{% endif %}
 			<td style="text-align:center; width:100;" class="bg1">
-				<a href="{{ players_row.ARMORY }}">
+				<a href="{{ players_row.U_PLAYER_DETAIL }}">
 					<img src="{{ players_row.PORTRAIT }}" alt=" " width="64" height="64" /></a>
 			</td>
 			<td style="text-align:left; width:100" class="bg2">
-				<strong><a style="color: {{ class.COLORCODE }};" href="{{ players_row.ARMORY }}">{{ players_row.NAME }}</a></strong>
+				<strong><a style="color: {{ class.COLORCODE }};" href="{{ players_row.U_PLAYER_DETAIL }}">{{ players_row.NAME }}</a></strong>
 				<p>
 					{{ players_row.CLASS }}
 					{{ players_row.LVL }}

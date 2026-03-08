@@ -27,7 +27,14 @@ $lang = array_merge(
 	$lang, array(
 
 	// General
+	'ACTIVE' => 'Aktywny',
 	'ALL' => 'Wszystko',
+	'ARMORY' => 'Zbrojownia',
+	'GAME' => 'Gra',
+	'INACTIVE' => 'Nieaktywny',
+	'LINKED_USER' => 'Konto na forum',
+	'NO_PLAYER' => 'Nie znaleziono gracza.',
+	'ROLE' => 'Rola',
 	'BBGUILDDISABLED' => 'bbGuild jest obecnie wyłączony.',
 	'FOOTERBBGUILD' => 'bbGuild',
 
@@ -162,6 +169,11 @@ $lang = array_merge(
 	'CHARACTERS_UPDATED' => 'Postać %s została przypisana do Twojego konta. ',
 	'CLAIM_PLAYER' => 'Przypisz postać',
 	'CLAIM' => 'Przypisz',
+	'UNCLAIM' => 'Zwolnij',
+	'CHARACTER_UNCLAIMED' => 'Postać %s została usunięta z twojego konta.',
+	'CHARACTER_UNCLAIM_FAILED' => 'Nie udało się zwolnić tej postaci.',
+	'CONFIRM_UNCLAIM_PLAYER' => 'Czy na pewno chcesz zwolnić %s?',
+	'MY_CHARACTERS' => 'Moje Postacie',
 	'NO_PLAYERS_FOUND' => 'Nie znaleziono postaci.',
 	'NO_CHARACTERS_BOUND' => 'Brak postaci przypisanych do Twojego konta.',
 

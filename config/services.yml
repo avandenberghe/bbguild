@@ -23,6 +23,26 @@ services:
             - '%avathar.bbguild.tables.bb_language%'
             - '%avathar.bbguild.tables.bb_guild%'
             - '%avathar.bbguild.tables.bb_factions%'
+    avathar.bbguild.player_detail:
+        class: avathar\bbguild\views\player_detail
+        arguments:
+            - '@dbal.conn'
+            - '@user'
+            - '@config'
+            - '@cache.driver'
+            - '@ext.manager'
+            - '@avathar.bbguild.log'
+            - '@avathar.bbguild.util'
+            - '@avathar.bbguild.game_registry'
+            - '@path_helper'
+            - '%avathar.bbguild.tables.bb_players%'
+            - '%avathar.bbguild.tables.bb_ranks%'
+            - '%avathar.bbguild.tables.bb_classes%'
+            - '%avathar.bbguild.tables.bb_races%'
+            - '%avathar.bbguild.tables.bb_language%'
+            - '%avathar.bbguild.tables.bb_guild%'
+            - '%avathar.bbguild.tables.bb_factions%'
+            - '%avathar.bbguild.tables.bb_games%'
     avathar.bbguild.controller:
         class: avathar\bbguild\controller\view_controller
         arguments:
@@ -30,6 +50,8 @@ services:
             - '@template'
             - '@avathar.bbguild.guild_context'
             - '@avathar.bbguild.portal.renderer'
+            - '@avathar.bbguild.player_detail'
+            - '@dispatcher'
     avathar.bbguild.admin.controller:
         class: avathar\bbguild\controller\ajax_controller
         arguments:

@@ -24,10 +24,9 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge(
 	$lang, array(
-	'UCP_DKP_CHARACTERS'    => 'Charaktere',
-	'UCP_DKP'            => 'bbDKP',
-	'UCP_DKP_CHARACTER_LIST'    => 'Meine Charaktere',
-	'UCP_DKP_CHARACTER_ADD'        => 'Charakter hinzufügen',
+	'UCP_BBGUILD'                  => 'bbGuild',
+	'UCP_BBGUILD_CHARACTER_LIST'   => 'Meine Charaktere',
+	'UCP_BBGUILD_CHARACTER_ADD'    => 'Charakter hinzufügen',
 
 	)
 );
