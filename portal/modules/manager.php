@@ -9,7 +9,7 @@
 namespace avathar\bbguild\portal\modules;
 
 use avathar\bbguild\portal\columns;
-use avathar\bbguild\portal\controller_helper;
+use avathar\bbguild\portal\module_helper;
 use avathar\bbguild\portal\module_registry;
 use avathar\bbguild\portal\portal_config;
 use phpbb\cache\service as cache_service;
@@ -25,7 +25,7 @@ class manager
 {
 	protected cache_service $cache;
 	protected driver_interface $db;
-	protected controller_helper $controller_helper;
+	protected module_helper $module_helper;
 	protected columns $portal_columns;
 	protected module_registry $module_registry;
 	protected constraints_handler $constraints_handler;
@@ -41,7 +41,7 @@ class manager
 	public function __construct(
 		cache_service $cache,
 		driver_interface $db,
-		controller_helper $controller_helper,
+		module_helper $module_helper,
 		columns $portal_columns,
 		module_registry $module_registry,
 		constraints_handler $constraints_handler,
@@ -54,7 +54,7 @@ class manager
 	{
 		$this->cache = $cache;
 		$this->db = $db;
-		$this->controller_helper = $controller_helper;
+		$this->module_helper = $module_helper;
 		$this->portal_columns = $portal_columns;
 		$this->module_registry = $module_registry;
 		$this->constraints_handler = $constraints_handler;

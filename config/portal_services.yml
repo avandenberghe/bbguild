@@ -24,8 +24,8 @@ services:
         arguments:
             - '@avathar.bbguild.portal.module_collection'
 
-    avathar.bbguild.portal.controller_helper:
-        class: avathar\bbguild\portal\controller_helper
+    avathar.bbguild.portal.module_helper:
+        class: avathar\bbguild\portal\module_helper
         arguments:
             - '@avathar.bbguild.portal.columns'
             - '@language'
@@ -52,7 +52,7 @@ services:
         arguments:
             - '@cache'
             - '@dbal.conn'
-            - '@avathar.bbguild.portal.controller_helper'
+            - '@avathar.bbguild.portal.module_helper'
             - '@avathar.bbguild.portal.columns'
             - '@avathar.bbguild.portal.module_registry'
             - '@avathar.bbguild.portal.modules.constraints_handler'
@@ -66,7 +66,7 @@ services:
         class: avathar\bbguild\portal\portal_renderer
         arguments:
             - '@avathar.bbguild.portal.columns'
-            - '@avathar.bbguild.portal.controller_helper'
+            - '@avathar.bbguild.portal.module_helper'
             - '@avathar.bbguild.portal.modules.database_handler'
             - '@config'
             - '@template'

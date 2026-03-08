@@ -17,7 +17,7 @@ use phpbb\user;
  * Helper for the portal renderer. Handles module loading, language,
  * template variable assignment, and group-based access checks.
  */
-class controller_helper
+class module_helper
 {
 	/** @var int Module disabled status */
 	const MODULE_DISABLED = 0;
@@ -92,8 +92,8 @@ class controller_helper
 			return true;
 		}
 
-		$group_ary = explode(',', $row['module_group_ids']);
-		return in_array($this->user->data['group_id'], $group_ary);
+		$group_ary = array_map('intval', explode(',', $row['module_group_ids']));
+		return in_array((int) $this->user->data['group_id'], $group_ary, true);
 	}
 
 	/**

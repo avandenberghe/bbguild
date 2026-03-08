@@ -20,7 +20,7 @@ use phpbb\user;
 class portal_renderer
 {
 	protected columns $portal_columns;
-	protected controller_helper $controller_helper;
+	protected module_helper $module_helper;
 	protected database_handler $database_handler;
 	protected config $config;
 	protected template $template;
@@ -31,7 +31,7 @@ class portal_renderer
 
 	public function __construct(
 		columns $portal_columns,
-		controller_helper $controller_helper,
+		module_helper $module_helper,
 		database_handler $database_handler,
 		config $config,
 		template $template,
@@ -39,7 +39,7 @@ class portal_renderer
 	)
 	{
 		$this->portal_columns = $portal_columns;
-		$this->controller_helper = $controller_helper;
+		$this->module_helper = $module_helper;
 		$this->database_handler = $database_handler;
 		$this->config = $config;
 		$this->template = $template;
@@ -62,7 +62,7 @@ class portal_renderer
 
 		foreach ($portal_modules as $row)
 		{
-			$module = $this->controller_helper->get_portal_module($row);
+			$module = $this->module_helper->get_portal_module($row);
 			if (!$module)
 			{
 				continue;
@@ -72,7 +72,7 @@ class portal_renderer
 			$module->set_guild_context($guild_id);
 
 			// Load language
-			$this->controller_helper->load_module_language($module);
+			$this->module_helper->load_module_language($module);
 
 			// Get template based on column type
 			$template_module = $this->get_module_template($row, $module);
@@ -82,7 +82,7 @@ class portal_renderer
 			}
 
 			// Assign to template block
-			$this->controller_helper->assign_module_vars($row, $template_module);
+			$this->module_helper->assign_module_vars($row, $template_module);
 		}
 
 		// Assign column visibility vars
