@@ -927,7 +927,7 @@ class guilds
 				g.emblemurl, g.min_armory, g.rec_status, g.guilddefault, g.armory_enabled, g.armoryresult, g.recruitforum,
 				g.faction, f.faction_name
 				FROM ' . $this->bb_guild_table . ' g
-				INNER JOIN '  . $this->bb_factions_table . ' f ON f.game_id=g.game_id and f.faction_id=g.faction
+				LEFT JOIN '  . $this->bb_factions_table . ' f ON f.game_id=g.game_id and f.faction_id=g.faction
 				WHERE id = ' . $this->guildid;
 		$result = $this->db->sql_query($sql, 604800);
 
