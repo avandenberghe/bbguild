@@ -969,18 +969,19 @@ class admin_guild
 
 		// List existing recruitments
 		$lang_code = $this->config['bbguild_lang'] ?? 'en';
+		$game_id = $this->db->sql_escape($updateguild->getGameId());
 		$sql = 'SELECT r.id, r.role_id, r.class_id, r.level, r.positions, r.applicants, r.status, r.note,
 				l_c.name as class_name, c.colorcode, c.imagename,
 				l_r.name as role_name, gr.role_color
 			FROM ' . $this->bb_recruit_table . ' r
-			LEFT JOIN ' . $this->bb_classes_table . ' c ON r.class_id = c.class_id
-			LEFT JOIN ' . $this->bb_language_table . " l_c ON r.class_id = l_c.attribute_id
+			LEFT JOIN ' . $this->bb_classes_table . " c ON r.class_id = c.class_id AND c.game_id = '" . $game_id . "'
+			LEFT JOIN " . $this->bb_language_table . " l_c ON r.class_id = l_c.attribute_id
 				AND l_c.attribute = 'class' AND l_c.language = '" . $this->db->sql_escape($lang_code) . "'
-				AND l_c.game_id = c.game_id
-			LEFT JOIN " . $this->bb_gameroles_table . ' gr ON r.role_id = gr.role_id
-			LEFT JOIN ' . $this->bb_language_table . " l_r ON r.role_id = l_r.attribute_id
+				AND l_c.game_id = '" . $game_id . "'
+			LEFT JOIN " . $this->bb_gameroles_table . " gr ON r.role_id = gr.role_id AND gr.game_id = '" . $game_id . "'
+			LEFT JOIN " . $this->bb_language_table . " l_r ON r.role_id = l_r.attribute_id
 				AND l_r.attribute = 'role' AND l_r.language = '" . $this->db->sql_escape($lang_code) . "'
-				AND l_r.game_id = gr.game_id
+				AND l_r.game_id = '" . $game_id . "'
 			WHERE r.guild_id = " . $guild_id . '
 			ORDER BY r.role_id, r.class_id';
 		$result = $this->db->sql_query($sql);
