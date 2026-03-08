@@ -521,7 +521,7 @@ class admin_main
 		if ($ssl)
 		{
 			//https://davidwalsh.name/php-ssl-curl-error
-			$pemfile = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/mozilla.pem';
+			$pemfile = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true) . 'controller/cacert.pem';
 			if (!(file_exists($pemfile) && is_readable($pemfile)))
 			{
 				$ssl = false;
