@@ -1097,8 +1097,8 @@ class admin_games
 		$row_count = 0;
 		foreach ($role_list as $role)
 		{
-			$role_icon_path = !empty($role['role_icon']) ? $game_images_web . $role['role_icon'] : '';
-			$role_cat_icon_path = !empty($role['role_cat_icon']) ? $game_images_web . $role['role_cat_icon'] : '';
+			$role_icon_path = !empty($role['role_icon']) ? $game_images_web . 'role_icons/' . $role['role_icon'] . '.png' : '';
+			$role_cat_icon_path = !empty($role['role_cat_icon']) ? $game_images_web . 'role_icons/' . $role['role_cat_icon'] . '.png' : '';
 
 			$this->template->assign_block_vars('role_row', array(
 				'ROLE_ID'               => $role['role_id'],
@@ -1106,9 +1106,9 @@ class admin_games
 				'ROLE_COLOR'            => $role['role_color'],
 				'ROLE_ICON'             => $role['role_icon'],
 				'U_ROLE_ICON'           => $role_icon_path,
-				'S_ROLE_ICON_EXISTS'    => !empty($role['role_icon']) && @file_exists($game_images_path . $role['role_icon']),
+				'S_ROLE_ICON_EXISTS'    => !empty($role['role_icon']) && @file_exists($game_images_path . 'role_icons/' . $role['role_icon'] . '.png'),
 				'U_ROLE_CAT_ICON'       => $role_cat_icon_path,
-				'S_ROLE_CAT_ICON_EXISTS'=> !empty($role['role_cat_icon']) && @file_exists($game_images_path . $role['role_cat_icon']),
+				'S_ROLE_CAT_ICON_EXISTS'=> !empty($role['role_cat_icon']) && @file_exists($game_images_path . 'role_icons/' . $role['role_cat_icon'] . '.png'),
 				'U_DELETE'              => $u_edit_game . '&amp;action=deleterole&amp;role_id=' . $role['role_id'],
 				'U_EDIT'                => $u_edit_game . '&amp;action=editrole&amp;role_id=' . $role['role_id'],
 				'S_ROW_COUNT'           => $row_count++,
