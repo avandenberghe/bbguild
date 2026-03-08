@@ -106,9 +106,14 @@ services:
             - '@template'
             - '@user'
             - '@config'
+            - '@cache.driver'
+            - '@ext.manager'
+            - '@avathar.bbguild.log'
+            - '@avathar.bbguild.util'
             - '@pagination'
             - '@request'
             - '@path_helper'
+            - '@controller.helper'
             - '@avathar.bbguild.game_registry'
             - '%avathar.bbguild.tables.bb_players%'
             - '%avathar.bbguild.tables.bb_ranks%'
@@ -117,5 +122,6 @@ services:
             - '%avathar.bbguild.tables.bb_language%'
             - '%avathar.bbguild.tables.bb_guild%'
             - '%avathar.bbguild.tables.bb_factions%'
+            - '%avathar.bbguild.tables.bb_games%'
         tags:
             - { name: bbguild.portal.module }

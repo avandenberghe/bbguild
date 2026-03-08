@@ -2,97 +2,189 @@
 {{ definition.BLOCK_ICON }}{{ definition.TITLE }}
 {{ definition.C_BLOCK_H_R }}
 
-		<div class="portal-roster-filters">
-			<form id="roster_filter" method="get" action="">
-				<select name="filter" class="input" onchange="this.form.submit();">
-					{% for item in loops.roster_filter_row %}
-					<option value="{{ item.VALUE }}"{{ item.SELECTED }}{{ item.DISABLED }}>{{ item.OPTION }}</option>
-					{% endfor %}
-				</select>
-				<input type="hidden" name="hidden_guild_id" value="{{ ROSTER_GUILD_ID }}" />
-				<input type="search" name="player_name" size="20" maxlength="20" placeholder="{{ lang('SEARCH') }}..." value="{{ ROSTER_PLAYER_NAME }}" class="inputbox search tiny" />
-				<button type="submit" class="button icon-button search-icon">{{ lang('FILTER') }}</button>
-			</form>
-		</div>
+<div class="roster">
+	<div class="action-bar top">
+		<form id="roster_filter" method="get" action="{{ F_ROSTER }}">
+			<div>
+				<div style="float:left; text-align:left; white-space:nowrap; padding: 4px;">
+					<select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();">
+						{% for rosterlayout_row in loops.rosterlayout_row %}
+						<option value="{{ rosterlayout_row.VALUE }}"{{ rosterlayout_row.SELECTED }}>{{ rosterlayout_row.OPTION }}</option>
+						{% endfor %}
+					</select>
+					<select name="filter" class="input" onchange="javascript:form.submit();">
+						{% for filter_row in loops.roster_filter_row %}
+						<option value="{{ filter_row.VALUE }}"{{ filter_row.SELECTED }}{{ filter_row.DISABLED }}>{{ filter_row.OPTION }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="search-box" style="text-align:right; float:left; white-space:nowrap;">
+					<fieldset>
+						<input type="hidden" name="hidden_guild_id" value="{{ ROSTER_GUILD_ID }}" />
+						<input type="search" name="player_name" id="player_name" size="20" maxlength="20" placeholder="{{ lang('SEARCH') }}..." value="{{ ROSTER_PLAYER_NAME }}" class="inputbox search tiny" />
+						<button type="submit" name="submit_options" title="{{ lang('FILTER') }}" class="button icon-button search-icon">{{ lang('FILTER') }}</button>
+					</fieldset>
+				</div>
+			</div>
+		</form>
 
-		{% if S_PORTAL_HAS_ROSTER %}
-		<table class="portal-roster-table">
-			{% if S_SHOWACH == 1 %}
-			<colgroup>
-				<col style="width:20%" />
-				<col style="width:7%" />
-				<col style="width:8%" />
-				<col style="width:15%" />
-				<col style="width:18%" />
-				<col style="width:16%" />
-				<col style="width:16%" />
-			</colgroup>
-			{% else %}
-			<colgroup>
-				<col style="width:22%" />
-				<col style="width:8%" />
-				<col style="width:16%" />
-				<col style="width:20%" />
-				<col style="width:16%" />
-				<col style="width:18%" />
-			</colgroup>
-			{% endif %}
-			<thead>
-			<tr>
-				<th style="text-align:left;"><a href="{{ O_NAME }}">{{ lang('PLAYER') }}</a></th>
-				<th style="text-align:center;"><a href="{{ O_LEVEL }}">{{ lang('LEVEL') }}</a></th>
-				{% if S_SHOWACH == 1 %}
-				<th style="text-align:center;"><a href="{{ O_ACHI }}">{{ lang('ACHIEV') }}</a></th>
-				{% endif %}
-				<th style="text-align:left;">{{ lang('RACE') }}</th>
-				<th style="text-align:left;"><a href="{{ O_CLASS }}">{{ lang('CLASS') }}</a></th>
-				<th style="text-align:left;"><a href="{{ O_RANK }}">{{ lang('RANK') }}</a></th>
-				<th style="text-align:left;"><a href="{{ O_PHPBB }}">{{ lang('MEMBER') }}</a></th>
-			</tr>
-			</thead>
-			<tbody>
-			{% for row in loops.portal_roster_row %}
-			<tr class="{% if row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
-				<td style="text-align:left;">
-					<a style="white-space:nowrap; color:{{ row.COLORCODE }}" href="{{ row.ARMORY }}"><strong>{{ row.NAME }}</strong></a>
-				</td>
-				<td style="text-align:center;">{{ row.LVL }}</td>
-				{% if S_SHOWACH == 1 %}
-				<td style="text-align:center;">{{ row.ACHIEVPTS }}</td>
-				{% endif %}
-				<td style="text-align:left;"><img src="{{ row.RACE_IMAGE }}" alt="" />&nbsp;{{ row.RACE }}</td>
-				<td style="text-align:left;">
-					<img src="{{ row.CLASS_IMAGE }}" alt="{{ row.CLASS }}" />&nbsp;
-					<span style="white-space:nowrap; color:{{ row.COLORCODE }}">{{ row.CLASS }}</span>
-				</td>
-				<td style="text-align:left; white-space:nowrap;">{{ row.RANK }}</td>
-				<td style="text-align:left;">{{ row.PHPBBUID }}</td>
-			</tr>
-			{% endfor %}
-			</tbody>
-			<tfoot>
-			<tr>
-				<td colspan="{% if S_SHOWACH == 1 %}7{% else %}6{% endif %}" style="text-align:left;">
-					{{ lang('MEMBERS') }}: {{ ROSTER_FOOTCOUNT }}
-				</td>
-			</tr>
-			</tfoot>
-		</table>
-
+		{% if S_DISPLAY_ROSTERLISTING %}
 		<div class="pagination">
-			{% if loops.roster_pagination|length %}
-				{% for pagination in loops.roster_pagination %}
-					{% if pagination.S_IS_PREV %}<a href="{{ pagination.PAGE_URL }}">&laquo;</a>
-					{% elseif pagination.S_IS_NEXT %}<a href="{{ pagination.PAGE_URL }}">&raquo;</a>
-					{% elseif pagination.S_IS_CURRENT %}<strong>{{ pagination.PAGE_NUMBER }}</strong>
-					{% else %}<a href="{{ pagination.PAGE_URL }}">{{ pagination.PAGE_NUMBER }}</a>
-					{% endif %}
-				{% endfor %}
+			{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+			{% else %}
+			{{ PAGE_NUMBER }}
 			{% endif %}
 		</div>
-		{% else %}
-		<p>{{ lang('NO_PLAYERS') }}</p>
 		{% endif %}
+	</div>
+
+	{% if S_PORTAL_HAS_ROSTER %}
+
+	{% if S_DISPLAY_ROSTERLISTING %}
+	{# ---- Listing view ---- #}
+	<div class="forumbg forumbg-table">
+		<div class="inner">
+			<span class="corners-top"><span></span></span>
+
+			<table class="table1 bbguild">
+				{% if S_SHOWACH == 1 %}
+				<colgroup span="7">
+					<col width="19%" />
+					<col width="9%" />
+					<col width="6%" />
+					<col width="18%" />
+					<col width="19%" />
+					<col width="12%" />
+					<col width="17%" />
+				</colgroup>
+				{% else %}
+				<colgroup span="6">
+					<col width="20%" />
+					<col width="10%" />
+					<col width="19%" />
+					<col width="20%" />
+					<col width="13%" />
+					<col width="18%" />
+				</colgroup>
+				{% endif %}
+				<thead>
+				<tr>
+					<th style="text-align: left;"><a href="{{ O_NAME }}">{{ lang('PLAYER') }}</a></th>
+					<th style="text-align: center;"><a href="{{ O_LEVEL }}">{{ lang('LEVEL') }}</a></th>
+					{% if S_SHOWACH == 1 %}
+					<th style="text-align: center;"><a href="{{ O_ACHI }}">{{ lang('ACHIEV') }}</a></th>
+					{% endif %}
+					<th style="text-align: left;">{{ lang('RACE') }}</th>
+					<th style="text-align: left;"><a href="{{ O_CLASS }}">{{ lang('CLASS') }}</a></th>
+					<th style="text-align: left;"><a href="{{ O_RANK }}">{{ lang('RANK') }}</a></th>
+					<th style="text-align: left;"><a href="{{ O_PHPBB }}">{{ lang('MEMBER') }}</a></th>
+				</tr>
+				</thead>
+				<tfoot>
+				<tr>
+					<td colspan="{% if S_SHOWACH == 1 %}7{% else %}6{% endif %}" style="text-align: left; white-space: nowrap;">{{ LISTPLAYERS_FOOTCOUNT }}</td>
+				</tr>
+				</tfoot>
+				<tbody>
+				{% for row in loops.portal_roster_row %}
+				<tr class="{% if row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+					<td style="text-align: left;">
+						<a style="white-space: nowrap; color:{{ row.COLORCODE }}" href="{{ row.ARMORY }}"><strong>{{ row.NAME }}</strong></a>
+					</td>
+					<td style="text-align:center;">{{ row.LVL }}</td>
+					{% if S_SHOWACH == 1 %}
+					<td style="text-align: center;">{{ row.ACHIEVPTS }}</td>
+					{% endif %}
+					<td style="text-align: left;"><img src="{{ row.RACE_IMAGE }}" alt="" />&nbsp;{{ row.RACE }}</td>
+					<td style="text-align: left;">
+						<img src="{{ row.CLASS_IMAGE }}" alt="{{ row.CLASS }}" />&nbsp;
+						<span style="white-space: nowrap; color:{{ row.COLORCODE }}">{{ row.CLASS }}</span>
+					</td>
+					<td style="text-align:left; white-space:nowrap;">{{ row.RANK }}</td>
+					<td style="text-align:left;">{{ row.PHPBBUID }}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+
+			<span class="corners-bottom"><span></span></span>
+		</div>
+	</div>
+
+	<div class="pagination">
+		{% if loops.pagination|length %}
+		{% INCLUDE 'pagination.html' %}
+		{% else %}
+		{{ PAGE_NUMBER }}
+		{% endif %}
+	</div>
+	{% endif %}
+
+	{% if S_DISPLAY_ROSTERGRID %}
+	{# ---- Grid view (grouped by class) ---- #}
+	{% for class in loops.class %}
+	<h2>
+		<img src="{{ class.CLASSIMG }}" style="max-width:100px; max-height:100px;" alt="{{ class.CLASSNAME }}" />
+		&nbsp;
+		<span style="color: {{ class.COLORCODE }};">{{ class.CLASSNAME }}</span>
+	</h2>
+
+	<table style="width: 100%" border="0" cellspacing="0" cellpadding="0">
+		<colgroup span="8">
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+		</colgroup>
+
+		{% for players_row in class.players_row %}
+		{% if players_row.S_ROW_COUNT % 4 == 0 %}
+		<tr class="bg1">
+		{% endif %}
+			<td style="text-align:center; width:100;" class="bg1">
+				<a href="{{ players_row.ARMORY }}">
+					<img src="{{ players_row.PORTRAIT }}" alt=" " width="64" height="64" /></a>
+			</td>
+			<td style="text-align:left; width:100" class="bg2">
+				<strong><a style="color: {{ class.COLORCODE }};" href="{{ players_row.ARMORY }}">{{ players_row.NAME }}</a></strong>
+				<p>
+					{{ players_row.CLASS }}
+					{{ players_row.LVL }}
+					{% if S_SHOWACH == 1 %}
+					<br/> Apt: {{ players_row.ACHIEVPTS }}
+					{% endif %}
+				</p>
+			</td>
+		{% if players_row.S_ROW_COUNT % 4 == 0 %}
+			{% if players_row.S_LAST_ROW %}<td colspan="10"></td></tr>{% endif %}
+		{% elseif players_row.S_ROW_COUNT % 4 == 1 %}
+			{% if players_row.S_LAST_ROW %}<td colspan="8"></td></tr>{% endif %}
+		{% elseif players_row.S_ROW_COUNT % 4 == 2 %}
+			{% if players_row.S_LAST_ROW %}<td colspan="6"></td></tr>{% endif %}
+		{% elseif players_row.S_ROW_COUNT % 4 == 3 %}
+			{% if players_row.S_LAST_ROW %}<td colspan="4"></td></tr>{% endif %}
+		{% endif %}
+		{% endfor %}
+	</table>
+	<br />
+	{% endfor %}
+
+	<div class="pagination">
+		{% if loops.pagination|length %}
+		{% INCLUDE 'pagination.html' %}
+		{% endif %}
+	</div>
+	{% endif %}
+
+	{% else %}
+	<p>{{ lang('NO_PLAYERS') }}</p>
+	{% endif %}
+</div>
 
 {{ definition.C_BLOCK_F_L }}
 {{ definition.C_BLOCK_F_R }}

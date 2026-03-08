@@ -16,6 +16,22 @@
      padding-bottom: 40px;
 }
 
+table.table1.bbguild {
+    font-size: 0.85em;
+}
+
+table.table1.bbguild th {
+    font-size: 0.8em;
+}
+
+.roster table {
+    font-size: 0.85em;
+}
+
+.roster h2 {
+    font-size: 1.1em;
+}
+
 .category, .subheader-3 {
     color: #7e3406;
     font-size: 22px;

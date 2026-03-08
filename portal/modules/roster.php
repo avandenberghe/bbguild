@@ -5,15 +5,22 @@
  * @license GNU General Public License, version 2 (GPL-2.0-only)
  *
  * Roster portal module.
- * Displays the guild roster as a table with filters and pagination.
+ * Displays the guild roster with layout switcher (listing / grid),
+ * filters, sorting and pagination.
  */
 
 namespace avathar\bbguild\portal\modules;
 
 use avathar\bbguild\model\player\player;
+use avathar\bbguild\model\admin\constants;
+use avathar\bbguild\model\admin\log;
+use avathar\bbguild\model\admin\util;
 use avathar\bbguild\model\games\game_registry;
+use phpbb\cache\driver\driver_interface as cache_interface;
 use phpbb\config\config;
+use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
+use phpbb\extension\manager;
 use phpbb\pagination;
 use phpbb\path_helper;
 use phpbb\request\request;
@@ -30,9 +37,14 @@ class roster extends module_base
 	protected template $template;
 	protected user $user;
 	protected config $config;
+	protected cache_interface $cache;
+	protected manager $ext_manager;
+	protected log $bbguild_log;
+	protected util $bbguild_util;
 	protected pagination $pagination;
 	protected request $request;
 	protected path_helper $path_helper;
+	protected helper $helper;
 	protected game_registry $game_registry;
 	protected string $players_table;
 	protected string $ranks_table;
@@ -41,15 +53,21 @@ class roster extends module_base
 	protected string $language_table;
 	protected string $guild_table;
 	protected string $factions_table;
+	protected string $games_table;
 
 	public function __construct(
 		driver_interface $db,
 		template $template,
 		user $user,
 		config $config,
+		cache_interface $cache,
+		manager $ext_manager,
+		log $bbguild_log,
+		util $bbguild_util,
 		pagination $pagination,
 		request $request,
 		path_helper $path_helper,
+		helper $helper,
 		game_registry $game_registry,
 		string $players_table,
 		string $ranks_table,
@@ -57,16 +75,22 @@ class roster extends module_base
 		string $races_table,
 		string $language_table,
 		string $guild_table,
-		string $factions_table
+		string $factions_table,
+		string $games_table
 	)
 	{
 		$this->db = $db;
 		$this->template = $template;
 		$this->user = $user;
 		$this->config = $config;
+		$this->cache = $cache;
+		$this->ext_manager = $ext_manager;
+		$this->bbguild_log = $bbguild_log;
+		$this->bbguild_util = $bbguild_util;
 		$this->pagination = $pagination;
 		$this->request = $request;
 		$this->path_helper = $path_helper;
+		$this->helper = $helper;
 		$this->game_registry = $game_registry;
 		$this->players_table = $players_table;
 		$this->ranks_table = $ranks_table;
@@ -75,6 +99,7 @@ class roster extends module_base
 		$this->language_table = $language_table;
 		$this->guild_table = $guild_table;
 		$this->factions_table = $factions_table;
+		$this->games_table = $games_table;
 	}
 
 	/**
@@ -85,8 +110,9 @@ class roster extends module_base
 		$game_id = $this->get_guild_game_id();
 		$ext_path_images = $this->get_game_images_path($game_id);
 
-		// Read filter values from request
+		// Read request values
 		$start = $this->request->variable('start', 0);
+		$mode = $this->request->variable('rosterlayout', 0);
 		$filter = $this->request->variable('filter', $this->user->lang['ALL']);
 		$player_filter = $this->request->variable('player_name', '', true);
 
@@ -112,27 +138,60 @@ class roster extends module_base
 			}
 		}
 
-		// Build filter dropdown
+		// Build filter + layout dropdowns
 		$this->build_filter_dropdown($game_id, $filter, $armor_types, $class_names);
+		$this->build_layout_dropdown($mode);
 
-		// Get player list (listing mode only for portal)
+		// Get player list
 		$players = new player(
-			$this->players_table,
-			$this->ranks_table,
-			$this->classes_table,
-			$this->races_table,
-			$this->language_table,
-			$this->guild_table,
-			$this->factions_table
+			$this->db, $this->config, $this->cache, $this->user,
+			$this->ext_manager, $this->bbguild_log, $this->bbguild_util,
+			$this->players_table, $this->ranks_table,
+			$this->classes_table, $this->races_table,
+			$this->language_table, $this->guild_table,
+			$this->factions_table, $this->games_table,
+			$this->game_registry
 		);
 		$players->game_id = $game_id;
 
 		$characters = $players->getplayerlist(
-			$start, 0, $query_by_armor, $query_by_class, $filter,
+			$start, $mode, $query_by_armor, $query_by_class, $filter,
 			$game_id, $this->guild_id, $class_id, 0, 0, 200, false, $player_filter, 0
 		);
 
-		// Assign roster rows
+		// Route-based pagination URL
+		$base_url = $this->helper->route('avathar_bbguild_00', [
+			'guild_id' => $this->guild_id,
+			'page'     => 'roster',
+		]);
+
+		if ($mode == 0)
+		{
+			$this->display_listing($characters, $ext_path_images, $base_url, $start);
+		}
+		else
+		{
+			$this->display_grid($players, $characters, $ext_path_images, $base_url, $start, $filter, $query_by_armor);
+		}
+
+		$this->template->assign_vars([
+			'S_PORTAL_HAS_ROSTER'  => count($characters[0]) > 0,
+			'S_SHOWACH'            => $this->config['bbguild_show_achiev'],
+			'S_RSTYLE'             => (string) $mode,
+			'ROSTER_FOOTCOUNT'     => count($characters[0]),
+			'ROSTER_PLAYER_NAME'   => $player_filter,
+			'ROSTER_GUILD_ID'      => $this->guild_id,
+			'F_ROSTER'             => $base_url,
+		]);
+
+		return 'roster_center.html';
+	}
+
+	/**
+	 * Display the listing (table) view.
+	 */
+	protected function display_listing(array $characters, string $ext_path_images, string $base_url, int $start): void
+	{
 		foreach ($characters[0] as $char)
 		{
 			$this->template->assign_block_vars('portal_roster_row', [
@@ -153,40 +212,128 @@ class roster extends module_base
 		}
 
 		// Pagination
-		$base_url = $this->request->variable('REQUEST_URI', '', true, request::SERVER);
 		$player_count = (int) $characters[2];
 		$per_page = (int) $this->config['bbguild_user_llimit'];
 
 		if ($per_page > 0)
 		{
 			$this->pagination->generate_template_pagination(
-				$base_url, 'roster_pagination', 'start',
+				$base_url, 'pagination', 'start',
 				$player_count, $per_page, $start, true
 			);
+
+			$this->template->assign_vars([
+				'PAGE_NUMBER' => $this->pagination->on_page($player_count, $per_page, $start),
+			]);
 		}
 
-		// Sort URLs
+		// Sort column URLs
 		if (isset($characters[1]))
 		{
 			$this->template->assign_vars([
-				'O_NAME'   => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][0],
-				'O_CLASS'  => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][2],
-				'O_RANK'   => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][3],
-				'O_LEVEL'  => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][4],
-				'O_PHPBB'  => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][5],
-				'O_ACHI'   => '?' . \avathar\bbguild\model\admin\constants::URI_ORDER . '=' . $characters[1]['uri'][6],
+				'O_NAME'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][0],
+				'O_CLASS' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][2],
+				'O_RANK'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][3],
+				'O_LEVEL' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][4],
+				'O_PHPBB' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][5],
+				'O_ACHI'  => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][6],
 			]);
 		}
 
 		$this->template->assign_vars([
-			'S_PORTAL_HAS_ROSTER'  => count($characters[0]) > 0,
-			'S_SHOWACH'            => $this->config['bbguild_show_achiev'],
-			'ROSTER_FOOTCOUNT'     => count($characters[0]),
-			'ROSTER_PLAYER_NAME'   => $player_filter,
-			'ROSTER_GUILD_ID'      => $this->guild_id,
+			'LISTPLAYERS_FOOTCOUNT'   => $this->user->lang['MEMBERS'] . ': ' . count($characters[0]),
+			'S_DISPLAY_ROSTERLISTING' => true,
 		]);
+	}
 
-		return 'roster_center.html';
+	/**
+	 * Display the grid (grouped by class) view.
+	 */
+	protected function display_grid(player $players, array $characters, string $ext_path_images, string $base_url, int $start, string $filter, bool $query_by_armor): void
+	{
+		$classgroup = $players->get_classes(
+			$filter, $query_by_armor,
+			0, $players->game_id, $this->guild_id, 0, 0, 200
+		);
+
+		if (count($classgroup) > 0)
+		{
+			$classes = [];
+			foreach ($classgroup as $row)
+			{
+				$classes[$row['class_id']]['name']      = $row['class_name'];
+				$classes[$row['class_id']]['imagename'] = $row['imagename'];
+				$classes[$row['class_id']]['colorcode'] = $row['colorcode'];
+			}
+
+			foreach ($classes as $classid => $class)
+			{
+				$classimgurl = $ext_path_images . 'roster_classes/' . $class['imagename'] . '.png';
+
+				$this->template->assign_block_vars('class', [
+					'CLASSNAME' => $class['name'],
+					'CLASSIMG'  => $classimgurl,
+					'COLORCODE' => $class['colorcode'],
+				]);
+
+				foreach ($characters[0] as $char)
+				{
+					if ($char['player_class_id'] == $classid)
+					{
+						$this->template->assign_block_vars('class.players_row', [
+							'PLAYER_ID' => $char['player_id'],
+							'GAME'      => $char['game_id'],
+							'COLORCODE' => $char['colorcode'],
+							'CLASS'     => $char['class_name'],
+							'NAME'      => $char['player_name'],
+							'RACE'      => $char['race_name'],
+							'RANK'      => $char['player_rank'],
+							'LVL'       => $char['player_level'],
+							'ARMORY'    => $char['player_armory_url'],
+							'PHPBBUID'  => $char['username'],
+							'PORTRAIT'  => $char['player_portrait_url'],
+							'ACHIEVPTS' => $char['player_achiev'],
+							'CLASS_IMAGE' => $ext_path_images . 'class_images/' . basename($char['class_image']),
+							'RACE_IMAGE'  => $ext_path_images . 'race_images/' . basename($char['race_image']),
+						]);
+					}
+				}
+			}
+
+			// Sort column URLs for grid
+			if (isset($characters[1]))
+			{
+				$this->template->assign_vars([
+					'U_LIST_PLAYERS0' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][0],
+					'U_LIST_PLAYERS1' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][1],
+					'U_LIST_PLAYERS2' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][2],
+					'U_LIST_PLAYERS3' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][3],
+					'U_LIST_PLAYERS4' => $base_url . '?' . constants::URI_ORDER . '=' . $characters[1]['uri'][4],
+				]);
+			}
+		}
+
+		// Pagination
+		$player_count = count($characters[0]);
+		$per_page = (int) $this->config['bbguild_user_llimit'];
+
+		if ($per_page > 0 && $start > $player_count)
+		{
+			$start = 0;
+		}
+
+		if ($per_page > 0)
+		{
+			$this->pagination->generate_template_pagination(
+				$base_url, 'pagination', 'start',
+				$player_count, $per_page, $start, true
+			);
+		}
+
+		$this->template->assign_vars([
+			'LISTPLAYERS_FOOTCOUNT' => $this->user->lang['MEMBERS'] . ': ' . $player_count,
+			'S_DISPLAY_ROSTERGRID'  => true,
+		]);
 	}
 
 	/**
@@ -270,6 +417,26 @@ class roster extends module_base
 		}
 		$this->db->sql_freeresult($result);
 		return $names;
+	}
+
+	/**
+	 * Build layout switcher dropdown template vars.
+	 */
+	protected function build_layout_dropdown(int $mode): void
+	{
+		$layouts = [
+			0 => $this->user->lang['ARM_STAND'],
+			1 => $this->user->lang['ARM_CLASS'],
+		];
+
+		foreach ($layouts as $lid => $lname)
+		{
+			$this->template->assign_block_vars('rosterlayout_row', [
+				'VALUE'    => $lid,
+				'SELECTED' => ($lid == $mode) ? ' selected="selected"' : '',
+				'OPTION'   => $lname,
+			]);
+		}
 	}
 
 	/**

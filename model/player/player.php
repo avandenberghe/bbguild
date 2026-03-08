@@ -69,9 +69,24 @@ class player
 	public $bb_language_table;
 	public $bb_guild_table;
 	public $bb_factions_table;
+	public $bb_games_table;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+	/** @var \phpbb\config\config */
+	protected $config;
+	/** @var \phpbb\cache\driver\driver_interface */
+	protected $cache;
+	/** @var \phpbb\user */
+	protected $user;
+	/** @var \phpbb\extension\manager */
+	protected $phpbb_extension_manager;
 	/** @var \avathar\bbguild\model\admin\log */
 	protected $log;
+	/** @var \avathar\bbguild\model\admin\util */
+	protected $util;
+	/** @var \avathar\bbguild\model\games\game_registry|null */
+	protected $game_registry;
 
 	/**
 	 * game id
@@ -960,13 +975,12 @@ class player
 	 */
 	public function getRegionlist()
 	{
-		global $user;
 		return array(
-			'eu' => $user->lang['REGIONEU'],
-			'kr' => $user->lang['REGIONKR'],
-			'sea' => $user->lang['REGIONSEA'],
-			'tw' => $user->lang['REGIONTW'],
-			'us' => $user->lang['REGIONUS'],
+			'eu' => $this->user->lang['REGIONEU'],
+			'kr' => $this->user->lang['REGIONKR'],
+			'sea' => $this->user->lang['REGIONSEA'],
+			'tw' => $this->user->lang['REGIONTW'],
+			'us' => $this->user->lang['REGIONUS'],
 		);
 
 	}
@@ -980,6 +994,13 @@ class player
 
 	/**
 	 * player constructor.
+	 *
+	 * @param \phpbb\db\driver\driver_interface    $db
+	 * @param \phpbb\config\config                 $config
+	 * @param \phpbb\cache\driver\driver_interface $cache
+	 * @param \phpbb\user                          $user
+	 * @param \phpbb\extension\manager             $ext_manager
+	 * @param \avathar\bbguild\model\admin\log     $log
 	 * @param string $bb_players_table
 	 * @param string $bb_ranks_table
 	 * @param string $bb_classes_table
@@ -987,17 +1008,30 @@ class player
 	 * @param string $bb_language_table
 	 * @param string $bb_guild_table
 	 * @param string $bb_factions_table
+	 * @param string $bb_games_table
 	 * @param int $player_id
 	 * @param array $guildlist
 	 */
-	public function __construct($bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $player_id = 0, $guildlist = null)
+	public function __construct(
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\config\config $config,
+		\phpbb\cache\driver\driver_interface $cache,
+		\phpbb\user $user,
+		\phpbb\extension\manager $ext_manager,
+		\avathar\bbguild\model\admin\log $log,
+		\avathar\bbguild\model\admin\util $util,
+		$bb_players_table, $bb_ranks_table, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_guild_table, $bb_factions_table, $bb_games_table,
+		$game_registry = null,
+		$player_id = 0, $guildlist = null)
 	{
-		global $phpbb_extension_manager, $phpbb_container;
-		if (!isset($phpbb_extension_manager) && isset($phpbb_container)) {
-			$phpbb_extension_manager = $phpbb_container->get('ext.manager');
-		}
-		$this->ext_path = $phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
-		$this->log = $phpbb_container->get('avathar.bbguild.log');
+		$this->db = $db;
+		$this->config = $config;
+		$this->cache = $cache;
+		$this->user = $user;
+		$this->phpbb_extension_manager = $ext_manager;
+		$this->log = $log;
+		$this->util = $util;
+		$this->ext_path = $ext_manager->get_extension_path('avathar/bbguild', true);
 
 		$this->bb_players_table = $bb_players_table;
 		$this->bb_races_table = $bb_races_table;
@@ -1006,15 +1040,13 @@ class player
 		$this->bb_language_table = $bb_language_table;
 		$this->bb_guild_table = $bb_guild_table;
 		$this->bb_factions_table = $bb_factions_table;
+		$this->bb_games_table = $bb_games_table;
+		$this->game_registry = $game_registry;
 
 		$games_obj = new \avathar\bbguild\model\games\game(
-			$phpbb_container->get('dbal.conn'),
-			$phpbb_container->get('cache.driver'),
-			$phpbb_container->get('config'),
-			$phpbb_container->get('user'),
-			$phpbb_extension_manager,
+			$db, $cache, $config, $user, $ext_manager,
 			$bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table,
-			$phpbb_container->getParameter('avathar.bbguild.tables.bb_games')
+			$bb_games_table
 		);
 		$this->games = $games_obj->games ?? [];
 		unset($games_obj);
@@ -1035,11 +1067,8 @@ class player
 		$this->guildplayerlist = array();
 		if ($guildlist == null)
 		{
-			global $db, $user, $config, $cache, $phpbb_container;
-			$bbguild_log = $phpbb_container->get('avathar.bbguild.log');
-			$bbguild_cache = $phpbb_container->get('cache.driver');
 			$guild = new guilds(
-				$db, $user, $config, $bbguild_cache, $bbguild_log,
+				$this->db, $this->user, $this->config, $this->cache, $this->log,
 				$this->bb_players_table,
 				$this->bb_ranks_table,
 				$this->bb_classes_table,
@@ -1062,7 +1091,6 @@ class player
 	 */
 	public function Getplayer()
 	{
-		global $db, $config;
 
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS player_class, l1.name AS player_race,
@@ -1080,10 +1108,10 @@ class player
 						$this->bb_language_table => 'c1') ,
 					'ON' => "c1.attribute_id = c.class_id
 						AND c1.game_id = c.game_id
-						AND c1.language= '" . $config['bbguild_lang'] . "'
+						AND c1.language= '" . $this->config['bbguild_lang'] . "'
 						AND c1.attribute = 'class'")) ,
 			'WHERE' => "
-					l1.attribute_id = r.race_id AND l1.game_id = r.game_id AND l1.language= '" . $config['bbguild_lang'] . "' AND l1.attribute = 'race'
+					l1.attribute_id = r.race_id AND l1.game_id = r.game_id AND l1.language= '" . $this->config['bbguild_lang'] . "' AND l1.attribute = 'race'
 					AND m.game_id = c.game_id
 					AND m.player_class_id = c.class_id
 					AND m.game_id = r.game_id
@@ -1091,10 +1119,10 @@ class player
 					AND m.player_guild_id = g.id
 					AND player_id = " . (int) $this->player_id);
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
 
 		if ($row)
 		{
@@ -1140,15 +1168,10 @@ class player
 		else
 		{
 			// load games class
-			global $phpbb_container;
 			$games = new game(
-				$phpbb_container->get('dbal.conn'),
-				$phpbb_container->get('cache.driver'),
-				$phpbb_container->get('config'),
-				$phpbb_container->get('user'),
-				$phpbb_container->get('ext.manager'),
+				$this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager,
 				$this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table,
-				$phpbb_container->getParameter('avathar.bbguild.tables.bb_games')
+				$this->bb_games_table
 			);
 			if (isset($games->games))
 			{
@@ -1208,32 +1231,31 @@ class player
 	 */
 	public function get_player_id($playername, $playerrealm, $guild_id = 0)
 	{
-		global $db;
 		if ($guild_id !=0)
 		{
 			$sql = 'SELECT player_id
                 FROM ' . $this->bb_players_table . '
-                WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
-                AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char()) . '
-                AND player_guild_id = ' . (int) $db->sql_escape($guild_id);
+                WHERE player_name ' . $this->db->sql_like_expression($this->db->get_any_char() . $this->db->sql_escape($playername) . $this->db->get_any_char()) . '
+                AND player_realm ' . $this->db->sql_like_expression($this->db->get_any_char() . $this->db->sql_escape($playerrealm) . $this->db->get_any_char()) . '
+                AND player_guild_id = ' . (int) $this->db->sql_escape($guild_id);
 		}
 		else
 		{
 			$sql = 'SELECT player_id
                 FROM ' . $this->bb_players_table . '
-                WHERE player_name ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playername) . $db->get_any_char()) . '
-                AND player_realm ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape($playerrealm) . $db->get_any_char());
+                WHERE player_name ' . $this->db->sql_like_expression($this->db->get_any_char() . $this->db->sql_escape($playername) . $this->db->get_any_char()) . '
+                AND player_realm ' . $this->db->sql_like_expression($this->db->get_any_char() . $this->db->sql_escape($playerrealm) . $this->db->get_any_char());
 		}
 
-		$result = $db->sql_query($sql);
+		$result = $this->db->sql_query($sql);
 		//take first one
-		while ($row = $db->sql_fetchrow($result))
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$membid = $row['player_id'];
 			break;
 		}
 
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		if (isset($membid))
 		{
 			return $membid;
@@ -1252,8 +1274,6 @@ class player
 	 */
 	public function Updateplayer(player $old_player)
 	{
-		global $user, $db;
-		global $config;
 
 		if ($this->player_id == 0)
 		{
@@ -1267,13 +1287,13 @@ class player
 			$sql = 'SELECT count(*) as playerexists
 				FROM ' . $this->bb_players_table . '
 				WHERE player_id <> ' . $this->player_id . "
-				AND UPPER(player_name) = UPPER('" . $db->sql_escape($this->player_name) . "')";
-			$result = $db->sql_query($sql);
-			$countm = $db->sql_fetchfield('playerexists');
-			$db->sql_freeresult($result);
+				AND UPPER(player_name) = UPPER('" . $this->db->sql_escape($this->player_name) . "')";
+			$result = $this->db->sql_query($sql);
+			$countm = $this->db->sql_fetchfield('playerexists');
+			$this->db->sql_freeresult($result);
 			if ($countm != 0)
 			{
-				trigger_error(sprintf($user->lang['ADMIN_UPDATE_PLAYER_FAIL'], ucwords($this->player_name)), E_USER_WARNING);
+				trigger_error(sprintf($this->user->lang['ADMIN_UPDATE_PLAYER_FAIL'], ucwords($this->player_name)), E_USER_WARNING);
 			}
 		}
 
@@ -1281,19 +1301,19 @@ class player
 		$sql = 'SELECT count(*) as rankccount
 				FROM ' . $this->bb_ranks_table . '
 				WHERE rank_id=' . (int) $this->player_rank_id . ' and guild_id = ' . $this->player_guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('rankccount');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$countm = $this->db->sql_fetchfield('rankccount');
+		$this->db->sql_freeresult($result);
 		if ($countm == 0)
 		{
-			trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
+			trigger_error($this->user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
 		}
 
 		// check level
 		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . $this->bb_classes_table;
-		$result = $db->sql_query($sql);
-		$maxlevel = $db->sql_fetchfield('maxlevel');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$maxlevel = $this->db->sql_fetchfield('maxlevel');
+		$this->db->sql_freeresult($result);
 		if ($this->player_level > $maxlevel)
 		{
 			$this->player_level = $maxlevel;
@@ -1306,7 +1326,7 @@ class player
 		}
 
 		// update the data including the phpbb userid
-		$query = $db->sql_build_array(
+		$query = $this->db->sql_build_array(
 			'UPDATE', array(
 				'player_name' => $this->player_name ,
 				'player_realm' => $this->player_realm,
@@ -1336,20 +1356,20 @@ class player
 		$sql = 'UPDATE ' . $this->bb_players_table . ' SET ' . $query . '
 			WHERE player_id= ' . $this->player_id;
 
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		// if status was 1 before then add a line in user comments and set an adjustment
 		if ($this->player_status == 0 && $old_player->player_status == 1)
 		{
 			// update the comment including the phpbb userid
-			$query = $db->sql_build_array(
+			$query = $this->db->sql_build_array(
 				'UPDATE', array(
 					'player_comment' => $this->player_comment . '
-' . sprintf($user->lang['BBGUILD_PLAYERDEACTIVATED'], $user->data['username'], date('d.m.y G:i:s', $this->time))  ,
+' . sprintf($this->user->lang['BBGUILD_PLAYERDEACTIVATED'], $this->user->data['username'], date('d.m.y G:i:s', $this->time))  ,
 				)
 			);
 
-			$db->sql_query(
+			$this->db->sql_query(
 				'UPDATE ' . $this->bb_players_table . ' SET ' . $query . '
 				WHERE player_id= ' . $this->player_id
 			);
@@ -1360,13 +1380,13 @@ class player
 		if ($this->player_status == 1 && $old_player->player_status == 0)
 		{
 			// update the comment including the phpbb userid
-			$query = $db->sql_build_array(
+			$query = $this->db->sql_build_array(
 				'UPDATE', array(
 					'player_comment' => $this->player_comment . '
-' . sprintf($user->lang['BBGUILD_PLAYERACTIVATED'], $user->data['username'], date('d.m.y G:i:s', $this->time))  ,
+' . sprintf($this->user->lang['BBGUILD_PLAYERACTIVATED'], $this->user->data['username'], date('d.m.y G:i:s', $this->time))  ,
 				)
 			);
-			$db->sql_query(
+			$this->db->sql_query(
 				'UPDATE ' . $this->bb_players_table . ' SET ' . $query . '
 				WHERE player_id= ' . $this->player_id
 			);
@@ -1388,10 +1408,9 @@ class player
 	 */
 	public function Deleteplayer()
 	{
-		global $user, $db;
 
 		$sql = 'DELETE FROM ' . $this->bb_players_table . ' where player_id = ' . (int) $this->player_id;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		$this->log->log_insert(
 			array(
@@ -1409,7 +1428,6 @@ class player
 	 */
 	public function Makeplayer()
 	{
-		global $user, $db, $config;
 
 		$error = array ();
 
@@ -1418,20 +1436,20 @@ class player
 		// check if playername exists
 		$sql = 'SELECT count(*) as playerexists
 				FROM ' . $this->bb_players_table . "
-				WHERE player_name= '" . $db->sql_escape(ucwords($this->player_name)) . "'
-				AND player_realm= '" . $db->sql_escape(ucwords($this->player_realm)) . "'
+				WHERE player_name= '" . $this->db->sql_escape(ucwords($this->player_name)) . "'
+				AND player_realm= '" . $this->db->sql_escape(ucwords($this->player_realm)) . "'
 				AND player_guild_id = " . $this->player_guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('playerexists');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$countm = $this->db->sql_fetchfield('playerexists');
+		$this->db->sql_freeresult($result);
 		if ($countm != 0)
 		{
-			$error[]= $user->lang['ERROR_PLAYEREXIST'];
+			$error[]= $this->user->lang['ERROR_PLAYEREXIST'];
 		}
 
 		if ($this->player_rank_id === null)
 		{
-			$error[]= $user->lang['ERROR_INCORRECTRANK'];
+			$error[]= $this->user->lang['ERROR_INCORRECTRANK'];
 		}
 
 		if ($this->player_status === null )
@@ -1449,12 +1467,12 @@ class player
 			FROM ' . $this->bb_ranks_table . '
 			WHERE rank_id=' . (int) $this->player_rank_id . '
 			AND guild_id = ' . (int) $this->player_guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('rankccount');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$countm = $this->db->sql_fetchfield('rankccount');
+		$this->db->sql_freeresult($result);
 		if ($countm == 0)
 		{
-			$error[]= $user->lang['ERROR_INCORRECTRANK'];
+			$error[]= $this->user->lang['ERROR_INCORRECTRANK'];
 		}
 
 		if (count($error) > 0)
@@ -1472,9 +1490,9 @@ class player
 
 		// check level
 		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . $this->bb_classes_table;
-		$result = $db->sql_query($sql);
-		$maxlevel = $db->sql_fetchfield('maxlevel');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$maxlevel = $this->db->sql_fetchfield('maxlevel');
+		$this->db->sql_freeresult($result);
 		if ($this->player_level > $maxlevel)
 		{
 			$this->player_level = $maxlevel;
@@ -1484,10 +1502,10 @@ class player
 		if ($this->player_realm =='' or  $this->player_region =='')
 		{
 			$sql = 'SELECT realm, region FROM ' . $this->bb_guild_table . ' WHERE id = ' . (int) $this->player_guild_id;
-			$result = $db->sql_query($sql);
-			$this->player_realm  = $config['bbguild_default_realm'];
+			$result = $this->db->sql_query($sql);
+			$this->player_realm  = $this->config['bbguild_default_realm'];
 			$this->player_region = '';
-			while ($row = $db->sql_fetchrow($result))
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$this->player_realm = $row['realm'];
 				$this->player_region = $row['region'];
@@ -1498,7 +1516,7 @@ class player
 		$this->generate_portrait_from_provider();
 
 		$this->last_update = $this->time;
-		$query = $db->sql_build_array(
+		$query = $this->db->sql_build_array(
 			'INSERT', array(
 				'player_name' => ucwords($this->player_name) ,
 				'player_status' => $this->player_status ,
@@ -1524,9 +1542,9 @@ class player
 			)
 		);
 
-		$db->sql_query('INSERT INTO ' . $this->bb_players_table . $query);
+		$this->db->sql_query('INSERT INTO ' . $this->bb_players_table . $query);
 
-		$this->player_id = $db->sql_nextid();
+		$this->player_id = $this->db->sql_nextid();
 
 		$this->log->log_insert(
 			array(
@@ -1551,7 +1569,6 @@ class player
 	 */
 	public function Armory_getplayer(?game_provider_interface $provider = null)
 	{
-		global $user, $cache;
 
 		$game = new game;
 		$game->game_id = $this->game_id;
@@ -1626,7 +1643,6 @@ class player
 	 */
 	private function Activate_player()
 	{
-		global $config, $user,  $db;
 		$changed = false;
 		if ($this->player_status == '0')
 		{
@@ -1636,13 +1652,13 @@ class player
 
 		if ($changed)
 		{
-			$query = $db->sql_build_array(
+			$query = $this->db->sql_build_array(
 				'UPDATE', array(
 					'player_status' => $this->player_status ,
 				)
 			);
 
-			$db->sql_query(
+			$this->db->sql_query(
 				'UPDATE ' . $this->bb_players_table . ' SET ' . $query . '
                 WHERE player_id= ' . $this->player_id
 			);
@@ -1665,7 +1681,6 @@ class player
 	 */
 	private function Deactivate_player()
 	{
-		global $config, $user, $db;
 		$changed = false;
 		if ($this->player_status == '1')
 		{
@@ -1675,13 +1690,13 @@ class player
 
 		if ($changed)
 		{
-			$query = $db->sql_build_array(
+			$query = $this->db->sql_build_array(
 				'UPDATE', array(
 					'player_status' => $this->player_status ,
 				)
 			);
 
-			$db->sql_query(
+			$this->db->sql_query(
 				'UPDATE ' . $this->bb_players_table . ' SET ' . $query . '
                 WHERE player_id= ' . $this->player_id
 			);
@@ -1706,15 +1721,13 @@ class player
 	 */
 	private function generate_portrait_from_provider()
 	{
-		global $phpbb_container;
 
 		// Try game registry for a provider with an API
-		if (isset($phpbb_container))
+		if ($this->game_registry !== null)
 		{
 			try
 			{
-				$registry = $phpbb_container->get('avathar.bbguild.game_registry');
-				$provider = $registry->get($this->game_id);
+				$provider = $this->game_registry->get($this->game_id);
 				if ($provider !== null && $provider->has_api())
 				{
 					$api = $provider->get_api();
@@ -1761,14 +1774,13 @@ class player
 	 */
 	public function GuildKick($player_name, $guild_id)
 	{
-		global $db, $user;
 		// find id for existing player name
 		$sql = 'SELECT *
 				FROM ' . $this->bb_players_table . "
-				WHERE player_name = '" . $db->sql_escape($player_name) . "' and player_guild_id = " . (int) $guild_id;
-		$result = $db->sql_query($sql);
+				WHERE player_name = '" . $this->db->sql_escape($player_name) . "' and player_guild_id = " . (int) $guild_id;
+		$result = $this->db->sql_query($sql);
 		// get old data
-		while ($row = $db->sql_fetchrow($result))
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->old_player = array(
 				'player_id' => $row['player_id'] ,
@@ -1776,7 +1788,7 @@ class player
 				'player_guild_id' => $row['player_guild_id'] ,
 				'player_comment' => $row['player_comment']);
 		}
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 		$sql_arr = array(
 			'player_rank_id' => 99 ,
@@ -1785,10 +1797,10 @@ class player
 			'player_guild_id' => 0);
 
 		$sql = 'UPDATE ' . $this->bb_players_table . '
-			SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
+			SET ' . $this->db->sql_build_array('UPDATE', $sql_arr) . '
 			WHERE player_id = ' . (int) $this->old_player['player_id'] . ' and player_guild_id = ' . (int) $this->old_player['player_guild_id'];
 
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 
 		$this->log->log_insert(
 			array(
@@ -1809,12 +1821,11 @@ class player
 	public function get_joindate($player_id)
 	{
 		// get player joindate
-		global $db;
 		$sql = 'SELECT player_joindate  FROM ' . $this->bb_players_table . ' WHERE player_id = ' . $player_id;
-		$result = $db->sql_query($sql, 3600);
-		$joindate = $db->sql_fetchfield('player_joindate');
+		$result = $this->db->sql_query($sql, 3600);
+		$joindate = $this->db->sql_fetchfield('player_joindate');
 
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 		return $joindate;
 
 	}
@@ -1829,7 +1840,6 @@ class player
 	 */
 	public function listallplayers($guild_id = 0, $assignedonly = false)
 	{
-		global $db;
 
 		$sql_array = array(
 			'SELECT'    => 'r.rank_name, m.player_id ,m.player_name, m.player_realm ',
@@ -1854,10 +1864,10 @@ class player
 			$sql_array['WHERE'] .= ' AND m.player_guild_id = ' . $guild_id;
 		}
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
 
-		while ( $row = $db->sql_fetchrow($result) )
+		while ( $row = $this->db->sql_fetchrow($result) )
 		{
 			$this->guildplayerlist[] = array(
 				'player_id'     => $row['player_id'],
@@ -1867,7 +1877,7 @@ class player
 			);
 		}
 
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 	}
 
 	/**
@@ -1875,16 +1885,15 @@ class player
 	 */
 	public function Claim_Player()
 	{
-		global $db, $user;
 
 		$sql_ary = array(
-			'phpbb_user_id'    => $user->data['user_id'],
+			'phpbb_user_id'    => $this->user->data['user_id'],
 		);
 
 		$sql = 'UPDATE ' . $this->bb_players_table . '
-						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+						SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE player_id = ' . $this->player_id;
-		$db->sql_query($sql);
+		$this->db->sql_query($sql);
 	}
 
 	/**
@@ -1894,14 +1903,13 @@ class player
 	 */
 	public function has_reached_maxbbguildaccounts()
 	{
-		global $config, $user, $db;
 		$sql = 'SELECT count(*) as charcount
 				FROM ' . $this->bb_players_table . '
-				WHERE phpbb_user_id = ' . (int) $user->data['user_id'];
-		$result = $db->sql_query($sql);
-		$countc = $db->sql_fetchfield('charcount');
-		$db->sql_freeresult($result);
-		return ($countc >= (int) $config['bbguild_maxchars']);
+				WHERE phpbb_user_id = ' . (int) $this->user->data['user_id'];
+		$result = $this->db->sql_query($sql);
+		$countc = $this->db->sql_fetchfield('charcount');
+		$this->db->sql_freeresult($result);
+		return ($countc >= (int) $this->config['bbguild_maxchars']);
 	}
 
 	/**
@@ -1928,7 +1936,6 @@ class player
 	)
 	{
 
-		global $db, $config, $user;
 		$sql_array = array();
 
 		$sql_array['SELECT'] =  'm.player_id, m.game_id, m.player_guild_id,  m.player_name, m.player_level, m.player_race_id, e1.name as race_name,
@@ -1950,7 +1957,7 @@ class player
 				'ON'    => 'u.user_id = m.phpbb_user_id '),
 			array(
 				'FROM'  => array($this->bb_language_table => 'c1'),
-				'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbguild_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "
+				'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $this->config['bbguild_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "
 			));
 
 		$sql_array['WHERE'] = ' c.class_id = m.player_class_id
@@ -1970,26 +1977,26 @@ class player
 
 		if ($mycharsonly ==false)
 		{
-			$sql_array['WHERE'] .= ' AND m.player_level >= ' . (int) $config['bbguild_minrosterlvl'];
+			$sql_array['WHERE'] .= ' AND m.player_level >= ' . (int) $this->config['bbguild_minrosterlvl'];
 		}
 
 		if ($player_filter != '')
 		{
-			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $db->sql_like_expression($db->get_any_char() . $db->sql_escape(mb_strtolower($player_filter)) . $db->get_any_char());
+			$sql_array['WHERE'] .= ' AND lcase(m.player_name) ' . $this->db->sql_like_expression($this->db->get_any_char() . $this->db->sql_escape(mb_strtolower($player_filter)) . $this->db->get_any_char());
 		}
 
 		$sql_array['WHERE'] .= " AND m.player_rank_id != 99
-			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbguild_lang'] . "'
+			AND e1.attribute_id = e.race_id AND e1.language= '" . $this->config['bbguild_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
 		if ($game_id != '' )
 		{
-			$sql_array['WHERE'] .= " AND m.game_id =  '" .  $db->sql_escape($game_id) . "'";
+			$sql_array['WHERE'] .= " AND m.game_id =  '" .  $this->db->sql_escape($game_id) . "'";
 		}
 
 		if ($mycharsonly == true)
 		{
-			$sql_array['WHERE'] .= ' AND m.phpbb_user_id =  ' . $user->data['user_id'];
+			$sql_array['WHERE'] .= ' AND m.phpbb_user_id =  ' . $this->user->data['user_id'];
 		}
 
 		if ($guild_id > 0)
@@ -2019,7 +2026,7 @@ class player
 
 		if ($filter != '' && $query_by_armor == true)
 		{
-			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape($filter) . "'";
+			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $this->db->sql_escape($filter) . "'";
 		}
 
 		// order
@@ -2033,9 +2040,7 @@ class player
 			6 => array('m.player_achiev', 'm.player_achiev  desc')
 		);
 
-		global $phpbb_container;
-		$util = $phpbb_container->get('avathar.bbguild.util');
-		$current_order = $util->switch_order($sort_order);
+		$current_order = $this->util->switch_order($sort_order);
 
 		if ($mode == 1)
 		{
@@ -2046,7 +2051,7 @@ class player
 			$sql_array['ORDER_BY']  = $current_order['sql'];
 		}
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 
 		if ($mode == 0)
 		{
@@ -2054,25 +2059,25 @@ class player
 			$player_count=0;
 
 			// get playercount in selection
-			$result = $db->sql_query($sql);
-			while ($row = $db->sql_fetchrow($result))
+			$result = $this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$player_count++;
 			}
 
 			//now get wanted window
-			$result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
-			$dataset = $db->sql_fetchrowset($result);
+			$result = $this->db->sql_query_limit($sql, $this->config['bbguild_user_llimit'], $start);
+			$dataset = $this->db->sql_fetchrowset($result);
 		}
 		else if ($mode == 1)
 		{
 			// CLASS mode
-			$result = $db->sql_query($sql);
-			$dataset = $db->sql_fetchrowset($result);
+			$result = $this->db->sql_query($sql);
+			$dataset = $this->db->sql_fetchrowset($result);
 			$player_count = count($dataset);
 		}
 
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 		$characters = array();
 
@@ -2122,7 +2127,6 @@ class player
 	 */
 	public function get_classes($filter, $query_by_armor, $classid, $game_id, $guild_id = 0, $race_id = 0, $level1 = 0, $level2 = 200)
 	{
-		global $db, $user, $config;
 		$sql_array = array(
 			'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename, c.colorcode' ,
 			'FROM'      => array(
@@ -2135,8 +2139,8 @@ class player
     							AND c.game_id = m.game_id
     							AND r.guild_id = m.player_guild_id
     							AND r.rank_id = m.player_rank_id AND r.rank_hide = 0
-    							AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbguild_lang'] . "' AND c1.attribute = 'class'
-    							AND (c.game_id = '" . $db->sql_escape($game_id) . "')
+    							AND c1.attribute_id =  c.class_id AND c1.language= '" . $this->config['bbguild_lang'] . "' AND c1.attribute = 'class'
+    							AND (c.game_id = '" . $this->db->sql_escape($game_id) . "')
     							AND c1.game_id=c.game_id
 
     							",
@@ -2145,9 +2149,9 @@ class player
 		);
 
 		// filters
-		if ($filter != $user->lang['ALL'] && $query_by_armor == true)
+		if ($filter != $this->user->lang['ALL'] && $query_by_armor == true)
 		{
-			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape($filter) . "'";
+			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $this->db->sql_escape($filter) . "'";
 		}
 
 		if ($guild_id > 0)
@@ -2155,7 +2159,7 @@ class player
 			$sql_array['WHERE'] .= ' AND m.player_guild_id =  ' . $guild_id;
 		}
 
-		if ($filter != $user->lang['ALL']  && $classid > 0)
+		if ($filter != $this->user->lang['ALL']  && $classid > 0)
 		{
 			$sql_array['WHERE'] .= ' AND m.player_class_id =  ' . $classid;
 		}
@@ -2175,10 +2179,10 @@ class player
 			$sql_array['WHERE'] .= ' AND m.player_level <=  ' . $level2;
 		}
 
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		$dataset = $db->sql_fetchrowset($result);
-		$db->sql_freeresult($result);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$dataset = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
 		unset($result);
 		return $dataset;
 	}

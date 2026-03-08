@@ -189,6 +189,9 @@ class bbguild_module
 		$ac = $this->admin_controller;
 		$this->bbguild_cache = $phpbb_container->get('cache.driver');
 		$this->bbguild_log = $phpbb_container->get('avathar.bbguild.log');
+		$this->bbguild_util = $phpbb_container->get('avathar.bbguild.util');
+		$this->bbguild_ext_manager = $phpbb_container->get('ext.manager');
+		$this->bbguild_game_registry = $phpbb_container->get('avathar.bbguild.game_registry');
 
 		// Attach the language files
 		$this->user->add_lang(array('acp/groups', 'acp/common'));
@@ -231,7 +234,7 @@ class bbguild_module
 				 */
 				$this->link = '';
 				$submit = $this->request->is_set_post('submit');
-				$player = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+				$player = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 				if ($submit)
 				{
 					if (!check_form_key('avathar/bbguild'))
@@ -341,7 +344,7 @@ class bbguild_module
 
 						if (confirm_box(true))
 						{
-							$deleteplayer = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+							$deleteplayer = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 							$deleteplayer->player_id = $this->request->variable('del_player_id', 0);
 							$deleteplayer->Getplayer();
 							$deleteplayer->Deleteplayer();
@@ -351,7 +354,7 @@ class bbguild_module
 						}
 						else
 						{
-							$deleteplayer = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+							$deleteplayer = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 							$deleteplayer->player_id = $this->request->variable('player_id', 0);
 							$deleteplayer->Getplayer();
 
@@ -375,7 +378,7 @@ class bbguild_module
 							trigger_error('FORM_INVALID');
 						}
 
-						$newplayer = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+						$newplayer = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 						if ($newplayer->has_reached_maxbbguildaccounts())
 						{
 							trigger_error(sprintf($this->user->lang['MAX_CHARS_EXCEEDED'], $this->config['bbguild_maxchars']), E_USER_WARNING);
@@ -474,7 +477,7 @@ class bbguild_module
 	private function UpdateMyCharacter($player_id)
 	{
 		$ac = $this->admin_controller;
-		$updateplayer = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$updateplayer = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 		$updateplayer->player_id = $player_id;
 		$updateplayer->Getplayer();
 
@@ -503,7 +506,7 @@ class bbguild_module
 		//override armory status
 		$updateplayer->setPlayerStatus($this->request->variable('activated', 0) > 0 ? 1 : 0);
 
-		$oldplayer = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$oldplayer = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 		$oldplayer->player_id = $updateplayer->player_id;
 		$oldplayer->Getplayer();
 		$updateplayer->Updateplayer($oldplayer);
@@ -522,7 +525,7 @@ class bbguild_module
 	{
 		global $phpbb_root_path;
 		$ac = $this->admin_controller;
-		$players = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$players = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 
 		// Attach the language file
 		$this->user->add_lang_ext('avathar/bbguild', array('common', 'admin'));
@@ -878,7 +881,7 @@ class bbguild_module
 
 		global $phpbb_root_path, $phpEx;
 		$ac = $this->admin_controller;
-		$players = new player($ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table);
+		$players = new player($this->db, $this->config, $this->bbguild_cache, $this->user, $this->bbguild_ext_manager, $this->bbguild_log, $this->bbguild_util, $ac->bb_players_table, $ac->bb_ranks_table, $ac->bb_classes_table, $ac->bb_races_table, $ac->bb_language_table, $ac->bb_guild_table, $ac->bb_factions_table, $ac->bb_games_table, $this->bbguild_game_registry);
 
 		$mycharacters = $players->getplayerlist(0, 0, false, false, '', '', 0, 0, 0, 0, 200, true, '', 1);
 
