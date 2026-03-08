@@ -291,7 +291,7 @@ class admin_main
 		}
 
 		//get number of games
-		$listgames = new \avathar\bbguild\model\games\game($this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table );
+		$listgames = new \avathar\bbguild\model\games\game($this->db, $this->cache, $this->config, $this->user, $this->phpbb_extension_manager, $this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_factions_table, $this->bb_games_table);
 
 
 		$sql = 'SELECT count(*) as recruitments_count FROM ' . $this->bb_recruit_table;
