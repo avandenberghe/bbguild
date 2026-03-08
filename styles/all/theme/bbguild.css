@@ -12,7 +12,6 @@
 .roster {
      padding-top: 15px;
      margin-left: 5px;
-     min-height: 807px;
      padding-bottom: 40px;
 }
 
@@ -46,7 +45,7 @@ table.table1.bbguild th {
     padding: 10px 10px 10px;
     margin-bottom: 10px;
     overflow: hidden;
-    min-height: 80px;
+    min-height: auto;
 }
 
 .guild-header-emblem {

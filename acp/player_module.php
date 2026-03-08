@@ -160,6 +160,7 @@ class player_module
 		$this->bbguild_util = $phpbb_container->get('avathar.bbguild.util');
 		$this->bbguild_ext_manager = $phpbb_container->get('ext.manager');
 		$this->bbguild_game_registry = $phpbb_container->get('avathar.bbguild.game_registry');
+		$this->path_helper = $phpbb_container->get('path_helper');
 
 		// Resolve table names from container parameters
 		$this->bb_players_table = $phpbb_container->getParameter('avathar.bbguild.tables.bb_players');
@@ -735,24 +736,45 @@ class player_module
 		$this->db->sql_freeresult($result);
 		$players_result = $this->guild->list_players($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $player_filter);
 		$lines          = 0;
+		$image_cache = [];
 		while ($row = $this->db->sql_fetchrow($players_result))
 		{
 			$phpbb_user_id = (int) $row['phpbb_user_id'];
 			$race_image    = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$lines += 1;
 
-			if (file_exists($this->ext_path . 'images/class_images/' . $row['imagename'] . '.png'))
+			// Resolve game-specific image paths via game_registry
+			$game_id = $row['game_id'] ?? '';
+			if (!isset($image_cache[$game_id]))
 			{
-				$class_img = $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png';
+				$provider = $this->bbguild_game_registry->get($game_id);
+				if ($provider)
+				{
+					$image_cache[$game_id] = [
+						'path' => $provider->get_images_path(),
+						'web'  => $this->path_helper->update_web_root_path($provider->get_images_path()),
+					];
+				}
+				else
+				{
+					$image_cache[$game_id] = ['path' => '', 'web' => ''];
+				}
+			}
+			$img_path = $image_cache[$game_id]['path'];
+			$img_web  = $image_cache[$game_id]['web'];
+
+			if ($img_path && file_exists($img_path . 'class_images/' . $row['imagename'] . '.png'))
+			{
+				$class_img = $img_web . 'class_images/' . $row['imagename'] . '.png';
 			}
 			else
 			{
 				$class_img = '';
 			}
 
-			if (file_exists($this->ext_path . 'images/race_images/' . $race_image . '.png'))
+			if ($img_path && file_exists($img_path . 'race_images/' . $race_image . '.png'))
 			{
-				$race_img = $this->ext_path . 'images/race_images/' . $race_image . '.png';
+				$race_img = $img_web . 'race_images/' . $race_image . '.png';
 			}
 			else
 			{
@@ -771,10 +793,10 @@ class player_module
 					'LEVEL'                => ($row['player_level'] > 0) ? $row['player_level'] : '&nbsp;',
 					'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
 					'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
-					'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $class_img : '',
-					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-					'RACE_IMAGE'           => (strlen($race_image) > 1) ? $race_img : '',
-					'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
+					'CLASS_IMAGE'          => $class_img,
+					'S_CLASS_IMAGE_EXISTS' => !empty($class_img),
+					'RACE_IMAGE'           => $race_img,
+					'S_RACE_IMAGE_EXISTS'  => !empty($race_img),
 					'CLASS'                => ($row['player_class'] != 'NULL') ? $row['player_class'] : '&nbsp;',
 					'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : $this->user->format_date($row['last_update']),
 					'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
@@ -861,7 +883,7 @@ class player_module
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
 				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $this->guild->getGuildid()),
 				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
-				'GUILD_EMBLEM'          => $this->guild->getEmblempath(),
+				'GUILD_EMBLEM'          => (!empty($this->guild->getEmblempath()) && @file_exists($this->guild->getEmblempath())) ? $this->guild->getEmblempath() : '',
 				'GUILD_NAME'            => $this->guild->getName(),
 			)
 		);

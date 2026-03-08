@@ -47,12 +47,12 @@
                     <table style="border-color:#FFFFFF">
                         <tr>
                             <td>{{ lang('MALE') }}&nbsp;</td>
-                            <td><input class="medium" type="text" id="image_male" name="image_male" value="{{ RACE_IMAGENAME_M }}" />
+                            <td><input class="medium" type="text" id="image_male" name="image_male" value="{{ RACE_IMAGENAME_M }}" placeholder="filename (.png)" />
                                 {% if S_RACE_IMAGE_M_EXISTS %}&nbsp;<img style="vertical-align: middle;" src="{{ RACE_IMAGE_M }}" alt="{{ RACE_IMAGE_M }}" />  {% endif %} <br/><span style="color: red">{{ MIMAGEWARNING }}</span></td>
                         </tr>
                         <tr>
                             <td>{{ lang('FEMALE') }}&nbsp;</td>
-                            <td><input class="medium" type="text" id="image_female" name="image_female" value="{{ RACE_IMAGENAME_F }}" />
+                            <td><input class="medium" type="text" id="image_female" name="image_female" value="{{ RACE_IMAGENAME_F }}" placeholder="filename (.png)" />
                                 {% if S_RACE_IMAGE_F_EXISTS %}&nbsp;<img style="vertical-align: middle;" src="{{ RACE_IMAGE_F }}" alt="{{ RACE_IMAGE_F }}" />  {% endif %} <br/><span style="color: red">{{ FIMAGEWARNING }}</span></td>
                         </tr>
                     </table>

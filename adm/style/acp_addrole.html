@@ -11,6 +11,15 @@
         }
         return true;
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var picker = document.getElementById('role_color_picker');
+        var text = document.getElementById('role_color');
+        picker.addEventListener('input', function() { text.value = this.value; });
+        text.addEventListener('input', function() {
+            if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) { picker.value = this.value; }
+        });
+    });
     //]]>
 </script>
 <a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
@@ -44,7 +53,10 @@
             </dl>
             <dl>
                 <dt><label for="role_color">{{ lang('ROLE_COLOR') }}:</label></dt>
-                <dd><input type="text" id="role_color" name="role_color" value="{{ ROLE_COLOR }}" /></dd>
+                <dd>
+                    <input type="color" id="role_color_picker" value="{{ ROLE_COLOR }}" style="vertical-align: middle; width: 50px; height: 30px; border: none; padding: 0; cursor: pointer;" />
+                    <input type="text" id="role_color" name="role_color" value="{{ ROLE_COLOR }}" style="margin-left: 5px;" />
+                </dd>
             </dl>
             <dl>
                 <dt><label for="role_icon">{{ lang('ROLE_ICON') }}:</label></dt>

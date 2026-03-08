@@ -37,7 +37,7 @@
 <p>{{ PREINSTALLED }}</p>
 
 {% if S_INSTALLED%}
-<fieldset style="background-color: #EEEEEE">
+<fieldset>
     <legend>{{ lang('DEFAULT_GAME') }}</legend>
     <dl>
         <dt>
@@ -57,7 +57,7 @@
 </fieldset>
 {% endif %}
 
-<fieldset style="background-color: #EEEEEE">
+<fieldset>
     <legend>{{ lang('ADD_GAME') }}</legend>
     {% if CANINSTALL == 1 %}
     <form id="acp_listgames" method="post" action="{{ U_ACTION }}">

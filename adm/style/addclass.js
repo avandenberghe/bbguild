@@ -1,12 +1,20 @@
 (function($) {
-    $(document).ready(
-        function() {
-            $('#nojquery').hide();
-            $('#picker').farbtastic('#classcolor');
-        }
-    );
+    $(document).ready(function() {
+        var picker = document.getElementById('classcolorpicker');
+        var text = document.getElementById('classcolor');
 
+        // Sync color picker → text input
+        picker.addEventListener('input', function() {
+            text.value = this.value;
+        });
 
+        // Sync text input → color picker
+        text.addEventListener('input', function() {
+            if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+                picker.value = this.value;
+            }
+        });
+    });
 })(jQuery);
 
 function check_form()
@@ -23,22 +31,20 @@ function check_form()
 }
 
 function isValidChar(char, e){
-
     var txt = char;
     var found = false;
-    var validChars = "0123456789"; //List of valid characters
+    var validChars = "0123456789";
 
-    for(j=0;j<txt.length;j++){ //Will look through the value of text
+    for(var j=0;j<txt.length;j++){
         var c = txt.charAt(j);
         found = false;
-        for(x=0;x<validChars.length;x++){
+        for(var x=0;x<validChars.length;x++){
             if(c==validChars.charAt(x)) {
                 found=true;
                 break;
             }
         }
         if(!found) {
-            //If invalid character is found remove it and return the valid character(s).
             document.getElementById(e).value = char.substring(0, char.length -1);
             break;
         }

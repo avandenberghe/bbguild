@@ -1,0 +1,46 @@
+/* bbguild acp css
+-------------------*/
+.positive {
+    color: #00BB55;
+}
+.negative {
+    color: #FF3344;
+}
+
+.warningbox {
+    padding: 8px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.warningbox h3 {
+    margin: 0 0 0.5em;
+    font-size: 1.10em;
+    font-family: "Lucida Grande",Verdana,Helvetica,Arial,sans-serif;
+}
+
+.warningbox p {
+    font-size: 0.85em;
+    margin-bottom: 0;
+}
+
+div.search-box input {
+    padding-left: 17px;
+    text-align: right;
+    white-space: nowrap;
+    margin: 0;
+    line-height: 1;
+    height: 18px;
+}
+
+select
+{
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 1px;
+    font-size: 1em;
+    border-radius: 0;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    width: 200px;
+}

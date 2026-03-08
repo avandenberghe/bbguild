@@ -1,8 +1,5 @@
 {% INCLUDE 'overall_header.html' %}
 {% INCLUDEJS '@avathar_bbguild/addclass.js' %}
-{% INCLUDEJS '@avathar_bbguild/lib/farbtastic.js' %}
-{% INCLUDECSS '@avathar_bbguild/css/farbtastic.css' %}
-<link rel="stylesheet" href="../ext/avathar/bbguild/adm/style/css/farbtastic.css" type="text/css" />
 <a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
 
 <h1>{{ lang('ACP_ADDCLASS') }}</h1>
@@ -44,25 +41,16 @@
 
 	<dl>
 		<dt><label for="image">{{ lang('CLASS_IMAGE') }}:</label><br/>{{ lang('CLASS_IMAGE_EXPLAIN') }}</dt>
-		<dd><input class="medium" type="text" id="image" name="image" value="{{ CLASS_IMAGENAME }}" />
+		<dd><input class="medium" type="text" id="image" name="image" value="{{ CLASS_IMAGENAME }}" placeholder="filename (.png)" />
 			{% if S_CLASS_IMAGE_EXISTS %} &nbsp;<img style="vertical-align: middle;" src="{{ CLASS_IMAGE }}" alt="{{ CLASS_NAME }}" />  {% endif %} <br />{{ IMAGEWARNING }}
 		</dd>
 	</dl>
 
 	<dl>
-		<dt><label>{{ lang('CLASS_COLOR') }}</label><br />{{ lang('CLASS_COLOR_EXPLAIN') }}</dt>
+		<dt><label for="classcolor">{{ lang('CLASS_COLOR') }}</label><br />{{ lang('CLASS_COLOR_EXPLAIN') }}</dt>
 		<dd>
-			<table style=" border-width: 0px;">
-			<tr>
-				<td>
-				<span id="nojquery" style="color: red; font-size: 1.4em">{{ lang('JQUERY_MISSING') }}</span>
-				  <span id="picker"></span>
-		       	</td>
-	       		<td>
-				<span class="form-item"><input type="text" id="classcolor" name="classcolor" value="{{ COLORCODE }}" /></span>
-	    	 	</td>
-		     </tr>
-			</table>
+			<input type="color" id="classcolorpicker" value="{{ COLORCODE }}" style="vertical-align: middle; width: 50px; height: 30px; border: none; padding: 0; cursor: pointer;" />
+			<input type="text" id="classcolor" name="classcolor" value="{{ COLORCODE }}" class="medium" style="margin-left: 5px;" />
 		</dd>
 	</dl>
 </fieldset>
