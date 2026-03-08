@@ -5,7 +5,7 @@
 **bbGuild** is a Guild Management System for phpBB 3.3+ designed for World of Warcraft gaming communities. It provides guild roster management, character tracking, achievements, recruitment, and integration with the Battle.net API.
 
 - **Author:** Andreas Vandenberghe (Sajaki)
-- **Version:** 2.0.0-b1 (beta)
+- **Version:** 2.0.0-b2 (beta)
 - **License:** GPL-2.0-only
 - **Repository:** https://github.com/avatharbe/bbguild
 
@@ -14,7 +14,7 @@
 | Metric | Value |
 |--------|-------|
 | First commit | May 28, 2010 |
-| Status | Phase 1 complete, Portal feature added |
+| Status | Phase 2 in progress, Portal refactored |
 | Tracking issue | [#303](https://github.com/avatharbe/bbguild/issues/303) |
 
 ## Requirements
@@ -37,20 +37,18 @@ bbguild/
 │   ├── admin/             # Utilities (curl, log, constants)
 │   ├── api/               # Battle.net API client
 │   ├── games/             # Game definitions + installers
-│   ├── player/            # Player, guild, rank management
-│   └── blocks/            # Display blocks
-├── portal/                # Portal block engine (forked from Board3 design)
+│   └── player/            # Player, guild, rank management
+├── portal/                # Portal block engine + guild context
 │   └── modules/          # Module infrastructure + built-in modules
 ├── event/                 # Event listeners
 ├── migrations/            # Database migrations
 │   ├── basics/           # Initial install (schema, data, config, permissions, modules)
-│   └── v200b1/           # Release 2.0.0-b1 (portal data, ACP module, version stamp)
+│   └── v200b2/           # Release 2.0.0-b2 (schema fix, version stamp)
 ├── config/                # Services and routing (YAML)
 ├── styles/                # Templates
 ├── language/              # Localization (en, fr, de, it, nl, es_x_tu, pl)
 ├── images/                # Game icons
 ├── contrib/               # Changelog, docs, diagrams
-├── views/                 # View helpers
 └── tests/                 # Unit tests
 ```
 
@@ -58,15 +56,13 @@ bbguild/
 
 | File | Purpose |
 |------|---------|
-| `view_controller.php` | Frontend (welcome, roster, achievements) |
+| `view_controller.php` | Frontend (portal page, delegates to guild_context + portal_renderer) |
 | `admin_main.php` | ACP panel, config, logs |
 | `admin_games.php` | Game management |
 | `admin_guild.php` | Guild management |
-| `admin_recruit.php` | Recruitment |
-| `admin_player.php` | Player management (empty) |
-| `admin_achievement.php` | Achievement management |
 | `admin_portal.php` | Portal module management |
-| `ajax.php` | AJAX endpoints |
+| `ajax_controller.php` | AJAX endpoints (faction, rank, player, class/race selectors) |
+| `validator.php` | Input validation |
 
 ### Database Tables (21)
 
@@ -90,7 +86,8 @@ Game plugins live at `ext/avathar/bbguild_<game>/`. Each provides a provider + i
 
 ### Routes
 
-- `/guild/{page}/{guild_id}` - Main pages (welcome, roster, achievements)
+- `/guild/{guild_id}` - Main guild portal page (primary route)
+- `/guild/{page}/{guild_id}` - Legacy compat route ($page ignored)
 - `/getfaction` - AJAX faction selector
 - `/getguildrank/{guild_id}` - AJAX rank selector
 - `/getplayerList/{game_id}` - AJAX player list
@@ -124,6 +121,16 @@ Game plugins live at `ext/avathar/bbguild_<game>/`. Each provides a provider + i
 - **Missing `switch_order` call** - `player.php:2063` called `$this->switch_order()` but method lives in `util` service
 - **Missing properties** - `$this->ext_path` and `$this->games` not initialized in `player.php` constructor; `$this->games` not set in `viewnavigation.php`
 - **Missing `ALL` lang key** - Added to all 4 language files (was removed during language cleanup)
+- **#336** - Assignment instead of comparison in ranks.php condition (`$RankId = 0` → `$RankId == 0`)
+- **#337** - Wrong cache invalidation in roles.php delete_role() (bb_classes_table → bb_gameroles_table)
+- **#341** - faction_id cast to string instead of int in classes.php
+- **#343** - bb_news bbcode columns aligned to phpBB standard types
+- **#344** - Type mismatch in module_helper group_id check (strict int comparison)
+- **#346** - view_controller slimmed from 29 to 4 args; guild_context moved to portal/ as DI service
+- **#345** - Roster rewritten as portal module with grid/listing layout switcher and pagination
+- **Missing DI args** - new game() calls in admin_main.php and admin_games.php were missing db, cache, config, user, ext_manager
+- **ACP/UCP service locator** - player_module.php and bbguild_module.php no longer depend on view_controller for table names; resolve from container parameters
+- **Dead code cleanup** - Removed viewwelcome.php, viewroster.php, viewnavigation.php, iviews.php, admin_player.php, model/blocks/
 
 ## Incomplete Features (Must Have)
 
@@ -165,6 +172,14 @@ Game plugins live at `ext/avathar/bbguild_<game>/`. Each provides a provider + i
 3. ~~Welcome page rewrite to use portal renderer~~ Done
 4. ~~ACP Portal Management (add/remove/reorder/toggle modules per guild)~~ Done
 5. ~~Portal language files (7 languages)~~ Done
+
+### Phase 1.6: Refactor and cleanup — COMPLETE (2.0.0-b2)
+1. ~~Slim view_controller (29→4 args), guild_context as DI service~~ Done
+2. ~~Roster rewritten as portal module with grid/listing switcher~~ Done
+3. ~~Remove dead code (views/, blocks/, empty stubs)~~ Done
+4. ~~Remove ACP/UCP dependency on view_controller as service locator~~ Done
+5. ~~Fix multiple minor bugs (#336, #337, #341, #343, #344)~~ Done
+6. ~~Migrations squashed to b2~~ Done
 
 ### Phase 2: Feature completion
 - #290 — UCP bbguild page

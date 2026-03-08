@@ -19,18 +19,16 @@ bbguild/
 ├── language/               # Localization (en, de, fr, it, nl, es_x_tu, pl)
 ├── migrations/             # Database migrations
 │   ├── basics/             # Initial install (schema, data, config, permissions, modules)
-│   └── v200b1/             # 2.0.0-b1 (portal data, ACP module, release stamp)
+│   └── v200b2/             # 2.0.0-b2 (schema fix, release stamp)
 ├── model/                  # Business logic and data access
 │   ├── admin/              # Utilities: curl, log, constants, util
 │   ├── api/                # Battle.net API client
-│   ├── blocks/             # Display block helpers
 │   ├── games/              # Game registry, abstract installer, custom game
 │   └── player/             # Player, guild, rank models
-├── portal/                 # Portal block engine
+├── portal/                 # Portal block engine + guild context
 │   └── modules/            # Module infrastructure + built-in modules
 ├── styles/                 # Twig templates (prosilver)
 ├── ucp/                    # User Control Panel modules
-├── views/                  # View helpers (guild_context)
 ├── images/                 # UI assets (emblems, icons, progressbar)
 ├── contrib/                # Documentation, diagrams, changelog
 └── tests/                  # Unit tests
@@ -88,19 +86,18 @@ All services are defined in `config/services.yml` and `config/portal_services.ym
 
 | Service ID | Class | Purpose |
 |---|---|---|
-| `avathar.bbguild.portal.renderer` | `portal\renderer` | Renders portal layout for a guild |
+| `avathar.bbguild.guild_context` | `portal\guild_context` | Resolves guild, loads data, assigns header template vars |
+| `avathar.bbguild.portal.renderer` | `portal\portal_renderer` | Renders portal layout for a guild |
 | `avathar.bbguild.portal.columns` | `portal\columns` | Column constants and helpers |
-| `avathar.bbguild.portal.module_registry` | `portal\modules\module_registry` | Available module type lookup |
+| `avathar.bbguild.portal.module_helper` | `portal\module_helper` | Module rendering helper (template, language, columns) |
+| `avathar.bbguild.portal.module_registry` | `portal\module_registry` | Available module type lookup |
 | `avathar.bbguild.portal.modules.manager` | `portal\modules\manager` | Module CRUD operations |
 | `avathar.bbguild.portal.modules.database_handler` | `portal\modules\database_handler` | Module config persistence |
 
 Built-in portal modules (tagged `bbguild.portal.module`):
 - `portal_motd` - Message of the Day
-- `portal_news` - Guild News
 - `portal_recruit` - Recruitment Status
-- `portal_roster` - Guild Roster (center-only, with filters and pagination)
-- `portal_activity` - Activity Feed
-- `portal_custom` - Custom HTML Block
+- `portal_roster` - Guild Roster (center-only, with grid/listing layout switcher, filters, and pagination)
 
 ## Routes
 
@@ -234,7 +231,7 @@ The log system (`model/admin/log.php`) follows the phpBB log design pattern:
 
 ```
 basics/schema -> basics/data -> basics/config -> basics/permissions -> basics/modules
-    -> v200b1/portal_data -> v200b1/release_2_0_0_b1
+    -> v200b2/release_2_0_0_b2
 ```
 
 ## Future: DKP Plugin

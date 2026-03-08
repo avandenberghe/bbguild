@@ -6,13 +6,13 @@ A Guild Management System for [phpBB 3.3](https://www.phpbb.com/). Manage your g
 
 Originally forked as bbDKP from EQDKP to phpBB 3.0 in 2008, the 2.0 version has been renamed bbGuild and rebuilt for phpBB 3.3 and PHP 8.x.
 
-**Current version:** 2.0.0-b1 (beta)
+**Current version:** 2.0.0-b2 (beta)
 
 ## Features
 
 ### Guild Portal
 - **Block-based welcome page** — configurable portal with 3-column layout (top, center, right)
-- **Built-in modules** — Message of the Day, Guild News, Recruitment, Activity Feed, Custom Block
+- **Built-in modules** — Message of the Day, Roster, Recruitment
 - **Guild-scoped** — each guild gets its own portal layout, independently configured
 - **Module plugin system** — extensible via tagged services; add custom portal modules from other extensions
 - **ACP management** — add, remove, reorder, move between columns, and enable/disable modules per guild

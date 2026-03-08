@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0-b2 08/03/2026
+  - [CHG] #346: Slimmed view_controller from 29 to 4 constructor args; guild_context moved to portal/ as proper DI service
+  - [CHG] #345: Roster rewritten as portal module with grid/listing layout switcher and pagination
+  - [CHG] Renamed portal controller_helper to module_helper to avoid confusion with phpBB controllers
+  - [CHG] ACP/UCP modules no longer depend on view_controller as service locator; resolve table names from container parameters
+  - [CHG] Removed dead code: viewwelcome.php, viewroster.php, viewnavigation.php, iviews.php, admin_player.php (empty stub), model/blocks/
+  - [CHG] Moved WoW-specific achievement templates (acp_addachievement.html, acp_listachievements.html) to bbguild_wow plugin
+  - [CHG] Migrations squashed into basics/ + v200b2/ for clean install
+  - [FIX] #336: Assignment instead of comparison in ranks.php condition (`$RankId = 0` → `$RankId == 0`)
+  - [FIX] #337: Wrong cache invalidation in roles.php delete_role() (was destroying bb_classes_table instead of bb_gameroles_table)
+  - [FIX] #341: faction_id cast to string instead of int in classes.php
+  - [FIX] #343: bb_news bbcode columns aligned to phpBB standard (VCHAR:255 for bitfield, UINT for options)
+  - [FIX] #344: Type mismatch in module_helper group_id check (strict int comparison)
+  - [FIX] Missing DI arguments in new game() constructor calls in admin_main.php and admin_games.php
+  - [FIX] Undefined $phpbb_container in player_module.php roles constructor
+  - [FIX] Updated Mozilla CA certificate bundle (cacert.pem)
+
 ## 2.0.0-b1 05/03/2026
   - [NEW] Portal system: guild-scoped block engine forked from Board3 Portal design (GPL-2.0)
   - [NEW] Portal modules: Message of the Day, Roster, Recruitment
