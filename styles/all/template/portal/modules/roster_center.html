@@ -3,6 +3,7 @@
 {{ definition.C_BLOCK_H_R }}
 
 <div class="roster">
+	{% if S_PORTAL_HAS_ROSTER %}
 	<div class="action-bar top">
 		<form id="roster_filter" method="get" action="{{ F_ROSTER }}">
 			<div>
@@ -38,8 +39,6 @@
 		</div>
 		{% endif %}
 	</div>
-
-	{% if S_PORTAL_HAS_ROSTER %}
 
 	{% if S_DISPLAY_ROSTERLISTING %}
 	{# ---- Listing view ---- #}
