@@ -9,243 +9,44 @@
 
 namespace avathar\bbguild\controller;
 
-use avathar\bbguild\views\guild_context;
-use avathar\bbguild\model\games\game;
+use avathar\bbguild\portal\guild_context;
+use avathar\bbguild\portal\portal_renderer;
 
 /**
- * Class view_controller
- *
-* @package avathar\bbguild\controller
+ * Front-end controller for the guild portal page.
+ * Handles the /guild/{page}/{guild_id} route.
  */
 class view_controller
 {
-	public $bb_games_table;
-	public $bb_logs_table;
-	public $bb_ranks_table;
-	public $bb_guild_table;
-	public $bb_players_table;
-	public $bb_classes_table;
-	public $bb_races_table;
-	public $bb_gameroles_table;
-	public $bb_factions_table;
-	public $bb_language_table;
-	public $bb_motd_table;
-	public $bb_recruit_table;
-	public $bb_bosstable;
-	public $bb_zonetable;
-	public $bb_news;
+	/** @var \phpbb\controller\helper */
+	protected $helper;
 
-	/** @var \avathar\bbguild\model\games\game_registry */
-	public $game_registry;
+	/** @var \phpbb\template\template */
+	protected $template;
 
-	/** @var \avathar\bbguild\portal\portal_renderer */
-	public $portal_renderer;
+	/** @var guild_context */
+	protected $guild_context;
 
+	/** @var portal_renderer */
+	protected $portal_renderer;
 
 	/**
-	 * @var \phpbb\config\config
-	 */
-	public $config;
-	/**
-	 * @var \phpbb\controller\helper
-	 */
-	public $helper;
-	/**
-	 * @var \phpbb\template\template
-	 */
-	public $template;
-	/**
-	 * @var \phpbb\db\driver\driver_interface
-	 */
-	public $db;
-	/**
-	 * @var \phpbb\request\request
-	 */
-	public $request;
-	/**
-	 * @var \phpbb\user
-	 */
-	public $user;
-	/**
-	 * @var string
-	 */
-	public $phpEx;
-	/**
-	 * @var \phpbb\pagination
-	 */
-	public $pagination;
-	/** @var \phpbb\cache\driver\driver_interface */
-	public $cache;
-	/**
-	 * @var \phpbb\extension\manager
-	 */
-	public $phpbb_extension_manager;
-	/**
-	 * @var string
-	 */
-	public $ext_path;
-	/**
-	 * @var string
-	 */
-	public $ext_path_web;
-	/**
-	 * @var string
-	 */
-	public $ext_path_images;
-	/**
-	 * @var string
-	 */
-	public $root_path;
-	/**
-	 * @var array
-	 */
-	public $games;
-
-	/**
-	 * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
-	 * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
-	 *
-	 * @var array
-	 */
-	public $languagecodes;
-
-
-	/**
-	 * view_controller constructor.
-	 *
-	 * @param \phpbb\auth\auth                  $auth
-	 * @param \phpbb\config\config              $config
-	 * @param \phpbb\controller\helper          $helper
-	 * @param $php_ext
-	 * @param $root_path
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\extension\manager          $phpbb_extension_manager
-	 * @param \phpbb\language\language          $language
-	 * @param \phpbb\pagination                 $pagination
-	 * @param \phpbb\path_helper                $path_helper
-	 * @param \phpbb\template\template          $template
-	 * @param \phpbb\request\request            $request
-	 * @param \phpbb\user                       $user
-	 * @param  string           $bb_games_table	name of game table
-	 * @param  string           $bb_logs_table	name of logging table
-	 * @param  string           $bb_ranks_table	name of ranks table
-	 * @param  string           $bb_guild_table	name of guild table
-	 * @param  string           $bb_players_table	name of players table
-	 * @param  string           $bb_classes_table	name of classes table
-	 * @param  string           $bb races_table		name of races table
-	 * @param  string           $bb_gameroles_table	name of roles table
-	 * @param  string           $bb_factions_table	name of factions table
-	 * @param  string           $bb_language_table	name of language table
-	 * @param  string           $bb_motd_table	name of motd table
-	 * @param  string           $recruit_table	name of recruit table
-	 * @param  string           $bb_bosstable	name of boss table
-	 * @param  string           $bb_zonetable	name of zone table
-	 * @param  string           $bb_news	name of news table
-	 * @param  \avathar\bbguild\model\games\game_registry $game_registry
-	 * @param  \avathar\bbguild\portal\portal_renderer $portal_renderer
+	 * @param \phpbb\controller\helper $helper
+	 * @param \phpbb\template\template $template
+	 * @param guild_context            $guild_context
+	 * @param portal_renderer          $portal_renderer
 	 */
 	public function __construct(
-		\phpbb\auth\auth $auth,
-		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		$php_ext,
-		$root_path,
-		\phpbb\db\driver\driver_interface $db,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\language\language $language,
-		\phpbb\pagination $pagination,
-		\phpbb\path_helper $path_helper,
 		\phpbb\template\template $template,
-		\phpbb\request\request $request,
-		\phpbb\user $user,
-		\phpbb\cache\driver\driver_interface $cache,
-		$bb_games_table,
-		$bb_logs_table,
-		$bb_ranks_table,
-		$bb_guild_table,
-		$bb_players_table,
-		$bb_classes_table,
-		$bb_races_table,
-		$bb_gameroles_table,
-		$bb_factions_table,
-		$bb_language_table,
-		$bb_motd_table,
-		$bb_recruit_table,
-		$bb_bosstable,
-		$bb_zonetable,
-		$bb_news,
-		\avathar\bbguild\model\games\game_registry $game_registry,
-		\avathar\bbguild\portal\portal_renderer $portal_renderer
+		guild_context $guild_context,
+		portal_renderer $portal_renderer
 	)
 	{
-
-		$this->auth         = $auth;
-		$this->config       = $config;
-		$this->helper       = $helper;
-		$this->php_ext      = $php_ext;
-		$this->root_path  	= $root_path;
-		$this->db           = $db;
-		$this->phpbb_extension_manager = $phpbb_extension_manager;
-		$this->ext_path            = $this->phpbb_extension_manager->get_extension_path('avathar/bbguild', true);
-		$this->language         = $language;
-		$this->pagination     = $pagination;
-		$this->path_helper    = $path_helper;
-		$this->ext_path_web        = $this->path_helper->get_web_root_path();
-		$this->ext_path_images    = $this->ext_path_web . 'ext/avathar/bbguild/images/';
-		$this->template     = $template;
-		$this->request      = $request;
-		$this->user         = $user;
-		$this->cache        = $cache;
-		$this->bb_games_table = $bb_games_table;
-		$this->bb_logs_table = $bb_logs_table;
-		$this->bb_ranks_table = $bb_ranks_table;
-		$this->bb_guild_table = $bb_guild_table;
-		$this->bb_players_table = $bb_players_table;
-		$this->bb_classes_table = $bb_classes_table;
-		$this->bb_races_table = $bb_races_table;
-		$this->bb_gameroles_table = $bb_gameroles_table;
-		$this->bb_factions_table = $bb_factions_table;
-		$this->bb_language_table = $bb_language_table;
-		$this->bb_motd_table = $bb_motd_table;
-		$this->bb_recruit_table = $bb_recruit_table;
-		$this->bb_bosstable = $bb_bosstable;
-		$this->bb_zonetable =  $bb_zonetable;
-		$this->bb_news = $bb_news;
-		$this->game_registry = $game_registry;
+		$this->helper = $helper;
+		$this->template = $template;
+		$this->guild_context = $guild_context;
 		$this->portal_renderer = $portal_renderer;
-
-		$this->languagecodes = array(
-			'de' => $user->lang['LANG_DE'],
-			'en' => $user->lang['LANG_EN'],
-			'fr' => $user->lang['LANG_FR'],
-			'it' => $user->lang['LANG_IT']
-		);
-
-		$listgames = new game($db, $cache, $config, $user, $phpbb_extension_manager, $bb_classes_table, $bb_races_table, $bb_language_table, $bb_factions_table, $bb_games_table );
-		$this->games = $listgames->games;
-		unset($listgames);
-
-	}
-
-	/**
-	 * Resolve game-specific images web path via game_registry.
-	 *
-	 * @param string $game_id
-	 * @return string Web-accessible images path, falls back to core bbguild images
-	 */
-	public function get_game_images_web_path(string $game_id): string
-	{
-		$provider = $this->game_registry->get($game_id);
-		if ($provider !== null)
-		{
-			$filesystem_path = $provider->get_images_path();
-			$pos = strpos($filesystem_path, 'ext/');
-			if ($pos !== false)
-			{
-				return $this->ext_path_web . substr($filesystem_path, $pos);
-			}
-		}
-		return $this->ext_path_images;
 	}
 
 	/**
@@ -257,14 +58,14 @@ class view_controller
 	 */
 	public function handleview($guild_id, $page = 'welcome')
 	{
-		// Build guild context (sidebar, header, guild data)
-		$context = new guild_context($this, $guild_id);
+		// Build guild context (header, guild dropdown)
+		$this->guild_context->init((int) $guild_id);
 
 		// Render all portal modules (MOTD, Roster, News, etc.)
-		$this->portal_renderer->render($context->guild_id);
+		$this->portal_renderer->render($this->guild_context->guild_id);
 
 		$this->template->assign_vars(['S_DISPLAY_WELCOME' => true]);
 
-		return $this->helper->render('main.html', $context->guild->getName());
+		return $this->helper->render('main.html', $this->guild_context->guild->getName());
 	}
 }
