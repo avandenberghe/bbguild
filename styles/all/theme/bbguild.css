@@ -42,20 +42,26 @@ table.table1.bbguild th {
 
 /* Guild header — normal document flow above portal content */
 .guild-header {
-    padding: 10px 10px 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
     margin-bottom: 10px;
-    overflow: hidden;
     min-height: auto;
 }
 
 .guild-header-emblem {
-    float: right;
-    margin-left: 15px;
+    flex-shrink: 0;
+    margin-right: 15px;
 }
 
 .guild-header-emblem img {
     max-width: 200px;
     max-height: 200px;
+}
+
+.guild-header-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .guild-header-name {
