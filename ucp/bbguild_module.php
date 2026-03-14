@@ -893,10 +893,10 @@ class bbguild_module
 				'S_PLAYER_PORTRAIT_EXISTS'  => strlen((string) $players->getPlayerPortraitUrl()) > 1 ? true : false,
 				'S_CAN_GENERATE_ARMORY'        => $this->game_has_api($players->game_id),
 				'COLORCODE'             => $players->getColorcode() == '' ? '#254689' : $players->getColorcode(),
-				'CLASS_IMAGE'             => $players->getClassImage(),
-				'S_CLASS_IMAGE_EXISTS'     => strlen((string) $players->getClassImage()) > 1 ? true : false,
-				'RACE_IMAGE'             => $players->getRaceImage(),
-				'S_RACE_IMAGE_EXISTS'     => strlen((string) $players->getRaceImage()) > 1 ? true : false ,
+				'CLASS_IMAGE'             => $this->resolve_image_url($players->getClassImage()),
+				'S_CLASS_IMAGE_EXISTS'     => !empty($players->getClassImage()) && file_exists($players->getClassImage()),
+				'RACE_IMAGE'             => $this->resolve_image_url($players->getRaceImage()),
+				'S_RACE_IMAGE_EXISTS'     => !empty($players->getRaceImage()) && file_exists($players->getRaceImage()),
 				'S_JOINDATE_DAY_OPTIONS'    => $s_playerjoin_day_options,
 				'S_JOINDATE_MONTH_OPTIONS'    => $s_playerjoin_month_options,
 				'S_JOINDATE_YEAR_OPTIONS'    => $s_playerjoin_year_options,
@@ -947,8 +947,8 @@ class bbguild_module
 					'PHPBBUID'        => $char['username'],
 					'PORTRAIT'        => $this->resolve_portrait_url($char['player_portrait_url']),
 					'ACHIEVPTS'        => $char['player_achiev'],
-					'CLASS_IMAGE'     => $char['class_image'],
-					'RACE_IMAGE'     => $char['race_image'],
+					'CLASS_IMAGE'     => $this->resolve_image_url($char['class_image']),
+					'RACE_IMAGE'     => $this->resolve_image_url($char['race_image']),
 				)
 			);
 
@@ -1006,13 +1006,33 @@ class bbguild_module
 	/**
 	 * Resolve a portrait URL for template use.
 	 */
-	private function resolve_portrait_url(string $url): string
+	private function resolve_portrait_url(?string $url): string
 	{
-		if (empty($url) || strpos($url, 'http') === 0)
+		if (empty($url))
+		{
+			return '';
+		}
+		if (strpos($url, 'http') === 0)
 		{
 			return $url;
 		}
 		global $phpbb_container;
 		return $phpbb_container->get('path_helper')->get_web_root_path() . $url;
+	}
+
+	/**
+	 * Resolve a filesystem-relative image path to a web URL.
+	 *
+	 * @param string|null $path Filesystem-relative path (e.g. ext/avathar/bbguild_wow/images/...)
+	 * @return string Web URL
+	 */
+	private function resolve_image_url(?string $path): string
+	{
+		if (empty($path))
+		{
+			return '';
+		}
+		global $phpbb_container;
+		return $phpbb_container->get('path_helper')->get_web_root_path() . $path;
 	}
 }

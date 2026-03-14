@@ -36,7 +36,7 @@
 
     // ]]>
 </script>
-<h2>{{ lang('UCP_BBGUILD_CHARACTER_ADD') }}</h2>
+<h2>{% if S_ADD %}{{ lang('UCP_BBGUILD_CHARACTER_ADD') }}{% else %}{{ lang('UCP_BBGUILD_CHARACTER_EDIT') }}{% endif %}</h2>
 <div class="panel">
     <div class="inner"><span class="corners-top"><span></span></span>
 
