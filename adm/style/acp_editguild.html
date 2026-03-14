@@ -115,6 +115,13 @@
                         <dt><label>{{ lang('ARMORYSTATUS') }}:</label></dt>
                         <dd>{{ ARMORYSTATUS }}</dd>
                     </dl>
+
+                    <fieldset>
+
+                    <dl>
+                        <dt><label for="min_armorylevel">{{ lang('MIN_ARMORYLEVEL') }}</label></dt>
+                        <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{{ MIN_ARMORYLEVEL }}" /></dd>
+                    </dl>
                     <dl>
                         <dt style="width: 35%;"><label>{{ lang('ARMORY_GUILD') }}</label>
                             <!-- EVENT avathar_bbguild_acp_editguild_api_explain -->
@@ -124,10 +131,12 @@
                         </dd>
                     </dl>
                     <!-- EVENT avathar_bbguild_acp_editguild_api_after -->
-                    <dl>
-                        <dt><label for="min_armorylevel">{{ lang('MIN_ARMORYLEVEL') }}</label></dt>
-                        <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{{ MIN_ARMORYLEVEL }}" /></dd>
-                    </dl>
+                    </fieldset>
+
+                    <fieldset>
+                    <!-- EVENT avathar_bbguild_acp_editguild_api_achievements -->
+                    </fieldset>
+
                     {% endif %}
                 </fieldset>
                 {% endif %}
