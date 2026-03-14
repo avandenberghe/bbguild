@@ -32,7 +32,7 @@ table.table1.bbguild th {
 }
 
 .category, .subheader-3 {
-    color: #7e3406;
+    color: inherit;
     font-size: 22px;
     font-weight: normal;
     letter-spacing: -0.05em;
@@ -189,7 +189,7 @@ table.table1.bbguild th {
 }
 
 .achievements-total-completed {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.16);
     border-radius: 4px;
     margin-bottom: 10px;
     padding: 10px 15px 15px;
@@ -205,7 +205,7 @@ table.table1.bbguild th {
 }
 
 .achievements-total-completed .desc {
-    color: #fef092;
+    color: inherit;
     font-weight: bold;
     padding-bottom: 6px;
 }
@@ -223,21 +223,9 @@ table.table1.bbguild th {
     margin: 0 auto 20px;
 }
 .profile-progress {
-    background: rgba(255, 255, 255, 0.1) none repeat scroll 0 0;
-    clear: both;
-    height: 22px;
-    margin: 0;
-    text-align: center;
-}
-.profile-progress {
-    clear: both;
-    height: 22px;
-    margin: 0;
-    text-align: center;
-}
-.profile-progress {
-    background-color: #542b19;
+    background-color: var(--progress-bar-bg, rgba(128, 128, 128, 0.3));
     color: white;
+    clear: both;
     height: 22px;
     margin: 5px auto 10px;
     position: relative;
@@ -255,11 +243,7 @@ table.table1.bbguild th {
     height: 23px;
 }
 .profile-progress .bar {
-    height: 26px;
-    position: absolute;
-}
-.profile-progress .bar {
-    background: rgba(0, 0, 0, 0) url("./images/bg-progressbar-fill.gif") repeat-x scroll left -40px;
+    background-color: var(--progress-bar-fill, #4caf50);
     display: block;
     height: 22px;
     left: 0;
@@ -267,11 +251,7 @@ table.table1.bbguild th {
     top: 0;
     z-index: 1;
 }
-
 /*----------*/
-.profile-progress .bar-contents {
-    text-shadow: 1px 1px 1px black;
-}
 .achievements-total-completed .bar-contents {
     line-height: 25px;
 }
@@ -279,9 +259,6 @@ table.table1.bbguild th {
     font-size: 12px;
     font-weight: normal;
     line-height: 23px;
-}
-.profile-progress .bar-contents {
-    line-height: 25px;
 }
 .profile-progress .bar-contents {
     font-size: 12px;
