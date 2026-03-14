@@ -1160,8 +1160,19 @@ class player
 			$this->deactivate_reason = $row['deactivate_reason'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-			$this->race_image = (strlen($race_image) > 1) ? $this->ext_path . 'images/race_images/' . $race_image . '.png' : '';
-			$this->class_image = (strlen($row['imagename']) > 1) ? $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png' : '';
+
+			// Resolve image path via game registry (game-specific extension) or fall back to core
+			$img_base = $this->ext_path . 'images/';
+			if ($this->game_registry !== null)
+			{
+				$provider = $this->game_registry->get($this->game_id);
+				if ($provider)
+				{
+					$img_base = $provider->get_images_path();
+				}
+			}
+			$this->race_image = (strlen($race_image) > 1) ? $img_base . 'race_images/' . $race_image . '.png' : '';
+			$this->class_image = (strlen($row['imagename']) > 1) ? $img_base . 'class_images/' . $row['imagename'] . '.png' : '';
 			$this->player_title  = $row['player_title'];
 
 			return $this->player_id;
@@ -1580,16 +1591,16 @@ class player
 				$this->armoryresult = 'KO';
 				return -1;
 			}
-			$this->player_level = isset($data['level']) ? $data['level'] : $this->player_level;
-			$this->player_race_id = isset($data['race']) ? $data['race'] : $this->player_race_id;
-			$this->player_class_id = isset($data['class']) ? $data['class'] : $this->player_class_id;
-			$this->player_gender_id = isset($data['gender']) ? $data['gender'] : $this->player_gender_id;
-			$this->player_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->player_achiev;
+			$this->player_level = isset($data['level']) ? (int) $data['level'] : $this->player_level;
+			$this->player_race_id = isset($data['playable_race']['id']) ? (int) $data['playable_race']['id'] : $this->player_race_id;
+			$this->player_class_id = isset($data['playable_class']['id']) ? (int) $data['playable_class']['id'] : $this->player_class_id;
+			$this->player_gender_id = isset($data['gender']['type']) ? ($data['gender']['type'] === 'FEMALE' ? 1 : 0) : $this->player_gender_id;
+			$this->player_achiev = isset($data['achievement_points']) ? (int) $data['achievement_points'] : $this->player_achiev;
 			$this->player_armory_url = $api->get_player_armory_url($this->player_name, $this->player_realm, $this->player_region);
 			$this->player_portrait_url = $api->get_player_portrait_url($data);
-			if (isset($data['realm']))
+			if (isset($data['realm']['slug']))
 			{
-				$this->player_realm = $data['realm'];
+				$this->player_realm = $data['realm']['slug'];
 			}
 			$this->armoryresult = 'OK';
 			return 1;
@@ -2101,10 +2112,10 @@ class player
 				'colorcode' => $row['colorcode'],
 				'player_class_id' => $row['player_class_id'],
 				'class_name' => $row['class_name'],
-				'class_image' => $this->ext_path . 'images/class_images/' . $row['imagename'] . '.png',
+				'class_image' => $this->resolve_game_image_path($row['game_id'], 'class_images/' . $row['imagename'] . '.png'),
 				'race_name' => $row['race_name'],
 				'player_gender_id' => $row['player_gender_id'],
-				'race_image' =>  $this->ext_path . 'images/race_images/' . (($row['player_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
+				'race_image' => $this->resolve_game_image_path($row['game_id'], 'race_images/' . (($row['player_gender_id'] == 0) ? $row['image_male'] : $row['image_female']) . '.png'),
 				'image_female' => $row['image_female'],
 				'image_male' => $row['image_male'],
 				'player_rank'    => $row['rank_prefix'] . ' ' . $row['rank_name'] . ' ' . $row['rank_suffix'],
@@ -2194,5 +2205,25 @@ class player
 		$this->db->sql_freeresult($result);
 		unset($result);
 		return $dataset;
+	}
+
+	/**
+	 * Resolve a game-specific image path via game_registry.
+	 *
+	 * @param string $game_id Game identifier
+	 * @param string $relative_path Relative path within the images directory (e.g. 'class_images/wow_hunter.png')
+	 * @return string Full path to image
+	 */
+	private function resolve_game_image_path(string $game_id, string $relative_path): string
+	{
+		if ($this->game_registry !== null)
+		{
+			$provider = $this->game_registry->get($game_id);
+			if ($provider)
+			{
+				return $provider->get_images_path() . $relative_path;
+			}
+		}
+		return $this->ext_path . 'images/' . $relative_path;
 	}
 }
