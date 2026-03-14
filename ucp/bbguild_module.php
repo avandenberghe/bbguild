@@ -889,7 +889,7 @@ class bbguild_module
 				'REALM'                 => $players->getPlayerRealm(),
 				'S_CAN_HAVE_ARMORY'        => $this->game_has_api($players->game_id),
 				'PLAYER_URL'            =>  $players->getPlayerArmoryUrl(),
-				'PLAYER_PORTRAIT'        =>  $players->getPlayerPortraitUrl(),
+				'PLAYER_PORTRAIT'        =>  $this->resolve_portrait_url($players->getPlayerPortraitUrl()),
 				'S_PLAYER_PORTRAIT_EXISTS'  => strlen((string) $players->getPlayerPortraitUrl()) > 1 ? true : false,
 				'S_CAN_GENERATE_ARMORY'        => $this->game_has_api($players->game_id),
 				'COLORCODE'             => $players->getColorcode() == '' ? '#254689' : $players->getColorcode(),
@@ -945,7 +945,7 @@ class bbguild_module
 					'LEVEL'            => $char['player_level'],
 					'ARMORY'        => $char['player_armory_url'],
 					'PHPBBUID'        => $char['username'],
-					'PORTRAIT'        => $char['player_portrait_url'],
+					'PORTRAIT'        => $this->resolve_portrait_url($char['player_portrait_url']),
 					'ACHIEVPTS'        => $char['player_achiev'],
 					'CLASS_IMAGE'     => $char['class_image'],
 					'RACE_IMAGE'     => $char['race_image'],
@@ -1003,4 +1003,16 @@ class bbguild_module
 
 	}
 
+	/**
+	 * Resolve a portrait URL for template use.
+	 */
+	private function resolve_portrait_url(string $url): string
+	{
+		if (empty($url) || strpos($url, 'http') === 0)
+		{
+			return $url;
+		}
+		global $phpbb_container;
+		return $phpbb_container->get('path_helper')->get_web_root_path() . $url;
+	}
 }

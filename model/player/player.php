@@ -1947,7 +1947,7 @@ class player
 		$sql_array = array();
 
 		$sql_array['SELECT'] =  'm.player_id, m.game_id, m.player_guild_id,  m.player_name, m.player_level, m.player_race_id, e1.name as race_name,
-    		m.player_class_id, m.player_gender_id, m.player_rank_id, m.player_achiev, m.player_armory_url, m.player_portrait_url, m.player_status,
+    		m.player_class_id, m.player_gender_id, m.player_rank_id, m.player_achiev, m.player_armory_url, m.player_portrait_url, m.player_spec, m.player_status,
     		r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
     		g.name as guildname, m.player_realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
 
@@ -2111,6 +2111,7 @@ class player
 				'player_level' => $row['player_level'],
 				'username' => get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
 				'player_portrait_url' => $row['player_portrait_url'],
+				'player_spec' => isset($row['player_spec']) ? $row['player_spec'] : '',
 				'player_armory_url' => $row['player_armory_url'],
 				'player_achiev' => $row['player_achiev'],
 				'player_status' => $row['player_status'],

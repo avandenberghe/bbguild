@@ -295,7 +295,8 @@ class roster extends module_base
 							'LVL'       => $char['player_level'],
 							'ARMORY'    => $char['player_armory_url'],
 							'PHPBBUID'  => $char['username'],
-							'PORTRAIT'  => $char['player_portrait_url'],
+							'PORTRAIT'  => $this->resolve_portrait_url($char['player_portrait_url']),
+							'SPEC'      => isset($char['player_spec']) ? $char['player_spec'] : '',
 							'ACHIEVPTS' => $char['player_achiev'],
 							'CLASS_IMAGE' => $ext_path_images . 'class_images/' . basename($char['class_image']),
 							'RACE_IMAGE'  => $ext_path_images . 'race_images/' . basename($char['race_image']),
@@ -360,6 +361,25 @@ class roster extends module_base
 	/**
 	 * Get game-specific images web path.
 	 */
+	/**
+	 * Resolve a portrait URL for template use.
+	 * Local paths (files/...) get the web root prefix. External URLs pass through.
+	 */
+	protected function resolve_portrait_url(string $url): string
+	{
+		if (empty($url))
+		{
+			return '';
+		}
+		// External URL — use as-is
+		if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0)
+		{
+			return $url;
+		}
+		// Local path — prepend web root
+		return $this->path_helper->get_web_root_path() . $url;
+	}
+
 	protected function get_game_images_path(string $game_id): string
 	{
 		$web_root = $this->path_helper->get_web_root_path();

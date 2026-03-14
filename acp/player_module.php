@@ -1193,7 +1193,7 @@ class player_module
 				'PLAYER_COMMENT'           => $editplayer->getPlayerComment(),
 				'S_CAN_HAVE_ARMORY'        => $this->game_has_api($editplayer->game_id),
 				'PLAYER_URL'               => $editplayer->getPlayerArmoryUrl(),
-				'PLAYER_PORTRAIT'          => $editplayer->getPlayerPortraitUrl(),
+				'PLAYER_PORTRAIT'          => $this->resolve_portrait_url($editplayer->getPlayerPortraitUrl()),
 				'S_PLAYER_PORTRAIT_EXISTS' => (strlen($editplayer->getPlayerPortraitUrl()) > 1) ? true : false,
 				'S_CAN_GENERATE_ARMORY'    => $this->game_has_api($editplayer->game_id),
 				'COLORCODE'                => ($editplayer->getColorcode() == '') ? '#254689' : $editplayer->getColorcode(),
@@ -1217,5 +1217,17 @@ class player_module
 				'UA_FINDCLASSRACE'         => append_sid($phpbb_admin_path . "style/dkp/findclassrace.$phpEx"),
 				'S_ADD'                    => $S_ADD)
 		);
+	}
+
+	/**
+	 * Resolve a portrait URL for template use.
+	 */
+	private function resolve_portrait_url(string $url): string
+	{
+		if (empty($url) || strpos($url, 'http') === 0)
+		{
+			return $url;
+		}
+		return $this->path_helper->get_web_root_path() . $url;
 	}
 }

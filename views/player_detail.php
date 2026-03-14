@@ -221,7 +221,7 @@ class player_detail
 			'PLAYER_ACHIEV'      => $p->getPlayerAchiev(),
 			'PLAYER_COMMENT'     => $p->getPlayerComment(),
 			'PLAYER_ARMORY_URL'  => $p->getPlayerArmoryUrl(),
-			'PLAYER_PORTRAIT'    => $p->getPlayerPortraitUrl(),
+			'PLAYER_PORTRAIT'    => $this->resolve_portrait_url($p->getPlayerPortraitUrl()),
 			'PLAYER_CLASS_IMAGE' => $class_image,
 			'PLAYER_RACE_IMAGE'  => $race_image,
 			'PLAYER_PHPBB_USER'  => $phpbb_username,
@@ -234,6 +234,18 @@ class player_detail
 		]);
 
 		return true;
+	}
+
+	/**
+	 * Resolve a portrait URL for template use.
+	 */
+	private function resolve_portrait_url(string $url): string
+	{
+		if (empty($url) || strpos($url, 'http') === 0)
+		{
+			return $url;
+		}
+		return $this->path_helper->get_web_root_path() . $url;
 	}
 
 	/**

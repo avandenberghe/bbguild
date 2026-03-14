@@ -152,11 +152,8 @@
 			<td style="text-align:left; width:100" class="bg2">
 				<strong><a style="color: {{ class.COLORCODE }};" href="{{ players_row.U_PLAYER_DETAIL }}">{{ players_row.NAME }}</a></strong>
 				<p>
-					{{ players_row.CLASS }}
+					{% if players_row.SPEC %}{{ players_row.SPEC }} {% endif %}{{ players_row.CLASS }}
 					{{ players_row.LVL }}
-					{% if S_SHOWACH == 1 %}
-					<br/> Apt: {{ players_row.ACHIEVPTS }}
-					{% endif %}
 				</p>
 			</td>
 		{% if players_row.S_ROW_COUNT % 4 == 0 %}
