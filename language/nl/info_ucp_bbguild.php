@@ -27,7 +27,8 @@ $lang = array_merge(
 	'UCP_BBGUILD_CHARACTERS'        => 'Karakters',
 	'UCP_BBGUILD'                    => 'bbGuild',
 	'UCP_BBGUILD_CHARACTER_LIST'    => 'Mijn karakters',
-	'UCP_BBGUILD_CHARACTER_ADD'        => 'Karakter toevoegen'
+	'UCP_BBGUILD_CHARACTER_ADD'        => 'Karakter toevoegen',
+	'UCP_BBGUILD_CHARACTER_EDIT'       => 'Karakter bewerken',
 
 	)
 );
