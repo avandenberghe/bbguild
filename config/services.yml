@@ -48,6 +48,7 @@ services:
         arguments:
             - '@controller.helper'
             - '@template'
+            - '@auth'
             - '@avathar.bbguild.guild_context'
             - '@avathar.bbguild.portal.renderer'
             - '@avathar.bbguild.player_detail'

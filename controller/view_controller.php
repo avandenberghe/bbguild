@@ -24,6 +24,9 @@ class view_controller
 	/** @var \phpbb\template\template */
 	protected $template;
 
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var guild_context */
 	protected $guild_context;
 
@@ -39,6 +42,7 @@ class view_controller
 	public function __construct(
 		\phpbb\controller\helper $helper,
 		\phpbb\template\template $template,
+		\phpbb\auth\auth $auth,
 		guild_context $guild_context,
 		portal_renderer $portal_renderer,
 		player_detail $player_detail,
@@ -47,6 +51,7 @@ class view_controller
 	{
 		$this->helper = $helper;
 		$this->template = $template;
+		$this->auth = $auth;
 		$this->guild_context = $guild_context;
 		$this->portal_renderer = $portal_renderer;
 		$this->player_detail = $player_detail;
@@ -62,6 +67,11 @@ class view_controller
 	 */
 	public function handleview($guild_id, $page = 'welcome')
 	{
+		if (!$this->auth->acl_get('u_bbguild'))
+		{
+			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
+		}
+
 		$this->guild_context->init((int) $guild_id);
 		$this->portal_renderer->render($this->guild_context->guild_id);
 		$this->template->assign_vars(['S_DISPLAY_WELCOME' => true]);
@@ -78,6 +88,11 @@ class view_controller
 	 */
 	public function playerdetail($guild_id, $player_id)
 	{
+		if (!$this->auth->acl_get('u_bbguild'))
+		{
+			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
+		}
+
 		$guild_id = (int) $guild_id;
 		$player_id = (int) $player_id;
 
