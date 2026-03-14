@@ -1182,7 +1182,7 @@ class admin_guild
 			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
 			'L_EDIT_GUILD_TITLE'     => $this->user->lang['EDIT_GUILD'],
 			'MSG_NAME_EMPTY'         => $this->user->lang['FV_REQUIRED_NAME'],
-			'EMBLEM'                 => $updateguild->getEmblempath(),
+			'EMBLEM'                 => $this->resolve_emblem_url((string) $updateguild->getEmblempath()),
 			'EMBLEMFILE'             => basename((string) $updateguild->getEmblempath()),
 			'S_EMBLEM_EXISTS'        => !empty($updateguild->getEmblempath()) && file_exists($this->root_path . $updateguild->getEmblempath()),
 			'WELCOME_MESSAGE'        => $textarr['text'],
@@ -1243,7 +1243,7 @@ class admin_guild
 			'L_EXPLAIN'              => $this->user->lang['ACP_EDITGUILD_EXPLAIN'],
 			'L_ADD_GUILD_TITLE'      => $this->user->lang['EDIT_GUILD'],
 			'MSG_NAME_EMPTY'         => $this->user->lang['FV_REQUIRED_NAME'],
-			'EMBLEM'                 => $updateguild->getEmblempath(),
+			'EMBLEM'                 => $this->resolve_emblem_url((string) $updateguild->getEmblempath()),
 			'EMBLEMFILE'             => basename((string) $updateguild->getEmblempath()),
 			'S_EMBLEM_EXISTS'        => !empty($updateguild->getEmblempath()) && file_exists($this->root_path . $updateguild->getEmblempath()),
 			'U_EDIT_GUILD'           => $this->acp_url('i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $updateguild->getGuildid()),
@@ -1253,5 +1253,28 @@ class admin_guild
 		));
 
 		$this->page_title = $this->user->lang['ACP_EDITGUILD'];
+	}
+
+	/**
+	 * Resolve an emblem path to a web URL usable from the ACP.
+	 *
+	 * @param string $emblempath Stored emblem path
+	 * @return string Web-accessible URL
+	 */
+	private function resolve_emblem_url(string $emblempath): string
+	{
+		if (empty($emblempath))
+		{
+			return '';
+		}
+
+		// New format: relative path (files/bbguild_wow/emblems/...)
+		if (strpos($emblempath, 'bbguild_wow/emblems/') !== false)
+		{
+			return $this->path_helper->get_web_root_path() . $emblempath;
+		}
+
+		// Legacy format: full path or filename — use ext images path
+		return $this->ext_path_web . 'images/guildemblem/' . basename($emblempath);
 	}
 }

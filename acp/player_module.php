@@ -883,7 +883,7 @@ class player_module
 				'LISTPLAYERS_FOOTCOUNT' => $footcount_text,
 				'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=-avathar-bbguild-acp-guild_module&amp;mode=editguild&amp;action=editguild&amp;' . constants::URI_GUILD . '=' . $this->guild->getGuildid()),
 				'PAGE_NUMBER'           => $playerpagination->on_page($player_count, $config['bbguild_user_llimit'], $start),
-				'GUILD_EMBLEM'          => (!empty($this->guild->getEmblempath()) && @file_exists($this->guild->getEmblempath())) ? $this->guild->getEmblempath() : '',
+				'GUILD_EMBLEM'          => $this->resolve_emblem_url((string) $this->guild->getEmblempath()),
 				'GUILD_NAME'            => $this->guild->getName(),
 			)
 		);
@@ -1229,5 +1229,37 @@ class player_module
 			return $url;
 		}
 		return $this->path_helper->get_web_root_path() . $url;
+	}
+
+	/**
+	 * Resolve an emblem path to a web URL usable from the ACP.
+	 *
+	 * @param string $emblempath Stored emblem path
+	 * @return string Web-accessible URL, or empty if not found
+	 */
+	private function resolve_emblem_url(string $emblempath): string
+	{
+		if (empty($emblempath))
+		{
+			return '';
+		}
+
+		// New format: relative path (files/bbguild_wow/emblems/...)
+		if (strpos($emblempath, 'bbguild_wow/emblems/') !== false)
+		{
+			global $phpbb_root_path;
+			if (file_exists($phpbb_root_path . $emblempath))
+			{
+				return $this->path_helper->get_web_root_path() . $emblempath;
+			}
+			return '';
+		}
+
+		// Legacy format
+		if (@file_exists($emblempath))
+		{
+			return $emblempath;
+		}
+		return '';
 	}
 }
