@@ -222,11 +222,61 @@ class guild_context
 			'ARMORY_URL'      => '',
 			'MIN_ARMORYLEVEL' => $this->guild->getMinArmory(),
 			'SHOW_ROSTER'     => $this->guild->getShowroster(),
-			'EMBLEM'          => $this->ext_path_images . 'guildemblem/' . basename((string) $this->guild->getEmblempath()),
+			'EMBLEM'          => $this->resolve_emblem_url((string) $this->guild->getEmblempath()),
 			'EMBLEMFILE'      => basename((string) $this->guild->getEmblempath()),
-			'S_EMBLEM_EXISTS' => !empty($this->guild->getEmblempath()) && file_exists($this->ext_path . 'images/guildemblem/' . basename((string) $this->guild->getEmblempath())),
+			'S_EMBLEM_EXISTS' => $this->emblem_exists((string) $this->guild->getEmblempath()),
 			'ARMORY'          => '',
 			'ACHIEV'          => '',
 		]);
+	}
+
+	/**
+	 * Resolve an emblem path to a web URL.
+	 *
+	 * Handles both new relative paths (files/bbguild_wow/emblems/...)
+	 * and legacy extension paths (ext/avathar/bbguild/images/guildemblem/...).
+	 *
+	 * @param string $emblempath Stored emblem path
+	 * @return string Web-accessible URL
+	 */
+	private function resolve_emblem_url(string $emblempath): string
+	{
+		if (empty($emblempath))
+		{
+			return '';
+		}
+
+		// New format: relative path starting with upload dir (e.g. files/bbguild_wow/emblems/...)
+		if (strpos($emblempath, 'bbguild_wow/emblems/') !== false)
+		{
+			return $this->path_helper->get_web_root_path() . $emblempath;
+		}
+
+		// Legacy format: full filesystem path or just a filename — resolve via ext images
+		return $this->ext_path_images . 'guildemblem/' . basename($emblempath);
+	}
+
+	/**
+	 * Check if an emblem file exists on disk.
+	 *
+	 * @param string $emblempath Stored emblem path
+	 * @return bool
+	 */
+	private function emblem_exists(string $emblempath): bool
+	{
+		if (empty($emblempath))
+		{
+			return false;
+		}
+
+		// New format: relative path — resolve from phpBB root
+		if (strpos($emblempath, 'bbguild_wow/emblems/') !== false)
+		{
+			global $phpbb_root_path;
+			return file_exists($phpbb_root_path . $emblempath);
+		}
+
+		// Legacy format
+		return file_exists($this->ext_path . 'images/guildemblem/' . basename($emblempath));
 	}
 }

@@ -893,19 +893,27 @@ class guilds
 		$sql = 'DELETE FROM ' . $this->bb_guild_table . ' WHERE id = ' .  $this->guildid;
 		$this->db->sql_query($sql);
 
-		$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region.'_'. $this->realm .'_'. str_replace(' ', '_', $this->name) . '.png';
-
-		if (file_exists($imgfile))
+		// Clean up emblem file from stored path or legacy location
+		$emblem_deleted = false;
+		if (!empty($this->emblempath) && strpos($this->emblempath, 'bbguild_wow/emblems/') !== false)
 		{
-			$fp = fopen($imgfile, 'r+');
-			// try to  acquire an exclusive lock
-			if (flock($fp, LOCK_EX))
+			global $phpbb_root_path;
+			$imgfile = $phpbb_root_path . $this->emblempath;
+			if (file_exists($imgfile))
 			{
-				unlink($imgfile);
-				flock($fp, LOCK_UN);
-				// release the lock
+				@unlink($imgfile);
+				$emblem_deleted = true;
 			}
-			unset($fp);
+		}
+
+		// Also try legacy location
+		if (!$emblem_deleted)
+		{
+			$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region . '_' . $this->realm . '_' . str_replace(' ', '_', $this->name) . '.png';
+			if (file_exists($imgfile))
+			{
+				@unlink($imgfile);
+			}
 		}
 
 		$this->log->log_insert(
