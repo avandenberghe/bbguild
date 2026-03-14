@@ -251,5 +251,17 @@ class constants {
 	 * a guild was deleted
 	 */
 	const GUILD_DELETED = 57;
+	/**
+	 * guild roster synced from API
+	 */
+	const ROSTER_SYNCED = 58;
+	/**
+	 * character specializations synced from API
+	 */
+	const SPECS_SYNCED = 59;
+	/**
+	 * character portraits synced from API
+	 */
+	const PORTRAITS_SYNCED = 60;
 
 }

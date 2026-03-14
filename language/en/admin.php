@@ -843,6 +843,11 @@ So the loot would go to player 2 <br />',
 	'ACTION_ROLE_ADDED' => 'Role Added',
 	'ACTION_ROLE_UPDATED' => 'Role Updated',
 	'ACTION_ROLE_DELETED' => 'Role deleted',
+	'ACTION_ARMORY_DOWN' => 'Battle.net API unavailable',
+	'ACTION_BATTLENET_ACCOUNT_INACTIVE' => 'Battle.net account inactive',
+	'ACTION_ROSTER_SYNCED' => 'Guild roster synced',
+	'ACTION_SPECS_SYNCED' => 'Specializations synced',
+	'ACTION_PORTRAITS_SYNCED' => 'Portraits synced',
 
 	// Verbose Log Messages
 	'NEW_ACTIONS' => 'Recent Activity',
@@ -901,6 +906,11 @@ So the loot would go to player 2 <br />',
 	'VLOG_ROLE_ADDED' => '%s added role %s to %s',
 	'VLOG_ROLE_UPDATED' => '%s updated role %s in %s',
 	'VLOG_ROLE_DELETED' => '%s deleted role %s',
+	'VLOG_ARMORY_DOWN' => '%s: Battle.net API error for %s',
+	'VLOG_BATTLENET_ACCOUNT_INACTIVE' => '%s: Battle.net account inactive for %s',
+	'VLOG_ROSTER_SYNCED' => '%s synced roster for guild %s: %s',
+	'VLOG_SPECS_SYNCED' => '%s synced specializations for guild %s: %s',
+	'VLOG_PORTRAITS_SYNCED' => '%s synced portraits for guild %s: %s',
 
 	// Log Detail Fields
 	'ADJUSTMENT_BEFORE' => 'Adjustment Before',

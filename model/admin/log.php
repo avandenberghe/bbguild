@@ -70,6 +70,9 @@ class log
 		// Battle.net API
 		constants::ARMORY_DOWN => 'ARMORY_DOWN',
 		constants::BATTLENET_ACCOUNT_INACTIVE => 'BATTLENET_ACCOUNT_INACTIVE',
+		constants::ROSTER_SYNCED => 'ROSTER_SYNCED',
+		constants::SPECS_SYNCED => 'SPECS_SYNCED',
+		constants::PORTRAITS_SYNCED => 'PORTRAITS_SYNCED',
 	);
 
 	public function __construct($bb_logs_table, \phpbb\db\driver\driver_interface $db, \phpbb\user $user)
