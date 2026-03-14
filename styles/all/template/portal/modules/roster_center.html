@@ -147,7 +147,7 @@
 		{% endif %}
 			<td style="text-align:center; width:100;" class="bg1">
 				<a href="{{ players_row.U_PLAYER_DETAIL }}">
-					<img src="{{ players_row.PORTRAIT }}" alt=" " width="64" height="64" /></a>
+					{% if players_row.PORTRAIT %}<img src="{{ players_row.PORTRAIT }}" alt=" " width="64" height="64" />{% else %}<img src="{{ players_row.CLASS_IMAGE }}" alt="{{ players_row.CLASS }}" width="64" height="64" />{% endif %}</a>
 			</td>
 			<td style="text-align:left; width:100" class="bg2">
 				<strong><a style="color: {{ class.COLORCODE }};" href="{{ players_row.U_PLAYER_DETAIL }}">{{ players_row.NAME }}</a></strong>

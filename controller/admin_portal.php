@@ -103,13 +103,9 @@ class admin_portal
 				redirect($redirect_url);
 				break;
 
-			case 'move_left':
-				$this->module_manager->move_module_horizontal($module_id, database_handler::MOVE_DIRECTION_LEFT);
-				redirect($redirect_url);
-				break;
-
-			case 'move_right':
-				$this->module_manager->move_module_horizontal($module_id, database_handler::MOVE_DIRECTION_RIGHT);
+			case 'move_to_column':
+				$target_column = $this->request->variable('target_column', 0);
+				$this->module_manager->move_module_to_column($module_id, $target_column);
 				redirect($redirect_url);
 				break;
 
@@ -205,18 +201,33 @@ class admin_portal
 			$this->template->assign_block_vars('module_row', [
 				'MODULE_ID'     => $row['module_id'],
 				'MODULE_NAME'   => $display_name,
-				'MODULE_COLUMN' => $this->language->lang('ACP_PORTAL_COLUMN_' . strtoupper($column_name)),
+				'MODULE_COLUMN' => (int) $row['module_column'],
 				'MODULE_ORDER'  => $row['module_order'],
 				'MODULE_STATUS' => (int) $row['module_status'],
 				'S_ENABLED'     => (int) $row['module_status'] === 1,
 				'U_CONFIGURE'   => $this->u_action . '&amp;' . $ap . '=configure&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
 				'U_MOVE_UP'     => $this->u_action . '&amp;' . $ap . '=move_up&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
 				'U_MOVE_DOWN'   => $this->u_action . '&amp;' . $ap . '=move_down&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
-				'U_MOVE_LEFT'   => $this->u_action . '&amp;' . $ap . '=move_left&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
-				'U_MOVE_RIGHT'  => $this->u_action . '&amp;' . $ap . '=move_right&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
+				'U_MOVE_COLUMN' => $this->u_action . '&amp;' . $ap . '=move_to_column&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
 				'U_DELETE'      => $this->u_action . '&amp;' . $ap . '=delete&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
 				'U_TOGGLE'      => $this->u_action . '&amp;' . $ap . '=toggle&amp;module_id=' . $row['module_id'] . '&amp;guild_id=' . $guild_id,
 			]);
+
+			// Add allowed column options for this module
+			$allowed = $module_obj ? $module_obj->get_allowed_columns() : 0;
+			foreach ($this->portal_columns->get_column_names() as $col_name)
+			{
+				$col_num = $this->portal_columns->string_to_number($col_name);
+				$col_const = $this->portal_columns->string_to_constant($col_name);
+				if ($allowed & $col_const)
+				{
+					$this->template->assign_block_vars('module_row.column_option', [
+						'VALUE'    => $col_num,
+						'LABEL'    => $this->language->lang('ACP_PORTAL_COLUMN_' . strtoupper($col_name)),
+						'SELECTED' => ((int) $row['module_column'] === $col_num),
+					]);
+				}
+			}
 		}
 	}
 

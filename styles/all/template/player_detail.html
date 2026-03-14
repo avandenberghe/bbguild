@@ -24,11 +24,13 @@
         <!-- Player detail card -->
         <div class="player-detail">
             <div class="player-detail-header">
-                {% if S_HAS_PORTRAIT %}
                 <div class="player-detail-portrait">
-                    <img src="{{ PLAYER_PORTRAIT }}" alt="{{ PLAYER_NAME }}" />
+                    {% if S_HAS_PORTRAIT %}
+                    <img src="{{ PLAYER_PORTRAIT }}" alt="{{ PLAYER_NAME }}" onerror="this.onerror=null;{% if PLAYER_CLASS_IMAGE %}this.src='{{ PLAYER_CLASS_IMAGE }}';{% else %}this.style.display='none';{% endif %}" />
+                    {% elseif PLAYER_CLASS_IMAGE %}
+                    <img src="{{ PLAYER_CLASS_IMAGE }}" alt="{{ PLAYER_CLASS }}" />
+                    {% endif %}
                 </div>
-                {% endif %}
                 <div class="player-detail-title-block">
                     <h2 class="player-detail-name" style="color: {{ PLAYER_COLORCODE }}">{{ PLAYER_NAME }}</h2>
                     {% if PLAYER_TITLE %}

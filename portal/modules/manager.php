@@ -121,19 +121,73 @@ class manager
 			return false;
 		}
 
-		if (!$this->constraints_handler->can_move_horizontally($module_data, $direction))
+		// Find the next valid column in the given direction
+		// Columns: top=1, center=2, right=3, bottom=4
+		$min_column = $this->portal_columns->string_to_number('top');
+		$max_column = $this->portal_columns->string_to_number('bottom');
+		$current_column = (int) $module_data['module_column'];
+		$target_column_num = $current_column + $direction;
+
+		// Skip columns that aren't in the module's allowed bitmask
+		while ($target_column_num >= $min_column && $target_column_num <= $max_column)
+		{
+			$target_name = $this->portal_columns->number_to_string($target_column_num);
+			if ($target_name !== '' && ($module->get_allowed_columns() & $this->portal_columns->string_to_constant($target_name)))
+			{
+				break;
+			}
+			$target_column_num += $direction;
+		}
+
+		if ($target_column_num < $min_column || $target_column_num > $max_column)
 		{
 			return false;
 		}
 
-		// Check if target column is allowed
-		$target_column = $this->portal_columns->number_to_string((int) $module_data['module_column'] + $direction);
-		if (!($module->get_allowed_columns() & $this->portal_columns->string_to_constant($target_column)))
+		// Calculate the step to jump (may skip columns)
+		$step = $target_column_num - $current_column;
+		$this->database_handler->move_module_horizontal($module_id, $module_data, $step);
+		$this->cache->destroy('sql', $this->modules_table);
+
+		return true;
+	}
+
+	/**
+	 * Move module to a specific column.
+	 */
+	public function move_module_to_column(int $module_id, int $target_column): bool
+	{
+		$module_data = $this->get_move_module_data($module_id);
+		if ($module_data === false)
 		{
 			return false;
 		}
 
-		$this->database_handler->move_module_horizontal($module_id, $module_data, $direction);
+		if ((int) $module_data['module_column'] === $target_column)
+		{
+			return true;
+		}
+
+		$module = $this->module_registry->get_module($module_data['module_classname']);
+		if (!$module instanceof module_interface)
+		{
+			return false;
+		}
+
+		// Verify target column is valid and allowed
+		$target_name = $this->portal_columns->number_to_string($target_column);
+		if ($target_name === '')
+		{
+			return false;
+		}
+
+		if (!($module->get_allowed_columns() & $this->portal_columns->string_to_constant($target_name)))
+		{
+			return false;
+		}
+
+		$step = $target_column - (int) $module_data['module_column'];
+		$this->database_handler->move_module_horizontal($module_id, $module_data, $step);
 		$this->cache->destroy('sql', $this->modules_table);
 
 		return true;

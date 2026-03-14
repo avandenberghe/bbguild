@@ -355,9 +355,14 @@ class admin_games
 			));
 		}
 
-		// Default game dropdown
+		// Default game dropdown — only show games with active plugins
 		foreach ($this->gamelist as $game)
 		{
+			$plugin_avail = ($game['game_id'] === 'custom' || $this->game_registry->has($game['game_id']));
+			if (!$plugin_avail)
+			{
+				continue;
+			}
 			$this->template->assign_block_vars('defaultgame_row', array(
 				'VALUE'    => $game['game_id'],
 				'SELECTED' => ($this->config['bbguild_default_game'] == $game['game_id']) ? ' selected="selected"' : '',

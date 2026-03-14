@@ -679,7 +679,7 @@ class player_module
 
 		// fill popup and set selected to default selection
 		$this->guild->get_guild();
-		$guildlist = $this->guild->guildlist(0);
+		$guildlist = $this->guild->guildlist(1);
 		foreach ($guildlist as $g)
 		{
 			$this->template->assign_block_vars(

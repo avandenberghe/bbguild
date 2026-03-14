@@ -173,7 +173,7 @@ class player_detail
 			$provider = $this->game_registry->get($p->getGameId());
 			if ($provider !== null)
 			{
-				$game_name = $provider->get_name();
+				$game_name = $provider->get_game_name();
 			}
 		}
 		catch (\Exception $e) {}
@@ -290,17 +290,23 @@ class player_detail
 	 */
 	protected function get_game_images_path(string $game_id): string
 	{
+		$web_root = $this->path_helper->get_web_root_path();
 		try
 		{
 			$provider = $this->game_registry->get($game_id);
 			if ($provider !== null)
 			{
-				return $provider->get_images_path();
+				$path = $provider->get_images_path();
+				$pos = strpos($path, 'ext/');
+				if ($pos !== false)
+				{
+					return $web_root . substr($path, $pos);
+				}
 			}
 		}
 		catch (\Exception $e) {}
 
 		// Fallback to core images
-		return $this->path_helper->get_web_root_path() . 'ext/avathar/bbguild/images/';
+		return $web_root . 'ext/avathar/bbguild/images/';
 	}
 }
