@@ -172,6 +172,7 @@ class schema extends \phpbb\db\migration\migration
 						'player_achiev'       => ['UINT', 0],
 						'player_armory_url'   => ['VCHAR:255', ''],
 						'player_portrait_url' => ['VCHAR', ''],
+						'player_spec'         => ['VCHAR:100', ''],
 						'phpbb_user_id'       => ['UINT', 0],
 						'player_status'       => ['BOOL', 0],
 						'deactivate_reason'   => ['VCHAR_UNI:255', ''],
