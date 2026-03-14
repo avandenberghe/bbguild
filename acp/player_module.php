@@ -542,6 +542,12 @@ class player_module
 		$this->guild = new guilds($this->db, $this->user, $this->config, $this->bbguild_cache, $this->bbguild_log, $this->bb_players_table, $this->bb_ranks_table, $this->bb_classes_table, $this->bb_races_table, $this->bb_language_table, $this->bb_guild_table, $this->bb_factions_table, $updateplayer->getPlayerGuildId());
 		$this->guild->get_guild();
 
+		// Fall back to guild region if player region is empty
+		if (empty($updateplayer->getPlayerRegion()))
+		{
+			$updateplayer->setPlayerRegion($this->guild->getRegion());
+		}
+
 		if ($updateplayer->getPlayerRankId() < 90 && $this->guild->isArmoryEnabled() == 1 )
 		{
 			$updateplayer->Armory_getplayer($this->get_game_provider($updateplayer->game_id));
