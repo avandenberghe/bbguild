@@ -29,5 +29,6 @@ $lang = array_merge(
 	'ACP_BBGUILD_PANEL'           => 'Dashboard',
 	'ACP_BBGUILD_CONFIG'          => 'Instellingen',
 	'ACP_BBGUILD_LOGS'            => 'Activiteitenlog',
+	'ACP_BBGUILD_INDEX'           => 'Portaal instellingen',
 	)
 );
