@@ -210,6 +210,7 @@ services:
             - '@avathar.bbguild.portal.modules.database_handler'
             - '@avathar.bbguild.portal.modules.manager'
             - '@avathar.bbguild.portal.config'
+            - '@path_helper'
             - '%avathar.bbguild.tables.bb_guild%'
     avathar.bbguild.game_provider_collection:
         class: phpbb\di\service_collection

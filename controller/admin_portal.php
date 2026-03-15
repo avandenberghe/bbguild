@@ -14,6 +14,7 @@ use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
+use phpbb\path_helper;
 use phpbb\user;
 use phpbb\cache\service as cache_service;
 use avathar\bbguild\portal\columns;
@@ -36,6 +37,7 @@ class admin_portal
 	protected database_handler $database_handler;
 	protected manager $module_manager;
 	protected portal_config $portal_config;
+	protected path_helper $path_helper;
 	protected string $guild_table;
 	protected string $u_action = '';
 	protected string $action_param = 'action';
@@ -53,6 +55,7 @@ class admin_portal
 		database_handler $database_handler,
 		manager $module_manager,
 		portal_config $portal_config,
+		path_helper $path_helper,
 		string $guild_table
 	)
 	{
@@ -68,6 +71,7 @@ class admin_portal
 		$this->database_handler = $database_handler;
 		$this->module_manager = $module_manager;
 		$this->portal_config = $portal_config;
+		$this->path_helper = $path_helper;
 		$this->guild_table = $guild_table;
 	}
 
@@ -357,7 +361,7 @@ class admin_portal
 		}
 
 		$image_src = $module_data['module_image_src'] ?? '';
-		$ext_path = generate_board_url() . '/ext/avathar/bbguild/';
+		$ext_path = $this->path_helper->get_web_root_path() . 'ext/avathar/bbguild/';
 
 		$this->template->assign_vars([
 			'U_ACTION'             => $this->u_action,
