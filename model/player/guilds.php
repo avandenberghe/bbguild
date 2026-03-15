@@ -178,6 +178,13 @@ class guilds
 	protected $factionname;
 
 	/**
+	 * Game edition (e.g. 'retail', 'classic_era', 'classic_prog', 'classic_ann')
+	 *
+	 * @var string
+	 */
+	protected $game_edition = 'retail';
+
+	/**
 	 * @return int
 	 */
 	public function getStartdate()
@@ -351,6 +358,22 @@ class guilds
 	public function setFactionname($factionname)
 	{
 		$this->factionname = (string) $factionname;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGameEdition()
+	{
+		return $this->game_edition;
+	}
+
+	/**
+	 * @param string $game_edition
+	 */
+	public function setGameEdition($game_edition)
+	{
+		$this->game_edition = (string) $game_edition;
 	}
 
 	/**
@@ -608,6 +631,9 @@ class guilds
 			return false;
 		}
 
+		// Pass edition to the API so it can use the correct namespace
+		$params['edition'] = $this->game_edition;
+
 		// Delegate to game provider's API
 		if ($provider !== null && $provider->has_api())
 		{
@@ -770,6 +796,7 @@ class guilds
 				'players' => $this->playercount,
 				'emblemurl' => $this->emblempath,
 				'game_id' => $this->game_id,
+				'game_edition' => $this->game_edition,
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
 				'guilddefault' => $this->guilddefault,
@@ -837,6 +864,7 @@ class guilds
 				'players' => $this->playercount,
 				'emblemurl' => $this->emblempath,
 				'game_id' => $this->game_id,
+				'game_edition' => $this->game_edition,
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
 				'guilddefault' => $this->guilddefault,
@@ -931,7 +959,7 @@ class guilds
 	 */
 	public function get_guild()
 	{
-		$sql = 'SELECT g.id, g.name, g.realm, g.region, g.roster, g.game_id, g.players,
+		$sql = 'SELECT g.id, g.name, g.realm, g.region, g.roster, g.game_id, g.game_edition, g.players,
 				g.emblemurl, g.min_armory, g.rec_status, g.guilddefault, g.armory_enabled, g.armoryresult, g.recruitforum,
 				g.faction, f.faction_name
 				FROM ' . $this->bb_guild_table . ' g
@@ -945,6 +973,7 @@ class guilds
 		{
 			// load guild object
 			$this->game_id = $row['game_id'];
+			$this->game_edition = isset($row['game_edition']) ? $row['game_edition'] : 'retail';
 			$this->guildid = $row['id'];
 			$this->name = $row['name'];
 			$this->realm = $row['realm'];

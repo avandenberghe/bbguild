@@ -447,6 +447,18 @@ class admin_guild
 		$updateguild->setRecruitforum($this->request->variable('recruitforum', 0));
 		$updateguild->setEmblempath($this->ext_path . 'images/guildemblem/' . $this->request->variable('guild_emblem', '', true));
 
+		/**
+		 * Event dispatched after form values are read, before guild is saved.
+		 * Allows game plugins to set edition or other game-specific fields.
+		 *
+		 * @event avathar.bbguild.acp_editguild_submit
+		 * @var guilds updateguild The guild object being updated
+		 * @var string game_id     The game identifier from the form
+		 */
+		$game_id = $updateguild->getGameId();
+		$vars = array('updateguild', 'game_id');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editguild_submit', compact($vars)));
+
 		if ($updateguild->isArmoryEnabled())
 		{
 			$this->BattleNetUpdate($updateguild);
