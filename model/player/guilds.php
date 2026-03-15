@@ -937,7 +937,7 @@ class guilds
 		// Also try legacy location
 		if (!$emblem_deleted)
 		{
-			$imgfile = $this->ext_path . 'images/guildemblem/' . $this->region . '_' . $this->realm . '_' . str_replace(' ', '_', $this->name) . '.png';
+			$imgfile = $phpbb_root_path . 'ext/avathar/bbguild/images/guildemblem/' . $this->region . '_' . $this->realm . '_' . str_replace(' ', '_', $this->name) . '.png';
 			if (file_exists($imgfile))
 			{
 				@unlink($imgfile);
