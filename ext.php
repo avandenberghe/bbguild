@@ -62,6 +62,44 @@ class ext extends base
 
 
 	/**
+	 * Auto-disable child game-plugin extensions before bbGuild core is disabled.
+	 *
+	 * Without this, disabling core while a child (e.g. bbguild_wow) is still
+	 * enabled crashes the DI container because the child's services.yml
+	 * references core parameters that no longer exist.
+	 *
+	 * @param mixed $old_state
+	 * @return mixed
+	 */
+	public function disable_step($old_state)
+	{
+		if ($old_state === false)
+		{
+			$ext_manager = $this->container->get('ext.manager');
+
+			$child_extensions = array(
+				'avathar/bbguild_wow',
+				'avathar/bbguild_eq2',
+			);
+
+			foreach ($child_extensions as $child)
+			{
+				if ($ext_manager->is_enabled($child))
+				{
+					while ($ext_manager->disable_step($child))
+					{
+						// run all disable steps
+					}
+				}
+			}
+
+			return 'children_disabled';
+		}
+
+		return parent::disable_step($old_state);
+	}
+
+	/**
 	 * override enable step
 	 * enable_step is executed on enabling an extension until it returns false.
 	 *
