@@ -534,6 +534,31 @@ class game
 			trigger_error(sprintf($this->user->lang['ADMIN_INSTALL_GAME_FAILURE'], $this->name) . E_USER_WARNING);
 		}
 
+		// Block deletion if guilds or players still reference this game
+		$tables = $this->get_table_names();
+
+		$sql = 'SELECT COUNT(*) AS cnt FROM ' . $tables['bb_guild_table'] .
+			" WHERE game_id = '" . $this->db->sql_escape($this->game_id) . "' AND id != 0";
+		$result = $this->db->sql_query($sql);
+		$guild_count = (int) $this->db->sql_fetchfield('cnt');
+		$this->db->sql_freeresult($result);
+
+		if ($guild_count > 0)
+		{
+			trigger_error(sprintf($this->user->lang['ERROR_GAME_HAS_GUILDS'], $this->name, $guild_count), E_USER_WARNING);
+		}
+
+		$sql = 'SELECT COUNT(*) AS cnt FROM ' . $tables['bb_players_table'] .
+			" WHERE game_id = '" . $this->db->sql_escape($this->game_id) . "'";
+		$result = $this->db->sql_query($sql);
+		$player_count = (int) $this->db->sql_fetchfield('cnt');
+		$this->db->sql_freeresult($result);
+
+		if ($player_count > 0)
+		{
+			trigger_error(sprintf($this->user->lang['ERROR_GAME_HAS_PLAYERS'], $this->name, $player_count), E_USER_WARNING);
+		}
+
 		// Plugin-provided games (via game_registry)
 		if ($this->game_registry !== null && $this->game_registry->has($this->game_id))
 		{
