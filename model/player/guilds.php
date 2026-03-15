@@ -922,10 +922,10 @@ class guilds
 		$this->db->sql_query($sql);
 
 		// Clean up emblem file from stored path or legacy location
+		global $phpbb_root_path;
 		$emblem_deleted = false;
 		if (!empty($this->emblempath) && strpos($this->emblempath, 'bbguild_wow/emblems/') !== false)
 		{
-			global $phpbb_root_path;
 			$imgfile = $phpbb_root_path . $this->emblempath;
 			if (file_exists($imgfile))
 			{
