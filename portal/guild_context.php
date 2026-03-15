@@ -214,6 +214,7 @@ class guild_context
 			'FACTION_NAME'    => $this->guild->getFactionname(),
 			'FACTION_CSS'     => preg_replace('/[^a-z0-9]/', '', strtolower((string) $this->guild->getFactionname())) ?: 'other',
 			'GAME_ID'         => $this->guild->getGameId(),
+			'GAME_EDITION'    => $this->guild->getGameEdition(),
 			'GUILD_ID'        => $this->guild_id,
 			'GUILD_NAME'      => $this->guild->getName(),
 			'REALM'           => $this->guild->getRealm(),

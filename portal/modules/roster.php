@@ -295,7 +295,7 @@ class roster extends module_base
 							'LVL'       => $char['player_level'],
 							'ARMORY'    => $char['player_armory_url'],
 							'PHPBBUID'  => $char['username'],
-							'PORTRAIT'  => $this->resolve_portrait_url($char['player_portrait_url']),
+							'PORTRAIT'  => $this->resolve_portrait_with_fallback($char, $ext_path_images),
 							'SPEC'      => isset($char['player_spec']) ? $char['player_spec'] : '',
 							'ACHIEVPTS' => $char['player_achiev'],
 							'CLASS_IMAGE' => $ext_path_images . 'class_images/' . basename($char['class_image']),
@@ -367,7 +367,7 @@ class roster extends module_base
 	 */
 	protected function resolve_portrait_url(string $url): string
 	{
-		if (empty($url))
+		if (empty($url) || $url === 'N/A')
 		{
 			return '';
 		}
@@ -378,6 +378,53 @@ class roster extends module_base
 		}
 		// Local path — prepend web root
 		return $this->path_helper->get_web_root_path() . $url;
+	}
+
+	/**
+	 * Resolve portrait URL with race/gender/class fallback.
+	 *
+	 * If the player has no API portrait, falls back to a static
+	 * roster portrait based on gender-race-class (if available).
+	 *
+	 * @param array  $char           Player row from getplayerlist
+	 * @param string $ext_path_images Web path to game images
+	 * @return string Portrait URL or empty
+	 */
+	protected function resolve_portrait_with_fallback(array $char, string $ext_path_images): string
+	{
+		$url = $this->resolve_portrait_url($char['player_portrait_url'] ?? '');
+		if (!empty($url))
+		{
+			return $url;
+		}
+
+		// Fallback: static roster portrait from race/gender/class
+		$gender = isset($char['player_gender_id']) ? (int) $char['player_gender_id'] : 0;
+		$race = isset($char['player_race_id']) ? (int) $char['player_race_id'] : 0;
+		$class = isset($char['player_class_id']) ? (int) $char['player_class_id'] : 0;
+
+		if ($race > 0 && $class > 0)
+		{
+			$filename = $gender . '-' . $race . '-' . $class . '.gif';
+			$provider = $this->game_registry->get($char['game_id'] ?? '');
+			if ($provider !== null)
+			{
+				$provider_path = $provider->get_images_path();
+				$pos = strpos($provider_path, 'ext/');
+				if ($pos !== false)
+				{
+					$rel_path = substr($provider_path, $pos) . 'roster_portraits/' . $char['game_id'] . '/' . $filename;
+					// Check file exists relative to phpBB root
+					global $phpbb_root_path;
+					if (file_exists($phpbb_root_path . $rel_path))
+					{
+						return $this->path_helper->get_web_root_path() . $rel_path;
+					}
+				}
+			}
+		}
+
+		return '';
 	}
 
 	protected function get_game_images_path(string $game_id): string
