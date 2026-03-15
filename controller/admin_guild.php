@@ -408,6 +408,18 @@ class admin_guild
 		$addguild->setEmblempath($this->ext_path . 'images/guildemblem/' . $this->request->variable('guild_emblem', '', true));
 		$addguild->setStartdate(time());
 		$addguild->setArmoryresult('KO');
+
+		/**
+		 * @event avathar.bbguild.acp_editguild_submit
+		 * @var guilds updateguild The guild object being created
+		 * @var string game_id     The game identifier from the form
+		 */
+		$updateguild = $addguild;
+		$game_id = $addguild->getGameId();
+		$vars = array('updateguild', 'game_id');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editguild_submit', compact($vars)));
+		$addguild = $updateguild;
+
 		$addguild->make_guild();
 
 		// Seed default portal layout for the new guild
@@ -792,6 +804,10 @@ class admin_guild
 			}
 		}
 
+		$game_id = $addguild->getGameId();
+		$provider = $this->game_registry->get($game_id);
+		$has_api = ($provider !== null && $provider->has_api());
+
 		$this->template->assign_vars(array(
 			'U_FACTION'       => $this->factionroute,
 			'GUILD_NAME'      => $addguild->getName(),
@@ -800,7 +816,20 @@ class admin_guild
 			'DEFAULTREALM'    => ($this->config['bbguild_default_realm'] == '') ? $addguild->getRealm() : $this->config['bbguild_default_realm'],
 			'RECSTATUS'       => true,
 			'MIN_ARMORYLEVEL' => $this->config['bbguild_minrosterlvl'],
+			'GAME_ID'         => $game_id,
+			'HAS_API'         => $has_api,
 		));
+
+		/**
+		 * @event avathar.bbguild.acp_editguild_display
+		 * @var guilds updateguild The guild object being displayed
+		 * @var string game_id     The game identifier
+		 * @var bool   has_api     Whether this game has API support
+		 */
+		$updateguild = $addguild;
+		$vars = array('updateguild', 'game_id', 'has_api');
+		extract($this->dispatcher->trigger_event('avathar.bbguild.acp_editguild_display', compact($vars)));
+
 		$this->page_title = $this->user->lang['ACP_ADDGUILD'];
 	}
 
